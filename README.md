@@ -12,7 +12,8 @@ The Frontend repository for Dulwich Bookings hosted on Netlify. Built with React
 3. run `npm install -g npm@8.5.5`
 4. run `nvm use`
 5. Run `npm install` in the working directory to install required packages
-6. Run `npm start` to start the server on localhost
+6. Reference `.env.example` and create your own `.env` file
+7. Run `npm start` to start the server on localhost
 
 ## Screenshots
 _[Placeholder]_
