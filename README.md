@@ -6,6 +6,7 @@ The Frontend repository for Dulwich Bookings hosted on Netlify. Built with React
 * [**Figma Design**]()
 
 ## Inital setup
+**Prerequisites NodeJS LTS v16.15.0**
 
 1. Install nvm on your machine
 2. run `nvm install v16.15.0`
