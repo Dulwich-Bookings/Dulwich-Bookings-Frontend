@@ -2,7 +2,7 @@
 The Frontend repository for Dulwich Bookings hosted on Netlify. Built with React, Redux, TypeScript, Material UI, Tailwind CSS
 
 ## Documentation
-* [**Live Site**]()
+* [**Live Site**](https://dulwich-bookings.netlify.app/)
 * [**Figma Design**]()
 
 ## Inital setup
