@@ -33,7 +33,7 @@ const Notifier = () => {
 
   return (
     <Snackbar open={isNotify} autoHideDuration={autoHideDuration} onClose={handleClose}>
-      <Alert onClose={handleClose} severity={severity} sx={{ width: '100%', minWidth: '200px' }}>
+      <Alert {...(!isLoading && { onClose: handleClose })} severity={severity} sx={{ width: '100%', minWidth: '200px' }}>
         {isLoading && <LinearProgress sx={{ width: '100%', minWidth: '200px' }} />}
         {options.message}
       </Alert>
