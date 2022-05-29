@@ -14,13 +14,16 @@ export function useApi<T>(
   apiPromise: (id?: number) => Promise<ApiData<T>>,
   withSuccessNotification = false,
   withFailureNotification = false,
+  withLoadingNotification = false,
 ) {
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
 
   async function fetchApi(id?: number): Promise<ApiData<T> & isSuccess> {
-    dispatch(toggleShowNotification({ message: 'Loading...', severity: severity.LOADING }));
+    if (withLoadingNotification) {
+      dispatch(toggleShowNotification({ message: 'Loading...', severity: severity.LOADING }));
+    }
     try {
       const response = await apiPromise(id);
       if (response?.message && withSuccessNotification) {

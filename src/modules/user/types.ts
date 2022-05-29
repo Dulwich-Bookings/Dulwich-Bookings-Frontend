@@ -3,7 +3,7 @@ type Roles = 'Student' | 'Teacher' | 'Admin';
 export interface UserSignUpData {
   email: string;
   password: string;
-  confirmPassword: string;
+  passwordConfirmation: string;
   schoolId: number;
 }
 

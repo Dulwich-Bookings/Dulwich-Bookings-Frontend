@@ -3,7 +3,7 @@ import { useApi } from '@/api/ApiHandler';
 import UserService from '@/api/user/UserService';
 
 const Landing = () => {
-  const [getUsers] = useApi(() => UserService.getAllUsers(), true, true);
+  const [getUsers] = useApi(() => UserService.getAllUsers(), true, true, true);
 
   const fetchData = async () => {
     const userRes = await getUsers();
