@@ -1,5 +1,5 @@
 import { UserPutData } from '@/modules/user/types';
-import ApiService, { ApiData } from '../ApiService';
+import ApiService, { ApiData } from '@/api/ApiService';
 
 class UserService {
   private static getUserUrl() {
