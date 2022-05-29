@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
 import { useApi } from '@/api/ApiHandler';
-import UserService from '@/api/user/UserService';
+import AuthService from '@/api/auth/AuthService';
 
 const Landing = () => {
-  const [getUsers] = useApi(() => UserService.getAllUsers(), true, true, true);
+  const [login] = useApi(() => AuthService.login('student23@stu.dulwich.org', 'asdasd'), true, true);
 
-  const fetchData = async () => {
-    const userRes = await getUsers();
-    if (userRes.isSuccess) {
-      console.log(userRes);
+  const loginUser = async () => {
+    const loginUser = await login();
+    if (loginUser.isSuccess) {
+      console.log(loginUser);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    loginUser();
   }, []);
 
   return <div>Landing Page</div>;

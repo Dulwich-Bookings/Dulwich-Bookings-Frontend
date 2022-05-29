@@ -9,7 +9,7 @@ interface LoginData {
 
 class AuthService {
   private static getAuthUrl() {
-    return 'users/authentication';
+    return 'authentication';
   }
 
   public static async login(email: string, password: string): Promise<ApiData<LoginData>> {
@@ -47,6 +47,28 @@ class AuthService {
           ...userRegisterData,
         },
       });
+      return response;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+  /**
+   * Example:
+   * formData.append('file', file)
+   * use Upload file at test.tsx to test
+   */
+  public static async bulkRegister(bulkRegisterData: FormData): Promise<ApiData> {
+    try {
+      const response = await ApiService.request(
+        {
+          url: `${this.getAuthUrl()}/bulkSignUp`,
+          method: 'POST',
+          data: bulkRegisterData,
+        },
+        true,
+        false,
+        'multipart/form-data',
+      );
       return response;
     } catch (error) {
       return Promise.reject(error);
