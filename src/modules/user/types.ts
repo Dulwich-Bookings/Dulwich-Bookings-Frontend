@@ -5,6 +5,7 @@ export interface UserSignUpData {
   password: string;
   passwordConfirmation: string;
   schoolId: number;
+  class?: number;
 }
 
 export interface UserData {
