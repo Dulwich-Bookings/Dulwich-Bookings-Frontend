@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { severity } from '@/consts/constants';
 import { toggleShowNotification } from '@/modules/ui/uiSlice';
 
-interface isSuccess {
+export interface isSuccess {
   isSuccess: boolean;
 }
 
