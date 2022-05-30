@@ -52,6 +52,9 @@ const Test = () => {
   return (
     <>
       <div className='pt-6 pl-6'>
+        <Typography className='pb-6' variant='h3'>
+          Add your own test components below!
+        </Typography>
         <Typography variant='h4'>APIs</Typography>
         <Stack spacing={2} direction='column'>
           <Typography variant='h5'>Auth</Typography>
@@ -88,6 +91,7 @@ const Test = () => {
             </Button>
           </Stack>
         </Stack>
+        <br />
       </div>
     </>
   );
