@@ -1,5 +1,6 @@
 import React from 'react';
 import { Typography, Grid, TextField, Stack, Button } from '@mui/material';
+import ResponsiveText from '@components/ResponsiveText/ResponsiveText';
 
 const LoginForm = () => {
   return (
@@ -7,13 +8,15 @@ const LoginForm = () => {
       <Grid item className='w-9/12'>
         <Stack direction='column' spacing={8}>
           <Stack direction='column'>
-            <Typography variant='h2'>Welcome back</Typography>
-            <Typography variant='h6'>
-              Need to make an account?{' '}
-              <a className='text-dulwichRed underline underline-offset-4' href='#'>
-                Sign Up
-              </a>
-            </Typography>
+            <ResponsiveText>
+              <Typography variant='h2'>Welcome back</Typography>
+              <Typography variant='h6'>
+                Need to make an account?{' '}
+                <a className='text-dulwichRed underline underline-offset-4' href='#'>
+                  Sign Up
+                </a>
+              </Typography>
+            </ResponsiveText>
           </Stack>
           <Stack direction='column' spacing={2}>
             <Stack direction='column'>
