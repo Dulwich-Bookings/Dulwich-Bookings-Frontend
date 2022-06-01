@@ -4,8 +4,12 @@ const TailWindTheme = {
   important: true,
   theme: {
     extend: {},
-    fontFamily: {},
-    colors: {},
+    fontFamily: {
+      inter: ['sans-serif'],
+    },
+    colors: {
+      butt: '#e33939',
+    },
     fontSize: {
       sm: 12,
       md: 14,
