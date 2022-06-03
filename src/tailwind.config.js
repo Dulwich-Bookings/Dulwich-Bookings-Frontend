@@ -8,7 +8,8 @@ const TailWindTheme = {
       inter: ['sans-serif'],
     },
     colors: {
-      butt: '#e33939',
+      redbg: '#e33939',
+      dwgrey: '#3D3D3D',
     },
     fontSize: {
       sm: 12,
