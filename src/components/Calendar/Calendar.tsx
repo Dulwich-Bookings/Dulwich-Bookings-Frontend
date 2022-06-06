@@ -21,7 +21,7 @@ const dummyData = [
   {
     title: 'Lesson [Period 1]',
     start: '2022-06-06T08:35:00',
-    end: '2022-06-06T9:30:00',
+    end: '2022-06-06T09:30:00',
     description: 'Lecture',
     backgroundColor: '#D9D9D9',
     borderColor: '#D9D9D9',

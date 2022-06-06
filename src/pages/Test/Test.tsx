@@ -50,9 +50,19 @@ const Test = () => {
     <>
       <Modal className='flex justify-center items-center' open={openCalendarModal} onClose={() => setOpenCalendarModal(false)}>
         <Box className='bg-white w-3/4 h-4/5 mt-20 rounded-lg'>
-          <div className='h-full mx-14 mt-10'>
-            <Calendar />
-          </div>
+          <Box className='h-full mx-14 mt-10'>
+            <Stack className='h-full' spacing={{ xs: 1, md: -6 }}>
+              <Box>
+                <Typography variant='h4'>Tech 4</Typography>
+                <Typography className='bookingSafe:block hidden w-1/3' variant='subtitle2'>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lorem nisl, vulputate non neque vel.
+                </Typography>
+              </Box>
+              <Box className='h-full'>
+                <Calendar />
+              </Box>
+            </Stack>
+          </Box>
         </Box>
       </Modal>
       <div className='pt-6 pl-6'>

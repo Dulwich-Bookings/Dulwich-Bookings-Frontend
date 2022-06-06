@@ -15,6 +15,11 @@ const TailWindTheme = {
       xl: 20,
       xxl: 24,
     },
+    screens: {
+      bookingSafe: '1135px',
+      phone: '576px',
+      laptop: '900px',
+    },
   },
   variants: {
     extend: {
