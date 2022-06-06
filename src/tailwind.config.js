@@ -5,7 +5,9 @@ const TailWindTheme = {
   theme: {
     extend: {},
     fontFamily: {},
-    colors: {},
+    colors: {
+      white: '#ffffff',
+    },
     fontSize: {
       sm: 12,
       md: 14,

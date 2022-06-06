@@ -3,14 +3,10 @@ import { useApi } from '@/api/ApiHandler';
 import AuthService from '@/api/auth/AuthService';
 import UserService from '@/api/user/UserService';
 import TagService from '@/api/tag/TagService';
-import { styled } from '@mui/material/styles';
-import { Button, Stack, Typography } from '@mui/material';
+import Calendar from '@components/Calendar/Calendar';
+import { Button, Stack, Typography, Modal, Box } from '@mui/material';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
-
-const Input = styled('input')({
-  display: 'none',
-});
 
 let isFirstLoaded = true;
 
@@ -23,6 +19,7 @@ const Test = () => {
   const [getAllTags] = useApi(() => TagService.getAllTags(), true, true);
 
   const [bulkSignUpForm, setBulkSignUpForm] = useState<FormData>(new FormData());
+  const [openCalendarModal, setOpenCalendarModal] = useState<boolean>(false);
 
   const handleButtonClick = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();
@@ -51,47 +48,65 @@ const Test = () => {
 
   return (
     <>
+      <Modal className='flex justify-center items-center' open={openCalendarModal} onClose={() => setOpenCalendarModal(false)}>
+        <Box className='bg-white w-3/4 h-4/5 mt-20 rounded-lg'>
+          <div className='h-full mx-14 mt-10'>
+            <Calendar />
+          </div>
+        </Box>
+      </Modal>
       <div className='pt-6 pl-6'>
         <Typography className='pb-6' variant='h3'>
           Add your own test components below!
         </Typography>
         <Typography variant='h4'>APIs</Typography>
-        <Stack spacing={2} direction='column'>
-          <Typography variant='h5'>Auth</Typography>
-          <Stack spacing={2} direction='row'>
-            <Button variant='contained' onClick={() => handleButtonClick(loginStudent)}>
-              Sign In Student
-            </Button>
-            <Button variant='contained' onClick={() => handleButtonClick(loginTeacher)}>
-              Sign In Teacher
-            </Button>
-            <Button variant='contained' onClick={() => handleButtonClick(loginAdmin)}>
-              Sign In Admin
-            </Button>
-            <label htmlFor='bulk-sign-up'>
-              <Input accept='.csv' id='bulk-sign-up' type='file' onChange={e => handleBulkSignUp(e)} />
-              <Button variant='contained' component='span'>
-                Bulk Sign Up
+
+        <Stack spacing={4}>
+          <Stack spacing={2} direction='column'>
+            <Typography variant='h5'>Auth</Typography>
+            <Stack spacing={2} direction='row'>
+              <Button variant='contained' onClick={() => handleButtonClick(loginStudent)}>
+                Sign In Student
               </Button>
-            </label>
-            <Button variant='contained' onClick={() => AuthService.logout()}>
-              Logout
-            </Button>
+              <Button variant='contained' onClick={() => handleButtonClick(loginTeacher)}>
+                Sign In Teacher
+              </Button>
+              <Button variant='contained' onClick={() => handleButtonClick(loginAdmin)}>
+                Sign In Admin
+              </Button>
+              <label htmlFor='bulk-sign-up'>
+                <input className='hidden' accept='.csv' id='bulk-sign-up' type='file' onChange={e => handleBulkSignUp(e)} />
+                <Button variant='contained' component='span'>
+                  Bulk Sign Up
+                </Button>
+              </label>
+              <Button variant='contained' onClick={() => AuthService.logout()}>
+                Logout
+              </Button>
+            </Stack>
+            <Typography variant='h5'>Tag</Typography>
+            <Stack spacing={2} direction='row'>
+              <Button variant='contained' onClick={() => handleButtonClick(getAllTags)}>
+                Get All Tags
+              </Button>
+            </Stack>
+            <Typography variant='h5'>User</Typography>
+            <Stack spacing={2} direction='row'>
+              <Button variant='contained' onClick={() => handleButtonClick(getAllUsers)}>
+                Get All Users
+              </Button>
+            </Stack>
           </Stack>
-          <Typography variant='h5'>Tag</Typography>
-          <Stack spacing={2} direction='row'>
-            <Button variant='contained' onClick={() => handleButtonClick(getAllTags)}>
-              Get All Tags
-            </Button>
-          </Stack>
-          <Typography variant='h5'>User</Typography>
-          <Stack spacing={2} direction='row'>
-            <Button variant='contained' onClick={() => handleButtonClick(getAllUsers)}>
-              Get All Users
-            </Button>
+
+          <Stack spacing={2} direction='column'>
+            <Typography variant='h4'>Calendar Modal</Typography>
+            <Stack spacing={2} direction='row'>
+              <Button variant='contained' onClick={() => setOpenCalendarModal(true)}>
+                Open Modal
+              </Button>
+            </Stack>
           </Stack>
         </Stack>
-        <br />
       </div>
     </>
   );
