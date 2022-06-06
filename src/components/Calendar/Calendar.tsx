@@ -8,6 +8,43 @@ import DayHeaderContent from '@components/Calendar/DayHeaderContent/DayHeaderCon
 import SlotLabelContent from '@components/Calendar/SlotLabelContent/SlotLabelContent';
 import './Calendar.css';
 
+const dummyData = [
+  {
+    title: 'Form',
+    start: '2022-06-06T08:15:00',
+    end: '2022-06-06T08:30:00',
+    description: 'Lecture',
+    backgroundColor: '#D9D9D9',
+    borderColor: '#D9D9D9',
+    textColor: 'black',
+  },
+  {
+    title: 'Lesson [Period 1]',
+    start: '2022-06-06T08:35:00',
+    end: '2022-06-06T9:30:00',
+    description: 'Lecture',
+    backgroundColor: '#D9D9D9',
+    borderColor: '#D9D9D9',
+    textColor: 'black',
+    editable: true,
+  },
+  {
+    title: 'Lesson [Period 2]',
+    start: '2022-06-06T09:35:00',
+    end: '2022-06-06T10:30:00',
+    description: 'Lecture',
+    backgroundColor: '#D9D9D9',
+    borderColor: '#D9D9D9',
+    textColor: 'black',
+  },
+  {
+    title: 'MIT Meeting',
+    start: '2022-06-06T10:30:00',
+    end: '2022-06-06T11:00:00',
+    description: 'Meeting',
+  },
+];
+
 const Calendar = () => {
   const theme = useTheme();
   const isMobile = !useMediaQuery(theme.breakpoints.up('sm'));
@@ -27,8 +64,12 @@ const Calendar = () => {
         slotMinTime='07:00:00'
         slotMaxTime='22:00:00'
         scrollTime='08:00:00'
+        slotDuration='00:15:00'
+        slotLabelInterval={{ hours: 1 }}
+        eventMinHeight={20}
         plugins={[timeGridPlugin, interactionPlugin]}
         initialView={isMobile ? 'timeGridDay' : 'timeGridWeek'}
+        events={dummyData}
       />
     </>
   );
