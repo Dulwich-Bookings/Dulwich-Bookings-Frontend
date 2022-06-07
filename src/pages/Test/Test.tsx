@@ -3,7 +3,9 @@ import { useApi } from '@/api/ApiHandler';
 import AuthService from '@/api/auth/AuthService';
 import UserService from '@/api/user/UserService';
 import TagService from '@/api/tag/TagService';
+import CloseIcon from '@mui/icons-material/Close';
 import Calendar from '@components/Calendar/Calendar';
+import AddCalendarButton from '@/components/Calendar/AddCalendarButton/AddCalendarButton';
 import { Button, Stack, Typography, Modal, Box } from '@mui/material';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
@@ -20,6 +22,10 @@ const Test = () => {
 
   const [bulkSignUpForm, setBulkSignUpForm] = useState<FormData>(new FormData());
   const [openCalendarModal, setOpenCalendarModal] = useState<boolean>(false);
+
+  const handleCloseModal = () => {
+    setOpenCalendarModal(false);
+  };
 
   const handleButtonClick = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();
@@ -48,21 +54,23 @@ const Test = () => {
 
   return (
     <>
-      <Modal className='flex justify-center items-center' open={openCalendarModal} onClose={() => setOpenCalendarModal(false)}>
-        <Box className='bg-white w-3/4 h-4/5 mt-20 rounded-lg'>
-          <Box className='h-full mx-14 mt-10'>
-            <Stack className='h-full' spacing={{ xs: 1, md: -6 }}>
-              <Box>
+      <Modal className='flex justify-center items-center' open={openCalendarModal} onClose={handleCloseModal}>
+        <Box className='bg-white w-3/4 h-4/5 mt-20 px-14 pt-10 rounded-lg'>
+          <CloseIcon onClick={handleCloseModal} className='float-right cursor-pointer hover:text-grayAccent' />
+          <Stack className='h-full' spacing={{ xs: 1, md: -6 }}>
+            <Box>
+              <Stack direction='row' spacing={2} alignItems='center'>
                 <Typography variant='h4'>Tech 4</Typography>
-                <Typography className='bookingSafe:block hidden w-1/3' variant='subtitle2'>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lorem nisl, vulputate non neque vel.
-                </Typography>
-              </Box>
-              <Box className='h-full'>
-                <Calendar />
-              </Box>
-            </Stack>
-          </Box>
+                <AddCalendarButton />
+              </Stack>
+              <Typography className='bookingSafe:block hidden w-1/3' variant='subtitle2'>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lorem nisl, vulputate non neque vel.
+              </Typography>
+            </Box>
+            <Box className='h-full'>
+              <Calendar />
+            </Box>
+          </Stack>
         </Box>
       </Modal>
       <div className='pt-6 pl-6'>

@@ -58,7 +58,7 @@ const Calendar = () => {
         }}
         dayHeaderContent={obj => <DayHeaderContent obj={obj} />}
         slotLabelContent={obj => <SlotLabelContent obj={obj} />}
-        height={'90%'}
+        height={'95%'}
         allDaySlot={false}
         nowIndicator={true}
         slotMinTime='07:00:00'
@@ -67,6 +67,7 @@ const Calendar = () => {
         slotDuration='00:15:00'
         slotLabelInterval={{ hours: 1 }}
         eventMinHeight={20}
+        slotEventOverlap={false}
         plugins={[timeGridPlugin, interactionPlugin]}
         initialView={isMobile ? 'timeGridDay' : 'timeGridWeek'}
         events={dummyData}

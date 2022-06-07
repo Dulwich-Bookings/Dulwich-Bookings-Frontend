@@ -14,7 +14,7 @@ const DayHeaderContent = ({ obj }: Props) => {
   const day = moment(dateString).format('ddd').toUpperCase();
   return (
     <div className='flex flex-col'>
-      <Typography className='text-[#4D4D4D]' variant='caption'>
+      <Typography className='text-grayAccent' variant='caption'>
         {day}
       </Typography>
       <Typography variant='h5'>
