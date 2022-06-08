@@ -1,23 +1,21 @@
 import React from 'react';
-import Login from '@/components/Login/Login';
+import LoginForm from '@/components/Landing/LoginForm/LoginForm';
+import LocationSelect from '@/components/LocationSelect/LocationSelect';
 import { Grid } from '@mui/material';
 
-import dulwichlanding from '@/assets/images/dulwichlanding.png';
-
-const Landing = () => {
+const landing = () => {
   return (
-    <React.Fragment>
-      {' '}
+    <>
       <Grid container direction='row' className='h-screen'>
-        <Grid item xs={0} md={6}>
-          <img className='object-fill h-screen' width='100%' src={dulwichlanding}></img>
+        <Grid item xs={0} md={6} className='bg-dulwichLanding bg-cover'>
+          <LocationSelect />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Login />
+          <LoginForm />
         </Grid>
       </Grid>
-    </React.Fragment>
+    </>
   );
 };
 
-export default Landing;
+export default landing;

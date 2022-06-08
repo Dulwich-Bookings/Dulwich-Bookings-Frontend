@@ -3,13 +3,18 @@ const TailWindTheme = {
   darkMode: false, // or 'media' or 'class'
   important: true,
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        dulwichLanding: "url('assets/images/dc_beijing.webp')",
+      },
+    },
     fontFamily: {
       inter: ['sans-serif'],
     },
     colors: {
-      redbg: '#e33939',
-      dwgrey: '#3D3D3D',
+      redBg: '#e33939',
+      hoverBg: '#FFE4E6',
+      greyBg: '#3D3D3D',
     },
     fontSize: {
       sm: 12,
