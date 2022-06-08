@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, Card, CardMedia, CardContent, Typography, Button, CardActions } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Button, CardActions } from '@mui/material';
 
 type RoomProps = {
   id: string;

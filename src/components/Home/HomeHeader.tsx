@@ -1,15 +1,6 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, SvgIcon, Button } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { Add, AccountCircle } from '@mui/icons-material';
-import { ReactComponent as DummyIcon } from '../../assets/dummy_icon.svg';
-
-const ProfileIcon = () => {
-  return (
-    <SvgIcon className='content-end'>
-      <DummyIcon />
-    </SvgIcon>
-  );
-};
 
 const HomeHeader = () => {
   return (

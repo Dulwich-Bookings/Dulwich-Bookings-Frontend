@@ -6,9 +6,6 @@ import HeaderBackground from '@/components/Home/HomeHeaderBackground';
 import HomeRoomList from '@/components/Home/HomeRoomList';
 import HomeFooter from '@/components/Home/HomeFooter';
 
-import SearchForm from '@/components/Home/SearchForm';
-import HomeImage from '../../assets/landscapeImage.jpg';
-
 const Home = () => {
   return (
     <>
