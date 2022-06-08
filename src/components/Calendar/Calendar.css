@@ -37,6 +37,15 @@
   outline: none !important;
 }
 
+.fc-timegrid-slot:hover {
+  background-color: rgba(217, 217, 217, 0.4);
+  cursor: pointer !important;
+}
+.fc-day-today,
+.fc.day-future {
+  cursor: pointer !important;
+}
+
 @media only screen and (max-width: 620px) {
   .fc-toolbar-chunk h2 {
     margin-left: 23px !important;
