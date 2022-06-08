@@ -1,6 +1,6 @@
 const TailWindTheme = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: false,
   important: true,
   theme: {
     extend: {},
@@ -18,7 +18,7 @@ const TailWindTheme = {
       xxl: 24,
     },
     screens: {
-      bookingSafe: '1135px',
+      bookingSafe: '960px',
       phone: '576px',
       laptop: '900px',
     },

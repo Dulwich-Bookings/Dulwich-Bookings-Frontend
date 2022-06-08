@@ -3,12 +3,10 @@ import { useApi } from '@/api/ApiHandler';
 import AuthService from '@/api/auth/AuthService';
 import UserService from '@/api/user/UserService';
 import TagService from '@/api/tag/TagService';
-import CloseIcon from '@mui/icons-material/Close';
-import Calendar from '@components/Calendar/Calendar';
-import AddCalendarButton from '@/components/Calendar/AddCalendarButton/AddCalendarButton';
-import { Button, Stack, Typography, Modal, Box } from '@mui/material';
+import { Button, Stack, Typography, TextField } from '@mui/material';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
+import BookingsModal from '@/components/BookingsModal/BookingsModal';
 
 let isFirstLoaded = true;
 
@@ -54,25 +52,7 @@ const Test = () => {
 
   return (
     <>
-      <Modal className='flex justify-center items-center' open={openCalendarModal} onClose={handleCloseModal}>
-        <Box className='bg-white w-3/4 h-4/5 mt-20 px-14 pt-10 rounded-lg'>
-          <CloseIcon onClick={handleCloseModal} className='float-right cursor-pointer hover:text-grayAccent' />
-          <Stack className='h-full' spacing={{ xs: 1, md: -6 }}>
-            <Box>
-              <Stack direction='row' spacing={2} alignItems='center'>
-                <Typography variant='h4'>Tech 4</Typography>
-                <AddCalendarButton />
-              </Stack>
-              <Typography className='bookingSafe:block hidden w-1/3' variant='subtitle2'>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lorem nisl, vulputate non neque vel.
-              </Typography>
-            </Box>
-            <Box className='h-full'>
-              <Calendar />
-            </Box>
-          </Stack>
-        </Box>
-      </Modal>
+      <BookingsModal openState={openCalendarModal} handleCloseModal={handleCloseModal} />
       <div className='pt-6 pl-6'>
         <Typography className='pb-6' variant='h3'>
           Add your own test components below!
@@ -123,6 +103,7 @@ const Test = () => {
                 Open Modal
               </Button>
             </Stack>
+            <TextField label='Outlined' variant='outlined' className='w-3/4 rounded-full' />
           </Stack>
         </Stack>
       </div>
