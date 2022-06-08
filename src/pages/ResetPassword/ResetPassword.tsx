@@ -3,8 +3,6 @@ import ResetForm from '@/components/ResetPassword/ResetForm';
 import LocationSelect from '@/components/LocationSelect/LocationSelect';
 import { Grid } from '@mui/material';
 
-import dulwichlanding from '@/assets/images/dulwichlanding.png';
-
 const resetPassword = () => {
   return (
     <>
