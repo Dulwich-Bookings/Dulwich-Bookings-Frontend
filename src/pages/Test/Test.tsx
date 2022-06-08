@@ -3,7 +3,7 @@ import { useApi } from '@/api/ApiHandler';
 import AuthService from '@/api/auth/AuthService';
 import UserService from '@/api/user/UserService';
 import TagService from '@/api/tag/TagService';
-import { Button, Stack, Typography, TextField } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
 import BookingsModal from '@/components/BookingsModal/BookingsModal';
@@ -103,7 +103,6 @@ const Test = () => {
                 Open Modal
               </Button>
             </Stack>
-            <TextField label='Outlined' variant='outlined' className='w-3/4 rounded-full' />
           </Stack>
         </Stack>
       </div>

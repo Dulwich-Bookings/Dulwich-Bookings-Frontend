@@ -1,6 +1,7 @@
 import React from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import { Box } from '@mui/material';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -49,7 +50,7 @@ const Calendar = () => {
   const theme = useTheme();
   const isMobile = !useMediaQuery(theme.breakpoints.up('sm'));
   return (
-    <>
+    <Box className='h-full'>
       <FullCalendar
         headerToolbar={{
           start: '',
@@ -72,7 +73,7 @@ const Calendar = () => {
         initialView={isMobile ? 'timeGridDay' : 'timeGridWeek'}
         events={dummyData}
       />
-    </>
+    </Box>
   );
 };
 

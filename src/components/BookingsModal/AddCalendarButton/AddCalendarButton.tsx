@@ -1,10 +1,33 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { toggleShowNotification } from '@/modules/ui/uiSlice';
+import { copyToClipboard } from '@/utilities/clipboard';
+import { severity } from '@/consts/constants';
 import { Box, Typography, Stack } from '@mui/material';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
-const AddCalendarButton = () => {
+type Props = {
+  id: number;
+};
+
+const AddCalendarButton = ({ id }: Props) => {
+  const dispatch = useDispatch();
+
+  const handleAddToClipboard = () => {
+    const url = `http://www.testURL/${id}`;
+    try {
+      copyToClipboard(url);
+      dispatch(
+        toggleShowNotification({ message: 'Successfully Copied Calendar Subscription Link to Clipboard', severity: severity.SUCCESS }),
+      );
+    } catch (err: unknown) {
+      const error = err as Error;
+      dispatch(toggleShowNotification({ message: error.message, severity: severity.ERROR }));
+    }
+  };
+
   return (
-    <Box className='rounded-2xl px-3 py-1 bg-grayLight cursor-pointer'>
+    <Box onClick={handleAddToClipboard} className='rounded-2xl px-3 py-1 bg-grayLight cursor-pointer'>
       <Stack direction='row' alignItems='center' spacing={1}>
         <CalendarMonthIcon />{' '}
         <Typography className='text-center mt-0.5' variant='caption'>
