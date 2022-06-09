@@ -11,7 +11,7 @@ const LandingFormWrapper = ({ children }: Props) => {
     <Grid container className='h-screen' direction='column' alignItems='center' justifyContent='center'>
       <Grid item className='w-9/12'>
         <Stack direction='column' spacing={8}>
-          <SelectSchoolInput className='laptop:hidden flex -top-10 h-11' />
+          <SelectSchoolInput className=' laptop:absolute laptop:top-10 laptop:left-10 flex -top-10 h-11' />
           {children}
         </Stack>
       </Grid>
