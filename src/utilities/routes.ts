@@ -4,7 +4,7 @@ const Routes = {
     login: '/auth/login',
     signUp: '/auth/signUp',
     forgetPassword: '/auth/forgetPassword',
-    resetForgetPassword: '/auth/resetForgetPassword',
+    resetPassword: '/auth/resetPassword',
   },
   base: '/',
   home: '/home',
