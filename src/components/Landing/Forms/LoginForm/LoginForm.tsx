@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import { updateCurrentUser } from '@/modules/user/userSlice';
 import AuthService from '@/api/auth/AuthService';
+import UserService from '@/api/user/UserService';
 import { useApi } from '@/api/ApiHandler';
 
 const LoginForm = () => {
@@ -18,6 +19,7 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [login] = useApi(() => AuthService.login(email, password), true, true, false);
+  const [getSelf] = useApi(() => UserService.getSelf(), true, true, false);
 
   const signUpRoute: LandingRoute = {
     route: Routes.authentication.signUp,
@@ -32,10 +34,11 @@ const LoginForm = () => {
   const handleSignIn = async () => {
     try {
       setIsLoading(true);
-      const res = await login();
+      await login();
+      const res = await getSelf();
       if (res.isSuccess) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        dispatch(updateCurrentUser(res.data!.user));
+        dispatch(updateCurrentUser(res.data));
+        console.log(res.data);
         history.push('/home');
       }
       setIsLoading(false);

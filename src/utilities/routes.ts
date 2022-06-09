@@ -6,6 +6,7 @@ const Routes = {
     forgetPassword: '/auth/forgetPassword',
     resetForgetPassword: '/auth/resetForgetPassword',
   },
+  base: '/',
   home: '/home',
 };
 
