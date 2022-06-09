@@ -1,39 +1,19 @@
-import React, { useState } from 'react';
-import { Select, SelectChangeEvent, MenuItem } from '@mui/material';
+import React from 'react';
+import { Select, MenuItem, SelectChangeEvent } from '@mui/material';
 
 export type SchoolLocation = {
   text: string;
   value: number;
 };
 
-const dummyLocations: SchoolLocation[] = [
-  {
-    text: 'Beijing',
-    value: 1,
-  },
-  {
-    text: 'Shanghai Pudong',
-    value: 2,
-  },
-  {
-    text: 'Test',
-    value: 3,
-  },
-];
-
 type Props = {
   className?: string;
+  allLocations: SchoolLocation[];
+  currentLocation: SchoolLocation;
+  handleLocationChange: (event: SelectChangeEvent) => void;
 };
 
-const SelectSchoolInput = ({ className }: Props) => {
-  const [currentLocation, setCurrentLocation] = useState<SchoolLocation>(dummyLocations[0]);
-
-  const handleLocationChange = (event: SelectChangeEvent) => {
-    // This is a safe conversion as all values inside select are of type 'SchoolLocation'
-    const changedValue = parseInt(event.target.value) - 1;
-    setCurrentLocation(dummyLocations[changedValue]);
-  };
-
+const SelectSchoolInput = ({ className, allLocations, currentLocation, handleLocationChange }: Props) => {
   return (
     <>
       <Select
@@ -42,7 +22,7 @@ const SelectSchoolInput = ({ className }: Props) => {
         renderValue={() => `Dulwich College ${currentLocation.text}`}
         className={`bg-bgWhite ${className}`}
       >
-        {dummyLocations.map(location => (
+        {allLocations.map(location => (
           <MenuItem key={location.value} value={location.value}>
             {location.text}
           </MenuItem>
