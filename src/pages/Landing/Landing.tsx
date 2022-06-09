@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 import LandingImage from '@/assets/images/Landing-Sample.png';
-import LoginForm from '@/components/Landing/LoginForm/LoginForm';
+import LoginForm from '@/components/Landing/Forms/LoginForm/LoginForm';
 
 const Landing = () => {
   return (
