@@ -12,7 +12,7 @@ const HomeHeader = () => {
           </Typography>
         </div>
         <div>
-          <Button className='mr-8 bg-dulwichRed' variant='contained'>
+          <Button className='mr-8 bg-dulwichRed normal-case space-x-1' variant='contained'>
             <Add />
             <Typography color='inherit'>Resource</Typography>
           </Button>
