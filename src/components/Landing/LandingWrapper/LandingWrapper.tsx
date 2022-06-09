@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Grid, SelectChangeEvent } from '@mui/material';
 import LandingImage1 from '@/assets/images/Landing-Sample-1.png';
 import LandingImage2 from '@/assets/images/Landing-Sample-2.png';
+import LandingImage3 from '@/assets/images/Landing-Sample-3.png';
 import LandingFormWrapper from '@/components/Landing/LandingFormWrapper/LandingFormWrapper';
 import { SchoolLocation } from '@/components/Landing/SelectSchoolInput/SelectSchoolInput';
 
@@ -25,7 +26,7 @@ const dummyLocations: SchoolLocation[] = [
 const locationImages = [
   {
     id: 1,
-    img: LandingImage1,
+    img: LandingImage3,
   },
   {
     id: 2,
