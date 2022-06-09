@@ -1,6 +1,7 @@
 import React from 'react';
-import { Typography, Grid, TextField, Stack, Button } from '@mui/material';
+import { Typography, Grid, Stack, Button } from '@mui/material';
 import ResponsiveText from '@components/ResponsiveText/ResponsiveText';
+import InputWithLabel from '@/components/InputWithLabel/InputWithLabel';
 
 const LoginForm = () => {
   return (
@@ -19,14 +20,8 @@ const LoginForm = () => {
             </ResponsiveText>
           </Stack>
           <Stack direction='column' spacing={2}>
-            <Stack direction='column'>
-              <Typography variant='h6'>Email</Typography>
-              <TextField id='outlined-basic' label='name@dulwich.org' variant='outlined' />
-            </Stack>
-            <Stack direction='column'>
-              <Typography variant='h6'>Password</Typography>
-              <TextField type='password' id='outlined-basic' label='6+ characters, 1 special character' variant='outlined' />
-            </Stack>
+            <InputWithLabel labelText='Email' inputPlaceholder='name@dulwich.org' inputType='text' />
+            <InputWithLabel labelText='Password' inputPlaceholder='6+ characters, 1 special character' inputType='password' />
           </Stack>
           <Stack direction='column' alignItems='center' spacing={1}>
             <Button className='bg-dulwichRed normal-case w-32 h-11 text-lg' variant='contained'>
