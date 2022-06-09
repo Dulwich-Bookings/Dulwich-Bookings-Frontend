@@ -19,7 +19,7 @@ const LandingFormWrapper = ({ children, allLocations, currentLocation, handleLoc
             allLocations={allLocations}
             currentLocation={currentLocation}
             handleLocationChange={handleLocationChange}
-            className='laptop:absolute laptop:top-10 laptop:left-10 flex -top-10 h-11'
+            className='laptop:absolute laptop:top-10 laptop:left-10 flex h-11'
           />
           {children}
         </Stack>
