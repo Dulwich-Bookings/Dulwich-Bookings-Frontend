@@ -8,12 +8,13 @@ type Props = {
   buttonText: string;
   handleOnClick: () => void;
   footerLink?: LandingRoute;
+  loading?: boolean;
 };
 
-const LandingFormFooter = ({ buttonText, footerLink, handleOnClick }: Props) => {
+const LandingFormFooter = ({ buttonText, footerLink, handleOnClick, loading }: Props) => {
   return (
     <Stack direction='column' alignItems='center' spacing={1}>
-      <LandingButton buttonText={buttonText} handleOnClick={handleOnClick} />
+      <LandingButton buttonText={buttonText} handleOnClick={handleOnClick} loading={loading} />
       {footerLink && (
         <Typography variant='h6'>
           <NavLink to={footerLink.route} className='underline underline-offset-4 text-[#3D3D3D]'>

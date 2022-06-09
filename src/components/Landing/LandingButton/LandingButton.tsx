@@ -1,16 +1,24 @@
 import React from 'react';
-import { Button } from '@mui/material';
+import { CircularProgress } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 type Props = {
   buttonText: string;
   handleOnClick: () => void;
+  loading?: boolean;
 };
 
-const LandingButton = ({ buttonText, handleOnClick }: Props) => {
+const LandingButton = ({ buttonText, handleOnClick, loading }: Props) => {
   return (
-    <Button onClick={handleOnClick} className='bg-dulwichRed normal-case w-32 h-11 text-lg' variant='contained'>
+    <LoadingButton
+      loading={loading}
+      onClick={handleOnClick}
+      className='bg-dulwichRed normal-case w-32 h-11 text-lg '
+      variant='contained'
+      loadingIndicator={<CircularProgress size={16} className='text-bgWhite' />}
+    >
       {buttonText}
-    </Button>
+    </LoadingButton>
   );
 };
 

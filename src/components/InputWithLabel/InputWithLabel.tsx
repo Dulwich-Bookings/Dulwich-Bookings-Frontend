@@ -16,7 +16,7 @@ type Props = {
   inputValidation?: InputValidation;
   inputVariant?: 'outlined' | 'standard' | 'filled';
   inputValue?: string;
-  inputHandleOnChange?: () => void; // Use with InputValue (Double Binding)
+  inputHandleOnChange?: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void; // Use with InputValue (Double Binding)
   required?: boolean;
 };
 
