@@ -36,7 +36,7 @@ export function useApi<T>(
         dispatch(toggleShowNotification({ message: error.data.message, severity: severity.ERROR }));
       }
       if (error?.status === 403) {
-        history.push(Routes.base);
+        history.push(Routes.authentication.login);
       }
       console.log(error);
       return { ...error?.data, isSuccess: false };

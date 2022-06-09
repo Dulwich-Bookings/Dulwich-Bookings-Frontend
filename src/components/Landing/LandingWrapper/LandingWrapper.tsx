@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Grid, SelectChangeEvent } from '@mui/material';
 import LandingImage1 from '@/assets/images/Landing-Sample-1.png';
 import LandingImage2 from '@/assets/images/Landing-Sample-2.png';
-import LoginForm from '@/components/Landing/Forms/LoginForm/LoginForm';
 import LandingFormWrapper from '@/components/Landing/LandingFormWrapper/LandingFormWrapper';
 import { SchoolLocation } from '@/components/Landing/SelectSchoolInput/SelectSchoolInput';
 
@@ -38,7 +37,11 @@ const locationImages = [
   },
 ];
 
-const Landing = () => {
+type Props = {
+  children: React.ReactNode;
+};
+
+const LandingWrapper = ({ children }: Props) => {
   const [currentLocation, setCurrentLocation] = useState<SchoolLocation>(dummyLocations[0]);
   const img = locationImages.filter(img => img.id === currentLocation.value)[0].img;
 
@@ -56,11 +59,11 @@ const Landing = () => {
       </Grid>
       <Grid item xs={12} md={6}>
         <LandingFormWrapper allLocations={dummyLocations} currentLocation={currentLocation} handleLocationChange={handleLocationChange}>
-          <LoginForm />
+          {children}
         </LandingFormWrapper>
       </Grid>
     </Grid>
   );
 };
 
-export default Landing;
+export default LandingWrapper;

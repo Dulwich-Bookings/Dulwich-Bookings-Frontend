@@ -1,6 +1,11 @@
 const Routes = {
   test: '/test',
-  base: '/',
+  authentication: {
+    login: '/auth/login',
+    signUp: '/auth/signUp',
+    forgetPassword: '/auth/forgetPassword',
+    resetForgetPassword: '/auth/resetForgetPassword',
+  },
   home: '/home',
 };
 

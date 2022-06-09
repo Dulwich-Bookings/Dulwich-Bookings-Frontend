@@ -8,12 +8,12 @@ import Routes from '@/utilities/routes';
 
 const LoginForm = () => {
   const signUpRoute: LandingRoute = {
-    route: Routes.base,
+    route: Routes.authentication.signUp,
     routeText: 'Sign Up',
   };
 
   const forgetPasswordRoute: LandingRoute = {
-    route: Routes.base,
+    route: Routes.authentication.forgetPassword,
     routeText: 'Forgot your password',
   };
 
