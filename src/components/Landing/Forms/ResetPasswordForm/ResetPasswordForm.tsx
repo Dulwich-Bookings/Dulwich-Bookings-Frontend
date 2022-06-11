@@ -35,7 +35,6 @@ const ResetPasswordForm = () => {
     setPasswordError(isPasswordValid ? noError : emptyFieldError);
     setPasswordConfirmationError(isPasswordConfirmationValid ? noError : emptyFieldError);
 
-    console.log(queryToken);
     if (!queryToken) {
       dispatch(toggleShowNotification({ message: 'Invalid link! Check your email for a set password link', severity: severity.WARNING }));
       throw new Error('Invalid Token');

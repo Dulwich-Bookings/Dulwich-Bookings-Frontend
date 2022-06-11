@@ -18,7 +18,7 @@ const ForgetPasswordForm = ({ schoolId }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [emailError, setEmailError] = useState<InputValidation>(noError);
-  const [sendForgetPasswordEmail] = useApi(() => AuthService.createForgotPasswordUrl(email, schoolId));
+  const [sendForgetPasswordEmail] = useApi(() => AuthService.createForgotPasswordUrl(email, schoolId), true, true, false);
 
   const loginRoute: LandingRoute = {
     route: Routes.authentication.login,
