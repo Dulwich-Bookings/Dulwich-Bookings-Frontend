@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Routes from '@/utilities/routes';
 import { getLocalStorageValue } from '@/utilities/localStorage';
+import { useApi } from '@/api/ApiHandler';
+import UserService from '@/api/user/UserService';
+import { useDispatch } from 'react-redux';
+import { updateCurrentUser } from '@/modules/user/userSlice';
 
 import Login from '@pages/Landing/Login/Login';
 import ForgetPassword from '@pages/Landing/ForgetPassword/ForgetPassword';
@@ -11,7 +15,26 @@ import Home from '@pages/Home/Home';
 import Test from '@pages/Test/Test';
 
 const AppRouter = () => {
+  const dispatch = useDispatch();
   const accessToken: string | null = getLocalStorageValue('accessToken') ?? null;
+  const [getSelf] = useApi(() => UserService.getSelf(), false, false, false);
+
+  const fetchUser = async () => {
+    try {
+      const res = await getSelf();
+      if (res.isSuccess) {
+        dispatch(updateCurrentUser(res.data));
+        console.log(res.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (!accessToken) return;
+    fetchUser();
+  }, []);
 
   return (
     <Switch>

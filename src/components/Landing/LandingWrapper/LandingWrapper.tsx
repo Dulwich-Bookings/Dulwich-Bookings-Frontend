@@ -38,11 +38,17 @@ const locationImages = [
   },
 ];
 
-type Props = {
-  children: React.ReactNode;
+type FormProps = {
+  schoolId: number;
 };
 
-const LandingWrapper = ({ children }: Props) => {
+type Props = {
+  Form: (props: FormProps) => JSX.Element;
+  children?: React.ReactNode;
+  spacing?: number;
+};
+
+const LandingWrapper = ({ children, spacing, Form }: Props) => {
   const [currentLocation, setCurrentLocation] = useState<SchoolLocation>(dummyLocations[0]);
   const img = locationImages.filter(img => img.id === currentLocation.value)[0].img;
 
@@ -59,7 +65,13 @@ const LandingWrapper = ({ children }: Props) => {
         <img className='object-none h-screen' width='100%' src={img} />
       </Grid>
       <Grid item xs={12} md={6}>
-        <LandingFormWrapper allLocations={dummyLocations} currentLocation={currentLocation} handleLocationChange={handleLocationChange}>
+        <LandingFormWrapper
+          spacing={spacing}
+          allLocations={dummyLocations}
+          currentLocation={currentLocation}
+          handleLocationChange={handleLocationChange}
+        >
+          <Form schoolId={currentLocation.value} />
           {children}
         </LandingFormWrapper>
       </Grid>

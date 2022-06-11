@@ -5,24 +5,24 @@ import LandingFormHeader from '@components/Landing/LandingFormHeader/LandingForm
 import LandingFormFooter from '@components/Landing/LandingFormFooter/LandingFormFooter';
 import { LandingRoute } from '@/consts/constants';
 import Routes from '@/utilities/routes';
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import { updateCurrentUser } from '@/modules/user/userSlice';
 import AuthService from '@/api/auth/AuthService';
-import UserService from '@/api/user/UserService';
 import { useApi } from '@/api/ApiHandler';
 import { InputValidation } from '@components/InputWithLabel/InputWithLabel';
 
-const LoginForm = () => {
+type Props = {
+  schoolId: number;
+};
+
+const LoginForm = ({ schoolId }: Props) => {
+  const noError: InputValidation = { isError: false, errorHelperText: '' };
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [emailError, setEmailError] = useState<InputValidation>({ isError: false, errorHelperText: '' });
-  const [passwordError, setPasswordError] = useState<InputValidation>({ isError: false, errorHelperText: '' });
-  const dispatch = useDispatch();
+  const [emailError, setEmailError] = useState<InputValidation>(noError);
+  const [passwordError, setPasswordError] = useState<InputValidation>(noError);
   const history = useHistory();
-  const [login] = useApi(() => AuthService.login(email, password), true, true, false);
-  const [getSelf] = useApi(() => UserService.getSelf(), true, true, false);
+  const [login] = useApi(() => AuthService.login(email, password, schoolId), true, true, false);
 
   const signUpRoute: LandingRoute = {
     route: Routes.authentication.signUp,
@@ -40,14 +40,10 @@ const LoginForm = () => {
       isError: true,
       errorHelperText: errorText,
     };
-    const noErrorObj: InputValidation = {
-      isError: false,
-      errorHelperText: '',
-    };
     const isValidEmail = email.length !== 0;
     const isValidPassword = password.length !== 0;
-    setEmailError(isValidEmail ? noErrorObj : errorObj);
-    setPasswordError(isValidPassword ? noErrorObj : errorObj);
+    setEmailError(isValidEmail ? noError : errorObj);
+    setPasswordError(isValidPassword ? noError : errorObj);
 
     if (!isValidEmail || !isValidPassword) {
       throw new Error('Form Invalid');
@@ -58,10 +54,8 @@ const LoginForm = () => {
     try {
       setIsLoading(true);
       formValidation();
-      await login();
-      const res = await getSelf();
+      const res = await login();
       if (res.isSuccess) {
-        dispatch(updateCurrentUser(res.data));
         console.log(res.data);
         history.push('/home');
       }

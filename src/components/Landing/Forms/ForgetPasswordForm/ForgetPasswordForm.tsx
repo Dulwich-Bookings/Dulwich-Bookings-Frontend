@@ -6,7 +6,11 @@ import LandingFormFooter from '@components/Landing/LandingFormFooter/LandingForm
 import { LandingRoute } from '@/consts/constants';
 import Routes from '@/utilities/routes';
 
-const ForgetPasswordForm = () => {
+type Props = {
+  schoolId: number;
+};
+
+const ForgetPasswordForm = ({ schoolId }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const loginRoute: LandingRoute = {

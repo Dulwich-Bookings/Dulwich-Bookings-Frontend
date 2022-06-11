@@ -12,7 +12,7 @@ class AuthService {
     return 'authentication';
   }
 
-  public static async login(email: string, password: string): Promise<ApiData<LoginData>> {
+  public static async login(email: string, password: string, schoolId: number): Promise<ApiData<LoginData>> {
     try {
       //get the token
       const response = await ApiService.request({
@@ -21,6 +21,7 @@ class AuthService {
         data: {
           email,
           password,
+          schoolId,
         },
       });
 
