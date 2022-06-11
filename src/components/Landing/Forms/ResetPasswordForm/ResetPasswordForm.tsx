@@ -4,11 +4,7 @@ import InputWithLabel from '@/components/InputWithLabel/InputWithLabel';
 import LandingFormHeader from '@components/Landing/LandingFormHeader/LandingFormHeader';
 import LandingFormFooter from '@components/Landing/LandingFormFooter/LandingFormFooter';
 
-type Props = {
-  schoolId: number;
-};
-
-const ResetPasswordForm = ({ schoolId }: Props) => {
+const ResetPasswordForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleResetPassword = () => {

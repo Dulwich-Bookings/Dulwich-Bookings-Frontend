@@ -142,13 +142,14 @@ class AuthService {
     }
   }
 
-  public static async createForgotPasswordUrl(email: string): Promise<ApiData> {
+  public static async createForgotPasswordUrl(email: string, schoolId: number): Promise<ApiData> {
     try {
       const response = await ApiService.request({
         url: `${this.getAuthUrl()}/forgetPassword`,
         method: 'POST',
         data: {
           email,
+          schoolId,
         },
       });
       return response;
