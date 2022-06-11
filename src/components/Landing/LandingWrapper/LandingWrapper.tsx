@@ -5,6 +5,7 @@ import LandingImage2 from '@/assets/images/Landing-Sample-2.png';
 import LandingImage3 from '@/assets/images/Landing-Sample-3.png';
 import LandingFormWrapper from '@/components/Landing/LandingFormWrapper/LandingFormWrapper';
 import { SchoolLocation } from '@/components/Landing/SelectSchoolInput/SelectSchoolInput';
+import { setLocalStorageValue, getLocalStorageValue } from '@/utilities/localStorage';
 
 // TODO: Add API call to retrieve all schools
 // TODO: Move to the consts/dummyData.ts file
@@ -46,16 +47,25 @@ type Props = {
   Form: (props: FormProps) => JSX.Element;
   children?: React.ReactNode;
   spacing?: number;
+  showSelectLocation?: boolean;
 };
 
-const LandingWrapper = ({ children, spacing, Form }: Props) => {
-  const [currentLocation, setCurrentLocation] = useState<SchoolLocation>(dummyLocations[0]);
+const LandingWrapper = ({ children, spacing, showSelectLocation, Form }: Props) => {
+  const firstLocationId: number = getLocalStorageValue('currentLocation')
+    ? (getLocalStorageValue('currentLocation') as unknown as number)
+    : -1;
+
+  const firstLocation =
+    firstLocationId === -1 ? dummyLocations[0] : dummyLocations.filter(location => location.value === firstLocationId)[0];
+
+  const [currentLocation, setCurrentLocation] = useState<SchoolLocation>(firstLocation);
   const img = locationImages.filter(img => img.id === currentLocation.value)[0].img;
 
   const handleLocationChange = (event: SelectChangeEvent) => {
     // This is a safe conversion as all values inside select are of type 'SchoolLocation'
     const changedValue = parseInt(event.target.value);
     const newLocation = dummyLocations.filter(location => location.value === changedValue)[0];
+    setLocalStorageValue('currentLocation', changedValue);
     setCurrentLocation(newLocation);
   };
 
@@ -70,6 +80,7 @@ const LandingWrapper = ({ children, spacing, Form }: Props) => {
           allLocations={dummyLocations}
           currentLocation={currentLocation}
           handleLocationChange={handleLocationChange}
+          showSelectLocation={showSelectLocation}
         >
           <Form schoolId={currentLocation.value} />
           {children}

@@ -3,7 +3,7 @@ import ConfirmEmailForm from '@components/Landing/Forms/ConfirmEmailForm/Confirm
 import LandingWrapper from '@components/Landing/LandingWrapper/LandingWrapper';
 
 const ConfirmEmail = () => {
-  return <LandingWrapper Form={ConfirmEmailForm} />;
+  return <LandingWrapper showSelectLocation={false} Form={ConfirmEmailForm} />;
 };
 
 export default ConfirmEmail;

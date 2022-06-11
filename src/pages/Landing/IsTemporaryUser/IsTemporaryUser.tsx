@@ -3,7 +3,7 @@ import IsTemporaryUserForm from '@/components/Landing/Forms/IsTemporaryUserForm/
 import LandingWrapper from '@components/Landing/LandingWrapper/LandingWrapper';
 
 const IsTemporaryUser = () => {
-  return <LandingWrapper Form={IsTemporaryUserForm} />;
+  return <LandingWrapper showSelectLocation={false} Form={IsTemporaryUserForm} />;
 };
 
 export default IsTemporaryUser;

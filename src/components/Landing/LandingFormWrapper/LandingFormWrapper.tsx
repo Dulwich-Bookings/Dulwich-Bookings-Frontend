@@ -9,20 +9,24 @@ type Props = {
   currentLocation: SchoolLocation;
   handleLocationChange: (event: SelectChangeEvent) => void;
   spacing?: number;
+  showSelectLocation?: boolean;
 };
 
-const LandingFormWrapper = ({ children, allLocations, currentLocation, spacing, handleLocationChange }: Props) => {
+const LandingFormWrapper = ({ children, allLocations, currentLocation, spacing, showSelectLocation, handleLocationChange }: Props) => {
   const componentSpacing = spacing ? spacing : 8;
+  const showSelect = showSelectLocation === undefined || null ? true : showSelectLocation;
   return (
     <Grid container className='h-screen' direction='column' alignItems='center' justifyContent='center'>
       <Grid item className='w-9/12'>
         <Stack direction='column' spacing={componentSpacing}>
-          <SelectSchoolInput
-            allLocations={allLocations}
-            currentLocation={currentLocation}
-            handleLocationChange={handleLocationChange}
-            className='laptop:absolute laptop:top-10 laptop:left-10 h-11'
-          />
+          {showSelect && (
+            <SelectSchoolInput
+              allLocations={allLocations}
+              currentLocation={currentLocation}
+              handleLocationChange={handleLocationChange}
+              className='laptop:absolute laptop:top-10 laptop:left-10 h-11'
+            />
+          )}
           {children}
         </Stack>
       </Grid>
