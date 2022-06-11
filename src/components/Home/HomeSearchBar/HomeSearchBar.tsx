@@ -3,7 +3,18 @@ import { Grid, OutlinedInput, FormControl, InputAdornment, Button } from '@mui/m
 import { Search } from '@mui/icons-material';
 import HomeMenu from './HomeMenu';
 
-const HomeSearchBar = () => {
+type Props = {
+  onInputChange(enteredValue: string): void;
+};
+
+const HomeSearchBar = (props: Props) => {
+  //const [roomInput, setRoomInput] = useState<string>('');
+  //const roomTextInputRef = useRef<HTMLInputElement>(null);
+
+  const roomInputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    props.onInputChange(event.target.value);
+  };
+
   return (
     <Grid container justifyContent='center'>
       <FormControl className='rounded-full w-3/4 bg-bgWhite' sx={{ boxShadow: 12 }}>
@@ -21,6 +32,7 @@ const HomeSearchBar = () => {
               </Button>
             </InputAdornment>
           }
+          onChange={roomInputChangeHandler}
         />
       </FormControl>
     </Grid>
