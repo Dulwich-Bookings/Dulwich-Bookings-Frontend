@@ -90,7 +90,7 @@ const SignUpForm = ({ schoolId }: Props) => {
             inputValidation={emailError}
           />
           <InputWithLabel
-            inputValue={signUpData.class?.toString()}
+            inputValue={signUpData.class}
             inputHandleOnChange={input => setSetUpData({ ...signUpData, class: parseInt(input.target.value) })}
             labelText='Graduation Year'
             inputPlaceholder={currentYear}

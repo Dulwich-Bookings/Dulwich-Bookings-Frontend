@@ -6,7 +6,7 @@ export type InputValidation = {
   errorHelperText: string;
 };
 
-type Props = {
+type Props<inputType> = {
   spacing?: number; // Optional definition for the space between Label and Input
   labelText: string;
   labelClassName?: string; // Optional ClassNames for Label
@@ -15,12 +15,13 @@ type Props = {
   inputClassName?: string; // Optional ClassNames for Input
   inputValidation?: InputValidation;
   inputVariant?: 'outlined' | 'standard' | 'filled';
-  inputValue?: string;
+  inputValue?: inputType;
   inputHandleOnChange?: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void; // Use with InputValue (Double Binding)
   required?: boolean;
 };
 
-const InputWithLabel = (props: Props) => {
+// eslint-disable-next-line @typescript-eslint/ban-types
+const InputWithLabel = <T extends Object>(props: Props<T>) => {
   const { inputValidation } = props;
   const colSpacing = props.spacing ? props.spacing : 0.5;
   const isError = inputValidation ? inputValidation.isError : false;
