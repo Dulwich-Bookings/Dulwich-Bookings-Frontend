@@ -16,14 +16,14 @@ type Props = {
 
 const SignUpForm = ({ schoolId }: Props) => {
   const noError: InputValidation = { isError: false, errorHelperText: '' };
+  const currentYear = new Date().getFullYear();
   const initSignUp: UserSignUpData = {
     email: '',
     password: '',
     passwordConfirmation: '',
-    class: 0,
+    class: currentYear,
     schoolId: schoolId,
   };
-  const currentYear = new Date().getFullYear().toString();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [signUpData, setSetUpData] = useState<UserSignUpData>(initSignUp);
   const [emailError, setEmailError] = useState<InputValidation>(noError);
@@ -93,7 +93,7 @@ const SignUpForm = ({ schoolId }: Props) => {
             inputValue={signUpData.class}
             inputHandleOnChange={input => setSetUpData({ ...signUpData, class: parseInt(input.target.value) })}
             labelText='Graduation Year'
-            inputPlaceholder={currentYear}
+            inputPlaceholder={currentYear.toString()}
             inputType='number'
             inputValidation={gradYearError}
           />
