@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Stack, Grid } from '@mui/material';
 =======
+=======
+>>>>>>> c5cbc85c384f7bf01df6bd3a411e893abefbedcf
 import { Stack } from '@mui/material';
 >>>>>>> c5cbc85c384f7bf01df6bd3a411e893abefbedcf
 
@@ -12,7 +15,10 @@ import HomeSearchBar from '@/components/Home/HomeSearchBar/HomeSearchBar';
 import Footer from '@/components/Footer/Footer';
 import Room from '@/models/room';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import HomeRoomHeader from '@/components/Home/HomeRooms/HomeRoomHeader';
+=======
+>>>>>>> c5cbc85c384f7bf01df6bd3a411e893abefbedcf
 =======
 >>>>>>> c5cbc85c384f7bf01df6bd3a411e893abefbedcf
 
@@ -53,6 +59,9 @@ const Home = () => {
           <HomeSearchBar onInputChange={onInputChangeHandler} />
         </Stack>
         <HomeRoomList rooms={rooms} />
+<<<<<<< HEAD
+>>>>>>> c5cbc85c384f7bf01df6bd3a411e893abefbedcf
+=======
 >>>>>>> c5cbc85c384f7bf01df6bd3a411e893abefbedcf
       </main>
       {/* Footer */}
