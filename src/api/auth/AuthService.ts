@@ -139,7 +139,7 @@ class AuthService {
     }
   }
 
-  public static async confirmEmail(id: number, accessToken: string): Promise<ApiData> {
+  public static async confirmEmail(accessToken: string): Promise<ApiData> {
     const isConfirmed = true;
     try {
       const response = await ApiService.request({

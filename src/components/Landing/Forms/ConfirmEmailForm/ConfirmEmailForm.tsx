@@ -5,7 +5,6 @@ import Routes from '@/utilities/routes';
 import { useLocation } from 'react-router-dom';
 import { useApi } from '@/api/ApiHandler';
 import AuthService from '@/api/auth/AuthService';
-import { decodeJwt } from '@/utilities/jwtUtils';
 import { useDispatch } from 'react-redux';
 import { toggleShowNotification } from '@/modules/ui/uiSlice';
 import { severity } from '@/consts/constants';
@@ -16,8 +15,7 @@ const ConfirmEmailForm = () => {
   const search = useLocation().search;
   const queryToken = new URLSearchParams(search).get('token');
   const token = queryToken ? queryToken : '';
-  const userId = decodeJwt(token).id;
-  const [confirmEmail] = useApi(() => AuthService.confirmEmail(userId, token), true, true, false);
+  const [confirmEmail] = useApi(() => AuthService.confirmEmail(token), true, true, false);
 
   const loginRoute: LandingRoute = {
     route: Routes.authentication.login,
