@@ -5,13 +5,20 @@ const TailWindTheme = {
   theme: {
     extend: {},
     fontFamily: {},
-    colors: {},
+    colors: {
+      bgWhite: '#feffff',
+      dulwichRed: '#E33939',
+    },
     fontSize: {
       sm: 12,
       md: 14,
       lg: 19,
       xl: 20,
       xxl: 24,
+    },
+    screens: {
+      phone: '576px',
+      laptop: '900px',
     },
   },
   variants: {
