@@ -12,7 +12,11 @@ class AuthService {
     return 'authentication';
   }
 
-  public static async login(email: string, password: string): Promise<ApiData<LoginData>> {
+  private static getUserUrl() {
+    return 'users';
+  }
+
+  public static async login(email: string, password: string, schoolId: number): Promise<ApiData<LoginData>> {
     try {
       //get the token
       const response = await ApiService.request({
@@ -21,6 +25,7 @@ class AuthService {
         data: {
           email,
           password,
+          schoolId,
         },
       });
 
@@ -118,36 +123,31 @@ class AuthService {
     }
   }
 
-  public static async resetForgotPassword(password: string, passwordConfirmation: string, accessToken: string): Promise<ApiData> {
-    try {
-      const response = await ApiService.request(
-        {
-          url: `${this.getAuthUrl()}/setForgetPassword`,
-          method: 'POST',
-          data: {
-            password,
-            passwordConfirmation,
-          },
-          headers: {
-            'x-auth-token': accessToken,
-          },
-        },
-        false,
-        true,
-      );
-      return response;
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  }
-
-  public static async createForgotPasswordUrl(email: string): Promise<ApiData> {
+  public static async createForgotPasswordUrl(email: string, schoolId: number): Promise<ApiData> {
     try {
       const response = await ApiService.request({
         url: `${this.getAuthUrl()}/forgetPassword`,
         method: 'POST',
         data: {
           email,
+          schoolId,
+        },
+      });
+      return response;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public static async confirmEmail(accessToken: string): Promise<ApiData> {
+    const isConfirmed = true;
+    try {
+      const response = await ApiService.request({
+        url: `${this.getUserUrl()}/updateSelf`,
+        method: 'PUT',
+        data: { isConfirmed },
+        headers: {
+          'x-auth-token': accessToken,
         },
       });
       return response;

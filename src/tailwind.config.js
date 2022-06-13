@@ -5,7 +5,10 @@ const TailWindTheme = {
   theme: {
     extend: {},
     fontFamily: {},
-    colors: { bgWhite: '#feffff', dulwichRed: '#E33939', bgBlack: '#000000' },
+    colors: {
+      bgWhite: '#feffff',
+      dulwichRed: '#E33939',
+    },
     fontSize: {
       sm: 12,
       md: 14,
@@ -13,13 +16,9 @@ const TailWindTheme = {
       xl: 20,
       xxl: 24,
     },
-    backgroundImage: {
-      homePage: './assets/landscapeImage.jpg',
-    },
-    textField: {
-      [`& fieldset`]: {
-        borderRadius: 0,
-      },
+    screens: {
+      phone: '576px',
+      laptop: '900px',
     },
   },
   variants: {
