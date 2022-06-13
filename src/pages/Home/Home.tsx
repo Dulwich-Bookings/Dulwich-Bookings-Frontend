@@ -29,13 +29,13 @@ const Home = () => {
     <>
       <HomeHeader />
       <main>
-        <Stack spacing={2}>
+        <Stack spacing={3}>
           <Stack spacing={-4}>
             <HomeBanner />
             <HomeSearchBar onInputChange={onInputChangeHandler} />
           </Stack>
           <Grid container alignItems='center' justifyContent='center'>
-            <Stack direction='column' spacing={-6}>
+            <Stack direction='column' spacing={-7}>
               <HomeRoomHeader />
               <HomeRoomList rooms={rooms} />
             </Stack>

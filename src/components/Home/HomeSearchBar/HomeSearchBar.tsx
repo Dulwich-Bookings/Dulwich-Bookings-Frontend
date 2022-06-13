@@ -28,11 +28,12 @@ const HomeSearchBar = (props: Props) => {
           endAdornment={
             <InputAdornment position='end'>
               <Button>
-                <Search />
+                <Search style={{ color: 'black' }} />
               </Button>
             </InputAdornment>
           }
           onChange={roomInputChangeHandler}
+          placeholder='Search for a Room...'
         />
       </FormControl>
     </Grid>

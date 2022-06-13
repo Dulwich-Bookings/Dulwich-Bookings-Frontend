@@ -12,7 +12,7 @@ type RoomProps = {
 const HomeRoomItem = (props: RoomProps) => {
   return (
     <Grid item key={props.id} xs={12} sm={6} md={4}>
-      <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', boxShadow: 12 }}>
+      <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', boxShadow: 10 }} style={{ borderRadius: '12px' }}>
         <CardContent sx={{ flexGrow: 1 }}>
           <Typography gutterBottom variant='h5' component='h2'>
             {props.roomName}
