@@ -3,6 +3,8 @@ import { useApi } from '@/api/ApiHandler';
 import AuthService from '@/api/auth/AuthService';
 import UserService from '@/api/user/UserService';
 import TagService from '@/api/tag/TagService';
+import SubscriptionService from '@/api/subscription/SubscriptionService';
+import { CreateSubscriptionData } from '@/modules/subscription/types';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
 import { ApiData } from '@/api/ApiService';
@@ -11,6 +13,16 @@ import { isSuccess } from '@/api/ApiHandler';
 const Input = styled('input')({
   display: 'none',
 });
+
+const createSubscriptionData: CreateSubscriptionData = {
+  name: 'Adobe Photoshop',
+  description: 'For photo editing',
+  accessRights: ['Admin', 'Teacher'],
+  credentials: 'test123',
+  expiry: '2023-06-01',
+  remindMe: true,
+  schoolId: 1,
+};
 
 let isFirstLoaded = true;
 
@@ -21,6 +33,11 @@ const Test = () => {
   const [bulkSignUp] = useApi(() => AuthService.bulkRegister(bulkSignUpForm), true, true);
   const [getAllUsers] = useApi(() => UserService.getAllUsers(), true, true);
   const [getAllTags] = useApi(() => TagService.getAllTags(), true, true);
+  const [createSubscription] = useApi(() => SubscriptionService.createSubscription(createSubscriptionData), true, true);
+  const [getAllSubscriptions] = useApi(() => SubscriptionService.getAllSubscriptions(), true, true);
+  const [getSubscriptionById] = useApi(() => SubscriptionService.getSubscriptionById(1), true, true);
+  const [updateSubscriptionById] = useApi(() => SubscriptionService.updateSubscriptionById(1, createSubscriptionData), true, true);
+  const [deleteSubscriptionById] = useApi(() => SubscriptionService.deleteSubscriptionById(1), true, true);
 
   const [bulkSignUpForm, setBulkSignUpForm] = useState<FormData>(new FormData());
 
@@ -88,6 +105,24 @@ const Test = () => {
           <Stack spacing={2} direction='row'>
             <Button variant='contained' onClick={() => handleButtonClick(getAllUsers)}>
               Get All Users
+            </Button>
+          </Stack>
+          <Typography variant='h5'>Subscription</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => handleButtonClick(createSubscription)}>
+              Create Subscription
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getAllSubscriptions)}>
+              Get All Subscriptions
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getSubscriptionById)}>
+              Get Resource By Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(updateSubscriptionById)}>
+              Update Subscription By Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(deleteSubscriptionById)}>
+              Delete Subscription By Id
             </Button>
           </Stack>
         </Stack>
