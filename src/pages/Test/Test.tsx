@@ -36,9 +36,9 @@ const Test = () => {
   const [getAllTags] = useApi(() => TagService.getAllTags(), true, true);
   const [createResource] = useApi(() => ResourceService.createResource(createResourceData), true, true);
   const [getAllResources] = useApi(() => ResourceService.getAllResources(), true, true);
-  const [getResourceById] = useApi(() => ResourceService.getResourceById(3000), true, true);
-  const [updateResourceById] = useApi(() => ResourceService.updateResourceById(4000, createResourceData), true, true);
-  const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(5000), true, true);
+  const [getResourceById] = useApi(() => ResourceService.getResourceById(3), true, true);
+  const [updateResourceById] = useApi(() => ResourceService.updateResourceById(3, createResourceData), true, true);
+  const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(5), true, true);
 
   const handleButtonClick = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();
