@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import HomeRoomItem from './HomeResourceContainer';
 import Room from '@/models/room';
 
