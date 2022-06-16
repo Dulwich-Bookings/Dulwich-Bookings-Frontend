@@ -15,7 +15,9 @@ const HomeMenu = () => {
   return (
     <>
       <Button id='home-menu-button' className='bg-dulwichRed text-bgWhite rounded-full normal-case' onClick={handleClick}>
-        <Typography color='inherit'>Rooms</Typography>
+        <Typography className='font-Inter' color='inherit'>
+          Rooms
+        </Typography>
         <ArrowDropDown />
       </Button>
 

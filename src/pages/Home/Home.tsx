@@ -4,12 +4,11 @@ import { Stack, Grid } from '@mui/material';
 
 import HomeHeader from '@/components/Home/HomeHeader/HomeHeader';
 import HomeBanner from '@/components/Home/HomeBanner/HomeBanner';
-import HomeRoomList from '@/components/Home/HomeRooms/HomeRoomList';
+import HomeRoomList from '@/components/Home/HomeRooms/HomeResourceList';
 import HomeSearchBar from '@/components/Home/HomeSearchBar/HomeSearchBar';
-import Footer from '@/components/Footer/Footer';
 import Room from '@/models/room';
 
-import HomeRoomHeader from '@/components/Home/HomeRooms/HomeRoomHeader';
+import HomeRoomHeader from '@/components/Home/HomeRooms/HomeResourceHeader';
 
 const DUMMY_ROOMS = [
   new Room('p1', 'COM1-01', true, false),
@@ -34,18 +33,14 @@ const Home = () => {
             <HomeBanner />
             <HomeSearchBar onInputChange={onInputChangeHandler} />
           </Stack>
-          <Grid container alignItems='center' justifyContent='center'>
-            <Stack direction='column' spacing={-7}>
+          <Grid container justifyContent='center'>
+            <Stack spacing={-7}>
               <HomeRoomHeader />
               <HomeRoomList rooms={rooms} />
             </Stack>
           </Grid>
         </Stack>
       </main>
-      {/* Footer */}
-      <Footer />
-
-      {/* End footer */}
     </>
   );
 };

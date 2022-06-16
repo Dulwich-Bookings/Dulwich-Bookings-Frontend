@@ -6,11 +6,11 @@ import SchoolLogo from './SchoolLogo';
 const SchoolName = () => {
   return (
     <Grid container spacing={0} wrap='nowrap' alignItems='center'>
-      <Grid item xs={2}>
+      <Grid item>
         <SchoolLogo />
       </Grid>
-      <Grid item xs={2}>
-        <Grid container alignItems='center'>
+      <Grid item>
+        <Grid container>
           <Stack direction='column' spacing={0}>
             <Stack direction='row' spacing={1}>
               <Typography variant='subtitle1' color='black' noWrap fontWeight='bold'>

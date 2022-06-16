@@ -17,8 +17,9 @@ const HomeSearchBar = (props: Props) => {
 
   return (
     <Grid container justifyContent='center'>
-      <FormControl className='rounded-full w-3/4 bg-bgWhite' sx={{ boxShadow: 12 }}>
+      <FormControl className='rounded-full w-[897px] h-[54px]' sx={{ boxShadow: 12 }}>
         <OutlinedInput
+          className='bg-bgWhite rounded-full '
           id='search-rooms'
           startAdornment={
             <InputAdornment position='start'>

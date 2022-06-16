@@ -3,11 +3,18 @@ const TailWindTheme = {
   darkMode: false, // or 'media' or 'class'
   important: true,
   theme: {
-    extend: {},
-    fontFamily: {},
+    extend: {
+      backgroundImage: {
+        'home-image': "url('/src/assets/landscapeImage.jpg')",
+      },
+    },
+    fontFamily: { Inter: ['Inter', 'sans-serif'] },
     colors: {
+      bgBlack: '#000000',
       bgWhite: '#feffff',
+      bgNoHover: '#404040',
       dulwichRed: '#E33939',
+      bgIcon: '#757AEC',
     },
     fontSize: {
       sm: 12,

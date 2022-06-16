@@ -1,21 +1,13 @@
 import React from 'react';
-import { Stack } from '@mui/material';
+import { Box } from '@mui/material';
 
 import SchoolLogoImage from '@/assets/dulwich_college.jpeg';
 
 const SchoolLogo = () => {
   return (
-    <Stack
-      direction='row'
-      justifyContent='end'
-      sx={{
-        pt: 10,
-        backgroundImage: `url(${SchoolLogoImage})`,
-        backgroundSize: 'contain',
-        backgroundRepeat: 'no-repeat',
-        height: '100%',
-      }}
-    ></Stack>
+    <Box>
+      <img className=' h-[65px]' src={SchoolLogoImage} />
+    </Box>
   );
 };
 
