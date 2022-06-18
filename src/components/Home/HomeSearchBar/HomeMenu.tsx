@@ -29,6 +29,7 @@ const HomeMenu = () => {
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
+        sx={{ height: 300, marginBlockStart: 2.7 }}
       >
         <MenuItem onClick={handleClose}>Rooms</MenuItem>
         <MenuItem onClick={handleClose}>Subscriptions</MenuItem>
