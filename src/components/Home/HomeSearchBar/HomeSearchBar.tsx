@@ -28,8 +28,16 @@ const HomeSearchBar = (props: Props) => {
           }
           endAdornment={
             <InputAdornment position='end'>
-              <Button>
-                <Search style={{ color: 'black' }} />
+              <Button
+                sx={{
+                  '&:hover': { backgroundColor: 'transparent' },
+                }}
+              >
+                <Search
+                  sx={{
+                    color: 'black',
+                  }}
+                />
               </Button>
             </InputAdornment>
           }
