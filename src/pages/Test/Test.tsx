@@ -9,6 +9,7 @@ import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
+import { Role } from '@/consts/constants';
 
 const Input = styled('input')({
   display: 'none',
@@ -17,8 +18,8 @@ const Input = styled('input')({
 const createResourceData: CreateResourceData = {
   name: 'A113',
   description: 'This is an intriguing room.',
-  accessRights: ['Admin', 'Teacher'],
-  bookingRights: ['Admin', 'Teacher'],
+  accessRights: [Role.Admin, Role.Teacher],
+  bookingRights: [Role.Admin, Role.Teacher],
   inAdvance: 3,
   isBookingDescriptionOptional: true,
   schoolId: 1,

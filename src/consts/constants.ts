@@ -12,3 +12,8 @@ export const severity = {
   WARNING: 'warning' as Severity,
   INFO: 'info' as Severity,
 };
+
+export enum Role {
+  Admin = 'Admin',
+  Teacher = 'Teacher',
+}
