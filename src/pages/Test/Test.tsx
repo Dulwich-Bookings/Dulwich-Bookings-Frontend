@@ -18,8 +18,8 @@ const Input = styled('input')({
 const createResourceData: CreateResourceData = {
   name: 'A113',
   description: 'This is an intriguing room.',
-  accessRights: [Role.Admin, Role.Teacher],
-  bookingRights: [Role.Admin, Role.Teacher],
+  accessRights: [Role.ADMIN, Role.TEACHER],
+  bookingRights: [Role.ADMIN, Role.TEACHER],
   inAdvance: 3,
   isBookingDescriptionOptional: true,
   schoolId: 1,
@@ -39,7 +39,7 @@ const Test = () => {
   const [getAllResources] = useApi(() => ResourceService.getAllResources(), true, true);
   const [getResourceById] = useApi(() => ResourceService.getResourceById(3), true, true);
   const [updateResourceById] = useApi(() => ResourceService.updateResourceById(3, createResourceData), true, true);
-  const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(5), true, true);
+  const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(3), true, true);
 
   const handleButtonClick = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();

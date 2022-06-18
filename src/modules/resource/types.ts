@@ -1,11 +1,11 @@
-import { Role } from '@/consts/constants';
+import { Roles } from '../user/types';
 
 export interface ResourceData {
   id: number;
   name: string;
   description: string;
-  accessRights: Role[];
-  bookingRights: Role[];
+  accessRights: Roles[];
+  bookingRights: Roles[];
   inAdvance: number;
   isBookingDescriptionOptional: boolean;
   schoolId: number;
@@ -14,8 +14,8 @@ export interface ResourceData {
 export interface CreateResourceData {
   name: string;
   description: string;
-  accessRights: Role[];
-  bookingRights: Role[];
+  accessRights: Roles[];
+  bookingRights: Roles[];
   inAdvance: number;
   isBookingDescriptionOptional: boolean;
   schoolId: number;

@@ -1,4 +1,4 @@
-type Roles = 'Student' | 'Teacher' | 'Admin';
+export type Roles = 'Student' | 'Teacher' | 'Admin';
 
 export interface UserSignUpData {
   email: string;
