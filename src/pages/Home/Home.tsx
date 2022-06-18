@@ -32,6 +32,7 @@ const dummyUser: UserData = {
 const Home = () => {
   const dispatch = useDispatch();
   const [rooms, setRooms] = useState<Room[]>(DUMMY_ROOMS);
+  const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
     dispatch(updateCurrentUser(dummyUser));
@@ -39,6 +40,7 @@ const Home = () => {
 
   const onInputChangeHandler = (enteredValue: string): void => {
     setRooms(DUMMY_ROOMS.filter(room => room.roomName.match(new RegExp(enteredValue, 'i'))));
+    setInputValue(enteredValue);
   };
 
   return (
@@ -52,7 +54,7 @@ const Home = () => {
           </Stack>
           <Grid container justifyContent='center'>
             <Stack spacing={-7}>
-              <HomeRoomHeader />
+              <HomeRoomHeader input={inputValue} />
               <HomeRoomList rooms={rooms} />
             </Stack>
           </Grid>
