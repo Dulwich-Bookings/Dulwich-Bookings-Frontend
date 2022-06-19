@@ -1,5 +1,6 @@
 import { SubscriptionPutData, CreateSubscriptionData } from '@/modules/subscription/types';
 import ApiService, { ApiData } from '@/api/ApiService';
+import moment from 'moment';
 
 export default class SubscriptionService {
   private static getSubscriptionUrl() {
@@ -30,6 +31,7 @@ export default class SubscriptionService {
         },
         true,
       );
+
       return response;
     } catch (error) {
       return Promise.reject(error);
@@ -44,6 +46,7 @@ export default class SubscriptionService {
           method: 'POST',
           data: {
             ...createSubscriptionData,
+            expiry: moment().utc(true),
           },
         },
         true,
@@ -63,6 +66,7 @@ export default class SubscriptionService {
           method: 'PUT',
           data: {
             ...subscriptionData,
+            expiry: moment().utc(true),
           },
         },
         true,

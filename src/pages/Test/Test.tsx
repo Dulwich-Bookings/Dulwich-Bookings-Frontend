@@ -9,6 +9,8 @@ import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
+import { Role } from '@/consts/constants';
+import moment from 'moment';
 
 const Input = styled('input')({
   display: 'none',
@@ -17,9 +19,9 @@ const Input = styled('input')({
 const createSubscriptionData: CreateSubscriptionData = {
   name: 'Adobe Photoshop',
   description: 'For photo editing',
-  accessRights: ['Admin', 'Teacher'],
+  accessRights: [Role.ADMIN, Role.TEACHER],
   credentials: 'test123',
-  expiry: '2023-06-01',
+  expiry: moment(new Date()),
   remindMe: true,
   schoolId: 1,
 };
