@@ -1,40 +1,27 @@
 import React from 'react';
-import { Button, Menu, MenuItem, Typography } from '@mui/material';
-import { ArrowDropDown } from '@mui/icons-material';
+import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
 const HomeMenu = () => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const [selectedIndex, setSelectedIndex] = React.useState('1');
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setSelectedIndex(event.target.value);
   };
 
   return (
     <>
-      <Button id='home-menu-button' className='bg-dulwichRed text-bgWhite rounded-full normal-case' onClick={handleClick}>
-        <Typography className='font-Inter' color='inherit'>
-          Rooms
-        </Typography>
-        <ArrowDropDown />
-      </Button>
-
-      <Menu
-        id='basic-menu'
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-        sx={{ height: 300, marginBlockStart: 2.7 }}
-      >
-        <MenuItem onClick={handleClose}>Rooms</MenuItem>
-        <MenuItem onClick={handleClose}>Subscriptions</MenuItem>
-        <MenuItem onClick={handleClose}>All</MenuItem>
-      </Menu>
+      <div>
+        <Select
+          id='select-menu'
+          className='bg-dulwichRed text-bgWhite rounded-full normal-case font-Inter max-h-9 hover:bg-dulwichRed'
+          value={selectedIndex}
+          onChange={handleChange}
+        >
+          <MenuItem value={1}>Rooms</MenuItem>
+          <MenuItem value={2}>Subscriptions</MenuItem>
+          <MenuItem value={3}>All</MenuItem>
+        </Select>
+      </div>
     </>
   );
 };
