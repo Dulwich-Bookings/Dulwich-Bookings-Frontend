@@ -25,15 +25,15 @@ const HomeHeader = () => {
 
   useEffect(() => {
     getProfileInitials();
-  }, [profileInitials]);
+  }, [currentUser]);
 
   // const profileInitials: string[] = getProfileInitials();
   // console.log(profileInitials);
 
   return (
     <AppBar className='bg-bgWhite' position='relative'>
-      <Grid container className='w-screen h-[80px] flex items-center ' direction='row' sx={{ justifyContent: 'space-between' }}>
-        <Grid item display={{ xs: 'none', sm: 'block' }}>
+      <Grid container className='w-screen h-[80px] flex items-center justify-end sm:justify-between ' direction='row'>
+        <Grid item className='hidden sm:block '>
           <SchoolName />
         </Grid>
         <Grid item className='flex items-center'>
