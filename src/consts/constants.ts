@@ -1,5 +1,5 @@
 import { Severity } from '@components/Notifier/Notifier';
-import { Roles } from '@/modules/user/types';
+import { Role } from '@/modules/user/types';
 
 export type LandingRoute = {
   route: string;
@@ -15,7 +15,7 @@ export const severity = {
 };
 
 export const role = {
-  ADMIN: 'Admin' as Roles,
-  TEACHER: 'Teacher' as Roles,
-  STUDENT: 'Student' as Roles,
+  ADMIN: 'Admin' as Role,
+  TEACHER: 'Teacher' as Role,
+  STUDENT: 'Student' as Role,
 };

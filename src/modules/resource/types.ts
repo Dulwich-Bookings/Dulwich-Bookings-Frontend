@@ -1,11 +1,11 @@
-import { Roles } from '@/modules/user/types';
+import { Role } from '@/modules/user/types';
 
 export interface ResourceData {
   id: number;
   name: string;
   description: string;
-  accessRights: Roles[];
-  bookingRights: Roles[];
+  accessRights: Role[];
+  bookingRights: Role[];
   inAdvance: number;
   isBookingDescriptionOptional: boolean;
   schoolId: number;
@@ -14,8 +14,8 @@ export interface ResourceData {
 export interface CreateResourceData {
   name: string;
   description: string;
-  accessRights: Roles[];
-  bookingRights: Roles[];
+  accessRights: Role[];
+  bookingRights: Role[];
   inAdvance: number;
   isBookingDescriptionOptional: boolean;
   schoolId: number;
