@@ -1,4 +1,4 @@
-import { Roles } from '../user/types';
+import { Roles } from '@/modules/user/types';
 import { Moment } from 'moment';
 
 export interface SubscriptionData {
