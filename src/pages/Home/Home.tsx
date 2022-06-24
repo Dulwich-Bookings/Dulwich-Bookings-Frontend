@@ -52,7 +52,7 @@ const Home = () => {
             <HomeBanner />
             <HomeSearchBar onInputChange={onInputChangeHandler} />
           </Stack>
-          <Grid container justifyContent='center'>
+          <Grid className='justify-center' container>
             <Stack spacing={-7}>
               <HomeRoomHeader input={inputValue} />
               <HomeRoomList rooms={rooms} />

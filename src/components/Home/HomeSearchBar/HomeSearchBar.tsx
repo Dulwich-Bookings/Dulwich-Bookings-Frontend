@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, OutlinedInput, FormControl, InputAdornment, Button } from '@mui/material';
+import { Grid, OutlinedInput, FormControl, InputAdornment } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import HomeMenu from './HomeMenu';
 
@@ -17,9 +17,9 @@ const HomeSearchBar = (props: Props) => {
 
   return (
     <Grid container className='justify-center'>
-      <FormControl className='rounded-full w-[897px] h-[54px]' sx={{ boxShadow: 12 }}>
+      <FormControl className='rounded-full w-[897px] h-[54px] shadow-[0_4px_4px_0px_rgba(0,0,0,0.25)]'>
         <OutlinedInput
-          className='bg-bgWhite rounded-full '
+          className='bg-bgWhite rounded-full'
           id='search-rooms'
           startAdornment={
             <InputAdornment position='start'>
@@ -27,18 +27,8 @@ const HomeSearchBar = (props: Props) => {
             </InputAdornment>
           }
           endAdornment={
-            <InputAdornment position='end'>
-              <Button
-                sx={{
-                  '&:hover': { backgroundColor: 'transparent' },
-                }}
-              >
-                <Search
-                  sx={{
-                    color: 'black',
-                  }}
-                />
-              </Button>
+            <InputAdornment className='pr-[15px] pb-[6px]' position='end'>
+              <Search className='text-bgBlack' />
             </InputAdornment>
           }
           onChange={roomInputChangeHandler}

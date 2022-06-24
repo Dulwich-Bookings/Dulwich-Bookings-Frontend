@@ -11,10 +11,13 @@ const TailWindTheme = {
     fontFamily: { Inter: ['Inter', 'sans-serif'] },
     colors: {
       bgBlack: '#000000',
-      bgWhite: '#feffff',
-      bgNoHover: '#404040',
-      dulwichRed: '#E33939',
+      bgCard: '#D9D9D9',
       bgIcon: '#757AEC',
+      bgNoHover: '#404040',
+      bgPlaceholder: '#333333',
+      bgWhite: '#feffff',
+      dulwichRed: '#E33939',
+      dulwichRedHover: '#FDECEC',
     },
     fontSize: {
       sm: 12,
@@ -22,6 +25,9 @@ const TailWindTheme = {
       lg: 19,
       xl: 20,
       xxl: 24,
+    },
+    placeholderColor: {
+      primary: '#333333',
     },
     screens: {
       xs: '0px',
