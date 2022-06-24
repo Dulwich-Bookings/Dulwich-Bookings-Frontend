@@ -1,4 +1,4 @@
-import { Roles } from '../user/types';
+import { Roles } from '@/modules/user/types';
 
 export interface ResourceData {
   id: number;
