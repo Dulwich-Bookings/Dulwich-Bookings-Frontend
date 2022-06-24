@@ -14,8 +14,8 @@ export const severity = {
   INFO: 'info' as Severity,
 };
 
-export const Role = {
+export const role = {
   ADMIN: 'Admin' as Roles,
-  STUDENT: 'Student' as Roles,
   TEACHER: 'Teacher' as Roles,
+  STUDENT: 'Student' as Roles,
 };
