@@ -3,14 +3,27 @@ import { useApi } from '@/api/ApiHandler';
 import AuthService from '@/api/auth/AuthService';
 import UserService from '@/api/user/UserService';
 import TagService from '@/api/tag/TagService';
+import ResourceService from '@/api/resource/ResourceService';
+import { CreateResourceData } from '@/modules/resource/types';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
+import { Role } from '@/consts/constants';
 
 const Input = styled('input')({
   display: 'none',
 });
+
+const createResourceData: CreateResourceData = {
+  name: 'A113',
+  description: 'This is an intriguing room.',
+  accessRights: [Role.ADMIN, Role.TEACHER],
+  bookingRights: [Role.ADMIN, Role.TEACHER],
+  inAdvance: 3,
+  isBookingDescriptionOptional: true,
+  schoolId: 1,
+};
 
 let isFirstLoaded = true;
 
@@ -19,10 +32,14 @@ const Test = () => {
   const [loginTeacher] = useApi(() => AuthService.login('teacher@dulwich.org', 'asdasd', 1), true, true);
   const [loginAdmin] = useApi(() => AuthService.login('admin@dulwich.org', 'asdasd', 1), true, true);
   const [bulkSignUp] = useApi(() => AuthService.bulkRegister(bulkSignUpForm), true, true);
+  const [bulkSignUpForm, setBulkSignUpForm] = useState<FormData>(new FormData());
   const [getAllUsers] = useApi(() => UserService.getAllUsers(), true, true);
   const [getAllTags] = useApi(() => TagService.getAllTags(), true, true);
-
-  const [bulkSignUpForm, setBulkSignUpForm] = useState<FormData>(new FormData());
+  const [createResource] = useApi(() => ResourceService.createResource(createResourceData), true, true);
+  const [getAllResources] = useApi(() => ResourceService.getAllResources(), true, true);
+  const [getResourceById] = useApi(() => ResourceService.getResourceById(3), true, true);
+  const [updateResourceById] = useApi(() => ResourceService.updateResourceById(3, createResourceData), true, true);
+  const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(3), true, true);
 
   const handleButtonClick = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();
@@ -88,6 +105,24 @@ const Test = () => {
           <Stack spacing={2} direction='row'>
             <Button variant='contained' onClick={() => handleButtonClick(getAllUsers)}>
               Get All Users
+            </Button>
+          </Stack>
+          <Typography variant='h5'>Resource</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => handleButtonClick(createResource)}>
+              Create Resource
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getAllResources)}>
+              Get all resources
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getResourceById)}>
+              Get Resource by Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(updateResourceById)}>
+              Update Resource By Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(deleteResourceById)}>
+              Delete Resource By Id
             </Button>
           </Stack>
         </Stack>
