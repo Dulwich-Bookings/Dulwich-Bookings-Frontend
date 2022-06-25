@@ -1,6 +1,6 @@
 import { SubscriptionPutData, CreateSubscriptionData } from '@/modules/subscription/types';
 import ApiService, { ApiData } from '@/api/ApiService';
-import moment from 'moment';
+import { convertToUTC, convertToLocal } from '@/utilities/timezones';
 
 export default class SubscriptionService {
   private static getSubscriptionUrl() {
@@ -16,6 +16,7 @@ export default class SubscriptionService {
         },
         true,
       );
+      convertToLocal(response.data.expiry, response.data.timezone);
       return response;
     } catch (error) {
       return Promise.reject(error);
@@ -31,7 +32,7 @@ export default class SubscriptionService {
         },
         true,
       );
-
+      convertToLocal(response.expiry, response.timezone);
       return response;
     } catch (error) {
       return Promise.reject(error);
@@ -46,11 +47,12 @@ export default class SubscriptionService {
           method: 'POST',
           data: {
             ...createSubscriptionData,
-            expiry: moment().utc(true),
+            expiry: convertToUTC(createSubscriptionData.expiry),
           },
         },
         true,
       );
+
       return response;
     } catch (error) {
       return Promise.reject(error);
@@ -59,6 +61,7 @@ export default class SubscriptionService {
 
   public static async updateSubscriptionById(id: number, subscriptionData: SubscriptionPutData): Promise<ApiData> {
     delete subscriptionData['id'];
+    subscriptionData.expiry ? convertToUTC(subscriptionData.expiry) : subscriptionData.expiry;
     try {
       const response = await ApiService.request(
         {
@@ -66,7 +69,6 @@ export default class SubscriptionService {
           method: 'PUT',
           data: {
             ...subscriptionData,
-            expiry: moment().utc(true),
           },
         },
         true,

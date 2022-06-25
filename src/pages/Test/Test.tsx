@@ -9,7 +9,7 @@ import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
-import { Role } from '@/consts/constants';
+import { role } from '@/consts/constants';
 import moment from 'moment';
 
 const Input = styled('input')({
@@ -19,7 +19,7 @@ const Input = styled('input')({
 const createSubscriptionData: CreateSubscriptionData = {
   name: 'Adobe Photoshop',
   description: 'For photo editing',
-  accessRights: [Role.ADMIN, Role.TEACHER],
+  accessRights: [role.ADMIN, role.TEACHER],
   credentials: 'test123',
   expiry: moment(new Date()),
   remindMe: true,
@@ -118,7 +118,7 @@ const Test = () => {
               Get All Subscriptions
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(getSubscriptionById)}>
-              Get Resource By Id
+              Get Subscription By Id
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(updateSubscriptionById)}>
               Update Subscription By Id

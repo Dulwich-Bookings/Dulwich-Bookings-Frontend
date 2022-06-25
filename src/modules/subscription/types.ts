@@ -1,11 +1,11 @@
-import { Roles } from '../user/types';
+import { Role } from '@/modules/user/types';
 import { Moment } from 'moment';
 
 export interface SubscriptionData {
   id: number;
   name: string;
   description: string;
-  accessRights: Roles[];
+  accessRights: Role[];
   credentials: string;
   expiry: Moment;
   remindMe: boolean;
@@ -15,7 +15,7 @@ export interface SubscriptionData {
 export interface CreateSubscriptionData {
   name: string;
   description: string;
-  accessRights: Roles[];
+  accessRights: Role[];
   credentials: string;
   expiry: Moment;
   remindMe: boolean;
