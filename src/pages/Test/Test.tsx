@@ -7,6 +7,14 @@ import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
+import SchoolService from '@/api/school/SchoolService';
+import { timezone } from '@/consts/constants';
+import { CreateSchoolData } from '@/modules/school/types';
+
+const createSchoolData: CreateSchoolData = {
+  name: 'Dulwich College Kuala Lumpur',
+  timezone: timezone.SINGAPORE,
+};
 
 const Input = styled('input')({
   display: 'none',
@@ -21,6 +29,11 @@ const Test = () => {
   const [bulkSignUp] = useApi(() => AuthService.bulkRegister(bulkSignUpForm), true, true);
   const [getAllUsers] = useApi(() => UserService.getAllUsers(), true, true);
   const [getAllTags] = useApi(() => TagService.getAllTags(), true, true);
+  const [createSchool] = useApi(() => SchoolService.createSchool(createSchoolData), true, true);
+  const [getAllSchools] = useApi(() => SchoolService.getAllSchools(), true, true);
+  const [getSchoolById] = useApi(() => SchoolService.getSchoolById(3), true, true);
+  const [updateSchoolById] = useApi(() => SchoolService.updateSchoolById(3, createSchoolData), true, true);
+  const [deleteSchoolById] = useApi(() => SchoolService.deleteSchoolById(3), true, true);
 
   const [bulkSignUpForm, setBulkSignUpForm] = useState<FormData>(new FormData());
 
@@ -88,6 +101,24 @@ const Test = () => {
           <Stack spacing={2} direction='row'>
             <Button variant='contained' onClick={() => handleButtonClick(getAllUsers)}>
               Get All Users
+            </Button>
+          </Stack>
+          <Typography variant='h5'>School</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => handleButtonClick(createSchool)}>
+              Create school
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getAllSchools)}>
+              Get all schools
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getSchoolById)}>
+              Get school by Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(updateSchoolById)}>
+              Update school by Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(deleteSchoolById)}>
+              Delete school by Id
             </Button>
           </Stack>
         </Stack>
