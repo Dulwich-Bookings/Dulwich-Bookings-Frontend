@@ -3,23 +3,42 @@ import { useApi } from '@/api/ApiHandler';
 import AuthService from '@/api/auth/AuthService';
 import UserService from '@/api/user/UserService';
 import TagService from '@/api/tag/TagService';
+import SubscriptionService from '@/api/subscription/SubscriptionService';
 import ResourceService from '@/api/resource/ResourceService';
+import DateTime from '@/modules/DateTime/DateTime';
+
+import { CreateSubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
 import { CreateResourceData } from '@/modules/resource/types';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
-import { Role } from '@/consts/constants';
+import { role } from '@/consts/constants';
 
 const Input = styled('input')({
   display: 'none',
 });
 
+const createSubscriptionData: CreateSubscriptionData = {
+  name: 'Adobe Photoshop',
+  description: 'For photo editing',
+  accessRights: [role.ADMIN, role.TEACHER],
+  credentials: 'test123',
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  expiry: DateTime.newDateTimeFromDate(new Date())!,
+  remindMe: true,
+  schoolId: 1,
+};
+
+const updateSubscriptionData: SubscriptionPutData = {
+  name: 'Adobe Acrobat',
+};
+
 const createResourceData: CreateResourceData = {
   name: 'A113',
   description: 'This is an intriguing room.',
-  accessRights: [Role.ADMIN, Role.TEACHER],
-  bookingRights: [Role.ADMIN, Role.TEACHER],
+  accessRights: [role.ADMIN, role.TEACHER],
+  bookingRights: [role.ADMIN, role.TEACHER],
   inAdvance: 3,
   isBookingDescriptionOptional: true,
   schoolId: 1,
@@ -35,6 +54,13 @@ const Test = () => {
   const [bulkSignUpForm, setBulkSignUpForm] = useState<FormData>(new FormData());
   const [getAllUsers] = useApi(() => UserService.getAllUsers(), true, true);
   const [getAllTags] = useApi(() => TagService.getAllTags(), true, true);
+
+  const [createSubscription] = useApi(() => SubscriptionService.createSubscription(createSubscriptionData), true, true);
+  const [getAllSubscriptions] = useApi(() => SubscriptionService.getAllSubscriptions(), true, true);
+  const [getSubscriptionById] = useApi(() => SubscriptionService.getSubscriptionById(2), true, true);
+  const [updateSubscriptionById] = useApi(() => SubscriptionService.updateSubscriptionById(2, updateSubscriptionData), true, true);
+  const [deleteSubscriptionById] = useApi(() => SubscriptionService.deleteSubscriptionById(1), true, true);
+
   const [createResource] = useApi(() => ResourceService.createResource(createResourceData), true, true);
   const [getAllResources] = useApi(() => ResourceService.getAllResources(), true, true);
   const [getResourceById] = useApi(() => ResourceService.getResourceById(3), true, true);
@@ -95,18 +121,40 @@ const Test = () => {
               Logout
             </Button>
           </Stack>
+
           <Typography variant='h5'>Tag</Typography>
           <Stack spacing={2} direction='row'>
             <Button variant='contained' onClick={() => handleButtonClick(getAllTags)}>
               Get All Tags
             </Button>
           </Stack>
+
           <Typography variant='h5'>User</Typography>
           <Stack spacing={2} direction='row'>
             <Button variant='contained' onClick={() => handleButtonClick(getAllUsers)}>
               Get All Users
             </Button>
           </Stack>
+
+          <Typography variant='h5'>Subscription</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => handleButtonClick(createSubscription)}>
+              Create Subscription
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getAllSubscriptions)}>
+              Get All Subscriptions
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getSubscriptionById)}>
+              Get Subscription By Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(updateSubscriptionById)}>
+              Update Subscription By Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(deleteSubscriptionById)}>
+              Delete Subscription By Id
+            </Button>
+          </Stack>
+
           <Typography variant='h5'>Resource</Typography>
           <Stack spacing={2} direction='row'>
             <Button variant='contained' onClick={() => handleButtonClick(createResource)}>

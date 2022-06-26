@@ -1,4 +1,4 @@
-export type Roles = 'Student' | 'Teacher' | 'Admin';
+export type Role = 'Student' | 'Teacher' | 'Admin';
 
 export interface UserSignUpData {
   email: string;
@@ -11,7 +11,7 @@ export interface UserSignUpData {
 export interface UserData {
   id: number;
   email: string;
-  role: Roles;
+  role: Role;
   isTemporary: boolean;
   isConfirmed: boolean;
   schoolId: number;
