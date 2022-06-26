@@ -1,6 +1,6 @@
-import { SubscriptionPutData, CreateSubscriptionData } from '@/modules/subscription/types';
+import { SubscriptionPutData, CreateSubscriptionData, SubscriptionData } from '@/modules/subscription/types';
 import ApiService, { ApiData } from '@/api/ApiService';
-import { convertToUTC, convertToLocal } from '@/utilities/timezones';
+import DateTime from '@/modules/DateTime/DateTime';
 
 export default class SubscriptionService {
   private static getSubscriptionUrl() {
@@ -16,7 +16,11 @@ export default class SubscriptionService {
         },
         true,
       );
-      convertToLocal(response.data.expiry, response.data.timezone);
+      const subscriptionData = response.data.map(
+        (subscription: SubscriptionData) =>
+          (subscription.expiry = DateTime.newDateTimeFromUTCString(subscription.expiry as unknown as string)),
+      );
+      response.data = subscriptionData;
       return response;
     } catch (error) {
       return Promise.reject(error);
@@ -32,7 +36,7 @@ export default class SubscriptionService {
         },
         true,
       );
-      convertToLocal(response.expiry, response.timezone);
+      response.data.expiry = DateTime.newDateTimeFromUTCString(response.data.expiry);
       return response;
     } catch (error) {
       return Promise.reject(error);
@@ -47,7 +51,7 @@ export default class SubscriptionService {
           method: 'POST',
           data: {
             ...createSubscriptionData,
-            expiry: convertToUTC(createSubscriptionData.expiry),
+            expiry: createSubscriptionData.expiry.toUTCString(),
           },
         },
         true,
@@ -61,14 +65,17 @@ export default class SubscriptionService {
 
   public static async updateSubscriptionById(id: number, subscriptionData: SubscriptionPutData): Promise<ApiData> {
     delete subscriptionData['id'];
-    subscriptionData.expiry ? convertToUTC(subscriptionData.expiry) : subscriptionData.expiry;
     try {
+      const newSubscriptionData = {
+        ...subscriptionData,
+        expiry: subscriptionData.expiry ? subscriptionData.expiry.toUTCString() : undefined,
+      };
       const response = await ApiService.request(
         {
           url: `${this.getSubscriptionUrl()}/${id}`,
           method: 'PUT',
           data: {
-            ...subscriptionData,
+            ...newSubscriptionData,
           },
         },
         true,
