@@ -1,5 +1,5 @@
 import { Role } from '@/modules/user/types';
-import { Moment } from 'moment';
+import { Moment } from 'moment-timezone';
 
 export interface SubscriptionData {
   id: number;
@@ -17,7 +17,7 @@ export interface CreateSubscriptionData {
   description: string;
   accessRights: Role[];
   credentials: string;
-  expiry: Moment;
+  expiry: string;
   remindMe: boolean;
   schoolId: number;
 }

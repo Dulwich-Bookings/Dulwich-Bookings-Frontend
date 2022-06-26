@@ -12,7 +12,6 @@ import { Button, Stack, Typography } from '@mui/material';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
 import { role } from '@/consts/constants';
-import moment from 'moment';
 
 const Input = styled('input')({
   display: 'none',
@@ -23,7 +22,7 @@ const createSubscriptionData: CreateSubscriptionData = {
   description: 'For photo editing',
   accessRights: [role.ADMIN, role.TEACHER],
   credentials: 'test123',
-  expiry: moment(new Date()),
+  expiry: '',
   remindMe: true,
   schoolId: 1,
 };
