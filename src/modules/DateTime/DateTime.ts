@@ -23,7 +23,7 @@ class DateTime {
     return this.utc;
   }
 
-  private static validateUTCString(utc: string): void {
+  public static validateUTCString(utc: string): void {
     const dateParsed = new Date(Date.parse(utc));
     if (dateParsed.toISOString() !== utc || dateParsed.toUTCString() !== new Date(utc).toUTCString()) {
       throw new Error('Invalid String format for UTC');

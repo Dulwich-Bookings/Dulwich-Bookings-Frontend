@@ -4,8 +4,9 @@ import AuthService from '@/api/auth/AuthService';
 import UserService from '@/api/user/UserService';
 import TagService from '@/api/tag/TagService';
 import SubscriptionService from '@/api/subscription/SubscriptionService';
-import { CreateSubscriptionData } from '@/modules/subscription/types';
 import ResourceService from '@/api/resource/ResourceService';
+
+import { CreateSubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
 import { CreateResourceData } from '@/modules/resource/types';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
@@ -25,6 +26,10 @@ const createSubscriptionData: CreateSubscriptionData = {
   expiry: '',
   remindMe: true,
   schoolId: 1,
+};
+
+const updateSubscriptionData: SubscriptionPutData = {
+  name: 'Adobe Acrobat',
 };
 
 const createResourceData: CreateResourceData = {
@@ -51,7 +56,7 @@ const Test = () => {
   const [createSubscription] = useApi(() => SubscriptionService.createSubscription(createSubscriptionData), true, true);
   const [getAllSubscriptions] = useApi(() => SubscriptionService.getAllSubscriptions(), true, true);
   const [getSubscriptionById] = useApi(() => SubscriptionService.getSubscriptionById(1), true, true);
-  const [updateSubscriptionById] = useApi(() => SubscriptionService.updateSubscriptionById(1, createSubscriptionData), true, true);
+  const [updateSubscriptionById] = useApi(() => SubscriptionService.updateSubscriptionById(1, updateSubscriptionData), true, true);
   const [deleteSubscriptionById] = useApi(() => SubscriptionService.deleteSubscriptionById(1), true, true);
 
   const [createResource] = useApi(() => ResourceService.createResource(createResourceData), true, true);
