@@ -5,6 +5,7 @@ import UserService from '@/api/user/UserService';
 import TagService from '@/api/tag/TagService';
 import SubscriptionService from '@/api/subscription/SubscriptionService';
 import ResourceService from '@/api/resource/ResourceService';
+import DateTime from '@/modules/DateTime/DateTime';
 
 import { CreateSubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
 import { CreateResourceData } from '@/modules/resource/types';
@@ -23,7 +24,8 @@ const createSubscriptionData: CreateSubscriptionData = {
   description: 'For photo editing',
   accessRights: [role.ADMIN, role.TEACHER],
   credentials: 'test123',
-  expiry: '',
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  expiry: DateTime.newDateTimeFromDate(new Date())!,
   remindMe: true,
   schoolId: 1,
 };
@@ -55,8 +57,8 @@ const Test = () => {
 
   const [createSubscription] = useApi(() => SubscriptionService.createSubscription(createSubscriptionData), true, true);
   const [getAllSubscriptions] = useApi(() => SubscriptionService.getAllSubscriptions(), true, true);
-  const [getSubscriptionById] = useApi(() => SubscriptionService.getSubscriptionById(1), true, true);
-  const [updateSubscriptionById] = useApi(() => SubscriptionService.updateSubscriptionById(1, updateSubscriptionData), true, true);
+  const [getSubscriptionById] = useApi(() => SubscriptionService.getSubscriptionById(2), true, true);
+  const [updateSubscriptionById] = useApi(() => SubscriptionService.updateSubscriptionById(2, updateSubscriptionData), true, true);
   const [deleteSubscriptionById] = useApi(() => SubscriptionService.deleteSubscriptionById(1), true, true);
 
   const [createResource] = useApi(() => ResourceService.createResource(createResourceData), true, true);

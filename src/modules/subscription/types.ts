@@ -7,7 +7,7 @@ export interface SubscriptionData {
   description: string;
   accessRights: Role[];
   credentials: string;
-  expiry: DateTime;
+  expiry?: DateTime;
   remindMe: boolean;
   schoolId: number;
 }
@@ -17,7 +17,7 @@ export interface CreateSubscriptionData {
   description: string;
   accessRights: Role[];
   credentials: string;
-  expiry: DateTime;
+  expiry?: DateTime;
   remindMe: boolean;
   schoolId: number;
 }

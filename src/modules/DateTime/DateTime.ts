@@ -9,8 +9,11 @@ class DateTime {
    * @param date  Date object for DateTime.
    * @returns  new DateTime object.
    */
-  public static newDateTimeFromDate(date: Date): DateTime {
-    const utc = date.toUTCString();
+  public static newDateTimeFromDate(date: Date): DateTime | null {
+    if (date === null) {
+      return null;
+    }
+    const utc = date.toISOString();
     return new DateTime(utc);
   }
 
@@ -19,7 +22,10 @@ class DateTime {
    * @param utc  utc string for DateTime.
    * @returns  new DateTime object.
    */
-  public static newDateTimeFromUTCString(utc: string): DateTime {
+  public static newDateTimeFromUTCString(utc: string): DateTime | null {
+    if (utc === null) {
+      return null;
+    }
     return new DateTime(utc);
   }
 
@@ -53,7 +59,7 @@ class DateTime {
    * Converts the current date into UTC String.
    * @returns  a UTC string of the current DateTime Object.
    */
-  public toUTCString(): string {
+  public toString(): string {
     return this.utc.format();
   }
 
@@ -63,9 +69,9 @@ class DateTime {
    * @throws  Error if string is not formatted as UTC.
    */
   public static validateUTCString(utc: string): void {
-    const dateParsed = new Date(Date.parse(utc));
-    if (dateParsed.toISOString() !== utc || dateParsed.toUTCString() !== new Date(utc).toUTCString()) {
-      throw new Error('Invalid String format for UTC');
+    const regex = new RegExp('\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z');
+    if (!regex.test(utc)) {
+      throw new Error('utc string is not in ISO 8601 UTC format');
     }
   }
 }

@@ -16,10 +16,12 @@ export default class SubscriptionService {
         },
         true,
       );
-      const subscriptionData = response.data.map(
-        (subscription: SubscriptionData) =>
-          (subscription.expiry = DateTime.newDateTimeFromUTCString(subscription.expiry as unknown as string)),
-      );
+      const subscriptionData = response.data.map((subscription: SubscriptionData) => {
+        return {
+          ...subscription,
+          expiry: DateTime.newDateTimeFromUTCString(subscription.expiry as unknown as string),
+        };
+      });
       response.data = subscriptionData;
       return response;
     } catch (error) {
@@ -36,7 +38,7 @@ export default class SubscriptionService {
         },
         true,
       );
-      response.data.expiry = DateTime.newDateTimeFromUTCString(response.data.expiry);
+      response.data.expiry = response.data.expiry ? DateTime.newDateTimeFromUTCString(response.data.expiry) : undefined;
       return response;
     } catch (error) {
       return Promise.reject(error);
@@ -51,7 +53,7 @@ export default class SubscriptionService {
           method: 'POST',
           data: {
             ...createSubscriptionData,
-            expiry: createSubscriptionData.expiry.toUTCString(),
+            expiry: createSubscriptionData.expiry ? createSubscriptionData.expiry.toString() : undefined,
           },
         },
         true,
@@ -68,7 +70,7 @@ export default class SubscriptionService {
     try {
       const newSubscriptionData = {
         ...subscriptionData,
-        expiry: subscriptionData.expiry ? subscriptionData.expiry.toUTCString() : undefined,
+        expiry: subscriptionData.expiry ? subscriptionData.expiry.toString() : undefined,
       };
       const response = await ApiService.request(
         {
