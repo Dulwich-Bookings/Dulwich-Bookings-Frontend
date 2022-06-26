@@ -3,26 +3,65 @@ import moment, { Moment } from 'moment-timezone';
 
 class DateTime {
   private utc: Moment;
-  private timezone: Timezone;
 
-  public constructor(utc: string, timezone: Timezone) {
+  /**
+   * Factory method for creating a new DateTime obj from a JS Date Obj.
+   * @param date  Date object for DateTime.
+   * @returns  new DateTime object.
+   */
+  public static newDateTimeFromDate(date: Date): DateTime {
+    const utc = date.toUTCString();
+    return new DateTime(utc);
+  }
+
+  /**
+   * Factory method for creating a new DateTime obj from a UTC string.
+   * @param utc  utc string for DateTime.
+   * @returns  new DateTime object.
+   */
+  public static newDateTimeFromUTCString(utc: string): DateTime {
+    return new DateTime(utc);
+  }
+
+  /**
+   * Private Constructor method that creates a new DateTime object.
+   * @param utc  utc string from DateTime.
+   */
+  private constructor(utc: string) {
     DateTime.validateUTCString(utc);
     this.utc = moment.utc(utc);
-    this.timezone = timezone;
   }
 
-  public toLocalDate(): Moment {
-    return this.utc.tz(this.timezone);
-  }
-
+  /**
+   * Converts the current date to the specifed timezone.
+   * @param timezone  the timezone to convert to.
+   * @returns  a moment object converted to the current timezone.
+   */
   public toTimezoneDate(timezone: Timezone): Moment {
     return this.utc.tz(timezone);
   }
 
+  /**
+   * Converts the current date into UTC.
+   * @returns  a moment object converted to UTC.
+   */
   public toUTCDate(): Moment {
     return this.utc;
   }
 
+  /**
+   * Converts the current date into UTC String.
+   * @returns  a UTC string of the current DateTime Object.
+   */
+  public toUTCString(): string {
+    return this.utc.format();
+  }
+
+  /**
+   * Method used to validate the input string to ensure that it's UTC formatted.
+   * @param utc  a string that'll be validated to see if it's UTC.
+   * @throws  Error if string is not formatted as UTC.
+   */
   public static validateUTCString(utc: string): void {
     const dateParsed = new Date(Date.parse(utc));
     if (dateParsed.toISOString() !== utc || dateParsed.toUTCString() !== new Date(utc).toUTCString()) {
