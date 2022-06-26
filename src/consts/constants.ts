@@ -1,5 +1,6 @@
 import { Severity } from '@components/Notifier/Notifier';
-import { Timezone } from '@/modules/school/types';
+import { Timezone } from '@/modules/DateTime/types';
+import { Role } from '@/modules/user/types';
 
 export type LandingRoute = {
   route: string;
@@ -19,4 +20,10 @@ export const timezone = {
   SEOUL: 'Asia/Seoul' as Timezone,
   SINGAPORE: 'Asia/Singapore' as Timezone,
   LONDON: 'Europe/London' as Timezone,
+};
+
+export const role = {
+  ADMIN: 'Admin' as Role,
+  STUDENT: 'Student' as Role,
+  TEACHER: 'Teacher' as Role,
 };
