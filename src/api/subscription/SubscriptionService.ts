@@ -38,7 +38,7 @@ export default class SubscriptionService {
         },
         true,
       );
-      response.data.expiry = response.data.expiry ? DateTime.newDateTimeFromUTCString(response.data.expiry) : undefined;
+      response.data.expiry = response.data.expiry ? DateTime.newDateTimeFromUTCString(response.data.expiry) : null;
       return response;
     } catch (error) {
       return Promise.reject(error);
@@ -53,7 +53,7 @@ export default class SubscriptionService {
           method: 'POST',
           data: {
             ...createSubscriptionData,
-            expiry: createSubscriptionData.expiry ? createSubscriptionData.expiry.toString() : undefined,
+            expiry: createSubscriptionData.expiry ? createSubscriptionData.expiry.toString() : null,
           },
         },
         true,
@@ -70,7 +70,7 @@ export default class SubscriptionService {
     try {
       const newSubscriptionData = {
         ...subscriptionData,
-        expiry: subscriptionData.expiry ? subscriptionData.expiry.toString() : undefined,
+        expiry: subscriptionData.expiry ? subscriptionData.expiry.toString() : null,
       };
       const response = await ApiService.request(
         {
