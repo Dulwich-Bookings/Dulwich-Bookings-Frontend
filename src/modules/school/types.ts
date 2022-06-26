@@ -1,3 +1,4 @@
+import { Timezone } from '@/modules/DateTime/types';
 export interface SchoolData {
   id: number;
   name: string;
@@ -10,5 +11,3 @@ export interface CreateSchoolData {
 }
 
 export type SchoolPutData = Partial<SchoolData>;
-
-export type Timezone = 'Asia/Shanghai' | 'Asia/Seoul' | 'Asia/Singapore' | 'Europe/London';
