@@ -12,7 +12,7 @@ const TailWindTheme = {
     colors: {
       bgBlack: '#000000',
       bgCard: '#D9D9D9',
-      bgIcon: '#757AEC',
+      bgPurple: '#757AEC',
       bgNoHover: '#404040',
       bgPlaceholder: '#333333',
       bgWhite: '#feffff',

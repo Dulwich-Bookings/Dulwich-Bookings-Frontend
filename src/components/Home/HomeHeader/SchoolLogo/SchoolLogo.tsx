@@ -1,13 +1,15 @@
 import React from 'react';
-import { Stack, Typography, Grid } from '@mui/material';
+import { Stack, Typography, Grid, Box } from '@mui/material';
 
-import SchoolLogo from './SchoolLogo';
+import SchoolLogoImage from '@/assets/dulwich_college.jpeg';
 
 const SchoolName = () => {
   return (
     <Grid container spacing={0} wrap='nowrap' alignItems='center'>
       <Grid item>
-        <SchoolLogo />
+        <Box>
+          <img className='h-16' src={SchoolLogoImage} />
+        </Box>
       </Grid>
       <Grid item>
         <Grid container>

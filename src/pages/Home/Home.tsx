@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 
 import { Stack, Grid } from '@mui/material';
 
-import HomeHeader from '@/components/Home/HomeHeader/HomeHeader';
-import HomeBanner from '@/components/Home/HomeBanner/HomeBanner';
-import HomeRoomList from '@/components/Home/HomeRooms/HomeResourceList';
-import HomeSearchBar from '@/components/Home/HomeSearchBar/HomeSearchBar';
+import HomeHeader from '@components/Home/HomeHeader/HomeHeader';
+import HomeBanner from '@components/Home/HomeBanner/HomeBanner';
+import HomeRoomList from '@components/Home/HomeRooms/HomeResourceList';
+import HomeSearchBar from '@components/Home/HomeSearchBar/HomeSearchBar';
 import Room from '@/models/room';
 
-import HomeRoomHeader from '@/components/Home/HomeRooms/HomeResourceHeader';
+import HomeRoomHeader from '@components/Home/HomeRooms/HomeResourceHeader';
 import { useDispatch } from 'react-redux';
 import { updateCurrentUser } from '@/modules/user/userSlice';
 import { UserData } from '@/modules/user/types';
