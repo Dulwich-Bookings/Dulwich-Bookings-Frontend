@@ -19,7 +19,7 @@ export default class SubscriptionService {
       const subscriptionData = response.data.map((subscription: SubscriptionData) => {
         return {
           ...subscription,
-          expiry: DateTime.newDateTimeFromUTCString(subscription.expiry as unknown as string),
+          expiry: subscription.expiry ? DateTime.newDateTimeFromUTCString(subscription.expiry as unknown as string) : null,
         };
       });
       response.data = subscriptionData;

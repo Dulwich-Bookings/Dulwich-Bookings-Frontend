@@ -9,10 +9,7 @@ class DateTime {
    * @param date  Date object for DateTime.
    * @returns  new DateTime object.
    */
-  public static newDateTimeFromDate(date: Date): DateTime | null {
-    if (date === null) {
-      return null;
-    }
+  public static newDateTimeFromDate(date: Date): DateTime {
     const utc = date.toISOString();
     return new DateTime(utc);
   }
@@ -22,10 +19,7 @@ class DateTime {
    * @param utc  utc string for DateTime.
    * @returns  new DateTime object.
    */
-  public static newDateTimeFromUTCString(utc: string): DateTime | null {
-    if (utc === null) {
-      return null;
-    }
+  public static newDateTimeFromUTCString(utc: string): DateTime {
     return new DateTime(utc);
   }
 
