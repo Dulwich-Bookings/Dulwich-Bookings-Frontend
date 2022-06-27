@@ -22,8 +22,9 @@ const Input = styled('input')({
 });
 
 const createSchoolData: CreateSchoolData = {
-  name: 'Kuala Lumpur',
-  timezone: timezone.SINGAPORE,
+  name: 'London',
+  alternativeName: '伦敦德威国际学校',
+  timezone: timezone.LONDON,
 };
 
 const updateSchoolData: SchoolPutData = {
