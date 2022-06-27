@@ -4,9 +4,10 @@ import Routes from '@/utilities/routes';
 import { getLocalStorageValue } from '@/utilities/localStorage';
 import { useApi } from '@/api/ApiHandler';
 import UserService from '@/api/user/UserService';
+import SchoolService from '@/api/school/SchoolService';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCurrentUser } from '@/modules/user/userSlice';
-import { updateCurrentUser } from '@/modules/user/userSlice';
+import { getCurrentUser, updateCurrentUser } from '@/modules/user/userSlice';
+import { updateCurrentSchool } from '@/modules/school/schoolSlice';
 
 import Login from '@pages/Landing/Login/Login';
 import ForgetPassword from '@pages/Landing/ForgetPassword/ForgetPassword';
@@ -20,18 +21,26 @@ import Test from '@pages/Test/Test';
 const AppRouter = () => {
   const dispatch = useDispatch();
   const accessToken: string | null = getLocalStorageValue('accessToken') ?? null;
-  const [getSelf] = useApi(() => UserService.getSelf(), false, false, false);
   const currentUser = useSelector(getCurrentUser);
   const isTemp = !currentUser?.isConfirmed && currentUser?.isTemporary;
-  console.log(isTemp);
+  const [getSelf] = useApi(() => UserService.getSelf(), false, false, false);
+  const [getSchool] = useApi(() => SchoolService.getSchoolById(currentUser?.id ?? 0), false, false, false);
 
-  const fetchUser = async () => {
+  const fetchSelf = async () => {
     try {
       const res = await getSelf();
-      if (res.isSuccess) {
-        dispatch(updateCurrentUser(res.data));
-        console.log(res.data);
-      }
+      if (!res.isSuccess) return;
+      dispatch(updateCurrentUser(res.data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const fetchSchool = async () => {
+    try {
+      const res = await getSchool();
+      if (!res.isSuccess) return;
+      dispatch(updateCurrentSchool(res.data));
     } catch (err) {
       console.log(err);
     }
@@ -39,8 +48,13 @@ const AppRouter = () => {
 
   useEffect(() => {
     if (!accessToken) return;
-    fetchUser();
+    fetchSelf();
   }, []);
+
+  useEffect(() => {
+    if (!currentUser || !accessToken) return;
+    fetchSchool();
+  }, [currentUser]);
 
   return (
     <Switch>
