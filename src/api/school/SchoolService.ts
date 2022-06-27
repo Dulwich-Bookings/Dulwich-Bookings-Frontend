@@ -1,5 +1,5 @@
 import { SchoolPutData, CreateSchoolData } from '@/modules/school/types';
-import ApiService, { ApiData } from '../ApiService';
+import ApiService, { ApiData } from '@/api/ApiService';
 
 class SchoolService {
   private static getSchoolUrl() {
