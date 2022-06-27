@@ -9,22 +9,26 @@ import SchoolService from '@/api/school/SchoolService';
 import DateTime from '@/modules/DateTime/DateTime';
 
 import { CreateSubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
+import { CreateSchoolData, SchoolPutData } from '@/modules/school/types';
 import { CreateResourceData } from '@/modules/resource/types';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
 import { timezone, role } from '@/consts/constants';
-import { CreateSchoolData } from '@/modules/school/types';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
-
-const createSchoolData: CreateSchoolData = {
-  name: 'Dulwich College Kuala Lumpur',
-  timezone: timezone.SINGAPORE,
-};
 
 const Input = styled('input')({
   display: 'none',
 });
+
+const createSchoolData: CreateSchoolData = {
+  name: 'Kuala Lumpur',
+  timezone: timezone.SINGAPORE,
+};
+
+const updateSchoolData: SchoolPutData = {
+  name: 'Shanghai',
+};
 
 const createSubscriptionData: CreateSubscriptionData = {
   name: 'Adobe Photoshop',
@@ -58,13 +62,15 @@ const Test = () => {
   const [loginAdmin] = useApi(() => AuthService.login('admin@dulwich.org', 'asdasd', 1), true, true);
   const [bulkSignUp] = useApi(() => AuthService.bulkRegister(bulkSignUpForm), true, true);
   const [bulkSignUpForm, setBulkSignUpForm] = useState<FormData>(new FormData());
+
   const [getAllUsers] = useApi(() => UserService.getAllUsers(), true, true);
   const [getAllTags] = useApi(() => TagService.getAllTags(), true, true);
+
   const [createSchool] = useApi(() => SchoolService.createSchool(createSchoolData), true, true);
   const [getAllSchools] = useApi(() => SchoolService.getAllSchools(), true, true);
-  const [getSchoolById] = useApi(() => SchoolService.getSchoolById(3), true, true);
-  const [updateSchoolById] = useApi(() => SchoolService.updateSchoolById(3, createSchoolData), true, true);
-  const [deleteSchoolById] = useApi(() => SchoolService.deleteSchoolById(3), true, true);
+  const [getSchoolById] = useApi(() => SchoolService.getSchoolById(1), true, true);
+  const [updateSchoolById] = useApi(() => SchoolService.updateSchoolById(3, updateSchoolData), true, true);
+  const [deleteSchoolById] = useApi(() => SchoolService.deleteSchoolById(5), true, true);
 
   const [createSubscription] = useApi(() => SubscriptionService.createSubscription(createSubscriptionData), true, true);
   const [getAllSubscriptions] = useApi(() => SubscriptionService.getAllSubscriptions(), true, true);
