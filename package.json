@@ -19,6 +19,7 @@
     "@types/react-dom": "18.0.3",
     "axios": "^0.27.2",
     "eslint-config-prettier": "8.5.0",
+    "moment-timezone": "^0.5.34",
     "prettier": "2.6.2",
     "react": "18.1.0",
     "react-dom": "18.1.0",
