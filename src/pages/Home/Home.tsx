@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Stack, Grid } from '@mui/material';
 
@@ -9,9 +9,9 @@ import HomeSearchBar from '@components/Home/HomeSearchBar/HomeSearchBar';
 import Room from '@/models/room';
 
 import HomeRoomHeader from '@components/Home/HomeRooms/HomeResourceHeader';
-import { useDispatch } from 'react-redux';
-import { updateCurrentUser } from '@/modules/user/userSlice';
-import { UserData } from '@/modules/user/types';
+import { useSelector } from 'react-redux';
+import { getCurrentUser } from '@/modules/user/userSlice';
+import { getCurrentSchool } from '@/modules/school/schoolSlice';
 
 const DUMMY_ROOMS = [
   new Room('p1', 'COM1-01', true, false),
@@ -20,23 +20,11 @@ const DUMMY_ROOMS = [
   new Room('p4', 'COM3-07', true, false),
 ];
 
-const dummyUser: UserData = {
-  id: 1,
-  email: 'brian.quek@test',
-  role: 'Admin',
-  isTemporary: false,
-  isConfirmed: true,
-  schoolId: 1,
-};
-
 const Home = () => {
-  const dispatch = useDispatch();
+  const currentUser = useSelector(getCurrentUser);
+  const currentSchool = useSelector(getCurrentSchool);
   const [rooms, setRooms] = useState<Room[]>(DUMMY_ROOMS);
   const [inputValue, setInputValue] = useState('');
-
-  useEffect(() => {
-    dispatch(updateCurrentUser(dummyUser));
-  }, [dispatch]);
 
   const onInputChangeHandler = (enteredValue: string): void => {
     setRooms(DUMMY_ROOMS.filter(room => room.roomName.match(new RegExp(enteredValue, 'i'))));
@@ -45,7 +33,7 @@ const Home = () => {
 
   return (
     <>
-      <HomeHeader />
+      {currentUser && currentSchool && <HomeHeader currentSchool={currentSchool} currentUser={currentUser} />}
       <main>
         <Stack spacing={3}>
           <Stack spacing={-4}>

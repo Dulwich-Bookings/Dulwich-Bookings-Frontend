@@ -3,7 +3,12 @@ import { Stack, Typography, Grid, Box } from '@mui/material';
 
 import SchoolLogoImage from '@/assets/dulwich_college.jpeg';
 
-const SchoolName = () => {
+type Props = {
+  name: string;
+  alternativeName?: string;
+};
+
+const SchoolName = ({ name, alternativeName }: Props) => {
   return (
     <Grid container spacing={0} wrap='nowrap' alignItems='center'>
       <Grid item>
@@ -19,11 +24,11 @@ const SchoolName = () => {
                 DULWICH COLLEGE
               </Typography>
               <Typography variant='subtitle1' color='black' noWrap>
-                | BEIJING |
+                | {name.toUpperCase()} |
               </Typography>
             </Stack>
             <Typography variant='subtitle2' color='black' noWrap fontWeight='bold'>
-              北京德威英国国际学校
+              {alternativeName}
             </Typography>
           </Stack>
         </Grid>

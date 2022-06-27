@@ -24,7 +24,7 @@ const AppRouter = () => {
   const currentUser = useSelector(getCurrentUser);
   const isTemp = !currentUser?.isConfirmed && currentUser?.isTemporary;
   const [getSelf] = useApi(() => UserService.getSelf(), false, false, false);
-  const [getSchool] = useApi(() => SchoolService.getSchoolById(currentUser?.id ?? 0), false, false, false);
+  const [getSchool] = useApi(() => SchoolService.getSchoolById(currentUser?.schoolId ?? 0), false, false, false);
 
   const fetchSelf = async () => {
     try {
