@@ -7,7 +7,7 @@ import UserService from '@/api/user/UserService';
 import SchoolService from '@/api/school/SchoolService';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCurrentUser, updateCurrentUser } from '@/modules/user/userSlice';
-import { updateCurrentSchool } from '@/modules/school/schoolSlice';
+import { updateAllSchools, updateCurrentSchool, getAllSchools } from '@/modules/school/schoolSlice';
 
 import Login from '@pages/Landing/Login/Login';
 import ForgetPassword from '@pages/Landing/ForgetPassword/ForgetPassword';
@@ -22,9 +22,10 @@ const AppRouter = () => {
   const dispatch = useDispatch();
   const accessToken: string | null = getLocalStorageValue('accessToken') ?? null;
   const currentUser = useSelector(getCurrentUser);
+  const allSchools = useSelector(getAllSchools);
   const isTemp = !currentUser?.isConfirmed && currentUser?.isTemporary;
   const [getSelf] = useApi(() => UserService.getSelf(), false, false, false);
-  const [getSchool] = useApi(() => SchoolService.getSchoolById(currentUser?.schoolId ?? 0), false, false, false);
+  const [getSchools] = useApi(() => SchoolService.getAllSchools(), false, false, false);
 
   const fetchSelf = async () => {
     try {
@@ -36,25 +37,30 @@ const AppRouter = () => {
     }
   };
 
-  const fetchSchool = async () => {
+  const fetchSchools = async () => {
     try {
-      const res = await getSchool();
+      const res = await getSchools();
       if (!res.isSuccess) return;
-      dispatch(updateCurrentSchool(res.data));
+      dispatch(updateAllSchools(res.data));
     } catch (err) {
       console.log(err);
     }
   };
 
+  // fetch all data
   useEffect(() => {
     if (!accessToken) return;
     fetchSelf();
+    fetchSchools();
   }, []);
 
+  // update redux store with current school
   useEffect(() => {
-    if (!currentUser || !accessToken) return;
-    fetchSchool();
-  }, [currentUser]);
+    if (!currentUser || !allSchools) return;
+    const currentSchool = allSchools.find(school => school.id === currentUser.schoolId);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    dispatch(updateCurrentSchool(currentSchool!));
+  }, [currentUser, allSchools]);
 
   return (
     <Switch>
