@@ -37,7 +37,7 @@ const Home = () => {
       <main>
         <Stack spacing={3}>
           <Stack spacing={-4}>
-            <HomeBanner />
+            <HomeBanner schoolId={1} />
             <HomeSearchBar onInputChange={onInputChangeHandler} />
           </Stack>
           <Grid className='justify-center' container>

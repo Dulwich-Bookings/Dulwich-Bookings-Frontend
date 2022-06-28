@@ -3,11 +3,7 @@ const TailWindTheme = {
   darkMode: false, // or 'media' or 'class'
   important: true,
   theme: {
-    extend: {
-      backgroundImage: {
-        'home-image': "url('/src/assets/landscapeImage.jpg')",
-      },
-    },
+    extend: {},
     fontFamily: { Inter: ['Inter', 'sans-serif'] },
     colors: {
       bgBlack: '#000000',

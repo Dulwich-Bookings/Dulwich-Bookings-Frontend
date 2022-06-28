@@ -1,8 +1,12 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { locationImages } from '@/consts/constants';
 
-const HomeBanner = () => {
-  return <Box className='bg-no-repeat bg-cover pt-[300px] bg-home-image'></Box>;
+type Props = {
+  schoolId: number;
+};
+
+const HomeBanner = ({ schoolId }: Props) => {
+  return <img className='object-cover object-center w-screen h-72' src={locationImages.find(location => location.id === schoolId)?.img} />;
 };
 
 export default HomeBanner;
