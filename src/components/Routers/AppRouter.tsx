@@ -49,9 +49,9 @@ const AppRouter = () => {
 
   // fetch all data
   useEffect(() => {
+    fetchSchools();
     if (!accessToken) return;
     fetchSelf();
-    fetchSchools();
   }, []);
 
   // update redux store with current school
