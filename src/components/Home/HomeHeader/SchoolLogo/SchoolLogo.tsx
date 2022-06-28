@@ -20,14 +20,14 @@ const SchoolName = ({ name, alternativeName }: Props) => {
         <Grid container>
           <Stack direction='column' spacing={0}>
             <Stack direction='row' spacing={1}>
-              <Typography variant='subtitle1' color='black' noWrap fontWeight='bold'>
+              <Typography className='tracking-widest' variant='subtitle1' color='black' noWrap fontWeight='bold'>
                 DULWICH COLLEGE
               </Typography>
-              <Typography variant='subtitle1' color='black' noWrap>
+              <Typography className='tracking-widest' variant='subtitle1' color='black' noWrap>
                 | {name.toUpperCase()} |
               </Typography>
             </Stack>
-            <Typography variant='subtitle2' color='black' noWrap fontWeight='bold'>
+            <Typography className='tracking-wider' variant='subtitle2' color='black' noWrap fontWeight='bold'>
               {alternativeName}
             </Typography>
           </Stack>
