@@ -19,8 +19,9 @@ const HomeSearchBar = (props: Props) => {
     <Grid container className='justify-center'>
       <FormControl className='rounded-full w-[897px] h-[54px] shadow-[0_4px_20px_0px_rgba(0,0,0,0.25)]'>
         <OutlinedInput
-          className='bg-bgWhite rounded-full'
+          className='bg-bgWhite rounded-full '
           id='search-rooms'
+          classes={{ notchedOutline: `border: 'none'` }}
           startAdornment={
             <InputAdornment position='start'>
               <HomeMenu />
@@ -33,6 +34,11 @@ const HomeSearchBar = (props: Props) => {
           }
           onChange={roomInputChangeHandler}
           placeholder='Search for a Room...'
+          sx={{
+            '& .MuiOutlinedInput-notchedOutline': {
+              border: '0 none',
+            },
+          }}
         />
       </FormControl>
     </Grid>
