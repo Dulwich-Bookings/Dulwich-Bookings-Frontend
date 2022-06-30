@@ -30,32 +30,18 @@ const HomeRoomItem = (props: RoomProps) => {
       <Card className='bg-[#F3F3F4] rounded-[12px] w-[313px] h-[190px] hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)]'>
         <CardContent className='grow'>
           <Stack spacing={-2}>
-            <div style={{ width: '282px', zIndex: '1' }}>
-              <Bookmark
-                onClick={isBookmarkHandler}
-                className='float-right'
-                sx={{
-                  fontSize: 30,
-                  ...(isBookmark && { color: '#000000' }),
-                  ...(!isBookmark && { color: '#D9D9D9' }),
-                }}
-              />
+            <div className='w-282px z-10'>
+              <Bookmark onClick={isBookmarkHandler} className={`float-right text-[30px] text-[${isBookmark ? '#000000' : '#D9D9D9'}] `} />
             </div>
-            <Stack spacing={0.5}>
+            <Stack spacing={0.5} className='z-0'>
               <Stack direction='row' spacing={1.5} alignItems='center'>
-                <Circle
-                  sx={{
-                    fontSize: 10,
-                    ...(props.vacancy && { color: '#76D674' }),
-                    ...(!props.vacancy && { color: '#E25454' }),
-                  }}
-                />
+                <Circle className={`text-[10px] text-[${props.vacancy ? '#76D674' : '#E25454'}]`} />
                 <Typography gutterBottom variant='h5' component='h2' className='font-Inter'>
                   {props.roomName}
                 </Typography>
               </Stack>
               <Stack direction='row' spacing={1.5} alignItems='center'>
-                <PersonOutlineOutlined sx={{ fontSize: 20, color: '#404040' }} />
+                <PersonOutlineOutlined className='text-[20px] text-[#404040]' />
                 <Stack spacing={-0.5}>
                   <Typography color='#404040' className='font-Inter'>
                     Access available to:
@@ -65,20 +51,10 @@ const HomeRoomItem = (props: RoomProps) => {
                   </Typography>
                 </Stack>
               </Stack>
-              <Grid container style={{ display: 'flex' }}>
+              <Grid container>
                 {DUMMY_SUBJECTS.map(subject => (
                   <Grid item key={subject.name}>
-                    <div
-                      style={{
-                        background: subject.color,
-                        margin: '5px',
-                        color: 'white',
-                        fontSize: '12px',
-                        borderRadius: '10px',
-                        paddingLeft: '18px',
-                        paddingRight: '18px',
-                      }}
-                    >
+                    <div className={`m-[5px] text-[white] text-[12px] rounded-[12px] px-[18px] bg-[${subject.color}]`}>
                       <p className='font-Inter'>{subject.name}</p>
                     </div>
                   </Grid>
