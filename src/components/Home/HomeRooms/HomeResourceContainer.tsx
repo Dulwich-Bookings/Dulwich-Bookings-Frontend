@@ -30,10 +30,16 @@ const HomeRoomItem = (props: RoomProps) => {
       <Card className='bg-[#F3F3F4] rounded-[12px] w-[313px] h-[190px] hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)]'>
         <CardContent className='grow'>
           <Stack spacing={-2}>
-            <div style={{ width: '260px' }}>
-              <button onClick={isBookmarkHandler} style={{ width: '10px', float: 'right' }}>
-                <Bookmark sx={{ fontSize: 30, ...(isBookmark && { color: '#000000' }), ...(!isBookmark && { color: '#D9D9D9' }) }} />
-              </button>
+            <div style={{ width: '282px', zIndex: '1' }}>
+              <Bookmark
+                onClick={isBookmarkHandler}
+                className='float-right'
+                sx={{
+                  fontSize: 30,
+                  ...(isBookmark && { color: '#000000' }),
+                  ...(!isBookmark && { color: '#D9D9D9' }),
+                }}
+              />
             </div>
             <Stack spacing={0.5}>
               <Stack direction='row' spacing={1.5} alignItems='center'>
