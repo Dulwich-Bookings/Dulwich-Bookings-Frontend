@@ -9,7 +9,7 @@ type Props = {
 
 const HomeRoomList = (props: Props) => {
   return (
-    <Box className='py-[80px]' maxWidth='1000px'>
+    <Box className='py-[80px]'>
       <Grid item container spacing={3.5}>
         {props.rooms.map(room => (
           <HomeRoomItem key={room.id} id={room.id} roomName={room.roomName} vacancy={room.vacancy} bookmark={room.bookmark} />

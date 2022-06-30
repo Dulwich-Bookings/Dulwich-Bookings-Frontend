@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Stack, Grid } from '@mui/material';
+import { Stack, Grid, Box } from '@mui/material';
 
 import HomeHeader from '@components/Home/HomeHeader/HomeHeader';
 import HomeBanner from '@components/Home/HomeBanner/HomeBanner';
@@ -40,8 +40,8 @@ const Home = () => {
             <HomeBanner schoolId={1} />
             <HomeSearchBar onInputChange={onInputChangeHandler} />
           </Stack>
-          <Grid className='justify-center' container>
-            <Stack spacing={-7}>
+          <Grid container className='justify-center'>
+            <Stack spacing={-7} className='w-screen max-w-[1000px]'>
               <HomeRoomHeader input={inputValue} />
               <HomeRoomList rooms={rooms} />
             </Stack>
