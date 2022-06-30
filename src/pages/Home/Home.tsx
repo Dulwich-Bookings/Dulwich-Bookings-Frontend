@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Stack, Grid, Box } from '@mui/material';
+import { Stack, Grid } from '@mui/material';
 
 import HomeHeader from '@components/Home/HomeHeader/HomeHeader';
 import HomeBanner from '@components/Home/HomeBanner/HomeBanner';
