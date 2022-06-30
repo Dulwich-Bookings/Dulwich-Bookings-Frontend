@@ -7,10 +7,8 @@ const TailWindTheme = {
     fontFamily: { Inter: ['Inter', 'sans-serif'] },
     colors: {
       bgBlack: '#000000',
-      bgCard: '#D9D9D9',
       bgPurple: '#757AEC',
       bgNoHover: '#404040',
-      bgPlaceholder: '#333333',
       bgWhite: '#feffff',
       dulwichRed: '#E33939',
       dulwichRedHover: '#FDECEC',

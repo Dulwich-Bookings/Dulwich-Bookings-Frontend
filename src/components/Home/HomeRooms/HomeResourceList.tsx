@@ -12,7 +12,6 @@ const HomeRoomList = (props: Props) => {
   useEffect(() => {
     if (props.rooms.length == 0) {
       setIsResourceEmpty(true);
-      console.log('No Rooms');
     } else {
       setIsResourceEmpty(false);
     }

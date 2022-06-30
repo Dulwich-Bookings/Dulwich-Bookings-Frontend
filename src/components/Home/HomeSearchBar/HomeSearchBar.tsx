@@ -8,9 +8,6 @@ type Props = {
 };
 
 const HomeSearchBar = (props: Props) => {
-  //const [roomInput, setRoomInput] = useState<string>('');
-  //const roomTextInputRef = useRef<HTMLInputElement>(null);
-
   const roomInputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     props.onInputChange(event.target.value);
   };

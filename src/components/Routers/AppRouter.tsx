@@ -19,7 +19,6 @@ import Home from '@pages/Home/Home';
 import Test from '@pages/Test/Test';
 
 const AppRouter = () => {
-  console.log('called');
   const dispatch = useDispatch();
   const [getSelf] = useApi(() => UserService.getSelf(), false, false, false);
   const [getSchools] = useApi(() => SchoolService.getAllSchools(), false, false, false);
