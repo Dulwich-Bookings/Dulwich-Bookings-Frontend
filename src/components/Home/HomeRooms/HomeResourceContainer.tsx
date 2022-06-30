@@ -31,11 +31,15 @@ const HomeRoomItem = (props: RoomProps) => {
         <CardContent className='grow'>
           <Stack spacing={-2}>
             <div className='w-282px z-10'>
-              <Bookmark onClick={isBookmarkHandler} className={`float-right text-[30px] text-[${isBookmark ? '#000000' : '#D9D9D9'}] `} />
+              <Bookmark
+                onClick={isBookmarkHandler}
+                className={`float-right text-[30px]`}
+                sx={{ color: `${isBookmark ? '#000000' : '#D9D9D9'}` }}
+              />
             </div>
             <Stack spacing={0.5} className='z-0'>
               <Stack direction='row' spacing={1.5} alignItems='center'>
-                <Circle className={`text-[10px] text-[${props.vacancy ? '#76D674' : '#E25454'}]`} />
+                <Circle className={`text-[10px]`} sx={{ color: `${props.vacancy ? '#76D674' : '#E25454'}` }} />
                 <Typography gutterBottom variant='h5' component='h2' className='font-Inter'>
                   {props.roomName}
                 </Typography>
@@ -54,7 +58,7 @@ const HomeRoomItem = (props: RoomProps) => {
               <Grid container>
                 {DUMMY_SUBJECTS.map(subject => (
                   <Grid item key={subject.name}>
-                    <div className={`m-[5px] text-[white] text-[12px] rounded-[12px] px-[18px] bg-[${subject.color}]`}>
+                    <div className={`m-[5px] text-[white] text-[12px] rounded-[12px] px-[18px]`} style={{ backgroundColor: subject.color }}>
                       <p className='font-Inter'>{subject.name}</p>
                     </div>
                   </Grid>
