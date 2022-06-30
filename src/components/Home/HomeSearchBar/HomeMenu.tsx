@@ -28,13 +28,13 @@ const HomeMenu = () => {
           }}
         >
           <MenuItem className='bg-white hover:bg-dulwichRedHover' value={1}>
-            Rooms
+            All
           </MenuItem>
           <MenuItem className='bg-white hover:bg-dulwichRedHover' value={2}>
-            Subscriptions
+            Rooms
           </MenuItem>
           <MenuItem className='bg-white hover:bg-dulwichRedHover' value={3}>
-            All
+            Subscriptions
           </MenuItem>
         </Select>
       </div>
