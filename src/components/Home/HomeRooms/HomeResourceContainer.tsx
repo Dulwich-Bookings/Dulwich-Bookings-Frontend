@@ -33,7 +33,7 @@ const HomeRoomItem = (props: RoomProps) => {
             <div className='w-282px z-10'>
               <Bookmark
                 onClick={isBookmarkHandler}
-                className={`float-right text-[30px]`}
+                className={`float-right text-[30px] cursor-pointer`}
                 sx={{ color: `${isBookmark ? '#000000' : '#D9D9D9'}` }}
               />
             </div>
