@@ -40,7 +40,7 @@ const Home = () => {
             <HomeBanner schoolId={1} />
             <HomeSearchBar onInputChange={onInputChangeHandler} />
           </Stack>
-          <Grid container className='justify-center'>
+          <Grid container className='pl-10 md:justify-center md:pl-0'>
             <Stack spacing={-7} className='w-screen max-w-[1000px]'>
               <HomeRoomHeader input={inputValue} />
               <HomeRoomList rooms={rooms} />
