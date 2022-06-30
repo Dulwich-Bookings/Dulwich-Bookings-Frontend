@@ -33,10 +33,10 @@ const HomeRoomHeader = (props: Props) => {
   }, [props.input]);
 
   return (
-    <Grid container direction='row'>
+    <Grid container direction='row' spacing={3}>
       {!filterText && (
         <Grid item>
-          <Button className=' hover:underline decoration-dulwichRed' onClick={onRecentClickHandler}>
+          <Button className='p-0 ' onClick={onRecentClickHandler}>
             <Typography
               className={`${'font-Inter'} ${recentClick && 'underline decoration-dulwichRed'} ${!recentClick && 'text-bgNoHover'}`}
               variant='h5'
@@ -51,7 +51,7 @@ const HomeRoomHeader = (props: Props) => {
 
       {!filterText && (
         <Grid item>
-          <Button onClick={onBookmarkClickHandler}>
+          <Button className='p-0' onClick={onBookmarkClickHandler}>
             <Typography
               className={`${'font-Inter'} ${bookmarkClick && 'underline decoration-dulwichRed'} ${!bookmarkClick && 'text-bgNoHover'}`}
               variant='h5'
