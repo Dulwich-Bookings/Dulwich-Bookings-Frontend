@@ -38,7 +38,7 @@ const HomeRoomHeader = (props: Props) => {
         <Grid item>
           <Button className='p-0 hover:bg-[transparent]' disableRipple={true} onClick={onRecentClickHandler}>
             <Typography
-              className={`${'font-Inter'} ${recentClick && 'underline decoration-dulwichRed'} ${!recentClick && 'text-bgNoHover'}`}
+              className={`${'font-Inter'} ${recentClick && 'underline decoration-dulwichRed'} ${!recentClick && 'text-[#404040]'}`}
               variant='h5'
               textTransform='capitalize'
               color='black'
@@ -53,7 +53,7 @@ const HomeRoomHeader = (props: Props) => {
         <Grid item>
           <Button className='p-0 hover:bg-[transparent]' disableRipple={true} onClick={onBookmarkClickHandler}>
             <Typography
-              className={`${'font-Inter'} ${bookmarkClick && 'underline decoration-dulwichRed'} ${!bookmarkClick && 'text-bgNoHover'}`}
+              className={`${'font-Inter'} ${bookmarkClick && 'underline decoration-dulwichRed'} ${!bookmarkClick && 'text-[#404040]'}`}
               variant='h5'
               textTransform='capitalize'
               color='black'

@@ -30,7 +30,7 @@ const HomeRoomList = (props: Props) => {
       )}
 
       {isResourceEmpty && (
-        <Typography className='font-Inter text-bgNoHover' variant='h5' textTransform='capitalize'>
+        <Typography className='font-Inter text-[#404040]' variant='h5' textTransform='capitalize'>
           No Resources Found.
         </Typography>
       )}

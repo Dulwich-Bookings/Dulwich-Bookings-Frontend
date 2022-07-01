@@ -8,7 +8,6 @@ const TailWindTheme = {
     colors: {
       bgBlack: '#000000',
       bgPurple: '#757AEC',
-      bgNoHover: '#404040',
       bgWhite: '#feffff',
       bgGray: '#F3F3F4',
       dulwichRed: '#E33939',
