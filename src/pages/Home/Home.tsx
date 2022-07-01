@@ -6,7 +6,7 @@ import HomeHeader from '@components/Home/HomeHeader/HomeHeader';
 import HomeBanner from '@components/Home/HomeBanner/HomeBanner';
 import HomeSearchBar from '@components/Home/HomeSearchBar/HomeSearchBar';
 import Room from '@/models/room';
-import HomeRooms from '@/components/Home/HomeRooms/HomeRooms';
+import HomeRooms from '@/components/Home/HomeResources/HomeResources';
 
 import { useSelector } from 'react-redux';
 import { getCurrentUser } from '@/modules/user/userSlice';
@@ -39,7 +39,7 @@ const Home = () => {
             <HomeBanner schoolId={1} />
             <HomeSearchBar onInputChange={onInputChangeHandler} />
           </Stack>
-          <HomeRooms input={inputValue} rooms={rooms} />
+          <HomeRooms searchedInput={inputValue} rooms={rooms} />
         </Stack>
       </main>
     </>

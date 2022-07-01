@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, OutlinedInput, FormControl, InputAdornment } from '@mui/material';
 import { Search } from '@mui/icons-material';
-import HomeMenu from './HomeMenu/HomeMenu';
+import SearchDropDown from '@components/Home/HomeSearchBar/SearchDropDown/SearchDropDown';
 
 type Props = {
   onInputChange(enteredValue: string): void;
@@ -21,7 +21,7 @@ const HomeSearchBar = (props: Props) => {
           classes={{ notchedOutline: `border: 'none'` }}
           startAdornment={
             <InputAdornment position='start'>
-              <HomeMenu />
+              <SearchDropDown />
             </InputAdornment>
           }
           endAdornment={

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Grid, Button, Typography } from '@mui/material';
 
 type Props = {
-  input: string;
+  searchedInput: string;
 };
 
 const HomeRoomHeader = (props: Props) => {
@@ -29,14 +29,14 @@ const HomeRoomHeader = (props: Props) => {
   };
 
   useEffect(() => {
-    setFilterText(props.input);
-  }, [props.input]);
+    setFilterText(props.searchedInput);
+  }, [props.searchedInput]);
 
   return (
     <Grid container direction='row' spacing={3}>
       {!filterText && (
         <Grid item>
-          <Button className='p-0 hover:bg-[transparent]' disableRipple={true} disableElevation={true} onClick={onRecentClickHandler}>
+          <Button className='p-0 hover:bg-[transparent]' disableRipple={true} onClick={onRecentClickHandler}>
             <Typography
               className={`${'font-Inter'} ${recentClick && 'underline decoration-dulwichRed'} ${!recentClick && 'text-bgNoHover'}`}
               variant='h5'
@@ -51,7 +51,7 @@ const HomeRoomHeader = (props: Props) => {
 
       {!filterText && (
         <Grid item>
-          <Button className='p-0 hover:bg-[transparent]' disableRipple={true} disableElevation={true} onClick={onBookmarkClickHandler}>
+          <Button className='p-0 hover:bg-[transparent]' disableRipple={true} onClick={onBookmarkClickHandler}>
             <Typography
               className={`${'font-Inter'} ${bookmarkClick && 'underline decoration-dulwichRed'} ${!bookmarkClick && 'text-bgNoHover'}`}
               variant='h5'

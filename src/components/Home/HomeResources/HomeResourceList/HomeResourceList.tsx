@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
-import HomeRoomItem from '../HomeRoomItem/HomeResourceContainer';
+import ResourceContainer from '@components/Home/HomeResources/HomeResourceContainer/HomeResourceContainer';
 import Room from '@/models/room';
 
 type Props = {
@@ -24,7 +24,7 @@ const HomeRoomList = (props: Props) => {
       {!isResourceEmpty && (
         <Grid item container spacing={3.5}>
           {props.rooms.map(room => (
-            <HomeRoomItem key={room.id} id={room.id} roomName={room.roomName} vacancy={room.vacancy} bookmark={room.bookmark} />
+            <ResourceContainer key={room.id} id={room.id} roomName={room.roomName} vacancy={room.vacancy} bookmark={room.bookmark} />
           ))}
         </Grid>
       )}
