@@ -27,13 +27,13 @@ const HomeRoomItem = (props: RoomProps) => {
 
   return (
     <Grid item>
-      <Card className='bg-[#F3F3F4] rounded-[12px] w-[313px] h-[190px] hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)] cursor-pointer'>
+      <Card className='bg-bgGray rounded-xl w-[313px] h-48 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)] cursor-pointer'>
         <CardContent className='grow'>
           <Stack spacing={-2}>
-            <div className='w-282px z-10'>
+            <div className='w-72 z-10'>
               <Bookmark
                 onClick={isBookmarkHandler}
-                className={`float-right text-[30px] `}
+                className={'float-right text-[30px]'}
                 sx={{ color: `${isBookmark ? '#000000' : '#D9D9D9'}` }}
               />
             </div>
@@ -45,20 +45,16 @@ const HomeRoomItem = (props: RoomProps) => {
                 </Typography>
               </Stack>
               <Stack direction='row' spacing={1.5} alignItems='center'>
-                <PersonOutlineOutlined className='text-[20px] text-[#404040]' />
+                <PersonOutlineOutlined className='text-[20px] text-bgNoHover' />
                 <Stack spacing={-0.5}>
-                  <Typography color='#404040' className='font-Inter'>
-                    Access available to:
-                  </Typography>
-                  <Typography color='#404040' className='font-Inter'>
-                    Insert available people
-                  </Typography>
+                  <Typography className='font-Inter text-bgNoHover'>Access available to:</Typography>
+                  <Typography className='font-Inter text-bgNoHover'>Insert available people</Typography>
                 </Stack>
               </Stack>
               <Grid container>
                 {DUMMY_SUBJECTS.map(subject => (
                   <Grid item key={subject.name}>
-                    <div className={`m-[5px] text-[white] text-[12px] rounded-[12px] px-[18px]`} style={{ backgroundColor: subject.color }}>
+                    <div className={`m-1 text-bgWhite text-[12px] rounded-xl px-4`} style={{ backgroundColor: subject.color }}>
                       <p className='font-Inter'>{subject.name}</p>
                     </div>
                   </Grid>

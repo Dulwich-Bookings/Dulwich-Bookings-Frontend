@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
-import HomeRoomItem from './HomeResourceContainer';
+import HomeRoomItem from '../HomeRoomItem/HomeResourceContainer';
 import Room from '@/models/room';
 
 type Props = {

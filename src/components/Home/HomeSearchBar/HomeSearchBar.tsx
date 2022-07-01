@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, OutlinedInput, FormControl, InputAdornment } from '@mui/material';
 import { Search } from '@mui/icons-material';
-import HomeMenu from './HomeMenu';
+import HomeMenu from './HomeMenu/HomeMenu';
 
 type Props = {
   onInputChange(enteredValue: string): void;

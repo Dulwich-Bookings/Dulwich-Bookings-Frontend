@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 
-import { Stack, Grid } from '@mui/material';
+import { Stack } from '@mui/material';
 
 import HomeHeader from '@components/Home/HomeHeader/HomeHeader';
 import HomeBanner from '@components/Home/HomeBanner/HomeBanner';
-import HomeRoomList from '@components/Home/HomeRooms/HomeResourceList';
 import HomeSearchBar from '@components/Home/HomeSearchBar/HomeSearchBar';
 import Room from '@/models/room';
+import HomeRooms from '@/components/Home/HomeRooms/HomeRooms';
 
-import HomeRoomHeader from '@components/Home/HomeRooms/HomeResourceHeader';
 import { useSelector } from 'react-redux';
 import { getCurrentUser } from '@/modules/user/userSlice';
 import { getCurrentSchool } from '@/modules/school/schoolSlice';
@@ -40,12 +39,7 @@ const Home = () => {
             <HomeBanner schoolId={1} />
             <HomeSearchBar onInputChange={onInputChangeHandler} />
           </Stack>
-          <Grid container className='pl-10 md:justify-center md:pl-0'>
-            <Stack spacing={-7} className='w-screen max-w-[1000px]'>
-              <HomeRoomHeader input={inputValue} />
-              <HomeRoomList rooms={rooms} />
-            </Stack>
-          </Grid>
+          <HomeRooms input={inputValue} rooms={rooms} />
         </Stack>
       </main>
     </>
