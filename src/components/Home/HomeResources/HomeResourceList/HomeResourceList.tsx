@@ -20,7 +20,7 @@ const HomeRoomList = (props: Props) => {
   }, [props.rooms]);
 
   return (
-    <Box className='py-[80px]'>
+    <Box className='py-20'>
       {!isResourceEmpty && (
         <Grid item container spacing={3.5}>
           {props.rooms.map(room => (

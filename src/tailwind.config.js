@@ -19,6 +19,7 @@ const TailWindTheme = {
       lg: 19,
       xl: 20,
       xxl: 24,
+      '3xl': 30,
     },
     placeholderColor: {
       primary: '#333333',
