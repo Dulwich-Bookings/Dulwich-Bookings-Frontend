@@ -33,12 +33,12 @@ const HomeRoomHeader = (props: Props) => {
   }, [props.searchedInput]);
 
   return (
-    <Grid container direction='row' spacing={3}>
+    <Grid container direction='row' className='justify-start' spacing={3}>
       {!filterText && (
-        <Grid item>
-          <Button className='p-0 hover:bg-[transparent]' disableRipple={true} onClick={onRecentClickHandler}>
+        <Grid item className='scale-[0.8] pl-0 sm:scale-100 sm:pl-6'>
+          <Button className='p-0 hover:bg-[transparent] ' disableRipple={true} onClick={onRecentClickHandler}>
             <Typography
-              className={`${'font-Inter'} ${recentClick && 'underline decoration-dulwichRed'} ${!recentClick && 'text-[#404040]'}`}
+              className={`${'font-Inter '} ${recentClick && 'underline decoration-dulwichRed'} ${!recentClick && 'text-[#404040]'}`}
               variant='h5'
               textTransform='capitalize'
               color='black'
@@ -50,7 +50,7 @@ const HomeRoomHeader = (props: Props) => {
       )}
 
       {!filterText && (
-        <Grid item>
+        <Grid item className='scale-[0.8] pl-0 sm:scale-100 sm:pl-6'>
           <Button className='p-0 hover:bg-[transparent]' disableRipple={true} onClick={onBookmarkClickHandler}>
             <Typography
               className={`${'font-Inter'} ${bookmarkClick && 'underline decoration-dulwichRed'} ${!bookmarkClick && 'text-[#404040]'}`}

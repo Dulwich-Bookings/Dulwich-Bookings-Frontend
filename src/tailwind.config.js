@@ -25,6 +25,7 @@ const TailWindTheme = {
       primary: '#333333',
     },
     screens: {
+      //dimensions are aligned to MUI breakpoints
       xs: '0px',
       sm: '600px',
       md: '900px',

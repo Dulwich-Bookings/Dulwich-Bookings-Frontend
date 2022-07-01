@@ -19,8 +19,8 @@ const HomeHeader = ({ currentUser, currentSchool }: Props) => {
 
   return (
     <AppBar elevation={0} className='bg-bgWhite' position='relative'>
-      <Grid container className='w-screen h-20 items-center flex justify-end laptop:justify-between' direction='row'>
-        <Grid item className='laptop:block hidden'>
+      <Grid container className='w-screen h-20 items-center flex justify-end md:justify-between' direction='row'>
+        <Grid item className='md:block hidden'>
           <SchoolLogo name={currentSchool.name} alternativeName={currentSchool.alternativeName} />
         </Grid>
         <Grid item className='flex items-center'>
