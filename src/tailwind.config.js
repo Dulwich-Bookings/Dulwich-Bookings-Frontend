@@ -9,6 +9,7 @@ const TailWindTheme = {
       white: '#ffffff',
       grayAccent: '#4D4D4D',
       grayLight: '#D9D9D9',
+      dulwichRed: '#E33939',
     },
     fontSize: {
       sm: 12,
