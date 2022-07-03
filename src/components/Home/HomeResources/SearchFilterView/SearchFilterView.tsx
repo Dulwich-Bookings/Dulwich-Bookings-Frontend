@@ -1,0 +1,78 @@
+import React, { useEffect, useState } from 'react';
+import { Grid, Button, Typography } from '@mui/material';
+
+type Props = {
+  searchedInput: string;
+};
+
+const HomeRoomHeader = (props: Props) => {
+  const [recentClick, setRecentClick] = useState(true);
+  const [bookmarkClick, setBookmarkClick] = useState(false);
+  const [filterText, setFilterText] = useState('');
+
+  const onRecentClickHandler = () => {
+    if (recentClick) {
+      return;
+    }
+
+    setRecentClick(true);
+    setBookmarkClick(false);
+  };
+
+  const onBookmarkClickHandler = () => {
+    if (bookmarkClick) {
+      return;
+    }
+
+    setRecentClick(false);
+    setBookmarkClick(true);
+  };
+
+  useEffect(() => {
+    setFilterText(props.searchedInput);
+  }, [props.searchedInput]);
+
+  return (
+    <Grid container direction='row' className='justify-start' spacing={3}>
+      {!filterText && (
+        <Grid item className='scale-[0.8] pl-0 sm:scale-100 sm:pl-6'>
+          <Button className='p-0 hover:bg-[transparent] ' disableRipple={true} onClick={onRecentClickHandler}>
+            <Typography
+              className={`${'font-Inter '} ${recentClick && 'underline decoration-dulwichRed'} ${!recentClick && 'text-[#404040]'}`}
+              variant='h5'
+              textTransform='capitalize'
+              color='black'
+            >
+              Recently Searched
+            </Typography>
+          </Button>
+        </Grid>
+      )}
+
+      {!filterText && (
+        <Grid item className='scale-[0.8] pl-0 sm:scale-100 sm:pl-6'>
+          <Button className='p-0 hover:bg-[transparent]' disableRipple={true} onClick={onBookmarkClickHandler}>
+            <Typography
+              className={`${'font-Inter'} ${bookmarkClick && 'underline decoration-dulwichRed'} ${!bookmarkClick && 'text-[#404040]'}`}
+              variant='h5'
+              textTransform='capitalize'
+              color='black'
+            >
+              Bookmarks
+            </Typography>
+          </Button>
+        </Grid>
+      )}
+
+      {filterText && (
+        <Grid item>
+          <Typography className='font-Inter' variant='h5' textTransform='capitalize' color='black'>
+            {filterText}
+          </Typography>
+        </Grid>
+      )}
+    </Grid>
+  );
+};
+
+export default HomeRoomHeader;

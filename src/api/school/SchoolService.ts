@@ -7,13 +7,10 @@ class SchoolService {
   }
   public static async getAllSchools(): Promise<ApiData> {
     try {
-      const response = await ApiService.request(
-        {
-          url: this.getSchoolUrl(),
-          method: 'GET',
-        },
-        true,
-      );
+      const response = await ApiService.request({
+        url: this.getSchoolUrl(),
+        method: 'GET',
+      });
       return response;
     } catch (error) {
       return Promise.reject(error);
