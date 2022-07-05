@@ -28,6 +28,8 @@ export function useApi<T>(
       const response = await apiPromise(id);
       if (response?.message && withSuccessNotification) {
         dispatch(toggleShowNotification({ message: response.message, severity: severity.SUCCESS }));
+      } else if (response && withSuccessNotification) {
+        dispatch(toggleShowNotification({ message: 'API Call Successful', severity: severity.SUCCESS }));
       }
       console.log(response);
       return { ...response, isSuccess: true };

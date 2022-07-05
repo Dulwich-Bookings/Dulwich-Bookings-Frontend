@@ -69,11 +69,19 @@ class AuthService {
           url: `${this.getAuthUrl()}/bulkSignUp`,
           method: 'POST',
           data: bulkRegisterData,
+          responseType: 'blob',
         },
         true,
         false,
         'multipart/form-data',
       );
+      const url = window.URL.createObjectURL(new Blob([response]));
+      const link = document.createElement('a');
+      link.href = url;
+      const currentDate = new Date().toLocaleString();
+      link.setAttribute('download', `User-Bulk-Sign-Up ${currentDate}.csv`);
+      document.body.appendChild(link);
+      link.click();
       return response;
     } catch (error) {
       return Promise.reject(error);
