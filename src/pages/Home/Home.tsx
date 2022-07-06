@@ -42,8 +42,8 @@ const Home = () => {
   };
 
   useEffect(() => {
-    retrieveAllData(getAllResources).then(d => d.filter((x: any) => resources.push(x)));
-    retrieveAllData(getAllTags).then(d => d.filter((x: any) => tags.push(x)));
+    retrieveAllData(getAllResources).then(d => d.filter((x: ResourceData) => resources.push(x)));
+    retrieveAllData(getAllTags).then(d => d.filter((x: TagData) => tags.push(x)));
   }, [resources, tags]);
 
   return (
