@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import ResourceContainer from '@components/Home/HomeResources/HomeResourceContainer/HomeResourceContainer';
-import Room from '@/models/room';
+import { ResourceData } from '@/modules/resource/types';
+import { TagData } from '@/modules/tag/types';
 
 type Props = {
-  rooms: Room[];
+  filteredResources: ResourceData[];
+  tagData: TagData[];
 };
 
 const HomeRoomList = (props: Props) => {
   const [isResourceEmpty, setIsResourceEmpty] = useState(false);
   useEffect(() => {
-    if (props.rooms.length == 0) {
+    if (props.filteredResources.length == 0) {
       setIsResourceEmpty(true);
     } else {
       setIsResourceEmpty(false);
     }
-
-    console.log('Rooms Found');
-  }, [props.rooms]);
+  });
 
   return (
     <Box className='py-20'>
       {!isResourceEmpty && (
         <Grid item container spacing={3.5}>
-          {props.rooms.map(room => (
-            <ResourceContainer key={room.id} id={room.id} roomName={room.roomName} vacancy={room.vacancy} bookmark={room.bookmark} />
+          {props.filteredResources.map(resource => (
+            <ResourceContainer key={resource.id} resource={resource} tagData={props.tagData} />
           ))}
         </Grid>
       )}

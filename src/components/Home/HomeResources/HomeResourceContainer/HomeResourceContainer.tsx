@@ -3,27 +3,26 @@ import React, { useState } from 'react';
 import { Grid, Card, CardContent, Typography, Stack } from '@mui/material';
 
 import { Bookmark, PersonOutlineOutlined, Circle } from '@mui/icons-material';
+import { ResourceData } from '@/modules/resource/types';
+import { tagMap, tagColor } from '@/consts/dummyMaps';
+import { TagData } from '@/modules/tag/types';
 
-type RoomProps = {
-  id: string;
-  roomName: string;
-  vacancy: boolean;
-  bookmark: boolean;
+type Props = {
+  resource: ResourceData;
+  tagData: TagData[];
 };
 
-const DUMMY_SUBJECTS = [
-  { name: 'Technology', color: '#F7AD1D' },
-  { name: 'Design', color: '#6AA5AD' },
-  { name: 'DT', color: '#934EEA' },
-  { name: 'CS', color: '#4E67EA' },
-];
+const vacancy = true;
 
-const HomeRoomItem = (props: RoomProps) => {
+const HomeRoomItem = (props: Props) => {
   const [isBookmark, setIsBookmark] = useState(false);
 
   const isBookmarkHandler = () => {
     setIsBookmark(!isBookmark);
   };
+
+  const filteredTagsIDs = tagMap.filter(tagArr => tagArr.resource_id === props.resource.id).map(filteredID => filteredID.tag_id);
+  const filteredTags = props.tagData.filter(tag => filteredTagsIDs.includes(tag.id));
 
   return (
     <Grid item>
@@ -39,23 +38,30 @@ const HomeRoomItem = (props: RoomProps) => {
             </div>
             <Stack spacing={0.5} className='z-0'>
               <Stack direction='row' spacing={1.5} alignItems='center'>
-                <Circle className={`text-sm`} sx={{ color: `${props.vacancy ? '#76D674' : '#E25454'}` }} />
+                <Circle className={`text-sm`} sx={{ color: `${vacancy ? '#76D674' : '#E25454'}` }} />
                 <Typography gutterBottom variant='h5' component='h2' className='font-Inter'>
-                  {props.roomName}
+                  {props.resource.name}
                 </Typography>
               </Stack>
               <Stack direction='row' spacing={1.5} alignItems='center'>
                 <PersonOutlineOutlined className='text-xl text-bgNoHover' />
                 <Stack spacing={-0.5}>
-                  <Typography className='font-Inter text-bgNoHover'>Access available to:</Typography>
+                  <Typography className='font-Inter text-bgNoHover'>
+                    Access available to: {props.resource.accessRights.map(role => role + ' ')}
+                  </Typography>
                   <Typography className='font-Inter text-bgNoHover'>Insert available people</Typography>
                 </Stack>
               </Stack>
               <Grid container>
-                {DUMMY_SUBJECTS.map(subject => (
-                  <Grid item key={subject.name}>
-                    <div className={`m-1 text-bgWhite text-sm rounded-xl px-4`} style={{ backgroundColor: subject.color }}>
-                      <p className='font-Inter'>{subject.name}</p>
+                {filteredTags.map(tag => (
+                  <Grid item key={tag.id}>
+                    <div
+                      className={`m-1 text-bgWhite text-sm rounded-xl px-4 `}
+                      style={{
+                        backgroundColor: `${tagColor.filter(colorTag => colorTag.id === tag.id).map(colorTag => colorTag.color)}`,
+                      }}
+                    >
+                      <p className='font-Inter'>{tag.name}</p>
                     </div>
                   </Grid>
                 ))}
