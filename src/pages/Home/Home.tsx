@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Stack } from '@mui/material';
 
@@ -12,6 +12,12 @@ import { useSelector } from 'react-redux';
 import { getCurrentUser } from '@/modules/user/userSlice';
 import { getCurrentSchool } from '@/modules/school/schoolSlice';
 
+import { useApi } from '@/api/ApiHandler';
+import { ApiData } from '@/api/ApiService';
+import ResourceService from '@/api/resource/ResourceService';
+import TagService from '@/api/tag/TagService';
+import { isSuccess } from '@/api/ApiHandler';
+
 const DUMMY_ROOMS = [
   new Room('p1', 'COM1-01', true, false),
   new Room('p2', 'BIZ2-01', true, false),
@@ -20,6 +26,21 @@ const DUMMY_ROOMS = [
 ];
 
 const Home = () => {
+  const retrieveAllData = async (func: () => Promise<ApiData & isSuccess>) => {
+    const res = await func();
+    if (res.isSuccess) {
+      console.log(res.data);
+    }
+  };
+
+  const [getAllResources] = useApi(() => ResourceService.getAllResources(), true, true);
+  const [getAllTags] = useApi(() => TagService.getAllTags(), true, true);
+
+  useEffect(() => {
+    retrieveAllData(getAllResources);
+    retrieveAllData(getAllTags);
+  }, []);
+
   const currentUser = useSelector(getCurrentUser);
   const currentSchool = useSelector(getCurrentSchool);
   const [rooms, setRooms] = useState<Room[]>(DUMMY_ROOMS);
