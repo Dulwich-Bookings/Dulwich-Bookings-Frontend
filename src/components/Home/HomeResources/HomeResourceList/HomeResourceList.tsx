@@ -4,8 +4,8 @@ import ResourceContainer from '@components/Home/HomeResources/HomeResourceContai
 import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
-import { recentlyVisitedMap } from '@/consts/dummyMaps';
-import { getCurrentUser } from '@/modules/user/userSlice';
+// import { recentlyVisitedMap } from '@/consts/dummyMaps';
+// import { getCurrentUser } from '@/modules/user/userSlice';
 
 type Props = {
   searchedInput: string;
