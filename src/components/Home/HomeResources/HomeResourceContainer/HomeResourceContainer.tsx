@@ -46,10 +46,8 @@ const HomeRoomItem = (props: Props) => {
               <Stack direction='row' spacing={1.5} alignItems='center'>
                 <PersonOutlineOutlined className='text-xl text-bgNoHover' />
                 <Stack spacing={-0.5}>
-                  <Typography className='font-Inter text-bgNoHover'>
-                    Access available to: {props.resource.accessRights.map(role => role + ' ')}
-                  </Typography>
-                  <Typography className='font-Inter text-bgNoHover'>Insert available people</Typography>
+                  <Typography className='font-Inter text-bgNoHover'>Access available to:</Typography>
+                  <Typography className='font-Inter text-bgNoHover'>{props.resource.accessRights.map(role => role + ', ')}</Typography>
                 </Stack>
               </Stack>
               <Grid container>
