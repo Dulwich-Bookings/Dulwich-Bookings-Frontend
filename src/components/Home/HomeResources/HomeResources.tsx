@@ -6,11 +6,13 @@ import HomeRoomHeader from '@/components/Home/HomeResources/SearchFilterView/Sea
 import HomeRoomList from '@/components/Home/HomeResources/HomeResourceList/HomeResourceList';
 import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
+import { UserData } from '@/modules/user/types';
 
 type Props = {
   searchedInput: string;
   resourceData: ResourceData[];
   tagData: TagData[];
+  currentUser: UserData;
 };
 
 const HomeRooms = (props: Props) => {
@@ -36,6 +38,7 @@ const HomeRooms = (props: Props) => {
           tagData={props.tagData}
           bookmarksClicked={bookmarksClicked}
           rvClicked={rvClicked}
+          currentUser={props.currentUser}
         />
       </Stack>
     </Grid>

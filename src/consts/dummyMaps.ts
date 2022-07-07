@@ -66,4 +66,4 @@ export const tagColor = [
 
 // export const recentlyVisitedMap[];
 
-// export const bookmarkMap[];
+export const bookmarkMap = [];

@@ -48,16 +48,20 @@ const Home = () => {
 
   return (
     <>
-      {currentUser && currentSchool && <HomeHeader currentSchool={currentSchool} currentUser={currentUser} />}
-      <main>
-        <Stack spacing={3}>
-          <Stack spacing={-4}>
-            <HomeBanner schoolId={1} />
-            <HomeSearchBar onInputChange={onInputChangeHandler} />
-          </Stack>
-          <HomeRooms searchedInput={inputValue} resourceData={resources} tagData={tags} />
-        </Stack>
-      </main>
+      {currentUser && currentSchool && (
+        <>
+          <HomeHeader currentSchool={currentSchool} currentUser={currentUser} />
+          <main>
+            <Stack spacing={3}>
+              <Stack spacing={-4}>
+                <HomeBanner schoolId={1} />
+                <HomeSearchBar onInputChange={onInputChangeHandler} />
+              </Stack>
+              <HomeRooms searchedInput={inputValue} resourceData={resources} tagData={tags} currentUser={currentUser} />
+            </Stack>
+          </main>
+        </>
+      )}
     </>
   );
 };
