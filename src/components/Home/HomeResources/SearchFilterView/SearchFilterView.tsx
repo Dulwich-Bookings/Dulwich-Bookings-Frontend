@@ -5,6 +5,8 @@ import BookmarksButton from '@/components/Home/HomeResources/SearchFilterView/Bo
 
 type Props = {
   searchedInput: string;
+  bookmarksClicked: (value: boolean) => void;
+  rvClicked: (value: boolean) => void;
 };
 
 const HomeRoomHeader = (props: Props) => {
@@ -18,6 +20,7 @@ const HomeRoomHeader = (props: Props) => {
     }
     setRecentClick(true);
     setBookmarkClick(false);
+    props.rvClicked(true);
   };
 
   const onBookmarkClickHandler = () => {
@@ -26,6 +29,7 @@ const HomeRoomHeader = (props: Props) => {
     }
     setRecentClick(false);
     setBookmarkClick(true);
+    props.bookmarksClicked(true);
   };
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Stack, Grid } from '@mui/material';
 
@@ -14,13 +14,29 @@ type Props = {
 };
 
 const HomeRooms = (props: Props) => {
-  const filteredResources = props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i')));
+  const [bookmarksClicked, setBookmarksClicked] = useState(false);
+  const [rvClicked, setRVClicked] = useState(true);
+
+  const bookmarksClickedHandler = (value: boolean) => {
+    setBookmarksClicked(value);
+    setRVClicked(!value);
+  };
+  const rvClickedHandler = (value: boolean) => {
+    setRVClicked(value);
+    setBookmarksClicked(!value);
+  };
 
   return (
     <Grid container className='pl-10 md:justify-center md:pl-0'>
       <Stack spacing={-7} className='w-screen max-w-5xl'>
-        <HomeRoomHeader searchedInput={props.searchedInput} />
-        <HomeRoomList filteredResources={filteredResources} tagData={props.tagData} />
+        <HomeRoomHeader searchedInput={props.searchedInput} bookmarksClicked={bookmarksClickedHandler} rvClicked={rvClickedHandler} />
+        <HomeRoomList
+          resourceData={props.resourceData}
+          searchedInput={props.searchedInput}
+          tagData={props.tagData}
+          bookmarksClicked={bookmarksClicked}
+          rvClicked={rvClicked}
+        />
       </Stack>
     </Grid>
   );
