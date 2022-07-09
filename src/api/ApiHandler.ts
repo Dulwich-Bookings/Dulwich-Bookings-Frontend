@@ -14,19 +14,22 @@ export function useApi<T>(
   apiPromise: (id?: number) => Promise<ApiData<T>>,
   withSuccessNotification = false,
   withFailureNotification = false,
+  withLoadingNotification = true,
 ) {
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
 
   async function fetchApi(id?: number): Promise<ApiData<T> & isSuccess> {
-    if (withSuccessNotification || withFailureNotification) {
+    if (withLoadingNotification) {
       dispatch(toggleShowNotification({ message: 'Loading...', severity: severity.LOADING }));
     }
     try {
       const response = await apiPromise(id);
       if (response?.message && withSuccessNotification) {
         dispatch(toggleShowNotification({ message: response.message, severity: severity.SUCCESS }));
+      } else if (response && withSuccessNotification) {
+        dispatch(toggleShowNotification({ message: 'API Call Successful', severity: severity.SUCCESS }));
       }
       console.log(response);
       return { ...response, isSuccess: true };
@@ -36,7 +39,7 @@ export function useApi<T>(
         dispatch(toggleShowNotification({ message: error.data.message, severity: severity.ERROR }));
       }
       if (error?.status === 403) {
-        history.push(Routes.base);
+        history.push(Routes.authentication.login);
       }
       console.log(error);
       return { ...error?.data, isSuccess: false };

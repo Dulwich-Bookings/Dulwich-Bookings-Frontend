@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Modal, createTheme, Stack, ThemeProvider, Box, Input } from '@mui/material';
-import { FormatAlignLeft, PeopleAltOutlined, AccessTime, Close } from '@mui/icons-material';
-import BookingButton from '../BookingButton/BookingButton';
+import { FormatAlignLeft, AccessTime, Close, CircleOutlined, RadioButtonCheckedOutlined } from '@mui/icons-material';
+import BookingFormFooter from '../BookingFormFooter/BookingFormFooter';
 import InputWithIcon from '../InputWithIcon/InputWithIcon';
+import Checkbox from '@mui/material/Checkbox';
+import BookingTimePicker from '../BookingTimePicker/BookingTimePicker';
 
 const theme = createTheme({
   breakpoints: {
@@ -21,26 +23,75 @@ type Props = {
   handleCloseModal: () => void;
   bookingTitle: string;
   bookingDescription: string;
-  bookingAddOthers: string;
   time: string;
+  editable: string;
+  start: string;
+  end: string;
 };
 
 const BookingForm = (props: Props) => {
+  const ref = useRef<HTMLDivElement>(null);
   const [title, setTitle] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [description, setDescription] = useState<string>('');
-  const [addOthers, setAddOthers] = useState<string>('');
+  const [time, setTime] = useState<string>(props.time);
+  const [description, setDescription] = useState<string>(props.bookingDescription);
   const [multiline, setMultiline] = useState<boolean>(false);
   const [rows, setRows] = useState<number>(1);
+  const [recurring, setRecurring] = useState<boolean>(false);
+  const [timeModal, setTimeModal] = useState<boolean>(false);
 
-  const handleBook = async () => {
+  const handleOnBook = async () => {
     setIsLoading(true);
   };
 
-  const handleOnClick = async () => {
+  const handleOnSave = async () => {
+    null;
+  };
+
+  const handleOnDelete = async () => {
+    null;
+  };
+
+  const handleOnContact = async () => {
+    null;
+  };
+
+  const handleTimeClick = async () => {
+    setTimeModal(true);
+  };
+
+  const handleCloseTimePicker = async () => {
+    setTimeModal(false);
+  };
+  const handleDescriptionClick = async () => {
     setMultiline(true);
     setRows(4);
   };
+
+  const handleRecurringClick = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (props.editable == 'editable' || props.editable == 'new') {
+      console.log(event.target.checked);
+      setRecurring(event.target.checked);
+    }
+  };
+
+  const handleTitleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (props.editable == 'editable' || props.editable == 'new') {
+      console.log(event.target.value);
+      setTitle(event.target.value);
+    }
+  };
+
+  const handleDescriptionChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (props.editable == 'editable' || props.editable == 'new') {
+      console.log(event.target.value);
+      setDescription(event.target.value);
+    }
+  };
+
+  useEffect(() => {
+    setTime(props.time);
+  }, [props.time]);
 
   useEffect(() => {
     setTitle(props.bookingTitle);
@@ -51,60 +102,85 @@ const BookingForm = (props: Props) => {
   }, [props.bookingDescription]);
 
   useEffect(() => {
-    setAddOthers(props.bookingAddOthers);
-  }, [props.bookingAddOthers]);
+    const checkIfClickedOutside = (e: Event) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setMultiline(false);
+      }
+    };
+
+    document.addEventListener('mousedown', checkIfClickedOutside);
+    return () => {
+      // Cleanup the event listener
+
+      document.removeEventListener('mousedown', checkIfClickedOutside);
+    };
+  }, [multiline]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Modal className='flex justify-center items-center' open={props.openState} onClose={props.handleCloseModal}>
-        <Box className='laptop:w-1/4 laptop:h-fit laptop:m-2 laptop:rounded-lg w-full h-full pl-4 pr-1 pt-3 pb-6 bg-white'>
-          <Close onClick={props.handleCloseModal} fontSize='small' className='float-right cursor-pointer hover:text-grayAccent' />
-          <Stack direction='column' className='h-full' spacing={{ xs: 2, md: 2 }} alignItems='justified'>
-            <Input
-              placeholder='Add title'
-              value={title}
-              color='error'
-              className='w-full h-1/6 text-xxl color-red'
-              onChange={input => setTitle(input.target.value)}
-            ></Input>
-            <Stack direction='column' spacing={{ xs: 2, md: 2 }} alignItems='center'>
-              <InputWithIcon
-                inputType='string'
-                inputValue={props.time}
-                inputClassname='w-10/12'
-                icon={<AccessTime />}
-                spacing={2}
-                multiline={true}
-                rows={2}
-              />
-              <InputWithIcon
-                inputType='string'
-                inputPlaceholder='Add description'
-                inputValue={props.bookingDescription ? props.bookingDescription : description}
-                inputClassname='w-full text-m'
-                inputVariant='outlined'
-                multiline={multiline}
-                rows={rows}
-                icon={<FormatAlignLeft />}
-                spacing={2}
-                handleOnClick={handleOnClick}
-                inputHandleOnChange={input => setDescription(input.target.value)}
-              />
-              <InputWithIcon
-                inputType='string'
-                inputPlaceholder='Add Others'
-                inputClassname='outline-none w-full'
-                inputValue={props.bookingAddOthers ? props.bookingAddOthers : addOthers}
-                icon={<PeopleAltOutlined />}
-                spacing={2}
-                inputHandleOnChange={input => setAddOthers(input.target.value)}
-              />
-              <BookingButton buttonText='Book' handleOnClick={handleBook} loading={isLoading} />
+    <>
+      <BookingTimePicker startTime={props.start} endTime={props.end} openState={timeModal} handleCloseModal={handleCloseTimePicker} />
+      <ThemeProvider theme={theme}>
+        <Modal className='flex justify-center items-center' open={props.openState} onClose={props.handleCloseModal}>
+          <Box className='laptop:w-1/4 laptop:h-fit laptop:m-2 laptop:rounded-lg w-full h-full pl-4 pr-1 pt-3 pb-6 bg-bgWhite'>
+            <Close onClick={props.handleCloseModal} fontSize='small' className='float-right cursor-pointer hover:text-grayAccent' />
+            <Stack direction='column' className='h-full' spacing={{ xs: 2, md: 2 }} alignItems='justified'>
+              <Input
+                color='error'
+                placeholder='Add title'
+                value={title}
+                className='w-full h-1/6 text-xxl ml-2'
+                onChange={handleTitleChange}
+              ></Input>
+              <Stack direction='column' spacing={{ xs: 1, md: 1 }} alignItems='center'>
+                <InputWithIcon
+                  inputType='string'
+                  inputValue={time}
+                  inputClassname='w-10/12'
+                  icon={<AccessTime className='ml-2' />}
+                  spacing={2}
+                  multiline={true}
+                  rows={2}
+                  acceptInput={false}
+                  handleOnClick={handleTimeClick}
+                />
+
+                <div ref={ref} className='w-full'>
+                  <InputWithIcon
+                    inputType='string'
+                    inputPlaceholder='Add description'
+                    inputValue={description}
+                    inputClassname='w-full text-m color-bgWhite'
+                    inputVariant='outlined'
+                    multiline={multiline}
+                    rows={rows}
+                    icon={<FormatAlignLeft className='ml-2' />}
+                    spacing={2}
+                    handleOnClick={handleDescriptionClick}
+                    inputHandleOnChange={handleDescriptionChange}
+                    acceptInput={true}
+                  />
+                </div>
+                <InputWithIcon
+                  inputType='string'
+                  inputValue={'Recurring Booking'}
+                  inputClassname='w-6/12'
+                  icon={<Checkbox icon={<CircleOutlined />} checkedIcon={<RadioButtonCheckedOutlined />} onChange={handleRecurringClick} />}
+                  spacing={1}
+                  acceptInput={false}
+                />
+                <BookingFormFooter
+                  type={props.editable}
+                  handleOnBook={handleOnBook}
+                  handleOnSave={handleOnSave}
+                  handleOnDelete={handleOnDelete}
+                  handleOnContact={handleOnContact}
+                />
+              </Stack>
             </Stack>
-          </Stack>
-        </Box>
-      </Modal>
-    </ThemeProvider>
+          </Box>
+        </Modal>
+      </ThemeProvider>
+    </>
   );
 };
 

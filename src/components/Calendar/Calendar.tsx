@@ -30,19 +30,23 @@ const Calendar = ({ data }: Props) => {
   const [openBookingModal, setOpenBookingModal] = useState<boolean>(false);
   const [bookingTitle, setBookingTitle] = useState<string>('');
   const [bookingTime, setBookingTime] = useState<string>('');
+  const [startBook, setStartBook] = useState<string>('');
+  const [endBook, setEndBook] = useState<string>('');
   const [bookingDescription, setBookingDescription] = useState<string>('');
-  const [bookingAddOthers, setBookingAddOthers] = useState<string>('');
+  const [editable, setEditable] = useState<string>('');
   const theme = useTheme();
   const isMobile = !useMediaQuery(theme.breakpoints.up('sm'));
 
   const handleDateClick = (e: DateClickArg) => {
-    const start = moment(e.dateStr).format('dddd, MMMM D');
+    const time = moment(e.dateStr).format('dddd, MMMM D');
     const startTime = moment(e.dateStr).format('HH:mm');
     const endTime = moment(e.dateStr).add(15, 'm').format('HH:mm');
     setBookingTitle('');
     setBookingDescription('');
-    setBookingAddOthers('');
-    setBookingTime(start + '\n' + startTime + ' - ' + endTime);
+    setEditable('new');
+    setBookingTime(time + '\n' + startTime + ' - ' + endTime);
+    setStartBook(startTime);
+    setEndBook(endTime);
     setOpenBookingModal(true);
   };
   const handleEventClick = (e: EventClickArg) => {
@@ -53,8 +57,8 @@ const Calendar = ({ data }: Props) => {
     setBookingTime(start + '\n' + startTime + ' - ' + endTime);
     setBookingTitle(e.event.title);
     setBookingDescription(e.event.extendedProps.description);
-    setBookingAddOthers(e.event.extendedProps.addOthers);
-    e.event.startEditable ? setOpenBookingModal(true) : setOpenBookingModal(false);
+    e.event.startEditable ? setEditable('editable') : setEditable('noneditable');
+    setOpenBookingModal(true);
   };
 
   return (
@@ -62,12 +66,14 @@ const Calendar = ({ data }: Props) => {
       <BookingForm
         bookingTitle={bookingTitle}
         bookingDescription={bookingDescription}
-        bookingAddOthers={bookingAddOthers}
         openState={openBookingModal}
         handleCloseModal={() => {
           setOpenBookingModal(false);
         }}
         time={bookingTime}
+        editable={editable}
+        start={startBook}
+        end={endBook}
       />
       <Box className='h-full'>
         <FullCalendar

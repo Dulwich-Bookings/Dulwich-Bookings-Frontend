@@ -4,7 +4,7 @@ import { LoadingButton } from '@mui/lab';
 
 type Props = {
   buttonText: string;
-  handleOnClick: () => void;
+  handleOnClick?: () => void;
   loading?: boolean;
 };
 
