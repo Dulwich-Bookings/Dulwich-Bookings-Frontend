@@ -32,11 +32,13 @@ type Props = {
 const BookingForm = (props: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const [title, setTitle] = useState<string>('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [time, setTime] = useState<string>(props.time);
   const [description, setDescription] = useState<string>(props.bookingDescription);
   const [multiline, setMultiline] = useState<boolean>(false);
   const [rows, setRows] = useState<number>(1);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [recurring, setRecurring] = useState<boolean>(false);
   const [timeModal, setTimeModal] = useState<boolean>(false);
 
