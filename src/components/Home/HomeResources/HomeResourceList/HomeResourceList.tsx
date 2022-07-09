@@ -4,7 +4,7 @@ import ResourceContainer from '@components/Home/HomeResources/HomeResourceContai
 import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
-import { recentlyVisitedMap } from '@/consts/dummyMaps';
+import { recentlyVisitedMap, bookmarkMap } from '@/consts/dummyMaps';
 
 type Props = {
   searchedInput: string;
@@ -25,17 +25,19 @@ const HomeRoomList = (props: Props) => {
 
   useEffect(() => {
     if (props.searchedInput.length > 0) {
-      console.log('typing...');
       setFilteredResources(props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i'))));
     } else if (props.rvClicked) {
-      console.log('rv');
       setFilteredResources(
         props.resourceData.filter(resource =>
           recentlyVisitedMap.some(rvMap => resource.id === rvMap.resource_id && rvMap.user_id === props.currentUser.id),
         ),
       );
     } else {
-      setFilteredResources(props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i'))));
+      setFilteredResources(
+        props.resourceData.filter(resource =>
+          bookmarkMap.some(bkMap => resource.id === bkMap.resource_id && bkMap.user_id === props.currentUser.id),
+        ),
+      );
     }
   }, [props.searchedInput, props.rvClicked, props.bookmarksClicked]);
   // const filteredResources = props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i')));

@@ -21,4 +21,11 @@ export interface CreateResourceData {
   schoolId: number;
 }
 
+export interface ResourceMappings {
+  id: number;
+  resource_id: number;
+  subscription_id: number;
+  user_id: number;
+}
+
 export type ResourcePutData = Partial<ResourceData>;
