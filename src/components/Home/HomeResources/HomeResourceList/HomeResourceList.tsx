@@ -4,8 +4,7 @@ import ResourceContainer from '@components/Home/HomeResources/HomeResourceContai
 import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
-// import { recentlyVisitedMap } from '@/consts/dummyMaps';
-// import { getCurrentUser } from '@/modules/user/userSlice';
+import { recentlyVisitedMap } from '@/consts/dummyMaps';
 
 type Props = {
   searchedInput: string;
@@ -18,21 +17,28 @@ type Props = {
 
 const HomeRoomList = (props: Props) => {
   const [isResourceEmpty, setIsResourceEmpty] = useState(false);
+  const [filteredResources, setFilteredResources] = useState(
+    props.resourceData.filter(resource =>
+      recentlyVisitedMap.some(rvMap => resource.id === rvMap.resource_id && rvMap.user_id === props.currentUser.id),
+    ),
+  );
 
-  // useEffect(() => {
-  //   if (props.searchedInput.length > 0) {
-  //     console.log('typing...');
+  useEffect(() => {
+    if (props.searchedInput.length > 0) {
+      console.log('typing...');
+      setFilteredResources(props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i'))));
+    } else if (props.rvClicked) {
+      console.log('rv');
+      setFilteredResources(
+        props.resourceData.filter(resource =>
+          recentlyVisitedMap.some(rvMap => resource.id === rvMap.resource_id && rvMap.user_id === props.currentUser.id),
+        ),
+      );
+    } else {
+      setFilteredResources(props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i'))));
+    }
+  }, [props.searchedInput, props.rvClicked, props.bookmarksClicked]);
   // const filteredResources = props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i')));
-  //   } else if (props.rvClicked) {
-  //     console.log('rv');
-  // const filteredResources = props.resourceData.filter(resource =>
-  //   recentlyVisitedMap.some(rvMap => resource.id === rvMap.resource_id && rvMap.user_id === props.currentUser.id),
-  // );
-  //   } else {
-  //     console.log('bookmarks');
-  //   }
-  // }, [props.searchedInput, props.rvClicked, props.bookmarksClicked]);
-  const filteredResources = props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i')));
 
   useEffect(() => {
     if (filteredResources.length == 0) {
