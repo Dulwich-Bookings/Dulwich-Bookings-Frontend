@@ -4,8 +4,9 @@ import { Grid, Card, CardContent, Typography, Stack } from '@mui/material';
 
 import { Bookmark, PersonOutlineOutlined, Circle } from '@mui/icons-material';
 import { ResourceData } from '@/modules/resource/types';
-import { tagMap, tagColor } from '@/consts/dummyMaps';
+import { tagMap } from '@/consts/dummyMaps';
 import { TagData } from '@/modules/tag/types';
+import HomeResourceTag from './HomeResourceTag/HomeResourceTag';
 
 type Props = {
   resource: ResourceData;
@@ -52,16 +53,7 @@ const HomeRoomItem = (props: Props) => {
               </Stack>
               <Grid container>
                 {filteredTags.map(tag => (
-                  <Grid item key={tag.id}>
-                    <div
-                      className={`m-1 text-bgWhite text-sm rounded-xl px-4 `}
-                      style={{
-                        backgroundColor: `${tagColor.filter(colorTag => colorTag.id === tag.id).map(colorTag => colorTag.color)}`,
-                      }}
-                    >
-                      <p className='font-Inter'>{tag.name}</p>
-                    </div>
-                  </Grid>
+                  <HomeResourceTag key={tag.id} tagData={tag} />
                 ))}
               </Grid>
             </Stack>
