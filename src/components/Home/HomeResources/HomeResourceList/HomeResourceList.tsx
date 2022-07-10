@@ -24,31 +24,28 @@ const HomeRoomList = (props: Props) => {
   );
 
   useEffect(() => {
+    let data: ResourceData[] = [];
     if (props.searchedInput.length > 0) {
-      setFilteredResources(props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i'))));
+      data = props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i')));
+      setFilteredResources(data);
     } else if (props.rvClicked) {
-      setFilteredResources(
-        props.resourceData.filter(resource =>
-          recentlyVisitedMap.some(rvMap => resource.id === rvMap.resource_id && rvMap.user_id === props.currentUser.id),
-        ),
+      data = props.resourceData.filter(resource =>
+        recentlyVisitedMap.some(rvMap => resource.id === rvMap.resource_id && rvMap.user_id === props.currentUser.id),
       );
+      setFilteredResources(data);
     } else {
-      setFilteredResources(
-        props.resourceData.filter(resource =>
-          bookmarkMap.some(bkMap => resource.id === bkMap.resource_id && bkMap.user_id === props.currentUser.id),
-        ),
+      data = props.resourceData.filter(resource =>
+        bookmarkMap.some(bkMap => resource.id === bkMap.resource_id && bkMap.user_id === props.currentUser.id),
       );
+      setFilteredResources(data);
     }
-  }, [props.searchedInput, props.rvClicked, props.bookmarksClicked]);
-  // const filteredResources = props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i')));
-
-  useEffect(() => {
-    if (filteredResources.length == 0) {
+    if (data.length === 0) {
       setIsResourceEmpty(true);
     } else {
       setIsResourceEmpty(false);
     }
-  }, [props.searchedInput]);
+  }, [props.searchedInput, props.rvClicked, props.bookmarksClicked]);
+  // const filteredResources = props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i')));
 
   return (
     <Box className='py-20'>
