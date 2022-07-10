@@ -6,7 +6,8 @@ import { Bookmark, PersonOutlineOutlined, Circle } from '@mui/icons-material';
 import { ResourceData } from '@/modules/resource/types';
 import { tagMap } from '@/consts/dummyMaps';
 import { TagData } from '@/modules/tag/types';
-import HomeResourceTag from './HomeResourceTag/HomeResourceTag';
+import ResourceTag from '@/components/Home/HomeResources/HomeResourceContainer/ResourceTag/ResourceTag';
+import ResourceRights from '@/components/Home/HomeResources/HomeResourceContainer/ResourceRights/ResourceRights';
 
 type Props = {
   resource: ResourceData;
@@ -48,12 +49,16 @@ const HomeRoomItem = (props: Props) => {
                 <PersonOutlineOutlined className='text-xl text-bgNoHover' />
                 <Stack spacing={-0.5}>
                   <Typography className='font-Inter text-bgNoHover'>Access available to:</Typography>
-                  <Typography className='font-Inter text-bgNoHover'>{props.resource.accessRights.map(role => role + ', ')}</Typography>
+                  <Typography className='font-Inter text-bgNoHover'>
+                    {props.resource.accessRights.map(role => (
+                      <ResourceRights key={role} role={role} initialIndex={props.resource.accessRights[0]} />
+                    ))}
+                  </Typography>
                 </Stack>
               </Stack>
               <Grid container>
                 {filteredTags.map(tag => (
-                  <HomeResourceTag key={tag.id} tagData={tag} />
+                  <ResourceTag key={tag.id} tagData={tag} />
                 ))}
               </Grid>
             </Stack>

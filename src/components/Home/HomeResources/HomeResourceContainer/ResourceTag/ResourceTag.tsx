@@ -9,7 +9,7 @@ type Props = {
   tagData: TagData;
 };
 
-const HomeResourceTag = (props: Props) => {
+const ResourceTag = (props: Props) => {
   return (
     <Grid item key={props.tagData.id}>
       <div
@@ -24,4 +24,4 @@ const HomeResourceTag = (props: Props) => {
   );
 };
 
-export default HomeResourceTag;
+export default ResourceTag;
