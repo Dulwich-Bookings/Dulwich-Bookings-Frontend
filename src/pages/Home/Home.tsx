@@ -5,7 +5,7 @@ import { Stack } from '@mui/material';
 import HomeHeader from '@components/Home/HomeHeader/HomeHeader';
 import HomeBanner from '@components/Home/HomeBanner/HomeBanner';
 import HomeSearchBar from '@components/Home/HomeSearchBar/HomeSearchBar';
-import HomeRooms from '@/components/Home/HomeResources/HomeResources';
+import HomeResources from '@/components/Home/HomeResources/HomeResources';
 
 import { useSelector } from 'react-redux';
 import { getCurrentUser } from '@/modules/user/userSlice';
@@ -57,7 +57,7 @@ const Home = () => {
                 <HomeBanner schoolId={1} />
                 <HomeSearchBar onInputChange={onInputChangeHandler} />
               </Stack>
-              <HomeRooms searchedInput={inputValue} resourceData={resources} tagData={tags} currentUser={currentUser} />
+              <HomeResources searchedInput={inputValue} resourceData={resources} tagData={tags} currentUser={currentUser} />
             </Stack>
           </main>
         </>
