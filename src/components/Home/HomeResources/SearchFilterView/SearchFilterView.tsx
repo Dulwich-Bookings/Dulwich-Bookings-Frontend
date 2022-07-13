@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Button, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
+import RecentlySearchedButton from '@/components/Home/HomeResources/SearchFilterView/RecentlySearchedButton/RecentlySearchedButton';
+import BookmarksButton from '@/components/Home/HomeResources/SearchFilterView/BookmarksButton/BookmarksButton';
 
 type Props = {
   searchedInput: string;
+  bookmarksClicked: (value: boolean) => void;
+  rvClicked: (value: boolean) => void;
 };
 
 const HomeRoomHeader = (props: Props) => {
@@ -14,18 +18,18 @@ const HomeRoomHeader = (props: Props) => {
     if (recentClick) {
       return;
     }
-
     setRecentClick(true);
     setBookmarkClick(false);
+    props.rvClicked(true);
   };
 
   const onBookmarkClickHandler = () => {
     if (bookmarkClick) {
       return;
     }
-
     setRecentClick(false);
     setBookmarkClick(true);
+    props.bookmarksClicked(true);
   };
 
   useEffect(() => {
@@ -34,36 +38,8 @@ const HomeRoomHeader = (props: Props) => {
 
   return (
     <Grid container direction='row' className='justify-start' spacing={3}>
-      {!filterText && (
-        <Grid item className='scale-[0.8] pl-0 sm:scale-100 sm:pl-6'>
-          <Button className='p-0 hover:bg-[transparent] ' disableRipple={true} onClick={onRecentClickHandler}>
-            <Typography
-              className={`${'font-Inter '} ${recentClick && 'underline decoration-dulwichRed'} ${!recentClick && 'text-[#404040]'}`}
-              variant='h5'
-              textTransform='capitalize'
-              color='black'
-            >
-              Recently Searched
-            </Typography>
-          </Button>
-        </Grid>
-      )}
-
-      {!filterText && (
-        <Grid item className='scale-[0.8] pl-0 sm:scale-100 sm:pl-6'>
-          <Button className='p-0 hover:bg-[transparent]' disableRipple={true} onClick={onBookmarkClickHandler}>
-            <Typography
-              className={`${'font-Inter'} ${bookmarkClick && 'underline decoration-dulwichRed'} ${!bookmarkClick && 'text-[#404040]'}`}
-              variant='h5'
-              textTransform='capitalize'
-              color='black'
-            >
-              Bookmarks
-            </Typography>
-          </Button>
-        </Grid>
-      )}
-
+      {!filterText && <RecentlySearchedButton onClick={onRecentClickHandler} clicked={recentClick} />}
+      {!filterText && <BookmarksButton onClick={onBookmarkClickHandler} clicked={bookmarkClick} />}
       {filterText && (
         <Grid item>
           <Typography className='font-Inter' variant='h5' textTransform='capitalize' color='black'>
