@@ -10,8 +10,8 @@ type Props = {
   searchedInput: string;
   tagData: TagData[];
   resourceData: ResourceData[];
-  bookmarksClicked: boolean;
-  rvClicked: boolean;
+  isBookmarksClicked: boolean;
+  isRvClicked: boolean;
   currentUser: UserData;
 };
 
@@ -25,27 +25,24 @@ const HomeRoomList = (props: Props) => {
 
   useEffect(() => {
     let data: ResourceData[] = [];
+
     if (props.searchedInput.length > 0) {
       data = props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i')));
       setFilteredResources(data);
-    } else if (props.rvClicked) {
+    } else if (props.isRvClicked) {
       data = props.resourceData.filter(resource =>
         recentlyVisitedMap.some(rvMap => resource.id === rvMap.resource_id && rvMap.user_id === props.currentUser.id),
       );
       setFilteredResources(data);
-    } else {
+    } else if (props.isBookmarksClicked) {
       data = props.resourceData.filter(resource =>
         bookmarkMap.some(bkMap => resource.id === bkMap.resource_id && bkMap.user_id === props.currentUser.id),
       );
       setFilteredResources(data);
     }
-    if (data.length === 0) {
-      setIsResourceEmpty(true);
-    } else {
-      setIsResourceEmpty(false);
-    }
-  }, [props.searchedInput, props.rvClicked, props.bookmarksClicked]);
-  // const filteredResources = props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i')));
+
+    data.length === 0 ? setIsResourceEmpty(true) : setIsResourceEmpty(false);
+  }, [props.searchedInput, props.isRvClicked, props.isBookmarksClicked]);
 
   return (
     <Box className='py-20'>

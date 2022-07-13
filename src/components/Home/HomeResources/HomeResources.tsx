@@ -16,16 +16,16 @@ type Props = {
 };
 
 const HomeRooms = (props: Props) => {
-  const [bookmarksClicked, setBookmarksClicked] = useState(false);
-  const [rvClicked, setRVClicked] = useState(true);
+  const [isBookmarksClicked, setIsBookmarksClicked] = useState(false);
+  const [isRvClicked, setIsRVClicked] = useState(true);
 
   const bookmarksClickedHandler = (value: boolean) => {
-    setBookmarksClicked(value);
-    setRVClicked(!value);
+    setIsBookmarksClicked(value);
+    setIsRVClicked(!value);
   };
   const rvClickedHandler = (value: boolean) => {
-    setRVClicked(value);
-    setBookmarksClicked(!value);
+    setIsRVClicked(value);
+    setIsBookmarksClicked(!value);
   };
 
   return (
@@ -36,8 +36,8 @@ const HomeRooms = (props: Props) => {
           resourceData={props.resourceData}
           searchedInput={props.searchedInput}
           tagData={props.tagData}
-          bookmarksClicked={bookmarksClicked}
-          rvClicked={rvClicked}
+          isBookmarksClicked={isBookmarksClicked}
+          isRvClicked={isRvClicked}
           currentUser={props.currentUser}
         />
       </Stack>
