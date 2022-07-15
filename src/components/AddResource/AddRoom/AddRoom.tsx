@@ -1,13 +1,35 @@
-import React from 'react';
-import { Stack, Typography, Button, FormControl, RadioGroup, FormControlLabel, Radio, Checkbox, FormGroup, TextField } from '@mui/material';
+import React, { useState } from 'react';
+import { Stack, Typography, Button, RadioGroup, FormControlLabel, Radio, Checkbox, FormGroup, TextField, Chip } from '@mui/material';
 import { locationImages } from '@/consts/constants';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import CloseIcon from '@mui/icons-material/Close';
+
+interface ChipData {
+  id: number;
+  email: string;
+}
 
 const AddRoom = () => {
+  const [othersData, setOthersData] = useState<ChipData[]>([]);
+  const [inputValue, setInputValue] = useState('');
+
+  const handleDelete = (chipToDelete: ChipData) => () => {
+    setOthersData(chips => chips.filter(chip => chip.id !== chipToDelete.id));
+  };
+
+  const handleEnter = () => {
+    setOthersData([...othersData, { id: Math.random(), email: inputValue }]);
+    setInputValue('');
+  };
+
+  const InputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setInputValue(event.target.value);
+  };
+
   return (
     <>
       <Stack direction='row' className='w-screen'>
-        <Stack className='w-2/3 py-12 px-24' spacing={2.5}>
+        <Stack className='w-2/3 py-10 px-24' spacing={2}>
           <Stack>
             <Stack direction='row' alignItems='center'>
               <Stack spacing={2}>
@@ -170,7 +192,25 @@ const AddRoom = () => {
                       },
                     },
                   }}
+                  onChange={InputChangeHandler}
+                  onKeyDown={event => {
+                    if (event.key === 'Enter') {
+                      handleEnter();
+                    }
+                  }}
+                  value={inputValue}
                 />
+                {othersData.map(email => (
+                  <Chip
+                    key={email.id}
+                    className='text-bgWhite px-2 max-w-fit rounded-[100px] font-inter text-[12px]'
+                    sx={{ backgroundColor: '#404040' }}
+                    onDelete={handleDelete(email)}
+                    label={email.email}
+                    size='small'
+                    deleteIcon={<CloseIcon className='text-bgWhite text-[14px]' />}
+                  />
+                ))}
               </Stack>
             </Stack>
           </Stack>
@@ -252,7 +292,7 @@ const AddRoom = () => {
             </Stack>
           </Stack>
 
-          <Stack className='py-4'>
+          <Stack>
             <Stack direction='row' spacing={5}>
               <Button disableRipple={true} className='w-[224px] h-[65px] bg-[#E33939] rounded-[10px] text-bgWhite font-inter text-[20px]'>
                 Add Room
