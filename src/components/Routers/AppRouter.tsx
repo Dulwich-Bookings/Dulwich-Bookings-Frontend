@@ -17,6 +17,8 @@ import SignUp from '@pages/Landing/SignUp/SignUp';
 import IsTemporaryUser from '@pages/Landing/IsTemporaryUser/IsTemporaryUser';
 import Home from '@pages/Home/Home';
 import Test from '@pages/Test/Test';
+import AddResource from '@pages/AddResource/AddResource';
+import AddRoom from '@/pages/AddResource/AddRoom/AddRoom';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -76,6 +78,8 @@ const AppRouter = () => {
       <Route exact path={Routes.authentication.confirmEmail} component={ConfirmEmail} />
       {accessToken && <Route exact path={Routes.authentication.isTempUser} component={IsTemporaryUser} />}
       {accessToken && !isTemp && <Route exact path={Routes.home} component={Home} />}
+      {accessToken && !isTemp && <Route exact path={Routes.addResource.main} component={AddResource} />}
+      {accessToken && !isTemp && <Route exact path={Routes.addResource.addRoom} component={AddRoom} />}
       <Route exact path={Routes.test} component={Test} />
       <Route exact path='*'>
         <Redirect to={Routes.base} />

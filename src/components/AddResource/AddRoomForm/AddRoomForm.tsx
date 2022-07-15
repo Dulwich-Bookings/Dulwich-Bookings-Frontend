@@ -11,11 +11,13 @@ import {
   TextField,
   Chip,
   ButtonGroup,
+  Box,
 } from '@mui/material';
 import { locationImages } from '@/consts/constants';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import CloseIcon from '@mui/icons-material/Close';
 import { TagData } from '@/modules/tag/types';
+import { useHistory } from 'react-router-dom';
+import BackButton from '@components/AddResource/BackButton/BackButton';
 
 interface ChipData {
   id: number;
@@ -35,6 +37,7 @@ const AddRoom = () => {
   const [othersData, setOthersData] = useState<ChipData[]>([]);
   const [addOthersInputValue, setAddOthersInputValue] = useState('');
   const [filteredTags, setFilteredTags] = useState<TagData[]>([]);
+  const history = useHistory();
 
   const handleDelete = (chipToDelete: ChipData) => () => {
     setOthersData(chips => chips.filter(chip => chip.id !== chipToDelete.id));
@@ -59,6 +62,10 @@ const AddRoom = () => {
     }
   };
 
+  const returnResourcePage = () => {
+    history.push('/addResource');
+  };
+
   return (
     <>
       <Stack direction='row' className='w-screen'>
@@ -66,10 +73,9 @@ const AddRoom = () => {
           <Stack>
             <Stack direction='row' alignItems='center'>
               <Stack spacing={2}>
-                <Stack direction='row' spacing={0.5} alignItems='center'>
-                  <ArrowBackIosNewIcon className='text-[16px] text-[#404040]' />
-                  <Typography className='font-Inter text-[#404040]'>Home</Typography>
-                </Stack>
+                <Box onClick={returnResourcePage}>
+                  <BackButton buttonName='Add Resource' />
+                </Box>
                 <Typography variant='h4' className='font-Inter'>
                   Add Room
                 </Typography>

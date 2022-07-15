@@ -6,6 +6,7 @@ import AddResourceButton from '@components/Home/HomeHeader/AddResourceButton/Add
 
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
+import { useHistory } from 'react-router-dom';
 
 type Props = {
   currentUser: UserData;
@@ -13,8 +14,9 @@ type Props = {
 };
 
 const HomeHeader = ({ currentUser, currentSchool }: Props) => {
+  const history = useHistory();
   const handleAddResource = () => {
-    console.log('add resource');
+    history.push('/addResource');
   };
 
   return (

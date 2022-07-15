@@ -10,6 +10,10 @@ const Routes = {
   },
   base: '/',
   home: '/home',
+  addResource: {
+    main: '/addResource',
+    addRoom: '/addResource/room',
+  },
 };
 
 export default Routes;
