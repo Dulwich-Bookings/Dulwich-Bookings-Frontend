@@ -39,33 +39,6 @@ export const tagMap = [
   },
 ];
 
-export const tagColor = [
-  {
-    id: 1,
-    color: '#F7AD1D',
-  },
-  {
-    id: 2,
-    color: '#6AA5AD',
-  },
-  {
-    id: 3,
-    color: '#FFC0CB',
-  },
-  {
-    id: 4,
-    color: '#4E67EA',
-  },
-  {
-    id: 5,
-    color: '#32CD32',
-  },
-  {
-    id: 6,
-    color: '#934EEA',
-  },
-];
-
 export const recentlyVisitedMap = [
   {
     id: 1,

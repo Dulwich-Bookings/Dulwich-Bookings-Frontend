@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Grid } from '@mui/material';
 
-import { tagColor } from '@/consts/dummyMaps';
 import { TagData } from '@/modules/tag/types';
 
 type Props = {
@@ -15,7 +14,7 @@ const ResourceTag = (props: Props) => {
       <div
         className={`m-1 text-bgWhite text-sm rounded-xl px-4 `}
         style={{
-          backgroundColor: `${tagColor.filter(colorTag => colorTag.id === props.tagData.id).map(colorTag => colorTag.color)}`,
+          backgroundColor: `${props.tagData.colour}`,
         }}
       >
         <p className='font-Inter'>{props.tagData.name}</p>

@@ -45,7 +45,6 @@ const HomeRoomList = (props: Props) => {
       setIsResourceEmpty(false);
     }
   }, [props.searchedInput, props.rvClicked, props.bookmarksClicked]);
-  // const filteredResources = props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i')));
 
   return (
     <Box className='py-20'>

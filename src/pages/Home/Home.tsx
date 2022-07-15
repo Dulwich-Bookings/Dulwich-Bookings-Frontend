@@ -45,8 +45,8 @@ const Home = () => {
     resources.splice(0);
     tags.splice(0);
 
-    retrieveAllData(getAllResources).then(d => d.filter((x: ResourceData) => resources.push(x)));
-    retrieveAllData(getAllTags).then(d => d.filter((x: TagData) => tags.push(x)));
+    retrieveAllData(getAllResources).then(d => d.map((x: ResourceData) => resources.push(x)));
+    retrieveAllData(getAllTags).then(d => d.map((x: TagData) => tags.push(x)));
   }, [resources, tags]);
 
   return (
