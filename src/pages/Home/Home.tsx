@@ -19,9 +19,6 @@ import TagService from '@/api/tag/TagService';
 import { isSuccess } from '@/api/ApiHandler';
 import { TagData } from '@/modules/tag/types';
 
-const resources: ResourceData[] = [];
-const tags: TagData[] = [];
-
 const Home = () => {
   const retrieveAllData = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();
@@ -36,18 +33,17 @@ const Home = () => {
   const currentUser = useSelector(getCurrentUser);
   const currentSchool = useSelector(getCurrentSchool);
   const [inputValue, setInputValue] = useState('');
+  const [resources, setResource] = useState<ResourceData[]>([]);
+  const [tags, setTags] = useState<TagData[]>([]);
 
   const onInputChangeHandler = (enteredValue: string): void => {
     setInputValue(enteredValue);
   };
 
   useEffect(() => {
-    resources.splice(0);
-    tags.splice(0);
-
-    retrieveAllData(getAllResources).then(d => d.map((x: ResourceData) => resources.push(x)));
-    retrieveAllData(getAllTags).then(d => d.map((x: TagData) => tags.push(x)));
-  }, [resources, tags]);
+    retrieveAllData(getAllResources).then(d => setResource(r => [...r, ...d]));
+    retrieveAllData(getAllTags).then(d => setTags(r => [...r, ...d]));
+  }, []);
 
   return (
     <>

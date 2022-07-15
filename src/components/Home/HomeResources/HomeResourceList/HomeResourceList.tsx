@@ -17,11 +17,7 @@ type Props = {
 
 const HomeRoomList = (props: Props) => {
   const [isResourceEmpty, setIsResourceEmpty] = useState(false);
-  const [filteredResources, setFilteredResources] = useState(
-    props.resourceData.filter(resource =>
-      recentlyVisitedMap.some(rvMap => resource.id === rvMap.resource_id && rvMap.user_id === props.currentUser.id),
-    ),
-  );
+  const [filteredResources, setFilteredResources] = useState<ResourceData[]>([]);
 
   useEffect(() => {
     let data: ResourceData[] = [];
@@ -44,7 +40,8 @@ const HomeRoomList = (props: Props) => {
     } else {
       setIsResourceEmpty(false);
     }
-  }, [props.searchedInput, props.rvClicked, props.bookmarksClicked]);
+    console.log(data.length);
+  }, [props.searchedInput, props.rvClicked, props.bookmarksClicked, props.resourceData]);
 
   return (
     <Box className='py-20'>
