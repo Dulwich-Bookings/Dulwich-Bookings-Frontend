@@ -1,32 +1,62 @@
 import React, { useState } from 'react';
-import { Stack, Typography, Button, RadioGroup, FormControlLabel, Radio, Checkbox, FormGroup, TextField, Chip } from '@mui/material';
+import {
+  Stack,
+  Typography,
+  Button,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Checkbox,
+  FormGroup,
+  TextField,
+  Chip,
+  ButtonGroup,
+} from '@mui/material';
 import { locationImages } from '@/consts/constants';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import CloseIcon from '@mui/icons-material/Close';
+import { TagData } from '@/modules/tag/types';
 
 interface ChipData {
   id: number;
   email: string;
 }
 
+const tagData = [
+  { id: 1, name: 'Math', colour: '#264653', createdAt: '2022-07-13T18:04:23.960Z', updatedAt: '2022-07-13T18:04:23.960Z' },
+  { id: 2, name: 'Science', colour: '#2A9D8F', createdAt: '2022-07-13T18:04:23.960Z', updatedAt: '2022-07-13T18:04:23.960Z' },
+  { id: 3, name: 'Geography', colour: '#E9C46A', createdAt: '2022-07-13T18:04:23.960Z', updatedAt: '2022-07-13T18:04:23.960Z' },
+  { id: 4, name: 'History', colour: '#F4A261', createdAt: '2022-07-13T18:04:23.960Z', updatedAt: '2022-07-13T18:04:23.960Z' },
+  { id: 5, name: 'Economics', colour: '#E76F51', createdAt: '2022-07-13T18:04:23.960Z', updatedAt: '2022-07-13T18:04:23.960Z' },
+  { id: 6, name: 'SE21', colour: '#EAE2B7', createdAt: '2022-07-13T18:04:23.960Z', updatedAt: '2022-07-13T18:04:23.960Z' },
+];
+
 const AddRoom = () => {
   const [othersData, setOthersData] = useState<ChipData[]>([]);
-  const [inputValue, setInputValue] = useState('');
+  const [addOthersInputValue, setAddOthersInputValue] = useState('');
+  const [filteredTags, setFilteredTags] = useState<TagData[]>([]);
 
   const handleDelete = (chipToDelete: ChipData) => () => {
     setOthersData(chips => chips.filter(chip => chip.id !== chipToDelete.id));
   };
 
   const handleEnter = () => {
-    if (inputValue.trim() === '') {
+    if (addOthersInputValue.trim() === '') {
       return;
     }
-    setOthersData([...othersData, { id: Math.random(), email: inputValue }]);
-    setInputValue('');
+    setOthersData([...othersData, { id: Math.random(), email: addOthersInputValue }]);
+    setAddOthersInputValue('');
   };
 
   const InputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setInputValue(event.target.value);
+    setAddOthersInputValue(event.target.value);
+  };
+
+  const TagChangeHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setFilteredTags(tagData.filter(tag => tag.name.match(new RegExp(event.target.value, 'i'))));
+    if (event.target.value.trim() === '') {
+      setFilteredTags([]);
+    }
   };
 
   return (
@@ -69,7 +99,7 @@ const AddRoom = () => {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
-                        borderColor: '#F3F3F4',
+                        borderWidth: '0px',
                       },
                       '&:hover fieldset': {
                         borderColor: '#F3F3F4',
@@ -127,6 +157,7 @@ const AddRoom = () => {
             <Stack spacing={1}>
               <Typography className='text-[#404040] text-[20px] font-inter'>Description</Typography>
               <TextField
+                size='small'
                 multiline={true}
                 maxRows='3'
                 rows='3'
@@ -135,7 +166,7 @@ const AddRoom = () => {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     '& fieldset': {
-                      borderColor: '#F3F3F4',
+                      borderWidth: '0px',
                     },
                     '&:hover fieldset': {
                       borderColor: '#F3F3F4',
@@ -160,10 +191,11 @@ const AddRoom = () => {
                   rows='1'
                   className='bg-bgGray rounded-[10px] w-[210px] focus-within:bg-bgWhite'
                   placeholder='Type to add tag'
+                  onChange={TagChangeHandler}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
-                        borderColor: '#F3F3F4',
+                        borderWidth: '0px',
                       },
                       '&:hover fieldset': {
                         borderColor: '#F3F3F4',
@@ -174,6 +206,21 @@ const AddRoom = () => {
                     },
                   }}
                 />
+                <ButtonGroup
+                  orientation='vertical'
+                  className='w-[210px] shadow-lg rounded-[4px] max-h-36 overflow-auto'
+                  variant='contained'
+                  disableElevation
+                >
+                  {filteredTags.map(tag => (
+                    <Button
+                      key={tag.id}
+                      className='min-h-[45px] w-full border-bgWhite bg-bgWhite text-bgBlack hover:bg-dulwichRed hover:bg-opacity-10'
+                    >
+                      {tag.name}
+                    </Button>
+                  ))}
+                </ButtonGroup>
               </Stack>
               <Stack spacing={1} className='w-1/2 px-[70px]'>
                 <Typography className='text-[#404040] text-[20px] font-inter'>Add Others</Typography>
@@ -185,7 +232,7 @@ const AddRoom = () => {
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
-                        borderColor: '#F3F3F4',
+                        borderWidth: '0px',
                       },
                       '&:hover fieldset': {
                         borderColor: '#F3F3F4',
@@ -201,7 +248,7 @@ const AddRoom = () => {
                       handleEnter();
                     }
                   }}
-                  value={inputValue}
+                  value={addOthersInputValue}
                 />
                 <Stack spacing={1} className='max-h-12 w-[311px] overflow-auto'>
                   {othersData.map(email => (
