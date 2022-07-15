@@ -18,6 +18,9 @@ const AddRoom = () => {
   };
 
   const handleEnter = () => {
+    if (inputValue.trim() === '') {
+      return;
+    }
     setOthersData([...othersData, { id: Math.random(), email: inputValue }]);
     setInputValue('');
   };
@@ -200,17 +203,19 @@ const AddRoom = () => {
                   }}
                   value={inputValue}
                 />
-                {othersData.map(email => (
-                  <Chip
-                    key={email.id}
-                    className='text-bgWhite px-2 max-w-fit rounded-[100px] font-inter text-[12px]'
-                    sx={{ backgroundColor: '#404040' }}
-                    onDelete={handleDelete(email)}
-                    label={email.email}
-                    size='small'
-                    deleteIcon={<CloseIcon className='text-bgWhite text-[14px]' />}
-                  />
-                ))}
+                <Stack spacing={1} className='max-h-12 w-[311px] overflow-auto'>
+                  {othersData.map(email => (
+                    <Chip
+                      key={email.id}
+                      className='text-bgWhite px-2 max-w-fit rounded-[100px] font-inter text-[12px]'
+                      sx={{ backgroundColor: '#404040' }}
+                      onDelete={handleDelete(email)}
+                      label={email.email}
+                      size='small'
+                      deleteIcon={<CloseIcon className='text-bgWhite text-[14px]' />}
+                    />
+                  ))}
+                </Stack>
               </Stack>
             </Stack>
           </Stack>
