@@ -13,27 +13,22 @@ import {
   ButtonGroup,
   Box,
 } from '@mui/material';
-import { locationImages } from '@/consts/constants';
 import CloseIcon from '@mui/icons-material/Close';
 import { TagData } from '@/modules/tag/types';
 import { useHistory } from 'react-router-dom';
 import BackButton from '@components/AddResource/BackButton/BackButton';
+import ResourceSample1 from '@/assets/images/Resource-Sample-1.jpg';
 
 interface ChipData {
   id: number;
   email: string;
 }
 
-const tagData = [
-  { id: 1, name: 'Math', colour: '#264653', createdAt: '2022-07-13T18:04:23.960Z', updatedAt: '2022-07-13T18:04:23.960Z' },
-  { id: 2, name: 'Science', colour: '#2A9D8F', createdAt: '2022-07-13T18:04:23.960Z', updatedAt: '2022-07-13T18:04:23.960Z' },
-  { id: 3, name: 'Geography', colour: '#E9C46A', createdAt: '2022-07-13T18:04:23.960Z', updatedAt: '2022-07-13T18:04:23.960Z' },
-  { id: 4, name: 'History', colour: '#F4A261', createdAt: '2022-07-13T18:04:23.960Z', updatedAt: '2022-07-13T18:04:23.960Z' },
-  { id: 5, name: 'Economics', colour: '#E76F51', createdAt: '2022-07-13T18:04:23.960Z', updatedAt: '2022-07-13T18:04:23.960Z' },
-  { id: 6, name: 'SE21', colour: '#EAE2B7', createdAt: '2022-07-13T18:04:23.960Z', updatedAt: '2022-07-13T18:04:23.960Z' },
-];
+type Props = {
+  tagData: TagData[];
+};
 
-const AddRoom = () => {
+const AddRoom = (props: Props) => {
   const [othersData, setOthersData] = useState<ChipData[]>([]);
   const [addOthersInputValue, setAddOthersInputValue] = useState('');
   const [filteredTags, setFilteredTags] = useState<TagData[]>([]);
@@ -56,7 +51,7 @@ const AddRoom = () => {
   };
 
   const TagChangeHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setFilteredTags(tagData.filter(tag => tag.name.match(new RegExp(event.target.value, 'i'))));
+    setFilteredTags(props.tagData.filter(tag => tag.name.match(new RegExp(event.target.value, 'i'))));
     if (event.target.value.trim() === '') {
       setFilteredTags([]);
     }
@@ -81,10 +76,7 @@ const AddRoom = () => {
                 </Typography>
               </Stack>
               <div className='w-3/4'>
-                <Button
-                  disableRipple={true}
-                  className='w-[205.65px] h-[40.3px] bg-[#808080] rounded-[6.19335px] text-bgWhite font-inter float-right'
-                >
+                <Button className='w-[205.65px] h-[40.3px] bg-[#808080] rounded-[6.19335px] text-bgWhite font-inter float-right'>
                   Download Template
                 </Button>
               </div>
@@ -352,16 +344,14 @@ const AddRoom = () => {
 
           <Stack>
             <Stack direction='row' spacing={5}>
-              <Button disableRipple={true} className='w-[224px] h-[65px] bg-[#E33939] rounded-[10px] text-bgWhite font-inter text-[20px]'>
-                Add Room
-              </Button>
-              <Button disableRipple={true} className='w-[299px] h-[65px] bg-[#E33939] rounded-[10px] text-bgWhite font-inter text-[20px]'>
+              <Button className='w-[224px] h-[65px] bg-[#E33939] rounded-[10px] text-bgWhite font-inter text-[20px]'>Add Room</Button>
+              <Button className='w-[299px] h-[65px] bg-[#E33939] rounded-[10px] text-bgWhite font-inter text-[20px]'>
                 Upload Template
               </Button>
             </Stack>
           </Stack>
         </Stack>
-        <img className='w-1/3 h-screen float-right' src={locationImages.find(location => location.id === 1)?.img} />
+        <img className='w-1/3 h-screen float-right object-cover' src={ResourceSample1} />
       </Stack>
     </>
   );
