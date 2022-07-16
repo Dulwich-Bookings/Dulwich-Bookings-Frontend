@@ -18,7 +18,7 @@ const AddResource = () => {
 
   return (
     <Grid container className='pl-10 justify-center pl-0 mt-10'>
-      <Stack className='w-screen max-w-[1432px]'>
+      <Stack className='w-screen max-w-[1312px]'>
         <Box onClick={returnHomePage}>
           <BackButton buttonName='Home' />
         </Box>
@@ -26,26 +26,29 @@ const AddResource = () => {
         <Grid container className='h-[621px] '>
           <Grid
             item
-            className="bg-[url('@/assets/images/Resource-Sample-1.jpg')] bg-cover bg-center mr-5 w-[424px] rounded-xl mt-14 cursor-pointer"
+            className="bg-[url('@/assets/images/Resource-Sample-1.jpg')] bg-cover bg-center mr-5 w-[424px] rounded-xl mt-14 cursor-pointer 
+            hover:border"
             onClick={returnAddRoomPage}
           >
-            <div className='flex w-full h-full justify-center items-center bg-bgBlur'>
+            <div className='flex w-full h-full justify-center items-center bg-bgBlur hover:bg-bgBlur/[.25]'>
               <div className='font-Inter text-[36px]'>Room</div>
             </div>
           </Grid>
           <Grid
             item
-            className="bg-[url('@/assets/images/Resource-Sample-2.png')] bg-cover bg-center mr-5 w-[424px] rounded-xl mt-14 cursor-not-allowed"
+            className="bg-[url('@/assets/images/Resource-Sample-2.png')] bg-cover bg-center mr-5 w-[424px] rounded-xl mt-14 cursor-not-allowed
+            hover:border"
           >
-            <div className='flex w-full h-full justify-center items-center bg-bgBlur'>
+            <div className='flex w-full h-full justify-center items-center bg-bgBlur hover:bg-bgBlur/[.25]'>
               <div className='font-Inter text-[36px]'>Tag</div>
             </div>
           </Grid>
           <Grid
             item
-            className="bg-[url('@/assets/images/Resource-Sample-3.jpg')] bg-cover bg-center mr-5 w-[424px] rounded-xl mt-14 cursor-not-allowed"
+            className="bg-[url('@/assets/images/Resource-Sample-3.jpg')] bg-cover bg-center w-[424px] rounded-xl mt-14 cursor-not-allowed
+            hover:border"
           >
-            <div className='flex w-full h-full justify-center items-center bg-bgBlur'>
+            <div className='flex w-full h-full justify-center items-center bg-bgBlur hover:bg-bgBlur/[.25]'>
               <div className='font-Inter text-[36px]'>Subscription</div>
             </div>
           </Grid>
