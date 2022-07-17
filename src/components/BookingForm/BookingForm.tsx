@@ -123,21 +123,21 @@ const BookingForm = (props: Props) => {
       <BookingTimePicker startTime={props.start} endTime={props.end} openState={timeModal} handleCloseModal={handleCloseTimePicker} />
       <ThemeProvider theme={theme}>
         <Modal className='flex justify-center items-center' open={props.openState} onClose={props.handleCloseModal}>
-          <Box className='laptop:w-1/4 laptop:h-fit laptop:m-2 laptop:rounded-lg w-full h-full pl-4 pr-1 pt-3 pb-6 bg-bgWhite'>
+          <Box className='laptop:rounded-lg w-96 h-fit pl-5 pr-3 pt-2 pb-6 bg-bgWhite'>
             <Close onClick={props.handleCloseModal} fontSize='small' className='float-right cursor-pointer hover:text-grayAccent' />
             <Stack direction='column' className='h-full' spacing={{ xs: 2, md: 2 }} alignItems='justified'>
               <Input
                 color='error'
                 placeholder='Add title'
                 value={title}
-                className='w-full h-1/6 text-xxl ml-2'
+                className='w-full h-1/6 text-xxl ml-2 font-Inter'
                 onChange={handleTitleChange}
               ></Input>
               <Stack direction='column' spacing={{ xs: 1, md: 1 }} alignItems='center'>
                 <InputWithIcon
                   inputType='string'
                   inputValue={time}
-                  inputClassname='w-10/12'
+                  inputClassname='w-10/12 font-Inter'
                   icon={<AccessTime className='ml-2' />}
                   spacing={2}
                   multiline={true}
@@ -151,7 +151,7 @@ const BookingForm = (props: Props) => {
                     inputType='string'
                     inputPlaceholder='Add description'
                     inputValue={description}
-                    inputClassname='w-full text-m color-bgWhite'
+                    inputClassname='w-full color-bgWhite font-Inter font-light'
                     inputVariant='outlined'
                     multiline={multiline}
                     rows={rows}
@@ -165,7 +165,7 @@ const BookingForm = (props: Props) => {
                 <InputWithIcon
                   inputType='string'
                   inputValue={'Recurring Booking'}
-                  inputClassname='w-6/12'
+                  inputClassname='w-6/12 font-Inter font-light'
                   icon={<Checkbox icon={<CircleOutlined />} checkedIcon={<RadioButtonCheckedOutlined />} onChange={handleRecurringClick} />}
                   spacing={1}
                   acceptInput={false}

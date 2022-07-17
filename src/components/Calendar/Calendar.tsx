@@ -9,7 +9,15 @@ import DayHeaderContent from '@components/Calendar/DayHeaderContent/DayHeaderCon
 import SlotLabelContent from '@components/Calendar/SlotLabelContent/SlotLabelContent';
 import BookingForm from '../BookingForm/BookingForm';
 import moment from 'moment';
+import styled from '@emotion/styled';
 import './Calendar.css';
+
+export const StyleWrapper = styled.div`
+  .fc .fc-timegrid-slot-minor {
+    border-top: none;
+    border-bottom: none;
+  }
+`;
 
 export type EventData = {
   title: string;

@@ -12,7 +12,7 @@ const SlotLabelContent = ({ obj }: Props) => {
   const dateString = date.toString();
   const time = moment(dateString).format('h a').toUpperCase();
   return (
-    <Typography className='text-grayAccent' variant='caption'>
+    <Typography className='text-gray-700 font-Inter' variant='caption'>
       {time}
     </Typography>
   );

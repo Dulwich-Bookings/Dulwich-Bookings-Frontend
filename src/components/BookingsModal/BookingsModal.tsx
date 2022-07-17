@@ -26,7 +26,7 @@ const BookingsModal = ({ openState, handleCloseModal }: Props) => {
   return (
     <ThemeProvider theme={theme}>
       <Modal className='flex justify-center items-center' open={openState} onClose={handleCloseModal}>
-        <Box className='laptop:w-11/12 laptop:h-5/6 laptop:mt-12 laptop:rounded-lg w-full h-full px-14 pt-10 bg-bgWhite'>
+        <Box className='laptop:w-10/12 laptop:h-5/6 laptop:mt-12 laptop:rounded-lg w-full h-full px-14 pt-10 bg-bgWhite'>
           <CloseIcon onClick={handleCloseModal} className='float-right cursor-pointer hover:text-grayAccent' />
           <Stack className='h-full' spacing={{ xs: 1, md: -6 }}>
             <BookingsHeader id={1} title={dummyResourceData.title} description={dummyResourceData.description} />

@@ -3,6 +3,12 @@ const TailWindTheme = {
   darkMode: false,
   important: true,
   theme: {
+    fontWeight: {
+      extra: 100,
+      light: 300,
+      normal: 400,
+      medium: 500,
+    },
     extend: {},
     fontFamily: { Inter: ['Inter', 'sans-serif'] },
     colors: {
@@ -16,7 +22,7 @@ const TailWindTheme = {
     fontSize: {
       sm: 12,
       md: 14,
-      lg: 19,
+      lg: 17,
       xl: 20,
       xxl: 24,
       '3xl': 30,

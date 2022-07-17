@@ -13,7 +13,7 @@ type Props = {
 const BookingFormFooter = (props: Props) => {
   if (props.type == 'editable') {
     return (
-      <Stack direction='row' className='w-full' spacing={1}>
+      <Stack direction='row' className='w-full' spacing={2}>
         <>
           <BookingButton buttonText='Save' handleOnClick={props.handleOnSave} />
           <BookingButton buttonText='Delete' handleOnClick={props.handleOnDelete} />
