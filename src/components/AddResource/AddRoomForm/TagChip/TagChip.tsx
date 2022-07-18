@@ -12,9 +12,9 @@ type Props = {
 
 const TagChip = (props: Props) => {
   return (
-    <Grid item key={props.tagData.id}>
+    <Grid item className='px-2' key={props.tagData.id}>
       <Chip
-        className={`text-bgWhite text-sm font-inter px-2 rounded-[100px] h-[20px]`}
+        className={`text-bgWhite text-sm font-inter rounded-[100px] h-[20px] `}
         size='small'
         style={{
           backgroundColor: `${props.tagData.colour}`,

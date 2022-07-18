@@ -1,0 +1,67 @@
+import React from 'react';
+import { Typography, TextField, Stack } from '@mui/material';
+import { InputValidation } from '@/modules/inputValidation/types';
+
+type Props<inputType> = {
+  spacing?: number; // Optional definition for the space between Label and Input
+  labelText: string;
+  labelClassName?: string; // Optional ClassNames for Label
+  inputPlaceholder: string;
+  inputType: string;
+  inputClassName?: string; // Optional ClassNames for Input
+  inputValidation?: InputValidation;
+  inputVariant?: 'outlined' | 'standard' | 'filled';
+  inputValue?: inputType;
+  inputSize?: 'small' | 'medium' | undefined;
+  inputRow?: number;
+  inputHandleOnChange?: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void; // Use with InputValue (Double Binding)
+  multiline?: boolean;
+  required?: boolean;
+};
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+const InputWithoutBorder = <T extends Object>(props: Props<T>) => {
+  const { inputValidation } = props;
+  const colSpacing = props.spacing ? props.spacing : 0.5;
+  const isError = inputValidation ? inputValidation.isError : false;
+  const errorHelperText = isError ? inputValidation?.errorHelperText : '';
+
+  return (
+    <Stack direction='column' spacing={colSpacing}>
+      <Typography className={props.labelClassName} variant='h6'>
+        {props.labelText}
+        {props.required && <label className='text-dulwichRed'> *</label>}
+      </Typography>
+      <TextField
+        error={isError}
+        helperText={errorHelperText}
+        value={props.inputValue}
+        onChange={props.inputHandleOnChange}
+        type={props.inputType}
+        size={props.inputSize}
+        rows={props.inputRow}
+        multiline={props.multiline}
+        id='outlined-basic'
+        placeholder={props.inputPlaceholder}
+        variant={props.inputVariant ? props.inputVariant : 'outlined'}
+        className={props.inputClassName}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderWidth: '0px',
+            },
+            '&:hover fieldset': {
+              borderColor: '#F3F3F4',
+            },
+            '&.Mui-focused fieldset': {
+              border: 1,
+              borderColor: '#E33939',
+            },
+          },
+        }}
+      />
+    </Stack>
+  );
+};
+
+export default InputWithoutBorder;

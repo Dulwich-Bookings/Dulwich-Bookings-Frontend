@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Stack } from '@mui/material';
-import InputWithLabel from '@/components/InputWithLabel/InputWithLabel';
 import LandingFormHeader from '@components/Landing/LandingFormHeader/LandingFormHeader';
 import LandingFormFooter from '@components/Landing/LandingFormFooter/LandingFormFooter';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { InputValidation } from '@/components/InputWithLabel/InputWithLabel';
 import { toggleShowNotification } from '@/modules/ui/uiSlice';
 import { severity } from '@/consts/constants';
 import { useApi } from '@/api/ApiHandler';
 import AuthService from '@/api/auth/AuthService';
+import InputWithLabel from '@/components/Inputs/InputWithLabel/InputWithLabel';
+import { InputValidation } from '@/modules/inputValidation/types';
 
 const ResetPasswordForm = () => {
   const noError: InputValidation = { isError: false, errorHelperText: '' };
