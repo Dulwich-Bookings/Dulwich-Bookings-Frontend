@@ -12,12 +12,14 @@ import {
   Chip,
   ButtonGroup,
   Box,
+  Grid,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { TagData } from '@/modules/tag/types';
 import { useHistory } from 'react-router-dom';
 import BackButton from '@components/AddResource/BackButton/BackButton';
 import ResourceSample1 from '@/assets/images/Resource-Sample-1.jpg';
+import AddRoomTag from './AddRoomTag/AddRoomTag';
 
 interface ChipData {
   id: number;
@@ -31,11 +33,17 @@ type Props = {
 const AddRoom = (props: Props) => {
   const [othersData, setOthersData] = useState<ChipData[]>([]);
   const [addOthersInputValue, setAddOthersInputValue] = useState('');
+  const [tagInputValue, setTagInputValue] = useState('');
   const [filteredTags, setFilteredTags] = useState<TagData[]>([]);
+  const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
   const history = useHistory();
 
   const handleDelete = (chipToDelete: ChipData) => () => {
     setOthersData(chips => chips.filter(chip => chip.id !== chipToDelete.id));
+  };
+
+  const tagDelete = (tagToDelete: number) => () => {
+    setSelectedTags(selectedTags.filter(tag => tag.id !== tagToDelete));
   };
 
   const handleEnter = () => {
@@ -51,6 +59,7 @@ const AddRoom = (props: Props) => {
   };
 
   const TagChangeHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setTagInputValue(event.target.value);
     setFilteredTags(props.tagData.filter(tag => tag.name.match(new RegExp(event.target.value, 'i'))));
     if (event.target.value.trim() === '') {
       setFilteredTags([]);
@@ -180,7 +189,7 @@ const AddRoom = (props: Props) => {
 
           <Stack>
             <Stack direction='row'>
-              <Stack className='w-1/2'>
+              <Stack className='w-4/12'>
                 <Stack direction='row' spacing={1}>
                   <Typography className='text-[#404040] text-[20px] font-inter'>Choose Tags</Typography>
                   <Typography className='text-[#E33939] text-[25px] font-inter'>*</Typography>
@@ -190,6 +199,7 @@ const AddRoom = (props: Props) => {
                   className='bg-bgGray rounded-[10px] w-[210px] focus-within:bg-bgWhite'
                   placeholder='Type to add tag'
                   onChange={TagChangeHandler}
+                  value={tagInputValue}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
@@ -214,13 +224,25 @@ const AddRoom = (props: Props) => {
                     <Button
                       key={tag.id}
                       className='min-h-[45px] w-full border-bgWhite bg-bgWhite text-bgBlack hover:bg-dulwichRed hover:bg-opacity-10'
+                      onClick={() => {
+                        if (selectedTags.filter(tags => tags.id === tag.id).length === 0) {
+                          setSelectedTags([...selectedTags, props.tagData.find(tags => tags.id === tag.id)]);
+                        }
+                        setTagInputValue('');
+                        setFilteredTags([]);
+                      }}
                     >
                       {tag.name}
                     </Button>
                   ))}
                 </ButtonGroup>
               </Stack>
-              <Stack spacing={1} className='w-1/2 px-[70px]'>
+              <Grid container className={'pt-12 w-3/12 max-h-40 overflow-auto pr-6'} spacing={1}>
+                {selectedTags.map(tag => (
+                  <AddRoomTag key={tag.id} tagData={tag} onDelete={tagDelete(tag.id)} />
+                ))}
+              </Grid>
+              <Stack spacing={1} className='pr-[70px] w-5/12'>
                 <Typography className='text-[#404040] text-[20px] font-inter'>Add Others</Typography>
                 <TextField
                   variant='outlined'
