@@ -10,7 +10,7 @@ type Props = {
   onDelete: () => void;
 };
 
-const AddRoomTag = (props: Props) => {
+const TagChip = (props: Props) => {
   return (
     <Grid item key={props.tagData.id}>
       <Chip
@@ -27,4 +27,4 @@ const AddRoomTag = (props: Props) => {
   );
 };
 
-export default AddRoomTag;
+export default TagChip;

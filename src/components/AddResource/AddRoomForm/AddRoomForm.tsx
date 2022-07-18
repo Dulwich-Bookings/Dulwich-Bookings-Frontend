@@ -9,23 +9,18 @@ import {
   Checkbox,
   FormGroup,
   TextField,
-  Chip,
   ButtonGroup,
   Box,
   Grid,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+
 import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
 import { useHistory } from 'react-router-dom';
 import BackButton from '@components/AddResource/BackButton/BackButton';
 import ResourceSample1 from '@/assets/images/Resource-Sample-1.jpg';
-import AddRoomTag from './AddRoomTag/AddRoomTag';
-
-interface ChipData {
-  id: number;
-  email: string;
-}
+import TagChip from './TagChip/TagChip';
+import UserChip from './UserChip/UserChip';
 
 type Props = {
   tagData: TagData[];
@@ -33,31 +28,30 @@ type Props = {
 };
 
 const AddRoom = (props: Props) => {
-  const [othersData, setOthersData] = useState<ChipData[]>([]);
-  const [addOthersInputValue, setAddOthersInputValue] = useState('');
+  const [addOtherUsersValue, setOtherUsersInputValue] = useState('');
+  const [filteredOtherUsers, setFilteredOtherUsers] = useState<UserData[]>([]);
+  const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>([]);
+
   const [tagInputValue, setTagInputValue] = useState('');
   const [filteredTags, setFilteredTags] = useState<TagData[]>([]);
   const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
+
   const history = useHistory();
 
-  const handleDelete = (chipToDelete: ChipData) => () => {
-    setOthersData(chips => chips.filter(chip => chip.id !== chipToDelete.id));
+  const userDelete = (userToDelete: number) => () => {
+    setSelectedOtherUsers(selectedOtherUsers.filter(user => user.id !== userToDelete));
   };
 
   const tagDelete = (tagToDelete: number) => () => {
     setSelectedTags(selectedTags.filter(tag => tag.id !== tagToDelete));
   };
 
-  const handleEnter = () => {
-    if (addOthersInputValue.trim() === '') {
-      return;
+  const otherUsersChangeHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setOtherUsersInputValue(event.target.value);
+    setFilteredOtherUsers(props.userData.filter(user => user.email.match(new RegExp(event.target.value, 'i'))));
+    if (event.target.value.trim() === '') {
+      setFilteredOtherUsers([]);
     }
-    setOthersData([...othersData, { id: Math.random(), email: addOthersInputValue }]);
-    setAddOthersInputValue('');
-  };
-
-  const InputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setAddOthersInputValue(event.target.value);
   };
 
   const TagChangeHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -166,7 +160,6 @@ const AddRoom = (props: Props) => {
               <TextField
                 size='small'
                 multiline={true}
-                maxRows='3'
                 rows='3'
                 className='bg-bgGray w-full rounded-xl focus-within:bg-bgWhite'
                 placeholder='Add a description of the room (location, size, equipment, etc...)'
@@ -240,7 +233,7 @@ const AddRoom = (props: Props) => {
               </Stack>
               <Grid container className={'pt-12 w-3/12 max-h-40 overflow-auto pr-6'} spacing={1}>
                 {selectedTags.map(tag => (
-                  <AddRoomTag key={tag.id} tagData={tag} onDelete={tagDelete(tag.id)} />
+                  <TagChip key={tag.id} tagData={tag} onDelete={tagDelete(tag.id)} />
                 ))}
               </Grid>
               <Stack spacing={1} className=' w-5/12'>
@@ -263,25 +256,35 @@ const AddRoom = (props: Props) => {
                       },
                     },
                   }}
-                  onChange={InputChangeHandler}
-                  onKeyDown={event => {
-                    if (event.key === 'Enter') {
-                      handleEnter();
-                    }
-                  }}
-                  value={addOthersInputValue}
+                  onChange={otherUsersChangeHandler}
+                  value={addOtherUsersValue}
                 />
-                <Stack spacing={1} className='max-h-12 w-80 overflow-auto'>
-                  {othersData.map(email => (
-                    <Chip
-                      key={email.id}
-                      className='text-bgWhite px-2 max-w-fit rounded-[100px] font-inter text-sm'
-                      sx={{ backgroundColor: '#404040' }}
-                      onDelete={handleDelete(email)}
-                      label={email.email}
-                      size='small'
-                      deleteIcon={<CloseIcon className='text-bgWhite text-md' />}
-                    />
+                <ButtonGroup
+                  orientation='vertical'
+                  className='w-full shadow-lg rounded max-h-36 overflow-auto'
+                  variant='contained'
+                  disableElevation
+                >
+                  {filteredOtherUsers.map(user => (
+                    <Button
+                      key={user.id}
+                      className='min-h-11 w-full border-bgWhite bg-bgWhite text-bgBlack hover:bg-dulwichRed hover:bg-opacity-10'
+                      onClick={() => {
+                        if (selectedOtherUsers.filter(selectedUser => selectedUser.id === user.id).length === 0) {
+                          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                          setSelectedOtherUsers([...selectedOtherUsers!, props.userData.find(users => users.id === user.id)!]);
+                        }
+                        setOtherUsersInputValue('');
+                        setFilteredOtherUsers([]);
+                      }}
+                    >
+                      {user.email}
+                    </Button>
+                  ))}
+                </ButtonGroup>
+                <Stack className={'max-h-40 overflow-auto'} spacing={1}>
+                  {selectedOtherUsers.map(user => (
+                    <UserChip key={user.id} userData={user} onDelete={userDelete(user.id)} />
                   ))}
                 </Stack>
               </Stack>
