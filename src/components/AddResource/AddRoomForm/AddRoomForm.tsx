@@ -87,9 +87,7 @@ const AddRoom = (props: Props) => {
                 </Typography>
               </Stack>
               <div className='w-3/4'>
-                <Button className='w-[205.65px] h-[40.3px] bg-[#808080] rounded-[6.19335px] text-bgWhite font-inter float-right'>
-                  Download Template
-                </Button>
+                <Button className='w-52 h-10 bg-[#808080] rounded-md text-bgWhite font-inter float-right'>Download Template</Button>
               </div>
             </Stack>
           </Stack>
@@ -98,12 +96,12 @@ const AddRoom = (props: Props) => {
             <Stack direction='row'>
               <Stack className='w-1/2'>
                 <Stack direction='row' spacing={1}>
-                  <Typography className='text-[#404040] text-[20px] font-inter'>Room Name</Typography>
-                  <Typography className='text-[#E33939] text-[25px] font-inter'>*</Typography>
+                  <Typography className='text-[#404040] text-xl font-inter'>Room Name</Typography>
+                  <Typography className='text-dulwichRed text-xxl font-inter'>*</Typography>
                 </Stack>
                 <TextField
                   rows='1'
-                  className='rounded-[10px] w-[341px] bg-bgGray focus-within:bg-bgWhite'
+                  className='rounded-xl w-3/4 bg-bgGray focus-within:bg-bgWhite'
                   placeholder='Add the room name'
                   sx={{
                     '& .MuiOutlinedInput-root': {
@@ -122,8 +120,8 @@ const AddRoom = (props: Props) => {
               </Stack>
               <Stack className='w-1/2 px-[70px]'>
                 <Stack direction='row' spacing={1}>
-                  <Typography className='text-[#404040] text-[20px] font-inter'>Week Profile</Typography>
-                  <Typography className='text-[#E33939] text-[25px] font-inter'>*</Typography>
+                  <Typography className='text-[#404040] text-xl font-inter'>Week Profile</Typography>
+                  <Typography className='text-dulwichRed text-xxl font-inter'>*</Typography>
                 </Stack>
                 <RadioGroup defaultValue='weekly' row>
                   <FormControlLabel
@@ -164,13 +162,13 @@ const AddRoom = (props: Props) => {
 
           <Stack>
             <Stack spacing={1}>
-              <Typography className='text-[#404040] text-[20px] font-inter'>Description</Typography>
+              <Typography className='text-[#404040] text-xl font-inter'>Description</Typography>
               <TextField
                 size='small'
                 multiline={true}
                 maxRows='3'
                 rows='3'
-                className='bg-bgGray w-[766px] rounded-[10px] focus-within:bg-bgWhite'
+                className='bg-bgGray w-full rounded-xl focus-within:bg-bgWhite'
                 placeholder='Add a description of the room (location, size, equipment, etc...)'
                 sx={{
                   '& .MuiOutlinedInput-root': {
@@ -193,12 +191,12 @@ const AddRoom = (props: Props) => {
             <Stack direction='row'>
               <Stack className='w-4/12'>
                 <Stack direction='row' spacing={1}>
-                  <Typography className='text-[#404040] text-[20px] font-inter'>Choose Tags</Typography>
-                  <Typography className='text-[#E33939] text-[25px] font-inter'>*</Typography>
+                  <Typography className='text-[#404040] text-xl font-inter'>Choose Tags</Typography>
+                  <Typography className='text-dulwichRed text-xxl font-inter'>*</Typography>
                 </Stack>
                 <TextField
                   rows='1'
-                  className='bg-bgGray rounded-[10px] w-[210px] focus-within:bg-bgWhite'
+                  className='bg-bgGray rounded-xl w-52 focus-within:bg-bgWhite'
                   placeholder='Type to add tag'
                   onChange={TagChangeHandler}
                   value={tagInputValue}
@@ -218,14 +216,14 @@ const AddRoom = (props: Props) => {
                 />
                 <ButtonGroup
                   orientation='vertical'
-                  className='w-[210px] shadow-lg rounded-[4px] max-h-36 overflow-auto'
+                  className='w-52 shadow-lg rounded max-h-36 overflow-auto'
                   variant='contained'
                   disableElevation
                 >
                   {filteredTags.map(tag => (
                     <Button
                       key={tag.id}
-                      className='min-h-[45px] w-full border-bgWhite bg-bgWhite text-bgBlack hover:bg-dulwichRed hover:bg-opacity-10'
+                      className='min-h-11 w-full border-bgWhite bg-bgWhite text-bgBlack hover:bg-dulwichRed hover:bg-opacity-10'
                       onClick={() => {
                         if (selectedTags.filter(tags => tags.id === tag.id).length === 0) {
                           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -245,12 +243,12 @@ const AddRoom = (props: Props) => {
                   <AddRoomTag key={tag.id} tagData={tag} onDelete={tagDelete(tag.id)} />
                 ))}
               </Grid>
-              <Stack spacing={1} className='pr-[70px] w-5/12'>
-                <Typography className='text-[#404040] text-[20px] font-inter'>Add Others</Typography>
+              <Stack spacing={1} className=' w-5/12'>
+                <Typography className='text-[#404040] text-xl font-inter'>Add Others</Typography>
                 <TextField
                   variant='outlined'
                   rows='1'
-                  className='bg-bgGray rounded-[10px] w-[311px] focus-within:bg-bgWhite'
+                  className='bg-bgGray rounded-xl w-full focus-within:bg-bgWhite'
                   placeholder='name@dulwich.com'
                   sx={{
                     '& .MuiOutlinedInput-root': {
@@ -273,16 +271,16 @@ const AddRoom = (props: Props) => {
                   }}
                   value={addOthersInputValue}
                 />
-                <Stack spacing={1} className='max-h-12 w-[311px] overflow-auto'>
+                <Stack spacing={1} className='max-h-12 w-80 overflow-auto'>
                   {othersData.map(email => (
                     <Chip
                       key={email.id}
-                      className='text-bgWhite px-2 max-w-fit rounded-[100px] font-inter text-[12px]'
+                      className='text-bgWhite px-2 max-w-fit rounded-[100px] font-inter text-sm'
                       sx={{ backgroundColor: '#404040' }}
                       onDelete={handleDelete(email)}
                       label={email.email}
                       size='small'
-                      deleteIcon={<CloseIcon className='text-bgWhite text-[14px]' />}
+                      deleteIcon={<CloseIcon className='text-bgWhite text-md' />}
                     />
                   ))}
                 </Stack>
@@ -294,8 +292,8 @@ const AddRoom = (props: Props) => {
             <Stack direction='row'>
               <Stack className='w-1/2'>
                 <Stack direction='row' spacing={1}>
-                  <Typography className='text-[#404040] text-[20px] font-inter'>Access Rights</Typography>
-                  <Typography className='text-[#E33939] text-[25px] font-inter'>*</Typography>
+                  <Typography className='text-[#404040] text-xl font-inter'>Access Rights</Typography>
+                  <Typography className='text-dulwichRed text-xxl font-inter'>*</Typography>
                 </Stack>
                 <FormGroup row>
                   <FormControlLabel
@@ -330,8 +328,8 @@ const AddRoom = (props: Props) => {
               </Stack>
               <Stack className='w-1/2 px-[70px]'>
                 <Stack direction='row' spacing={1}>
-                  <Typography className='text-[#404040] text-[20px] font-inter'>Booking Rights</Typography>
-                  <Typography className='text-[#E33939] text-[25px] font-inter'>*</Typography>
+                  <Typography className='text-[#404040] text-xl font-inter'>Booking Rights</Typography>
+                  <Typography className='text-dulwichRed text-xxl font-inter'>*</Typography>
                 </Stack>
                 <FormGroup row>
                   <FormControlLabel
@@ -369,10 +367,8 @@ const AddRoom = (props: Props) => {
 
           <Stack>
             <Stack direction='row' spacing={5}>
-              <Button className='w-[224px] h-[65px] bg-[#E33939] rounded-[10px] text-bgWhite font-inter text-[20px]'>Add Room</Button>
-              <Button className='w-[299px] h-[65px] bg-[#E33939] rounded-[10px] text-bgWhite font-inter text-[20px]'>
-                Upload Template
-              </Button>
+              <Button className='w-56 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter text-xl'>Add Room</Button>
+              <Button className='w-72 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter text-xl'>Upload Template</Button>
             </Stack>
           </Stack>
         </Stack>
