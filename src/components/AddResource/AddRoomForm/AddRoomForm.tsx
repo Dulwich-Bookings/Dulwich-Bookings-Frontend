@@ -226,7 +226,8 @@ const AddRoom = (props: Props) => {
                       className='min-h-[45px] w-full border-bgWhite bg-bgWhite text-bgBlack hover:bg-dulwichRed hover:bg-opacity-10'
                       onClick={() => {
                         if (selectedTags.filter(tags => tags.id === tag.id).length === 0) {
-                          setSelectedTags([...selectedTags, props.tagData.find(tags => tags.id === tag.id)]);
+                          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                          setSelectedTags([...selectedTags!, props.tagData.find(tags => tags.id === tag.id)!]);
                         }
                         setTagInputValue('');
                         setFilteredTags([]);
