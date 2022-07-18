@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { TagData } from '@/modules/tag/types';
+import { UserData } from '@/modules/user/types';
 import { useHistory } from 'react-router-dom';
 import BackButton from '@components/AddResource/BackButton/BackButton';
 import ResourceSample1 from '@/assets/images/Resource-Sample-1.jpg';
@@ -28,6 +29,7 @@ interface ChipData {
 
 type Props = {
   tagData: TagData[];
+  userData: UserData[];
 };
 
 const AddRoom = (props: Props) => {
