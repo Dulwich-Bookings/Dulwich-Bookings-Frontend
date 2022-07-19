@@ -56,6 +56,7 @@ const AddRoom = (props: Props) => {
   const [tagInputValue, setTagInputValue] = useState('');
   const [filteredTags, setFilteredTags] = useState<TagData[]>([]);
   const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
+  const [showTags, setShowTags] = useState<boolean>(false);
   const [tagError, setTagError] = useState<InputValidation>(noError);
 
   const formValidation = () => {
@@ -152,12 +153,13 @@ const AddRoom = (props: Props) => {
     }
   };
 
-  const TagFocusHandler = () => {
-    setFilteredTags(props.tagData.filter(tag => tag.name.match(new RegExp('', 'i'))));
+  const TagFocusHandler = (input: string) => {
+    setFilteredTags(props.tagData.filter(tag => tag.name.match(new RegExp(input, 'i'))));
+    setShowTags(true);
   };
 
   const TagBlurHandler = () => {
-    setFilteredTags([]);
+    setShowTags(false);
   };
 
   const returnResourcePage = () => {
@@ -224,7 +226,7 @@ const AddRoom = (props: Props) => {
             <Stack className='w-3/12'>
               <InputWithoutBorder
                 inputHandleOnChange={input => TagChangeHandler(input.target.value)}
-                inputHandleOnFocus={event => event && TagFocusHandler()}
+                inputHandleOnFocus={input => TagFocusHandler(input.target.value)}
                 inputHandleOnBlur={event => event && TagBlurHandler()}
                 inputValue={tagInputValue}
                 labelText='Choose Tags'
@@ -235,29 +237,31 @@ const AddRoom = (props: Props) => {
                 inputClassName='bg-bgGray rounded-xl w-full focus-within:bg-bgWhite'
                 required
               />
-              <ButtonGroup
-                orientation='vertical'
-                className='w-full shadow-lg rounded max-h-36 overflow-auto'
-                variant='contained'
-                disableElevation
-              >
-                {filteredTags.map(tag => (
-                  <Button
-                    key={tag.id}
-                    className='min-h-11 w-full border-bgWhite bg-bgWhite text-bgBlack hover:bg-dulwichRed hover:bg-opacity-10'
-                    onClick={() => {
-                      if (selectedTags.filter(tags => tags.id === tag.id).length === 0) {
-                        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                        setSelectedTags([...selectedTags!, props.tagData.find(tags => tags.id === tag.id)!]);
-                      }
-                      setTagInputValue('');
-                      setFilteredTags([]);
-                    }}
-                  >
-                    {tag.name}
-                  </Button>
-                ))}
-              </ButtonGroup>
+              {showTags && (
+                <ButtonGroup
+                  orientation='vertical'
+                  className='w-full shadow-lg rounded max-h-36 overflow-auto'
+                  variant='contained'
+                  disableElevation
+                >
+                  {filteredTags.map(tag => (
+                    <Button
+                      key={tag.id}
+                      className='min-h-11 w-full border-bgWhite bg-bgWhite text-bgBlack hover:bg-dulwichRed hover:bg-opacity-10'
+                      onMouseDown={() => {
+                        if (selectedTags.filter(tags => tags.id === tag.id).length === 0) {
+                          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                          setSelectedTags([...selectedTags!, props.tagData.find(tags => tags.id === tag.id)!]);
+                        }
+                        setTagInputValue('');
+                        setFilteredTags([]);
+                      }}
+                    >
+                      {tag.name}
+                    </Button>
+                  ))}
+                </ButtonGroup>
+              )}
             </Stack>
             <Grid container className={'pl-2 pt-12 w-3/12 max-h-40 overflow-auto pr-6'} spacing={1}>
               {selectedTags.map(tag => (
