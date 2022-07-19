@@ -13,8 +13,8 @@ type Props = {
 };
 
 const BookingTimePicker = (props: Props) => {
-  const [start, setStart] = React.useState<string>('');
-  const [end, setEnd] = React.useState<string>('');
+  const [start, setStart] = React.useState<string>(props.startTime);
+  const [end, setEnd] = React.useState<string>(props.endTime);
 
   return (
     <Modal className='flex justify-center items-center' open={props.openState} onClose={props.handleCloseModal}>

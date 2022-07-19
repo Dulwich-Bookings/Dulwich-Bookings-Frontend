@@ -15,7 +15,7 @@ const TailWindTheme = {
       bgBlack: '#000000',
       bgPurple: '#757AEC',
       bgWhite: '#feffff',
-      bgGray: '#F3F3F4',
+      bgGray: '#E6E6E6',
       dulwichRed: '#E33939',
       dulwichRedHover: '#FDECEC',
     },

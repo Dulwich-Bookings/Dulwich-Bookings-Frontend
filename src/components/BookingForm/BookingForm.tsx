@@ -65,10 +65,6 @@ const BookingForm = (props: Props) => {
   const handleCloseTimePicker = async () => {
     setTimeModal(false);
   };
-  const handleDescriptionClick = async () => {
-    setMultiline(true);
-    setRows(4);
-  };
 
   const handleRecurringClick = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (props.editable == 'editable' || props.editable == 'new') {
@@ -91,6 +87,11 @@ const BookingForm = (props: Props) => {
     }
   };
 
+  const handleOnFocus = async () => {
+    setMultiline(true);
+    setRows(4);
+  };
+
   useEffect(() => {
     setTime(props.time);
   }, [props.time]);
@@ -103,27 +104,18 @@ const BookingForm = (props: Props) => {
     setDescription(props.bookingDescription);
   }, [props.bookingDescription]);
 
-  useEffect(() => {
-    const checkIfClickedOutside = (e: Event) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setMultiline(false);
-      }
-    };
-
-    document.addEventListener('mousedown', checkIfClickedOutside);
-    return () => {
-      // Cleanup the event listener
-
-      document.removeEventListener('mousedown', checkIfClickedOutside);
-    };
-  }, [multiline]);
-
   return (
     <>
       <BookingTimePicker startTime={props.start} endTime={props.end} openState={timeModal} handleCloseModal={handleCloseTimePicker} />
       <ThemeProvider theme={theme}>
-        <Modal className='flex justify-center items-center' open={props.openState} onClose={props.handleCloseModal}>
-          <Box className='laptop:rounded-lg w-96 h-fit pl-5 pr-3 pt-2 pb-6 bg-bgWhite'>
+        <Modal
+          className='flex justify-center items-center'
+          open={props.openState}
+          onClose={props.handleCloseModal}
+          BackdropProps={{ style: { backgroundColor: 'transparent' } }}
+          disableAutoFocus
+        >
+          <Box className='laptop:rounded-lg w-96 h-fit pl-5 pr-3 pt-2 pb-6 bg-bgWhite shadow-lg border-2 border-bgGray ring-0'>
             <Close onClick={props.handleCloseModal} fontSize='small' className='float-right cursor-pointer hover:text-grayAccent' />
             <Stack direction='column' className='h-full' spacing={{ xs: 2, md: 2 }} alignItems='justified'>
               <Input
@@ -151,15 +143,16 @@ const BookingForm = (props: Props) => {
                     inputType='string'
                     inputPlaceholder='Add description'
                     inputValue={description}
-                    inputClassname='w-full color-bgWhite font-Inter font-light'
+                    inputClassname='w-full color-bgWhite font-Inter font-light px-0'
                     inputVariant='outlined'
                     multiline={multiline}
                     rows={rows}
                     icon={<FormatAlignLeft className='ml-2' />}
-                    spacing={2}
-                    handleOnClick={handleDescriptionClick}
+                    spacing={1}
                     inputHandleOnChange={handleDescriptionChange}
                     acceptInput={true}
+                    onFocus={handleOnFocus}
+                    onBlur={() => setMultiline(false)}
                   />
                 </div>
                 <InputWithIcon

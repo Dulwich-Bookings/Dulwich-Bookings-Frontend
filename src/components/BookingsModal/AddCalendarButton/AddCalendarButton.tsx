@@ -27,7 +27,10 @@ const AddCalendarButton = ({ id }: Props) => {
   };
 
   return (
-    <Box onClick={handleAddToClipboard} className='laptop:block hidden rounded-2xl px-3 py-1 bg-bgGray cursor-pointer'>
+    <Box
+      onClick={handleAddToClipboard}
+      className='laptop:block hidden rounded-2xl px-3 py-1 border-2 border-bgBlack text-bgBlack cursor-pointer'
+    >
       <Stack direction='row' alignItems='center' spacing={1}>
         <CalendarMonthIcon />{' '}
         <Typography className='text-center mt-0.5' variant='caption'>
