@@ -24,8 +24,8 @@ const AddRoom = () => {
     }
   };
 
-  const [getAllTags] = useApi(() => TagService.getAllTags(), true, true);
-  const [getAllUsers] = useApi(() => UserService.getAllUsers(), true, true);
+  const [getAllTags] = useApi(() => TagService.getAllTags(), false, true, false);
+  const [getAllUsers] = useApi(() => UserService.getAllUsers(), false, true, false);
 
   const currentUser = useSelector(getCurrentUser);
   const currentSchool = useSelector(getCurrentSchool);

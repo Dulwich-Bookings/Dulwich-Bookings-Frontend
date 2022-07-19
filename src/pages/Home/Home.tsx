@@ -27,8 +27,8 @@ const Home = () => {
     }
   };
 
-  const [getAllResources] = useApi(() => ResourceService.getAllResources(), true, true);
-  const [getAllTags] = useApi(() => TagService.getAllTags(), true, true);
+  const [getAllResources] = useApi(() => ResourceService.getAllResources(), false, true, false);
+  const [getAllTags] = useApi(() => TagService.getAllTags(), false, true, false);
 
   const currentUser = useSelector(getCurrentUser);
   const currentSchool = useSelector(getCurrentSchool);

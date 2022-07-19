@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, TextField, Stack, RadioGroup, FormControlLabel, Radio, FormControl } from '@mui/material';
+import { Typography, Stack, RadioGroup, FormControlLabel, Radio, FormControl } from '@mui/material';
 import { InputValidation } from '@/modules/inputValidation/types';
 
 type Props<inputType> = {
@@ -19,7 +19,6 @@ const InputWithRadio = <T extends Object>(props: Props<T>) => {
   const { inputValidation } = props;
   const colSpacing = props.spacing ? props.spacing : 0.5;
   const isError = inputValidation ? inputValidation.isError : false;
-  const errorHelperText = isError ? inputValidation?.errorHelperText : '';
 
   return (
     <Stack direction='column' spacing={colSpacing}>
