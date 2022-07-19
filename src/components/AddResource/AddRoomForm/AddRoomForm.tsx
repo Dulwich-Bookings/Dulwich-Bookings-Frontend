@@ -168,8 +168,8 @@ const AddRoom = (props: Props) => {
 
   return (
     <>
-      <Stack direction='row' className='w-screen'>
-        <Stack className='w-2/3 py-10 px-24' spacing={2}>
+      <Stack direction='row' className='w-screen justify-start'>
+        <Stack className='lg:w-2/3 py-10 px-24' spacing={2}>
           <Stack>
             <Stack direction='row' alignItems='center'>
               <Stack spacing={2}>
@@ -413,7 +413,7 @@ const AddRoom = (props: Props) => {
             </Stack>
           </Stack>
         </Stack>
-        <img className='w-1/3 h-screen float-right object-cover' src={ResourceSample1} />
+        <img className='hidden w-1/3 h-screen float-right object-cover lg:block' src={ResourceSample1} />
       </Stack>
     </>
   );

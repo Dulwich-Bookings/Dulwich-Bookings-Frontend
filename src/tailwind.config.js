@@ -34,6 +34,7 @@ const TailWindTheme = {
       xl: '1536px',
       phone: '640px',
       laptop: '900px',
+      addRoomLaptop: '750px',
     },
   },
   variants: {
