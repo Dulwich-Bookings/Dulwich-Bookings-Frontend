@@ -15,6 +15,8 @@ type Props<inputType> = {
   inputSize?: 'small' | 'medium' | undefined;
   inputRow?: number;
   inputHandleOnChange?: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void; // Use with InputValue (Double Binding)
+  inputHandleOnFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  inputHandleOnBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   multiline?: boolean;
   required?: boolean;
 };
@@ -37,6 +39,8 @@ const InputWithoutBorder = <T extends Object>(props: Props<T>) => {
         helperText={errorHelperText}
         value={props.inputValue}
         onChange={props.inputHandleOnChange}
+        onFocus={props.inputHandleOnFocus}
+        onBlur={props.inputHandleOnBlur}
         type={props.inputType}
         size={props.inputSize}
         rows={props.inputRow}

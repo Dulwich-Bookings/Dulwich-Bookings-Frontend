@@ -152,6 +152,14 @@ const AddRoom = (props: Props) => {
     }
   };
 
+  const TagFocusHandler = () => {
+    setFilteredTags(props.tagData.filter(tag => tag.name.match(new RegExp('', 'i'))));
+  };
+
+  const TagBlurHandler = () => {
+    setFilteredTags([]);
+  };
+
   const returnResourcePage = () => {
     history.push('/addResource');
   };
@@ -216,6 +224,8 @@ const AddRoom = (props: Props) => {
             <Stack className='w-3/12'>
               <InputWithoutBorder
                 inputHandleOnChange={input => TagChangeHandler(input.target.value)}
+                inputHandleOnFocus={event => event && TagFocusHandler()}
+                inputHandleOnBlur={event => event && TagBlurHandler()}
                 inputValue={tagInputValue}
                 labelText='Choose Tags'
                 labelClassName='text-[#404040] text-xl font-inter'
