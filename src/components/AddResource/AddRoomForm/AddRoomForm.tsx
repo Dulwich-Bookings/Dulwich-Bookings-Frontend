@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
-import { Stack, Typography, Button, RadioGroup, FormControlLabel, Radio, Checkbox, FormGroup, ButtonGroup, Box, Grid } from '@mui/material';
+import {
+  Stack,
+  Typography,
+  Button,
+  FormControlLabel,
+  Checkbox,
+  FormGroup,
+  ButtonGroup,
+  Box,
+  Grid,
+  FormHelperText,
+  FormControl,
+} from '@mui/material';
 
 import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
@@ -11,6 +23,9 @@ import UserChip from './UserChip/UserChip';
 
 import { InputValidation } from '@/modules/inputValidation/types';
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
+import InputWithRadio from '@/components/Inputs/InputWithRadio/InputWithRadio';
+
+import { role } from '@/consts/constants';
 
 type Props = {
   tagData: TagData[];
@@ -20,9 +35,19 @@ type Props = {
 const AddRoom = (props: Props) => {
   const noError: InputValidation = { isError: false, errorHelperText: '' };
   const [roomName, setRoomName] = useState<string>('');
-  //const [roomError, setRoomError] = useState<InputValidation>(noError);
+  const [roomError, setRoomError] = useState<InputValidation>(noError);
 
   const [description, setDescription] = useState<string>('');
+
+  const [weekProfile, setWeekProfile] = useState<string>('weekly');
+
+  const [accessRights, setAccessRights] = useState({ studentAccessRights: false, teacherAccessRights: false });
+  const { studentAccessRights, teacherAccessRights } = accessRights;
+  const [accessError, setAccessError] = useState<boolean>(false);
+
+  const [bookingRights, setBookingRights] = useState({ studentBookingRights: false, teacherBookingRights: false });
+  const { studentBookingRights, teacherBookingRights } = bookingRights;
+  const [bookingError, setBookingError] = useState<boolean>(false);
 
   const [addOtherUsersValue, setOtherUsersInputValue] = useState('');
   const [filteredOtherUsers, setFilteredOtherUsers] = useState<UserData[]>([]);
@@ -31,6 +56,63 @@ const AddRoom = (props: Props) => {
   const [tagInputValue, setTagInputValue] = useState('');
   const [filteredTags, setFilteredTags] = useState<TagData[]>([]);
   const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
+  const [tagError, setTagError] = useState<InputValidation>(noError);
+
+  const formValidation = () => {
+    const errorText = 'Field Cannot be Empty';
+    const errorObj: InputValidation = {
+      isError: true,
+      errorHelperText: errorText,
+    };
+
+    const isValidRoomName = roomName.length !== 0;
+    const isValidTag = selectedTags.length !== 0;
+    const isValidAccessRights = [studentAccessRights, teacherAccessRights].filter(d => d).length > 0;
+    const isValidBookingRights = [studentBookingRights, teacherBookingRights].filter(d => d).length >= 1;
+
+    setRoomError(isValidRoomName ? noError : errorObj);
+    setTagError(isValidTag ? noError : errorObj);
+    setAccessError(isValidAccessRights ? false : true);
+    setBookingError(isValidBookingRights ? false : true);
+
+    if (!isValidRoomName || !isValidTag || !isValidAccessRights || !isValidBookingRights) {
+      throw new Error('Form Invalid');
+    }
+  };
+
+  const handleRightsToArray = (teacher: boolean, student: boolean): string[] => {
+    const arr: string[] = [role.ADMIN];
+
+    if (teacher) {
+      arr.push(role.TEACHER);
+    }
+    if (student) {
+      arr.push(role.STUDENT);
+    }
+
+    return arr;
+  };
+
+  const handleCreateResource = () => {
+    try {
+      formValidation();
+      const filteredAccessRights = handleRightsToArray(accessRights.teacherAccessRights, accessRights.studentAccessRights);
+      const filteredBookingRights = handleRightsToArray(bookingRights.teacherBookingRights, bookingRights.studentBookingRights);
+
+      const createResourceData = {
+        name: roomName,
+        description: description,
+        accessRights: filteredAccessRights,
+        bookingRights: filteredBookingRights,
+        tags: selectedTags,
+        addOthers: selectedOtherUsers,
+        weekProfile: weekProfile,
+      };
+      console.log(createResourceData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const history = useHistory();
 
@@ -40,6 +122,18 @@ const AddRoom = (props: Props) => {
 
   const tagDelete = (tagToDelete: number) => () => {
     setSelectedTags(selectedTags.filter(tag => tag.id !== tagToDelete));
+  };
+
+  const weekProfileChangeHandler = (value: string): void => {
+    setWeekProfile(value);
+  };
+
+  const accessRightsHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAccessRights({ ...accessRights, [event.target.name]: event.target.checked });
+  };
+
+  const bookingRightsHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBookingRights({ ...bookingRights, [event.target.name]: event.target.checked });
   };
 
   const otherUsersChangeHandler = (input: string): void => {
@@ -89,50 +183,19 @@ const AddRoom = (props: Props) => {
                 inputValue={roomName}
                 labelText='Room Name'
                 inputPlaceholder='Add the room name'
-                inputValidation={noError}
+                inputValidation={roomError}
                 inputType='text'
                 inputClassName='rounded-xl w-3/4 bg-bgGray focus-within:bg-bgWhite'
                 required={true}
               />
             </Grid>
             <Stack className='w-1/2 px-[70px]'>
-              <Stack direction='row' spacing={1}>
-                <Typography className='text-[#404040] text-xl font-inter'>Week Profile</Typography>
-                <Typography className='text-dulwichRed text-xxl font-inter'>*</Typography>
-              </Stack>
-              <RadioGroup defaultValue='weekly' row>
-                <FormControlLabel
-                  value='Weekly'
-                  control={
-                    <Radio
-                      disableRipple={true}
-                      sx={{
-                        color: '#202020',
-                        '&.Mui-checked': {
-                          color: '#E33939',
-                        },
-                      }}
-                    />
-                  }
-                  label='Weekly'
-                  color='dulwichRed'
-                ></FormControlLabel>
-                <FormControlLabel
-                  value='Bi-weekly'
-                  control={
-                    <Radio
-                      disableRipple={true}
-                      sx={{
-                        color: '#202020',
-                        '&.Mui-checked': {
-                          color: '#E33939',
-                        },
-                      }}
-                    />
-                  }
-                  label='Bi-weekly'
-                ></FormControlLabel>
-              </RadioGroup>
+              <InputWithRadio
+                labelText='Week Profile'
+                inputLabels={['Weekly', 'Bi-Weekly']}
+                inputHandleOnChange={input => weekProfileChangeHandler(input.target.value)}
+                required
+              />
             </Stack>
           </Grid>
 
@@ -158,7 +221,9 @@ const AddRoom = (props: Props) => {
                 labelClassName='text-[#404040] text-xl font-inter'
                 inputPlaceholder='Type to add tag'
                 inputType='text'
+                inputValidation={tagError}
                 inputClassName='bg-bgGray rounded-xl w-full focus-within:bg-bgWhite'
+                required
               />
               <ButtonGroup
                 orientation='vertical'
@@ -237,79 +302,99 @@ const AddRoom = (props: Props) => {
                   <Typography className='text-[#404040] text-xl font-inter'>Access Rights</Typography>
                   <Typography className='text-dulwichRed text-xxl font-inter'>*</Typography>
                 </Stack>
-                <FormGroup row>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        disableRipple
-                        sx={{
-                          color: '#BFBFBF',
-                          '&.Mui-checked': {
-                            color: '#E33939',
-                          },
-                        }}
-                      />
-                    }
-                    label='Students'
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        sx={{
-                          color: '#BFBFBF',
-                          '&.Mui-checked': {
-                            color: '#E33939',
-                          },
-                        }}
-                        disableRipple
-                      />
-                    }
-                    label='Teachers'
-                  />
-                </FormGroup>
+                <FormControl error={accessError}>
+                  <FormGroup row>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          name='studentAccessRights'
+                          checked={studentAccessRights}
+                          onChange={accessRightsHandler}
+                          disableRipple
+                          sx={{
+                            color: '#BFBFBF',
+                            '&.Mui-checked': {
+                              color: '#E33939',
+                            },
+                          }}
+                        />
+                      }
+                      label='Students'
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          name='teacherAccessRights'
+                          checked={teacherAccessRights}
+                          onChange={accessRightsHandler}
+                          disableRipple
+                          sx={{
+                            color: '#BFBFBF',
+                            '&.Mui-checked': {
+                              color: '#E33939',
+                            },
+                          }}
+                        />
+                      }
+                      label='Teachers'
+                    />
+                  </FormGroup>
+                  {accessError && <FormHelperText className='m-0'>Please select at least one option</FormHelperText>}
+                </FormControl>
               </Stack>
               <Stack className='w-1/2 px-[70px]'>
                 <Stack direction='row' spacing={1}>
                   <Typography className='text-[#404040] text-xl font-inter'>Booking Rights</Typography>
                   <Typography className='text-dulwichRed text-xxl font-inter'>*</Typography>
                 </Stack>
-                <FormGroup row>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        disableRipple
-                        sx={{
-                          color: '#BFBFBF',
-                          '&.Mui-checked': {
-                            color: '#E33939',
-                          },
-                        }}
-                      />
-                    }
-                    label='Students'
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        disableRipple
-                        sx={{
-                          color: '#BFBFBF',
-                          '&.Mui-checked': {
-                            color: '#E33939',
-                          },
-                        }}
-                      />
-                    }
-                    label='Teachers'
-                  />
-                </FormGroup>
+                <FormControl error={bookingError}>
+                  <FormGroup row>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          name='studentBookingRights'
+                          checked={studentBookingRights}
+                          onChange={bookingRightsHandler}
+                          disableRipple
+                          sx={{
+                            color: '#BFBFBF',
+                            '&.Mui-checked': {
+                              color: '#E33939',
+                            },
+                          }}
+                        />
+                      }
+                      label='Students'
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          name='teacherBookingRights'
+                          checked={teacherBookingRights}
+                          onChange={bookingRightsHandler}
+                          disableRipple
+                          sx={{
+                            color: '#BFBFBF',
+                            '&.Mui-checked': {
+                              color: '#E33939',
+                            },
+                          }}
+                        />
+                      }
+                      label='Teachers'
+                    />
+                  </FormGroup>
+                  {bookingError && <FormHelperText className='m-0'>Please select at least one option</FormHelperText>}
+                </FormControl>
               </Stack>
             </Stack>
           </Stack>
 
           <Stack>
             <Stack direction='row' spacing={5}>
-              <Button className='w-56 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter text-xl'>Add Room</Button>
+              <Button className='w-56 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter text-xl' onClick={handleCreateResource}>
+                Add Room
+              </Button>
               <Button className='w-72 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter text-xl'>Upload Template</Button>
             </Stack>
           </Stack>
