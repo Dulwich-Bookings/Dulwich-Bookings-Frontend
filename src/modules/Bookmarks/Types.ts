@@ -6,7 +6,6 @@ export interface BookmarkData {
 }
 
 export interface CreateBookmarkData {
-  tagId: number;
   resourceId: number | null;
   subscriptionId: number | null;
 }
