@@ -7,6 +7,7 @@ import SubscriptionService from '@/api/subscription/SubscriptionService';
 import ResourceService from '@/api/resource/ResourceService';
 import SchoolService from '@/api/school/SchoolService';
 import DateTime from '@/modules/DateTime/DateTime';
+import RecentlyVisitedService from '@/api/recently visited/RecentlyVisitedService';
 
 import { CreateSubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
 import { CreateSchoolData, SchoolPutData } from '@/modules/school/types';
@@ -84,6 +85,20 @@ const Test = () => {
   const [getResourceById] = useApi(() => ResourceService.getResourceById(3), true, true);
   const [updateResourceById] = useApi(() => ResourceService.updateResourceById(3, createResourceData), true, true);
   const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(3), true, true);
+
+  const [createRecentlyVisited] = useApi(
+    () =>
+      RecentlyVisitedService.createRecentlyVisited({
+        resourceId: 1,
+        subscriptionId: null,
+      }),
+    true,
+    true,
+  );
+  const [getAllRecentlyVisited] = useApi(() => RecentlyVisitedService.getAllRecentlyVisited(), true, true);
+  const [getRecentlyVisitedById] = useApi(() => RecentlyVisitedService.getRecentlyVisitedById(3), true, true);
+  const [getSelfRecentlyVisited] = useApi(() => RecentlyVisitedService.getSelf(), true, true);
+  const [deleteRecentlyVisitedById] = useApi(() => RecentlyVisitedService.deleteRecentlyVisitedById(3), true, true);
 
   const handleButtonClick = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();
@@ -208,6 +223,25 @@ const Test = () => {
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(deleteResourceById)}>
               Delete Resource By Id
+            </Button>
+          </Stack>
+
+          <Typography variant='h5'>Recently Visited</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => handleButtonClick(createRecentlyVisited)}>
+              Create Recently Visited
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getAllRecentlyVisited)}>
+              Get All Recently Visited
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getRecentlyVisitedById)}>
+              Get Recently Visited by Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getSelfRecentlyVisited)}>
+              Get Self
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(deleteRecentlyVisitedById)}>
+              Delete Recently Visited By Id
             </Button>
           </Stack>
         </Stack>
