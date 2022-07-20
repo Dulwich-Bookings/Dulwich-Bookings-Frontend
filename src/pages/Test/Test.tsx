@@ -16,6 +16,8 @@ import { isSuccess } from '@/api/ApiHandler';
 import { timezone, role } from '@/consts/constants';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
+import ResourceMapService from '@/api/resourceMap/ResourceMapService';
+import { CreateResourceMapData } from '@/modules/resource/resourceMap/types';
 
 const Input = styled('input')({
   display: 'none',
@@ -55,6 +57,12 @@ const createResourceData: CreateResourceData = {
   schoolId: 1,
 };
 
+const dummyResourceMap: CreateResourceMapData = {
+  user_Id: 1,
+  resourceId: 1,
+  subscriptionId: null,
+};
+
 let isFirstLoaded = true;
 
 const Test = () => {
@@ -85,6 +93,15 @@ const Test = () => {
   const [updateResourceById] = useApi(() => ResourceService.updateResourceById(3, createResourceData), true, true);
   const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(3), true, true);
 
+  const [createResourceMap] = useApi(() => ResourceMapService.createResourceMap(dummyResourceMap), true, true);
+  const [getAllResourceMaps] = useApi(() => ResourceMapService.getAllResourceMaps(), true, true);
+  const [getResourceMapById] = useApi(() => ResourceMapService.getResourceMapById(1), true, true);
+  const [getResourceMapSelf] = useApi(() => ResourceMapService.getResourceMapSelf(), true, true);
+  const [deleteResourceMapById] = useApi(() => ResourceMapService.deleteResourceMapById(3), true, true);
+  const [bulkCreateResourceMap] = useApi(() => ResourceMapService.bulkCreateResourceMap(bulkCreateResourceMapForm), true, true);
+  const [bulkCreateResourceMapForm, setBulkCreateResourceMapForm] = useState<FormData>(new FormData());
+  const [bulkDeleteResourceMap] = useApi(() => ResourceMapService.bulkDeleteResourceMapByid([20, 21]), true, true);
+
   const handleButtonClick = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();
     if (res.isSuccess) {
@@ -102,13 +119,24 @@ const Test = () => {
     setBulkSignUpForm(formData);
   };
 
+  const handleBulkCreateResourceMap = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files ? event.target.files[0] : null;
+    if (!file) {
+      return;
+    }
+    const formData = new FormData();
+    formData.append('file', file);
+    setBulkCreateResourceMapForm(formData);
+  };
+
   useEffect(() => {
     if (isFirstLoaded) {
       isFirstLoaded = false;
       return;
     }
     bulkSignUp();
-  }, [bulkSignUpForm]);
+    bulkCreateResourceMap();
+  }, [bulkSignUpForm, bulkCreateResourceMapForm]);
 
   return (
     <>
@@ -208,6 +236,34 @@ const Test = () => {
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(deleteResourceById)}>
               Delete Resource By Id
+            </Button>
+          </Stack>
+
+          <Typography variant='h5'>Resource Map</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => handleButtonClick(createResourceMap)}>
+              Create Resource Map
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getAllResourceMaps)}>
+              Get all resources maps
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getResourceMapById)}>
+              Get Resource Map by Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getResourceMapSelf)}>
+              Get Resource Map Self
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(deleteResourceMapById)}>
+              Delete Resource Map By Id
+            </Button>
+            <label htmlFor='bulk-create-resource-map'>
+              <Input accept='.csv' id='bulk-create-resource-map' type='file' onChange={e => handleBulkCreateResourceMap(e)} />
+              <Button variant='contained' component='span'>
+                Bulk Create Resource Map
+              </Button>
+            </label>
+            <Button variant='contained' onClick={() => handleButtonClick(bulkDeleteResourceMap)}>
+              Bulk Delete Resource Map
             </Button>
           </Stack>
         </Stack>
