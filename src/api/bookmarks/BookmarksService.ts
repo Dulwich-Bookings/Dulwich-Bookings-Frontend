@@ -1,4 +1,4 @@
-import { BookmarkData } from '@/modules/Bookmarks/Types';
+import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
 import ApiService, { ApiData } from '../ApiService';
 
 export default class BookmarksService {
@@ -6,7 +6,7 @@ export default class BookmarksService {
     return 'bookmark';
   }
 
-  public static async createBookmark(createBookmarkData: BookmarkData): Promise<ApiData> {
+  public static async createBookmark(createBookmarkData: CreateBookmarkData): Promise<ApiData> {
     try {
       const response = await ApiService.request(
         {
