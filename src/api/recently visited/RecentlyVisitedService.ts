@@ -1,4 +1,4 @@
-import { ResourceMappings } from '@/modules/resource/types';
+import { CreateRecentlyVisitedData } from '@/modules/recently visited/Types';
 import ApiService, { ApiData } from '../ApiService';
 
 export default class RecentlyVisitedService {
@@ -6,7 +6,7 @@ export default class RecentlyVisitedService {
     return 'recentlyVisited';
   }
 
-  public static async createRecentlyVisited(createRecentlyVisitedData: ResourceMappings): Promise<ApiData> {
+  public static async createRecentlyVisited(createRecentlyVisitedData: CreateRecentlyVisitedData): Promise<ApiData> {
     try {
       const response = await ApiService.request(
         {
