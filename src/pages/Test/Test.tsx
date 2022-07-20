@@ -17,7 +17,7 @@ import { isSuccess } from '@/api/ApiHandler';
 import { timezone, role } from '@/consts/constants';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
-import { CreateTagMapData } from '@/modules/tagMap/types';
+import { CreateTagMapData } from '@/modules/tag/tagMap/types';
 
 const Input = styled('input')({
   display: 'none',
