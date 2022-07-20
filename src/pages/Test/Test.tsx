@@ -7,6 +7,7 @@ import SubscriptionService from '@/api/subscription/SubscriptionService';
 import ResourceService from '@/api/resource/ResourceService';
 import SchoolService from '@/api/school/SchoolService';
 import DateTime from '@/modules/DateTime/DateTime';
+import BookmarksService from '@/api/bookmarks/BookmarksService';
 
 import { CreateSubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
 import { CreateSchoolData, SchoolPutData } from '@/modules/school/types';
@@ -16,6 +17,7 @@ import { isSuccess } from '@/api/ApiHandler';
 import { timezone, role } from '@/consts/constants';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
+import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
 
 const Input = styled('input')({
   display: 'none',
@@ -84,6 +86,12 @@ const Test = () => {
   const [getResourceById] = useApi(() => ResourceService.getResourceById(3), true, true);
   const [updateResourceById] = useApi(() => ResourceService.updateResourceById(3, createResourceData), true, true);
   const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(3), true, true);
+
+  const [createBookmark] = useApi((data: CreateBookmarkData) => BookmarksService.createBookmark(data ?? null), true, true);
+  const [getAllBookmarks] = useApi(() => BookmarksService.getAllBookmarks(), true, true);
+  const [getBookmarkdById] = useApi(() => BookmarksService.getBookmarkById(3), true, true);
+  const [getSelfBookmark] = useApi(() => BookmarksService.getSelf(), true, true);
+  const [deleteBookmarkById] = useApi(() => BookmarksService.deleteBookmarkById(17), true, true);
 
   const handleButtonClick = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();
@@ -208,6 +216,25 @@ const Test = () => {
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(deleteResourceById)}>
               Delete Resource By Id
+            </Button>
+          </Stack>
+
+          <Typography variant='h5'>Bookmarks</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => handleButtonClick(() => createBookmark({ resourceId: 1 }))}>
+              Create Bookmark
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getAllBookmarks)}>
+              Get All Bookmarks
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getBookmarkdById)}>
+              Get Bookmark by Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getSelfBookmark)}>
+              Get Self
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(deleteBookmarkById)}>
+              Delete Bookmark By Id
             </Button>
           </Stack>
         </Stack>
