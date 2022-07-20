@@ -8,6 +8,7 @@ import ResourceService from '@/api/resource/ResourceService';
 import SchoolService from '@/api/school/SchoolService';
 import TagMapService from '@/api/tagMap/TagMapService';
 import DateTime from '@/modules/DateTime/DateTime';
+import BookmarksService from '@/api/bookmarks/BookmarksService';
 
 import { CreateSubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
 import { CreateSchoolData, SchoolPutData } from '@/modules/school/types';
@@ -117,6 +118,19 @@ const Test = () => {
   const [bulkCreateResourceMap] = useApi(() => ResourceMapService.bulkCreateResourceMap(bulkCreateResourceMapForm), true, true);
   const [bulkCreateResourceMapForm, setBulkCreateResourceMapForm] = useState<FormData>(new FormData());
   const [bulkDeleteResourceMap] = useApi(() => ResourceMapService.bulkDeleteResourceMapByid([20, 21]), true, true);
+  const [createBookmark] = useApi(
+    () =>
+      BookmarksService.createBookmark({
+        resourceId: 2,
+        subscriptionId: null,
+      }),
+    true,
+    true,
+  );
+  const [getAllBookmarks] = useApi(() => BookmarksService.getAllBookmarks(), true, true);
+  const [getBookmarkdById] = useApi(() => BookmarksService.getBookmarkById(3), true, true);
+  const [getSelfBookmark] = useApi(() => BookmarksService.getSelf(), true, true);
+  const [deleteBookmarkById] = useApi(() => BookmarksService.deleteBookmarkById(3), true, true);
 
   const handleButtonClick = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();
@@ -291,6 +305,7 @@ const Test = () => {
               Bulk Delete Tag Map
             </Button>
           </Stack>
+
           <Typography variant='h5'>Resource Map</Typography>
           <Stack spacing={2} direction='row'>
             <Button variant='contained' onClick={() => handleButtonClick(createResourceMap)}>
@@ -316,6 +331,25 @@ const Test = () => {
             </label>
             <Button variant='contained' onClick={() => handleButtonClick(bulkDeleteResourceMap)}>
               Bulk Delete Resource Map
+            </Button>
+          </Stack>
+
+          <Typography variant='h5'>Bookmarks</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => handleButtonClick(createBookmark)}>
+              Create Bookmark
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getAllBookmarks)}>
+              Get All Bookmarks
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getBookmarkdById)}>
+              Get Bookmark by Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getSelfBookmark)}>
+              Get Self
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(deleteBookmarkById)}>
+              Delete Bookmark By Id
             </Button>
           </Stack>
         </Stack>
