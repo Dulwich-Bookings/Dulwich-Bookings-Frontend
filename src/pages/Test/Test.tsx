@@ -12,13 +12,13 @@ import BookmarksService from '@/api/bookmarks/BookmarksService';
 
 import { CreateSubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
 import { CreateSchoolData, SchoolPutData } from '@/modules/school/types';
-import { CreateResourceData } from '@/modules/resource/types';
+import { CreateResourceData, ResourcePutData } from '@/modules/resource/types';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
 import { timezone, role } from '@/consts/constants';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
-import { CreateTagMapData } from '@/modules/tag/tagMap/types';
+import { CreateTagMapData } from '@/modules/tagMap/types';
 import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
 
 const Input = styled('input')({
@@ -50,13 +50,28 @@ const updateSubscriptionData: SubscriptionPutData = {
 };
 
 const createResourceData: CreateResourceData = {
-  name: 'A113',
-  description: 'This is an intriguing room.',
-  accessRights: [role.ADMIN, role.TEACHER],
-  bookingRights: [role.ADMIN, role.TEACHER],
-  inAdvance: 3,
-  isBookingDescriptionOptional: true,
-  schoolId: 1,
+  resource: {
+    name: 'A113',
+    description: 'This is an intriguing room.',
+    accessRights: [role.ADMIN, role.TEACHER],
+    bookingRights: [role.ADMIN, role.TEACHER],
+    inAdvance: 3,
+    isBookingDescriptionOptional: true,
+    weekProfile: 'Weekly',
+  },
+  tags: [1, 2],
+  users: [1, 2],
+};
+
+const updateResourceData: ResourcePutData = {
+  resource: {
+    name: 'B113',
+    description: 'This is an intriguing room.',
+    accessRights: [role.ADMIN, role.TEACHER],
+    bookingRights: [role.ADMIN, role.TEACHER],
+  },
+  tags: [1, 3],
+  users: [1, 3],
 };
 
 let isFirstLoaded = true;
@@ -85,9 +100,9 @@ const Test = () => {
 
   const [createResource] = useApi(() => ResourceService.createResource(createResourceData), true, true);
   const [getAllResources] = useApi(() => ResourceService.getAllResources(), true, true);
-  const [getResourceById] = useApi(() => ResourceService.getResourceById(3), true, true);
-  const [updateResourceById] = useApi(() => ResourceService.updateResourceById(3, createResourceData), true, true);
-  const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(3), true, true);
+  const [getResourceById] = useApi(() => ResourceService.getResourceById(27), true, true);
+  const [updateResourceById] = useApi(() => ResourceService.updateResourceById(27, updateResourceData), true, true);
+  const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(27), true, true);
 
   const [createTagMap] = useApi((data: CreateTagMapData) => TagMapService.createTagMap(data ?? null), true, true);
   const [bulkCreateTagMap] = useApi((data: CreateTagMapData[]) => TagMapService.bulkCreateTagMap(data ?? null), true, true);
