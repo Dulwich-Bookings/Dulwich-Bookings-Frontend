@@ -54,7 +54,7 @@ class DateTime {
    * @returns  a UTC string of the current DateTime Object.
    */
   public toString(): string {
-    return this.utc.format();
+    return `${this.utc.format('YYYY-MM-DDTHH:mm:ss.SSS')}Z`;
   }
 
   /**
