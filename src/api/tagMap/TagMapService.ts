@@ -7,14 +7,10 @@ export default class TagMapService {
   }
 
   private static tagMapValidation(createTagMapData: CreateTagMapData): boolean {
-    if (
-      (!createTagMapData.resourceId && !createTagMapData.subscriptionId) ||
+    return (!createTagMapData.resourceId && !createTagMapData.subscriptionId) ||
       (createTagMapData.resourceId && createTagMapData.subscriptionId)
-    ) {
-      return false;
-    }
-
-    return true;
+      ? false
+      : true;
   }
 
   private static processTagMapData(createTagMapData: CreateTagMapData): CreateTagMapData {
@@ -23,12 +19,11 @@ export default class TagMapService {
 
   public static async createTagMap(createTagMapData: CreateTagMapData): Promise<ApiData> {
     try {
-      if (!this.tagMapValidation(createTagMapData)) {
+      if (!TagMapService.tagMapValidation(createTagMapData)) {
         return Promise.reject('XOR validation Failed');
       }
 
-      const postData: CreateTagMapData = this.processTagMapData(createTagMapData);
-
+      const postData: CreateTagMapData = TagMapService.processTagMapData(createTagMapData);
       const response = await ApiService.request(
         {
           url: `${this.getTagMapUrl()}/`,
@@ -52,9 +47,7 @@ export default class TagMapService {
           return Promise.reject('XOR validation Failed');
         }
       });
-
       const postMapData: CreateTagMapData[] = bulkTagMapData.map(data => this.processTagMapData(data));
-
       const response = await ApiService.request(
         {
           url: `${this.getTagMapUrl()}/bulkCreate`,
