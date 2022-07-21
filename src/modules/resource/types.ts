@@ -28,8 +28,8 @@ export interface CreateResourceData {
 
 export interface ResourcePutData {
   resource?: Partial<ResourceData>;
-  tags?: number[];
-  users?: number[];
+  tags: number[];
+  users: number[];
 }
 
 export interface ResourceMappings {
