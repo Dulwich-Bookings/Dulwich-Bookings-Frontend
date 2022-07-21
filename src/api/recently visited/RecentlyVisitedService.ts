@@ -8,12 +8,23 @@ export default class RecentlyVisitedService {
 
   public static async createRecentlyVisited(createRecentlyVisitedData: CreateRecentlyVisitedData): Promise<ApiData> {
     try {
+      if (
+        (!createRecentlyVisitedData.resourceId && !createRecentlyVisitedData.subscriptionId) ||
+        (createRecentlyVisitedData.resourceId && createRecentlyVisitedData.subscriptionId)
+      ) {
+        return Promise.reject('XOR validation Failed');
+      }
+
+      const postData: CreateRecentlyVisitedData = createRecentlyVisitedData.resourceId
+        ? { ...createRecentlyVisitedData, subscriptionId: null }
+        : { ...createRecentlyVisitedData, resourceId: null };
+
       const response = await ApiService.request(
         {
           url: `${this.getRecentlyVisitedUrl()}/`,
           method: 'POST',
           data: {
-            ...createRecentlyVisitedData,
+            ...postData,
           },
         },
         true,
