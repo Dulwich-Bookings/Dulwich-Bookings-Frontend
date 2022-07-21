@@ -1,4 +1,4 @@
-import { CreateTagMapData } from '@/modules/tag/tagMap/types';
+import { CreateTagMapData } from '@/modules/tagMap/types';
 import ApiService, { ApiData } from '../ApiService';
 
 export default class TagMapService {
