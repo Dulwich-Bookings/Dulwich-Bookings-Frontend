@@ -17,8 +17,8 @@ The Frontend repository for Dulwich Bookings hosted on Netlify. Built with React
 7. Run `npm start` to start the server on localhost
 
 ## Screenshots
-_[Placeholder]_
+![Screenshot 2022-07-21 at 2 38 20 AM](https://user-images.githubusercontent.com/29945147/180057847-7ec869d0-fced-4676-a6bd-9b0cccbf8d0d.png)
+![Screenshot 2022-07-21 at 2 35 58 AM](https://user-images.githubusercontent.com/29945147/180057202-bef35e10-1339-44ae-a94f-938a80f842b0.png)
+![Screenshot 2022-07-21 at 2 36 05 AM](https://user-images.githubusercontent.com/29945147/180057232-91604cf8-049d-4999-b040-b604aec5f5be.png)
+![Screenshot 2022-07-21 at 2 36 12 AM](https://user-images.githubusercontent.com/29945147/180057255-0148bcb4-1d44-4199-a4fe-affdd2450bf0.png)
 
-_[Placeholder]_
-
-_[Placeholder]_
