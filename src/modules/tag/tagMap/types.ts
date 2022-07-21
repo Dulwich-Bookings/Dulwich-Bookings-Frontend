@@ -10,5 +10,3 @@ export interface CreateTagMapData {
   resourceId: number | null;
   subscriptionId: number | null;
 }
-
-export type TagMapPutData = Partial<TagMapData>;

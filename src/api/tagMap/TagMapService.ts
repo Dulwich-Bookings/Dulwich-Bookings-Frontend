@@ -6,14 +6,35 @@ export default class TagMapService {
     return 'tagMap';
   }
 
+  private static tagMapValidation(createTagMapData: CreateTagMapData): boolean {
+    if (
+      (!createTagMapData.resourceId && !createTagMapData.subscriptionId) ||
+      (createTagMapData.resourceId && createTagMapData.subscriptionId)
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private static processTagMapData(createTagMapData: CreateTagMapData): CreateTagMapData {
+    return createTagMapData.resourceId ? { ...createTagMapData, subscriptionId: null } : { ...createTagMapData, resourceId: null };
+  }
+
   public static async createTagMap(createTagMapData: CreateTagMapData): Promise<ApiData> {
     try {
+      if (!this.tagMapValidation(createTagMapData)) {
+        return Promise.reject('XOR validation Failed');
+      }
+
+      const postData: CreateTagMapData = this.processTagMapData(createTagMapData);
+
       const response = await ApiService.request(
         {
           url: `${this.getTagMapUrl()}/`,
           method: 'POST',
           data: {
-            ...createTagMapData,
+            ...postData,
           },
         },
         true,
@@ -24,28 +45,27 @@ export default class TagMapService {
     }
   }
 
-  public static async bulkCreateTagMap(bulkTagMapData: FormData): Promise<ApiData> {
+  public static async bulkCreateTagMap(bulkTagMapData: CreateTagMapData[]): Promise<ApiData> {
     try {
+      bulkTagMapData.forEach(data => {
+        if (!this.tagMapValidation(data)) {
+          return Promise.reject('XOR validation Failed');
+        }
+      });
+
+      const postMapData: CreateTagMapData[] = bulkTagMapData.map(data => this.processTagMapData(data));
+
       const response = await ApiService.request(
         {
           url: `${this.getTagMapUrl()}/bulkCreate`,
           method: 'POST',
-          data: bulkTagMapData,
-          responseType: 'blob',
+          data: postMapData,
         },
         true,
-        false,
-        'multipart/form-data',
       );
-      const url = window.URL.createObjectURL(new Blob([response]));
-      const link = document.createElement('a');
-      link.href = url;
-      const currentDate = new Date().toLocaleString();
-      link.setAttribute('download', `User-Bulk-Sign-Up ${currentDate}.csv`);
-      document.body.appendChild(link);
-      link.click();
       return response;
     } catch (error) {
+      console.log(error);
       return Promise.reject(error);
     }
   }
@@ -99,7 +119,7 @@ export default class TagMapService {
     try {
       const response = await ApiService.request(
         {
-          url: `${this.getTagMapUrl()}`,
+          url: `${this.getTagMapUrl()}/bulkDelete`,
           method: 'DELETE',
           data: {
             id: ids,
