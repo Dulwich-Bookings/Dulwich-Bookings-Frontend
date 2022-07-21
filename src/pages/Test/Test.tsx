@@ -36,17 +36,22 @@ const updateSchoolData: SchoolPutData = {
 };
 
 const createSubscriptionData: CreateSubscriptionData = {
-  name: 'Adobe Photoshop',
-  description: 'For photo editing',
-  accessRights: [role.ADMIN, role.TEACHER],
-  credentials: 'test123',
-  expiry: DateTime.newDateTimeFromDate(new Date()),
-  remindMe: true,
-  schoolId: 1,
+  subscription: {
+    name: 'Adobe Photoshop',
+    description: 'For photo editing',
+    accessRights: [role.ADMIN, role.TEACHER],
+    credentials: 'test123',
+    expiry: DateTime.newDateTimeFromDate(new Date()),
+    remindMe: true,
+  },
+  users: [1, 2],
+  tags: [1, 2],
 };
 
 const updateSubscriptionData: SubscriptionPutData = {
-  name: 'Adobe Acrobat',
+  subscription: { name: 'Adobe Acrobat' },
+  tags: [1, 3],
+  users: [1, 3],
 };
 
 const createResourceData: CreateResourceData = {
@@ -95,8 +100,8 @@ const Test = () => {
   const [createSubscription] = useApi(() => SubscriptionService.createSubscription(createSubscriptionData), true, true);
   const [getAllSubscriptions] = useApi(() => SubscriptionService.getAllSubscriptions(), true, true);
   const [getSubscriptionById] = useApi(() => SubscriptionService.getSubscriptionById(2), true, true);
-  const [updateSubscriptionById] = useApi(() => SubscriptionService.updateSubscriptionById(2, updateSubscriptionData), true, true);
-  const [deleteSubscriptionById] = useApi(() => SubscriptionService.deleteSubscriptionById(1), true, true);
+  const [updateSubscriptionById] = useApi(() => SubscriptionService.updateSubscriptionById(6, updateSubscriptionData), true, true);
+  const [deleteSubscriptionById] = useApi(() => SubscriptionService.deleteSubscriptionById(2), true, true);
 
   const [createResource] = useApi(() => ResourceService.createResource(createResourceData), true, true);
   const [getAllResources] = useApi(() => ResourceService.getAllResources(), true, true);
