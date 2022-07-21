@@ -59,12 +59,6 @@ const createResourceData: CreateResourceData = {
   schoolId: 1,
 };
 
-const dummyResourceMap: CreateResourceMapData = {
-  user_Id: 1,
-  resourceId: 1,
-  subscriptionId: null,
-};
-
 let isFirstLoaded = true;
 
 const Test = () => {
@@ -95,14 +89,17 @@ const Test = () => {
   const [updateResourceById] = useApi(() => ResourceService.updateResourceById(3, createResourceData), true, true);
   const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(3), true, true);
 
-  const [createResourceMap] = useApi(() => ResourceMapService.createResourceMap(dummyResourceMap), true, true);
+  const [createResourceMap] = useApi((data: CreateResourceMapData) => ResourceMapService.createResourceMap(data ?? null), true, true);
   const [getAllResourceMaps] = useApi(() => ResourceMapService.getAllResourceMaps(), true, true);
   const [getResourceMapById] = useApi(() => ResourceMapService.getResourceMapById(1), true, true);
   const [getResourceMapSelf] = useApi(() => ResourceMapService.getResourceMapSelf(), true, true);
-  const [deleteResourceMapById] = useApi(() => ResourceMapService.deleteResourceMapById(3), true, true);
-  const [bulkCreateResourceMap] = useApi(() => ResourceMapService.bulkCreateResourceMap(bulkCreateResourceMapForm), true, true);
-  const [bulkCreateResourceMapForm, setBulkCreateResourceMapForm] = useState<FormData>(new FormData());
-  const [bulkDeleteResourceMap] = useApi(() => ResourceMapService.bulkDeleteResourceMapByid([20, 21]), true, true);
+  const [deleteResourceMapById] = useApi(() => ResourceMapService.deleteResourceMapById(6), true, true);
+  const [bulkCreateResourceMap] = useApi(
+    (data: CreateResourceMapData[]) => ResourceMapService.bulkCreateResourceMap(data ?? null),
+    true,
+    true,
+  );
+  const [bulkDeleteResourceMap] = useApi(() => ResourceMapService.bulkDeleteResourceMapByid([4, 5]), true, true);
 
   const [createBookmark] = useApi((data: CreateBookmarkData) => BookmarksService.createBookmark(data ?? null), true, true);
   const [getAllBookmarks] = useApi(() => BookmarksService.getAllBookmarks(), true, true);
@@ -127,24 +124,13 @@ const Test = () => {
     setBulkSignUpForm(formData);
   };
 
-  const handleBulkCreateResourceMap = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files ? event.target.files[0] : null;
-    if (!file) {
-      return;
-    }
-    const formData = new FormData();
-    formData.append('file', file);
-    setBulkCreateResourceMapForm(formData);
-  };
-
   useEffect(() => {
     if (isFirstLoaded) {
       isFirstLoaded = false;
       return;
     }
     bulkSignUp();
-    bulkCreateResourceMap();
-  }, [bulkSignUpForm, bulkCreateResourceMapForm]);
+  }, [bulkSignUpForm]);
 
   return (
     <>
@@ -249,7 +235,7 @@ const Test = () => {
 
           <Typography variant='h5'>Resource Map</Typography>
           <Stack spacing={2} direction='row'>
-            <Button variant='contained' onClick={() => handleButtonClick(createResourceMap)}>
+            <Button variant='contained' onClick={() => handleButtonClick(() => createResourceMap({ userId: 2, resourceId: 1 }))}>
               Create Resource Map
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(getAllResourceMaps)}>
@@ -264,14 +250,21 @@ const Test = () => {
             <Button variant='contained' onClick={() => handleButtonClick(deleteResourceMapById)}>
               Delete Resource Map By Id
             </Button>
-            <label htmlFor='bulk-create-resource-map'>
-              <Input accept='.csv' id='bulk-create-resource-map' type='file' onChange={e => handleBulkCreateResourceMap(e)} />
-              <Button variant='contained' component='span'>
-                Bulk Create Resource Map
-              </Button>
-            </label>
+            <Button
+              variant='contained'
+              onClick={() =>
+                handleButtonClick(() =>
+                  bulkCreateResourceMap([
+                    { userId: 2, resourceId: 1 },
+                    { userId: 2, resourceId: 2 },
+                  ]),
+                )
+              }
+            >
+              Create Resource Map (Bulk)
+            </Button>
             <Button variant='contained' onClick={() => handleButtonClick(bulkDeleteResourceMap)}>
-              Bulk Delete Resource Map
+              Bulk Delete Resource Map (Bulk)
             </Button>
           </Stack>
           <Typography variant='h5'>Bookmarks</Typography>

@@ -6,14 +6,36 @@ export default class ResourceMapService {
     return 'resourceMap';
   }
 
+  private static resourceMapValidation(createResourceMapData: CreateResourceMapData) {
+    if (
+      (!createResourceMapData.resourceId && !createResourceMapData.subscriptionId) ||
+      (createResourceMapData.resourceId && createResourceMapData.subscriptionId)
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private static processResourceMapData(createResourceMapData: CreateResourceMapData): CreateResourceMapData {
+    return createResourceMapData.resourceId
+      ? { ...createResourceMapData, subscriptionId: null }
+      : { ...createResourceMapData, resourceId: null };
+  }
+
   public static async createResourceMap(createResourceMapData: CreateResourceMapData): Promise<ApiData> {
     try {
+      if (!this.resourceMapValidation(createResourceMapData)) {
+        return Promise.reject('XOR validation Failed');
+      }
+
+      const postData: CreateResourceMapData = this.processResourceMapData(createResourceMapData);
       const response = await ApiService.request(
         {
           url: `${this.getResourceMapUrl()}/`,
           method: 'POST',
           data: {
-            ...createResourceMapData,
+            ...postData,
           },
         },
         true,
@@ -24,26 +46,24 @@ export default class ResourceMapService {
     }
   }
 
-  public static async bulkCreateResourceMap(bulkResourceMapData: FormData): Promise<ApiData> {
+  public static async bulkCreateResourceMap(bulkResourceMapData: CreateResourceMapData[]): Promise<ApiData> {
     try {
+      bulkResourceMapData.forEach(data => {
+        if (!this.resourceMapValidation(data)) {
+          return Promise.reject('XOR validation Failed');
+        }
+      });
+
+      const postMapData: CreateResourceMapData[] = bulkResourceMapData.map(data => this.processResourceMapData(data));
+
       const response = await ApiService.request(
         {
           url: `${this.getResourceMapUrl()}/bulkCreate`,
           method: 'POST',
-          data: bulkResourceMapData,
-          responseType: 'blob',
+          data: postMapData,
         },
         true,
-        false,
-        'multipart/form-data',
       );
-      const url = window.URL.createObjectURL(new Blob([response]));
-      const link = document.createElement('a');
-      link.href = url;
-      const currentDate = new Date().toLocaleString();
-      link.setAttribute('download', `Resource-Map-Bulk-Create ${currentDate}.csv`);
-      document.body.appendChild(link);
-      link.click();
       return response;
     } catch (error) {
       return Promise.reject(error);
@@ -115,7 +135,7 @@ export default class ResourceMapService {
     try {
       const response = await ApiService.request(
         {
-          url: `${this.getResourceMapUrl()}`,
+          url: `${this.getResourceMapUrl()}/bulkDelete`,
           method: 'DELETE',
           data: {
             id: ids,
