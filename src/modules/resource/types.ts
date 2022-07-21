@@ -9,16 +9,27 @@ export interface ResourceData {
   inAdvance: number;
   isBookingDescriptionOptional: boolean;
   schoolId: number;
+  weekProfile: 'Weekly' | 'BiWeekly';
 }
 
 export interface CreateResourceData {
-  name: string;
-  description: string;
-  accessRights: Role[];
-  bookingRights: Role[];
-  inAdvance: number;
-  isBookingDescriptionOptional: boolean;
-  schoolId: number;
+  resource: {
+    name: string;
+    description: string;
+    accessRights: Role[];
+    bookingRights: Role[];
+    inAdvance: number;
+    isBookingDescriptionOptional: boolean;
+    weekProfile: 'Weekly' | 'BiWeekly';
+  };
+  tags: number[];
+  users: number[];
+}
+
+export interface ResourcePutData {
+  resource?: Partial<ResourceData>;
+  tags: number[];
+  users: number[];
 }
 
 export interface ResourceMappings {
@@ -27,5 +38,3 @@ export interface ResourceMappings {
   subscription_id: number;
   user_id: number;
 }
-
-export type ResourcePutData = Partial<ResourceData>;
