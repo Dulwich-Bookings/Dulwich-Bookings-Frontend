@@ -225,7 +225,7 @@ const Test = () => {
 
           <Typography variant='h5'>Recently Visited</Typography>
           <Stack spacing={2} direction='row'>
-            <Button variant='contained' onClick={() => handleButtonClick(createRecentlyVisited)}>
+            <Button variant='contained' onClick={() => handleButtonClick(() => createRecentlyVisited({ resourceId: 1 }))}>
               Create Recently Visited
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(getAllRecentlyVisited)}>
