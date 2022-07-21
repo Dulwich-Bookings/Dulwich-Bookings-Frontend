@@ -6,8 +6,6 @@ export interface RecentlyVisitedData {
 }
 
 export interface CreateRecentlyVisitedData {
-  resourceId: number | null;
-  subscriptionId: number | null;
+  resourceId?: number | null;
+  subscriptionId?: number | null;
 }
-
-export type RecentlyVisitedPutData = Partial<RecentlyVisitedData>;
