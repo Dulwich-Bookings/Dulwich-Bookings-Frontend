@@ -6,6 +6,7 @@ import TagService from '@/api/tag/TagService';
 import SubscriptionService from '@/api/subscription/SubscriptionService';
 import ResourceService from '@/api/resource/ResourceService';
 import SchoolService from '@/api/school/SchoolService';
+import TagMapService from '@/api/tagMap/TagMapService';
 import DateTime from '@/modules/DateTime/DateTime';
 import BookmarksService from '@/api/bookmarks/BookmarksService';
 
@@ -17,6 +18,7 @@ import { isSuccess } from '@/api/ApiHandler';
 import { timezone, role } from '@/consts/constants';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
+import { CreateTagMapData } from '@/modules/tag/tagMap/types';
 import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
 
 const Input = styled('input')({
@@ -86,6 +88,13 @@ const Test = () => {
   const [getResourceById] = useApi(() => ResourceService.getResourceById(3), true, true);
   const [updateResourceById] = useApi(() => ResourceService.updateResourceById(3, createResourceData), true, true);
   const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(3), true, true);
+
+  const [createTagMap] = useApi((data: CreateTagMapData) => TagMapService.createTagMap(data ?? null), true, true);
+  const [bulkCreateTagMap] = useApi((data: CreateTagMapData[]) => TagMapService.bulkCreateTagMap(data ?? null), true, true);
+  const [getAllTagMap] = useApi(() => TagMapService.getAllTagMap(), true, true);
+  const [getTagMapById] = useApi(() => TagMapService.getTagMapById(1), true, true);
+  const [deleteTagMapById] = useApi(() => TagMapService.deleteTagMapById(13), true, true);
+  const [bulkDeleteTagMap] = useApi(() => TagMapService.bulkDeleteUserByid([19, 20]), true, true);
 
   const [createBookmark] = useApi((data: CreateBookmarkData) => BookmarksService.createBookmark(data ?? null), true, true);
   const [getAllBookmarks] = useApi(() => BookmarksService.getAllBookmarks(), true, true);
@@ -219,6 +228,37 @@ const Test = () => {
             </Button>
           </Stack>
 
+          <Typography variant='h5'>TagMap</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => handleButtonClick(() => createTagMap({ tagId: 5, resourceId: 1 }))}>
+              Create Tag Map
+            </Button>
+            <Button
+              variant='contained'
+              onClick={() =>
+                handleButtonClick(() =>
+                  bulkCreateTagMap([
+                    { tagId: 5, resourceId: 1 },
+                    { tagId: 4, resourceId: 1 },
+                  ]),
+                )
+              }
+            >
+              Create Tag Map (Bulk)
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getAllTagMap)}>
+              Get all Tag Map
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getTagMapById)}>
+              Get Tag Map by Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(deleteTagMapById)}>
+              Delete Tag Map By Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(bulkDeleteTagMap)}>
+              Delete Tag Map (Bulk)
+            </Button>
+          </Stack>
           <Typography variant='h5'>Bookmarks</Typography>
           <Stack spacing={2} direction='row'>
             <Button variant='contained' onClick={() => handleButtonClick(() => createBookmark({ resourceId: 1 }))}>
