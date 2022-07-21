@@ -17,6 +17,7 @@ import { isSuccess } from '@/api/ApiHandler';
 import { timezone, role } from '@/consts/constants';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
+import { CreateRecentlyVisitedData } from '@/modules/recently visited/Types';
 
 const Input = styled('input')({
   display: 'none',
@@ -87,11 +88,7 @@ const Test = () => {
   const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(3), true, true);
 
   const [createRecentlyVisited] = useApi(
-    () =>
-      RecentlyVisitedService.createRecentlyVisited({
-        resourceId: 1,
-        subscriptionId: null,
-      }),
+    (data: CreateRecentlyVisitedData) => RecentlyVisitedService.createRecentlyVisited(data ?? null),
     true,
     true,
   );
