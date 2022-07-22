@@ -10,7 +10,7 @@ export interface ResourceData {
   isBookingDescriptionOptional: boolean;
   schoolId: number;
   weekProfile: 'Weekly' | 'BiWeekly';
-  type: 'resource';
+  type: string;
 }
 
 export interface CreateResourceData {

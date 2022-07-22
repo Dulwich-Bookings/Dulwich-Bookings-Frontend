@@ -10,7 +10,7 @@ export interface SubscriptionData {
   expiry?: DateTime;
   remindMe: boolean;
   schoolId: number;
-  type: 'subscription';
+  type: string;
 }
 
 export interface CreateSubscriptionData {

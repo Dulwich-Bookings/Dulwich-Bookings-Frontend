@@ -21,6 +21,14 @@ import { TagData } from '@/modules/tag/types';
 import { SubscriptionData } from '@/modules/subscription/types';
 import SubscriptionService from '@/api/subscription/SubscriptionService';
 
+const processResourceType = (input: ResourceData): ResourceData => {
+  return { ...input, type: 'resource' };
+};
+
+const processSubscriptionType = (input: SubscriptionData): SubscriptionData => {
+  return { ...input, type: 'subscription' };
+};
+
 const Home = () => {
   const retrieveAllData = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();
@@ -45,8 +53,12 @@ const Home = () => {
   };
 
   useEffect(() => {
-    retrieveAllData(getAllResources).then(d => setResources(r => [...r, ...d]));
-    retrieveAllData(getAllSubscriptions).then(d => setSubscriptions(r => [...r, ...d]));
+    retrieveAllData(getAllResources).then(d => {
+      setResources(r => [...r, ...d.map((data: ResourceData) => processResourceType(data))]);
+    });
+    retrieveAllData(getAllSubscriptions).then(d =>
+      setSubscriptions(r => [...r, ...d.map((data: SubscriptionData) => processSubscriptionType(data))]),
+    );
     retrieveAllData(getAllTags).then(d => setTags(r => [...r, ...d]));
   }, []);
 
