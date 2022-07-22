@@ -8,9 +8,10 @@ import { tagMap } from '@/consts/dummyMaps';
 import { TagData } from '@/modules/tag/types';
 import ResourceTag from '@/components/Home/HomeResources/HomeResourceContainer/ResourceTag/ResourceTag';
 import ResourceRights from '@/components/Home/HomeResources/HomeResourceContainer/ResourceRights/ResourceRights';
+import { SubscriptionData } from '@/modules/subscription/types';
 
 type Props = {
-  resource: ResourceData;
+  data: ResourceData | SubscriptionData;
   tagData: TagData[];
 };
 
@@ -23,7 +24,7 @@ const HomeRoomItem = (props: Props) => {
     setIsBookmark(!isBookmark);
   };
 
-  const filteredTagsIDs = tagMap.filter(tagArr => tagArr.resource_id === props.resource.id).map(filteredID => filteredID.tag_id);
+  const filteredTagsIDs = tagMap.filter(tagArr => tagArr.resource_id === props.data.id).map(filteredID => filteredID.tag_id);
   const filteredTags = props.tagData.filter(tag => filteredTagsIDs.includes(tag.id));
 
   return (
@@ -42,7 +43,7 @@ const HomeRoomItem = (props: Props) => {
               <Stack direction='row' spacing={1.5} alignItems='center'>
                 <Circle className={`text-sm`} sx={{ color: `${vacancy ? '#76D674' : '#E25454'}` }} />
                 <Typography gutterBottom variant='h5' component='h2' className='font-Inter'>
-                  {props.resource.name}
+                  {props.data.name}
                 </Typography>
               </Stack>
               <Stack direction='row' spacing={1.5} alignItems='center'>
@@ -50,17 +51,19 @@ const HomeRoomItem = (props: Props) => {
                 <Stack spacing={-0.5}>
                   <Typography className='font-Inter text-bgNoHover'>Access available to:</Typography>
                   <Typography className='font-Inter text-bgNoHover'>
-                    {props.resource.accessRights.map(role => (
-                      <ResourceRights key={role} role={role} initialIndex={props.resource.accessRights[0]} />
+                    {props.data.accessRights.map(role => (
+                      <ResourceRights key={role} role={role} initialIndex={props.data.accessRights[0]} />
                     ))}
                   </Typography>
                 </Stack>
               </Stack>
-              <Grid container>
-                {filteredTags.map(tag => (
-                  <ResourceTag key={tag.id} tagData={tag} />
-                ))}
-              </Grid>
+              {props.data.type === 'resource' && (
+                <Grid container>
+                  {filteredTags.map(tag => (
+                    <ResourceTag key={tag.id} tagData={tag} />
+                  ))}
+                </Grid>
+              )}
             </Stack>
           </Stack>
         </CardContent>

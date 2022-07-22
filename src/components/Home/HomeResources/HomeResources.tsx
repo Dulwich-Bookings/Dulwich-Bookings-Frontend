@@ -7,10 +7,12 @@ import HomeResourceList from '@/components/Home/HomeResources/HomeResourceList/H
 import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
+import { SubscriptionData } from '@/modules/subscription/types';
 
 type Props = {
   searchedInput: string;
   resourceData: ResourceData[];
+  subscriptionData: SubscriptionData[];
   tagData: TagData[];
   currentUser: UserData;
 };
@@ -34,6 +36,7 @@ const HomeRooms = (props: Props) => {
         <SearchFilterView searchedInput={props.searchedInput} bookmarksClicked={bookmarksClickedHandler} rvClicked={rvClickedHandler} />
         <HomeResourceList
           resourceData={props.resourceData}
+          subscriptionData={props.subscriptionData}
           searchedInput={props.searchedInput}
           tagData={props.tagData}
           bookmarksClicked={bookmarksClicked}

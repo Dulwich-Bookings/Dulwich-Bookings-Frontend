@@ -18,6 +18,8 @@ import ResourceService from '@/api/resource/ResourceService';
 import TagService from '@/api/tag/TagService';
 import { isSuccess } from '@/api/ApiHandler';
 import { TagData } from '@/modules/tag/types';
+import { SubscriptionData } from '@/modules/subscription/types';
+import SubscriptionService from '@/api/subscription/SubscriptionService';
 
 const Home = () => {
   const retrieveAllData = async (func: () => Promise<ApiData & isSuccess>) => {
@@ -28,12 +30,14 @@ const Home = () => {
   };
 
   const [getAllResources] = useApi(() => ResourceService.getAllResources(), false, true, false);
+  const [getAllSubscriptions] = useApi(() => SubscriptionService.getAllSubscriptions(), true, true, false);
   const [getAllTags] = useApi(() => TagService.getAllTags(), false, true, false);
 
   const currentUser = useSelector(getCurrentUser);
   const currentSchool = useSelector(getCurrentSchool);
   const [inputValue, setInputValue] = useState('');
-  const [resources, setResource] = useState<ResourceData[]>([]);
+  const [resources, setResources] = useState<ResourceData[]>([]);
+  const [subscriptions, setSubscriptions] = useState<SubscriptionData[]>([]);
   const [tags, setTags] = useState<TagData[]>([]);
 
   const onInputChangeHandler = (enteredValue: string): void => {
@@ -41,7 +45,8 @@ const Home = () => {
   };
 
   useEffect(() => {
-    retrieveAllData(getAllResources).then(d => setResource(r => [...r, ...d]));
+    retrieveAllData(getAllResources).then(d => setResources(r => [...r, ...d]));
+    retrieveAllData(getAllSubscriptions).then(d => setSubscriptions(r => [...r, ...d]));
     retrieveAllData(getAllTags).then(d => setTags(r => [...r, ...d]));
   }, []);
 
@@ -56,7 +61,13 @@ const Home = () => {
                 <HomeBanner schoolId={1} />
                 <HomeSearchBar onInputChange={onInputChangeHandler} />
               </Stack>
-              <HomeResources searchedInput={inputValue} resourceData={resources} tagData={tags} currentUser={currentUser} />
+              <HomeResources
+                searchedInput={inputValue}
+                resourceData={resources}
+                subscriptionData={subscriptions}
+                tagData={tags}
+                currentUser={currentUser}
+              />
             </Stack>
           </main>
         </>
