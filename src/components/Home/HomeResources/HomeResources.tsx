@@ -8,13 +8,15 @@ import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
 import { SubscriptionData } from '@/modules/subscription/types';
+import { TagMapData } from '@/modules/tagMap/types';
 
 type Props = {
   searchedInput: string;
-  stateValue: string;
+  viewState: string;
   resourceData: ResourceData[];
   subscriptionData: SubscriptionData[];
   tagData: TagData[];
+  tagMapData: TagMapData[];
   currentUser: UserData;
 };
 
@@ -37,10 +39,11 @@ const HomeRooms = (props: Props) => {
         <SearchFilterView searchedInput={props.searchedInput} bookmarksClicked={bookmarksClickedHandler} rvClicked={rvClickedHandler} />
         <HomeResourceList
           resourceData={props.resourceData}
-          stateValue={props.stateValue}
+          viewState={props.viewState}
           subscriptionData={props.subscriptionData}
           searchedInput={props.searchedInput}
           tagData={props.tagData}
+          tagMapData={props.tagMapData}
           bookmarksClicked={bookmarksClicked}
           rvClicked={rvClicked}
           currentUser={props.currentUser}

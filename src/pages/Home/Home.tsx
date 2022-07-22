@@ -20,13 +20,16 @@ import { isSuccess } from '@/api/ApiHandler';
 import { TagData } from '@/modules/tag/types';
 import { SubscriptionData } from '@/modules/subscription/types';
 import SubscriptionService from '@/api/subscription/SubscriptionService';
+import TagMapService from '@/api/tagMap/TagMapService';
+import { TagMapData } from '@/modules/tagMap/types';
+import { resourceTypes } from '@/consts/constants';
 
 const processResourceType = (input: ResourceData): ResourceData => {
-  return { ...input, type: 'resource' };
+  return { ...input, type: resourceTypes.RESOURCE };
 };
 
 const processSubscriptionType = (input: SubscriptionData): SubscriptionData => {
-  return { ...input, type: 'subscription' };
+  return { ...input, type: resourceTypes.SUBSCRIPTION };
 };
 
 const Home = () => {
@@ -38,23 +41,25 @@ const Home = () => {
   };
 
   const [getAllResources] = useApi(() => ResourceService.getAllResources(), false, true, false);
-  const [getAllSubscriptions] = useApi(() => SubscriptionService.getAllSubscriptions(), true, true, false);
+  const [getAllSubscriptions] = useApi(() => SubscriptionService.getAllSubscriptions(), false, true, false);
   const [getAllTags] = useApi(() => TagService.getAllTags(), false, true, false);
+  const [getallTagMaps] = useApi(() => TagMapService.getAllTagMap(), false, true, false);
 
   const currentUser = useSelector(getCurrentUser);
   const currentSchool = useSelector(getCurrentSchool);
   const [inputValue, setInputValue] = useState<string>('');
-  const [stateValue, setStateValue] = useState<string>('all');
+  const [viewState, setViewState] = useState<string>('all');
   const [resources, setResources] = useState<ResourceData[]>([]);
   const [subscriptions, setSubscriptions] = useState<SubscriptionData[]>([]);
   const [tags, setTags] = useState<TagData[]>([]);
+  const [tagMaps, setTagMaps] = useState<TagMapData[]>([]);
 
   const onInputChangeHandler = (enteredValue: string): void => {
     setInputValue(enteredValue);
   };
 
   const onStateChangeHandler = (state: string): void => {
-    setStateValue(state);
+    setViewState(state);
   };
 
   useEffect(() => {
@@ -65,6 +70,7 @@ const Home = () => {
       setSubscriptions(r => [...r, ...d.map((data: SubscriptionData) => processSubscriptionType(data))]),
     );
     retrieveAllData(getAllTags).then(d => setTags(r => [...r, ...d]));
+    retrieveAllData(getallTagMaps).then(d => setTagMaps(r => [...r, ...d]));
   }, []);
 
   return (
@@ -80,9 +86,10 @@ const Home = () => {
               </Stack>
               <HomeResources
                 searchedInput={inputValue}
-                stateValue={stateValue}
+                viewState={viewState}
                 resourceData={resources}
                 subscriptionData={subscriptions}
+                tagMapData={tagMaps}
                 tagData={tags}
                 currentUser={currentUser}
               />

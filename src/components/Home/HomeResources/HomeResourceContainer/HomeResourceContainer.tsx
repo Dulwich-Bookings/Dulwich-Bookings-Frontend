@@ -4,15 +4,17 @@ import { Grid, Card, CardContent, Typography, Stack } from '@mui/material';
 
 import { Bookmark, PersonOutlineOutlined, Circle } from '@mui/icons-material';
 import { ResourceData } from '@/modules/resource/types';
-import { tagMap } from '@/consts/dummyMaps';
 import { TagData } from '@/modules/tag/types';
 import ResourceTag from '@/components/Home/HomeResources/HomeResourceContainer/ResourceTag/ResourceTag';
 import ResourceRights from '@/components/Home/HomeResources/HomeResourceContainer/ResourceRights/ResourceRights';
 import { SubscriptionData } from '@/modules/subscription/types';
+import { TagMapData } from '@/modules/tagMap/types';
+import { resourceTypes } from '@/consts/constants';
 
 type Props = {
   data: ResourceData | SubscriptionData;
   tagData: TagData[];
+  tagMapData: TagMapData[];
 };
 
 const vacancy = true;
@@ -20,12 +22,23 @@ const vacancy = true;
 const HomeRoomItem = (props: Props) => {
   const [isBookmark, setIsBookmark] = useState(false);
 
+  const filterTagMaps = (): TagMapData[] => {
+    if (props.data.type === resourceTypes.RESOURCE) {
+      return props.tagMapData.filter((tagMap: TagMapData) => tagMap.resourceId === props.data.id);
+    } else {
+      return props.tagMapData.filter((tagMap: TagMapData) => tagMap.subscriptionId === props.data.id);
+    }
+  };
+
+  const filteredTags: TagData[] = props.tagData.filter(tag =>
+    filterTagMaps()
+      .map(filteredTagMap => filteredTagMap.tagId)
+      .includes(tag.id),
+  );
+
   const isBookmarkHandler = () => {
     setIsBookmark(!isBookmark);
   };
-
-  const filteredTagsIDs = tagMap.filter(tagArr => tagArr.resource_id === props.data.id).map(filteredID => filteredID.tag_id);
-  const filteredTags = props.tagData.filter(tag => filteredTagsIDs.includes(tag.id));
 
   return (
     <Grid item>
@@ -57,13 +70,11 @@ const HomeRoomItem = (props: Props) => {
                   </Typography>
                 </Stack>
               </Stack>
-              {props.data.type === 'resource' && (
-                <Grid container>
-                  {filteredTags.map(tag => (
-                    <ResourceTag key={tag.id} tagData={tag} />
-                  ))}
-                </Grid>
-              )}
+              <Grid container>
+                {filteredTags.map(tag => (
+                  <ResourceTag key={tag.id} tagData={tag} />
+                ))}
+              </Grid>
             </Stack>
           </Stack>
         </CardContent>

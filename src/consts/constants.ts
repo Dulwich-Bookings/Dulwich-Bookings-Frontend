@@ -46,3 +46,14 @@ export const role = {
   STUDENT: 'Student' as Role,
   TEACHER: 'Teacher' as Role,
 };
+
+export const resourceTypes = {
+  RESOURCE: 'resource',
+  SUBSCRIPTION: 'subscription',
+};
+
+export const viewState = {
+  ALL: 'all',
+  RESOURCES: 'resources',
+  SUBSCRIPTIONS: 'subscriptions',
+};

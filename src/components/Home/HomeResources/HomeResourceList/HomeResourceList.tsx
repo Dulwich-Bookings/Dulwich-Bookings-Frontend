@@ -6,11 +6,14 @@ import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
 import { recentlyVisitedMap, bookmarkMap } from '@/consts/dummyMaps';
 import { SubscriptionData } from '@/modules/subscription/types';
+import { TagMapData } from '@/modules/tagMap/types';
+import { resourceTypes, viewState } from '@/consts/constants';
 
 type Props = {
   searchedInput: string;
-  stateValue: string;
+  viewState: string;
   tagData: TagData[];
+  tagMapData: TagMapData[];
   resourceData: ResourceData[];
   subscriptionData: SubscriptionData[];
   bookmarksClicked: boolean;
@@ -52,13 +55,13 @@ const HomeRoomList = (props: Props) => {
       setFilteredResourcesAndSubscriptions([...resourceData]);
     }
 
-    if (props.stateValue === 'all') {
+    if (props.viewState === viewState.ALL) {
       if (resourceData.length === 0 && subscriptionData.length === 0) {
         setIsDataEmpty(true);
       } else {
         setIsDataEmpty(false);
       }
-    } else if (props.stateValue === 'rooms') {
+    } else if (props.viewState === viewState.RESOURCES) {
       if (resourceData.length === 0) {
         setIsDataEmpty(true);
       } else {
@@ -73,31 +76,45 @@ const HomeRoomList = (props: Props) => {
     }
 
     console.log(filteredResourcesAndSubscriptions);
-  }, [props.searchedInput, props.rvClicked, props.bookmarksClicked, props.resourceData, props.subscriptionData]);
+  }, [
+    props.searchedInput,
+    props.rvClicked,
+    props.bookmarksClicked,
+    props.resourceData,
+    props.subscriptionData,
+    props.tagData,
+    props.tagMapData,
+    props.viewState,
+  ]);
 
   return (
     <>
       <Box className='py-20'>
-        {!isDataEmpty && props.stateValue === 'all' && (
+        {!isDataEmpty && props.viewState === viewState.ALL && (
           <Grid item container spacing={3.5}>
             {filteredResourcesAndSubscriptions.map(resource => (
-              <ResourceContainer key={resource.id} data={resource} tagData={props.tagData} />
+              <ResourceContainer
+                key={resource.type === resourceTypes.RESOURCE ? `Room:${resource.id}` : `Subscription:${resource.id}`}
+                data={resource}
+                tagData={props.tagData}
+                tagMapData={props.tagMapData}
+              />
             ))}
           </Grid>
         )}
 
-        {!isDataEmpty && props.stateValue === 'rooms' && (
+        {!isDataEmpty && props.viewState === viewState.RESOURCES && (
           <Grid item container spacing={3.5}>
             {filteredResources.map(resource => (
-              <ResourceContainer key={resource.id} data={resource} tagData={props.tagData} />
+              <ResourceContainer key={resource.id} data={resource} tagData={props.tagData} tagMapData={props.tagMapData} />
             ))}
           </Grid>
         )}
 
-        {!isDataEmpty && props.stateValue === 'subscriptions' && (
+        {!isDataEmpty && props.viewState === viewState.SUBSCRIPTIONS && (
           <Grid item container spacing={3.5}>
             {filteredSubscriptions.map(resource => (
-              <ResourceContainer key={resource.id} data={resource} tagData={props.tagData} />
+              <ResourceContainer key={resource.id} data={resource} tagData={props.tagData} tagMapData={props.tagMapData} />
             ))}
           </Grid>
         )}
