@@ -19,6 +19,8 @@ import { timezone, role } from '@/consts/constants';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
 import { CreateTagMapData } from '@/modules/tagMap/types';
+import ResourceMapService from '@/api/resourceMap/ResourceMapService';
+import { CreateResourceMapData } from '@/modules/resourceMap/types';
 import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
 
 const Input = styled('input')({
@@ -79,12 +81,6 @@ const updateResourceData: ResourcePutData = {
   users: [1, 3],
 };
 
-const dummyResourceMap: CreateResourceMapData = {
-  user_Id: 1,
-  resourceId: 1,
-  subscriptionId: null,
-};
-
 let isFirstLoaded = true;
 
 const Test = () => {
@@ -121,6 +117,18 @@ const Test = () => {
   const [getTagMapById] = useApi(() => TagMapService.getTagMapById(1), true, true);
   const [deleteTagMapById] = useApi(() => TagMapService.deleteTagMapById(13), true, true);
   const [bulkDeleteTagMap] = useApi(() => TagMapService.bulkDeleteUserByid([19, 20]), true, true);
+
+  const [createResourceMap] = useApi((data: CreateResourceMapData) => ResourceMapService.createResourceMap(data ?? null), true, true);
+  const [getAllResourceMaps] = useApi(() => ResourceMapService.getAllResourceMaps(), true, true);
+  const [getResourceMapById] = useApi(() => ResourceMapService.getResourceMapById(1), true, true);
+  const [getResourceMapSelf] = useApi(() => ResourceMapService.getResourceMapSelf(), true, true);
+  const [deleteResourceMapById] = useApi(() => ResourceMapService.deleteResourceMapById(6), true, true);
+  const [bulkCreateResourceMap] = useApi(
+    (data: CreateResourceMapData[]) => ResourceMapService.bulkCreateResourceMap(data ?? null),
+    true,
+    true,
+  );
+  const [bulkDeleteResourceMap] = useApi(() => ResourceMapService.bulkDeleteResourceMapByid([4, 5]), true, true);
 
   const [createBookmark] = useApi((data: CreateBookmarkData) => BookmarksService.createBookmark(data ?? null), true, true);
   const [getAllBookmarks] = useApi(() => BookmarksService.getAllBookmarks(), true, true);
@@ -259,6 +267,7 @@ const Test = () => {
             <Button variant='contained' onClick={() => handleButtonClick(() => createTagMap({ tagId: 5, resourceId: 1 }))}>
               Create Tag Map
             </Button>
+
             <Button
               variant='contained'
               onClick={() =>
@@ -285,6 +294,42 @@ const Test = () => {
               Delete Tag Map (Bulk)
             </Button>
           </Stack>
+
+          <Typography variant='h5'>Resource Map</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => handleButtonClick(() => createResourceMap({ userId: 2, resourceId: 1 }))}>
+              Create Resource Map
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getAllResourceMaps)}>
+              Get all resources maps
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getResourceMapById)}>
+              Get Resource Map by Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getResourceMapSelf)}>
+              Get Resource Map Self
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(deleteResourceMapById)}>
+              Delete Resource Map By Id
+            </Button>
+            <Button
+              variant='contained'
+              onClick={() =>
+                handleButtonClick(() =>
+                  bulkCreateResourceMap([
+                    { userId: 2, resourceId: 1 },
+                    { userId: 2, resourceId: 2 },
+                  ]),
+                )
+              }
+            >
+              Create Resource Map (Bulk)
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(bulkDeleteResourceMap)}>
+              Bulk Delete Resource Map (Bulk)
+            </Button>
+          </Stack>
+
           <Typography variant='h5'>Bookmarks</Typography>
           <Stack spacing={2} direction='row'>
             <Button variant='contained' onClick={() => handleButtonClick(() => createBookmark({ resourceId: 1 }))}>
