@@ -8,12 +8,23 @@ export default class BookmarksService {
 
   public static async createBookmark(createBookmarkData: CreateBookmarkData): Promise<ApiData> {
     try {
+      if (
+        (!createBookmarkData.resourceId && !createBookmarkData.subscriptionId) ||
+        (createBookmarkData.resourceId && createBookmarkData.subscriptionId)
+      ) {
+        return Promise.reject('XOR validation Failed');
+      }
+
+      const postData: CreateBookmarkData = createBookmarkData.resourceId
+        ? { ...createBookmarkData, subscriptionId: null }
+        : { ...createBookmarkData, resourceId: null };
+
       const response = await ApiService.request(
         {
           url: `${this.getBookmarksUrl()}/`,
           method: 'POST',
           data: {
-            ...createBookmarkData,
+            ...postData,
           },
         },
         true,

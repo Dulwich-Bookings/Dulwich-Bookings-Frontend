@@ -13,13 +13,20 @@ export interface SubscriptionData {
 }
 
 export interface CreateSubscriptionData {
-  name: string;
-  description: string;
-  accessRights: Role[];
-  credentials: string;
-  expiry?: DateTime;
-  remindMe: boolean;
-  schoolId: number;
+  subscription: {
+    name: string;
+    description: string;
+    accessRights: Role[];
+    credentials: string;
+    expiry?: DateTime;
+    remindMe: boolean;
+  };
+  tags: number[];
+  users: number[];
 }
 
-export type SubscriptionPutData = Partial<SubscriptionData>;
+export interface SubscriptionPutData {
+  subscription?: Partial<SubscriptionData>;
+  tags: number[];
+  users: number[];
+}

@@ -1,13 +1,11 @@
 export interface BookmarkData {
   id: number;
   resourceId: number | null;
-  tagId: number;
+  userId: number;
   subscriptionId: number | null;
 }
 
 export interface CreateBookmarkData {
-  resourceId: number | null;
-  subscriptionId: number | null;
+  resourceId?: number | null;
+  subscriptionId?: number | null;
 }
-
-export type BookmarkPutData = Partial<BookmarkData>;

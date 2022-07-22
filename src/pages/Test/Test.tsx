@@ -12,15 +12,14 @@ import BookmarksService from '@/api/bookmarks/BookmarksService';
 
 import { CreateSubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
 import { CreateSchoolData, SchoolPutData } from '@/modules/school/types';
-import { CreateResourceData } from '@/modules/resource/types';
+import { CreateResourceData, ResourcePutData } from '@/modules/resource/types';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
 import { timezone, role } from '@/consts/constants';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
-import { CreateTagMapData } from '@/modules/tag/tagMap/types';
-import ResourceMapService from '@/api/resourceMap/ResourceMapService';
-import { CreateResourceMapData } from '@/modules/resource/resourceMap/types';
+import { CreateTagMapData } from '@/modules/tagMap/types';
+import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
 
 const Input = styled('input')({
   display: 'none',
@@ -37,33 +36,47 @@ const updateSchoolData: SchoolPutData = {
 };
 
 const createSubscriptionData: CreateSubscriptionData = {
-  name: 'Adobe Photoshop',
-  description: 'For photo editing',
-  accessRights: [role.ADMIN, role.TEACHER],
-  credentials: 'test123',
-  expiry: DateTime.newDateTimeFromDate(new Date()),
-  remindMe: true,
-  schoolId: 1,
+  subscription: {
+    name: 'Adobe Photoshop',
+    description: 'For photo editing',
+    accessRights: [role.ADMIN, role.TEACHER],
+    credentials: 'test123',
+    expiry: DateTime.newDateTimeFromDate(new Date()),
+    remindMe: true,
+  },
+  users: [1, 2],
+  tags: [1, 2],
 };
 
 const updateSubscriptionData: SubscriptionPutData = {
-  name: 'Adobe Acrobat',
+  subscription: { name: 'Adobe Acrobat' },
+  tags: [1, 3],
+  users: [1, 3],
 };
 
 const createResourceData: CreateResourceData = {
-  name: 'A113',
-  description: 'This is an intriguing room.',
-  accessRights: [role.ADMIN, role.TEACHER],
-  bookingRights: [role.ADMIN, role.TEACHER],
-  inAdvance: 3,
-  isBookingDescriptionOptional: true,
-  schoolId: 1,
+  resource: {
+    name: 'A113',
+    description: 'This is an intriguing room.',
+    accessRights: [role.ADMIN, role.TEACHER],
+    bookingRights: [role.ADMIN, role.TEACHER],
+    inAdvance: 3,
+    isBookingDescriptionOptional: true,
+    weekProfile: 'Weekly',
+  },
+  tags: [1, 2],
+  users: [1, 2],
 };
 
-const createTagMapData: CreateTagMapData = {
-  tagId: 5,
-  resourceId: 1,
-  subscriptionId: null,
+const updateResourceData: ResourcePutData = {
+  resource: {
+    name: 'B113',
+    description: 'This is an intriguing room.',
+    accessRights: [role.ADMIN, role.TEACHER],
+    bookingRights: [role.ADMIN, role.TEACHER],
+  },
+  tags: [1, 3],
+  users: [1, 3],
 };
 
 const dummyResourceMap: CreateResourceMapData = {
@@ -93,44 +106,27 @@ const Test = () => {
   const [createSubscription] = useApi(() => SubscriptionService.createSubscription(createSubscriptionData), true, true);
   const [getAllSubscriptions] = useApi(() => SubscriptionService.getAllSubscriptions(), true, true);
   const [getSubscriptionById] = useApi(() => SubscriptionService.getSubscriptionById(2), true, true);
-  const [updateSubscriptionById] = useApi(() => SubscriptionService.updateSubscriptionById(2, updateSubscriptionData), true, true);
-  const [deleteSubscriptionById] = useApi(() => SubscriptionService.deleteSubscriptionById(1), true, true);
+  const [updateSubscriptionById] = useApi(() => SubscriptionService.updateSubscriptionById(6, updateSubscriptionData), true, true);
+  const [deleteSubscriptionById] = useApi(() => SubscriptionService.deleteSubscriptionById(2), true, true);
 
   const [createResource] = useApi(() => ResourceService.createResource(createResourceData), true, true);
   const [getAllResources] = useApi(() => ResourceService.getAllResources(), true, true);
-  const [getResourceById] = useApi(() => ResourceService.getResourceById(3), true, true);
-  const [updateResourceById] = useApi(() => ResourceService.updateResourceById(3, createResourceData), true, true);
-  const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(3), true, true);
+  const [getResourceById] = useApi(() => ResourceService.getResourceById(27), true, true);
+  const [updateResourceById] = useApi(() => ResourceService.updateResourceById(27, updateResourceData), true, true);
+  const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(27), true, true);
 
-  const [createTagMap] = useApi(() => TagMapService.createTagMap(createTagMapData), true, true);
-  const [bulkCreateTagMap] = useApi(() => TagMapService.bulkCreateTagMap(bulkCreateTagMapForm), true, true);
+  const [createTagMap] = useApi((data: CreateTagMapData) => TagMapService.createTagMap(data ?? null), true, true);
+  const [bulkCreateTagMap] = useApi((data: CreateTagMapData[]) => TagMapService.bulkCreateTagMap(data ?? null), true, true);
   const [getAllTagMap] = useApi(() => TagMapService.getAllTagMap(), true, true);
   const [getTagMapById] = useApi(() => TagMapService.getTagMapById(1), true, true);
-  const [deleteTagMapById] = useApi(() => TagMapService.deleteTagMapById(15), true, true);
-  const [bulkDeleteTagMap] = useApi(() => TagMapService.bulkDeleteUserByid([8, 13]), true, true);
+  const [deleteTagMapById] = useApi(() => TagMapService.deleteTagMapById(13), true, true);
+  const [bulkDeleteTagMap] = useApi(() => TagMapService.bulkDeleteUserByid([19, 20]), true, true);
 
-  const [bulkCreateTagMapForm, setBulkCreateTagMapForm] = useState<FormData>(new FormData());
-  const [createResourceMap] = useApi(() => ResourceMapService.createResourceMap(dummyResourceMap), true, true);
-  const [getAllResourceMaps] = useApi(() => ResourceMapService.getAllResourceMaps(), true, true);
-  const [getResourceMapById] = useApi(() => ResourceMapService.getResourceMapById(1), true, true);
-  const [getResourceMapSelf] = useApi(() => ResourceMapService.getResourceMapSelf(), true, true);
-  const [deleteResourceMapById] = useApi(() => ResourceMapService.deleteResourceMapById(3), true, true);
-  const [bulkCreateResourceMap] = useApi(() => ResourceMapService.bulkCreateResourceMap(bulkCreateResourceMapForm), true, true);
-  const [bulkCreateResourceMapForm, setBulkCreateResourceMapForm] = useState<FormData>(new FormData());
-  const [bulkDeleteResourceMap] = useApi(() => ResourceMapService.bulkDeleteResourceMapByid([20, 21]), true, true);
-  const [createBookmark] = useApi(
-    () =>
-      BookmarksService.createBookmark({
-        resourceId: 2,
-        subscriptionId: null,
-      }),
-    true,
-    true,
-  );
+  const [createBookmark] = useApi((data: CreateBookmarkData) => BookmarksService.createBookmark(data ?? null), true, true);
   const [getAllBookmarks] = useApi(() => BookmarksService.getAllBookmarks(), true, true);
   const [getBookmarkdById] = useApi(() => BookmarksService.getBookmarkById(3), true, true);
   const [getSelfBookmark] = useApi(() => BookmarksService.getSelf(), true, true);
-  const [deleteBookmarkById] = useApi(() => BookmarksService.deleteBookmarkById(3), true, true);
+  const [deleteBookmarkById] = useApi(() => BookmarksService.deleteBookmarkById(17), true, true);
 
   const handleButtonClick = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();
@@ -149,36 +145,13 @@ const Test = () => {
     setBulkSignUpForm(formData);
   };
 
-  const handleBulkCreateTagMap = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files ? event.target.files[0] : null;
-    if (!file) {
-      return;
-    }
-    const formData = new FormData();
-    formData.append('file', file);
-    setBulkCreateTagMapForm(formData);
-  };
-
-  const handleBulkCreateResourceMap = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files ? event.target.files[0] : null;
-    if (!file) {
-      return;
-    }
-    const formData = new FormData();
-    formData.append('file', file);
-
-    setBulkCreateResourceMapForm(formData);
-  };
-
   useEffect(() => {
     if (isFirstLoaded) {
       isFirstLoaded = false;
       return;
     }
     bulkSignUp();
-    bulkCreateTagMap();
-    bulkCreateResourceMap();
-  }, [bulkSignUpForm, bulkCreateTagMapForm, bulkCreateResourceMapForm]);
+  }, [bulkSignUpForm]);
 
   return (
     <>
@@ -283,15 +256,22 @@ const Test = () => {
 
           <Typography variant='h5'>TagMap</Typography>
           <Stack spacing={2} direction='row'>
-            <Button variant='contained' onClick={() => handleButtonClick(createTagMap)}>
+            <Button variant='contained' onClick={() => handleButtonClick(() => createTagMap({ tagId: 5, resourceId: 1 }))}>
               Create Tag Map
             </Button>
-            <label htmlFor='bulk-sign-up'>
-              <Input accept='.csv' id='bulk-sign-up' type='file' onChange={e => handleBulkCreateTagMap(e)} />
-              <Button variant='contained' component='span'>
-                Bulk Create Tag Map
-              </Button>
-            </label>
+            <Button
+              variant='contained'
+              onClick={() =>
+                handleButtonClick(() =>
+                  bulkCreateTagMap([
+                    { tagId: 5, resourceId: 1 },
+                    { tagId: 4, resourceId: 1 },
+                  ]),
+                )
+              }
+            >
+              Create Tag Map (Bulk)
+            </Button>
             <Button variant='contained' onClick={() => handleButtonClick(getAllTagMap)}>
               Get all Tag Map
             </Button>
@@ -302,41 +282,12 @@ const Test = () => {
               Delete Tag Map By Id
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(bulkDeleteTagMap)}>
-              Bulk Delete Tag Map
+              Delete Tag Map (Bulk)
             </Button>
           </Stack>
-
-          <Typography variant='h5'>Resource Map</Typography>
-          <Stack spacing={2} direction='row'>
-            <Button variant='contained' onClick={() => handleButtonClick(createResourceMap)}>
-              Create Resource Map
-            </Button>
-            <Button variant='contained' onClick={() => handleButtonClick(getAllResourceMaps)}>
-              Get all resources maps
-            </Button>
-            <Button variant='contained' onClick={() => handleButtonClick(getResourceMapById)}>
-              Get Resource Map by Id
-            </Button>
-            <Button variant='contained' onClick={() => handleButtonClick(getResourceMapSelf)}>
-              Get Resource Map Self
-            </Button>
-            <Button variant='contained' onClick={() => handleButtonClick(deleteResourceMapById)}>
-              Delete Resource Map By Id
-            </Button>
-            <label htmlFor='bulk-create-resource-map'>
-              <Input accept='.csv' id='bulk-create-resource-map' type='file' onChange={e => handleBulkCreateResourceMap(e)} />
-              <Button variant='contained' component='span'>
-                Bulk Create Resource Map
-              </Button>
-            </label>
-            <Button variant='contained' onClick={() => handleButtonClick(bulkDeleteResourceMap)}>
-              Bulk Delete Resource Map
-            </Button>
-          </Stack>
-
           <Typography variant='h5'>Bookmarks</Typography>
           <Stack spacing={2} direction='row'>
-            <Button variant='contained' onClick={() => handleButtonClick(createBookmark)}>
+            <Button variant='contained' onClick={() => handleButtonClick(() => createBookmark({ resourceId: 1 }))}>
               Create Bookmark
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(getAllBookmarks)}>
