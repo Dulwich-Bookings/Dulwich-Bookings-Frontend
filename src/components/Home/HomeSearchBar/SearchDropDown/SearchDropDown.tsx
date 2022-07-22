@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
-const HomeMenu = () => {
-  const [selectedIndex, setSelectedIndex] = React.useState('1');
+type Props = {
+  selectedState(state: string): void;
+};
+
+const HomeMenu = (props: Props) => {
+  const [selectedIndex, setSelectedIndex] = useState<string>('all');
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedIndex(event.target.value);
+    props.selectedState(event.target.value);
   };
 
   return (
@@ -27,13 +32,13 @@ const HomeMenu = () => {
             },
           }}
         >
-          <MenuItem className='bg-white hover:bg-dulwichRedHover' value={1}>
+          <MenuItem className='bg-white hover:bg-dulwichRedHover' value={'all'}>
             All
           </MenuItem>
-          <MenuItem className='bg-white hover:bg-dulwichRedHover' value={2}>
+          <MenuItem className='bg-white hover:bg-dulwichRedHover' value={'rooms'}>
             Rooms
           </MenuItem>
-          <MenuItem className='bg-white hover:bg-dulwichRedHover' value={3}>
+          <MenuItem className='bg-white hover:bg-dulwichRedHover' value={'subscriptions'}>
             Subscriptions
           </MenuItem>
         </Select>

@@ -9,6 +9,7 @@ import { SubscriptionData } from '@/modules/subscription/types';
 
 type Props = {
   searchedInput: string;
+  stateValue: string;
   tagData: TagData[];
   resourceData: ResourceData[];
   subscriptionData: SubscriptionData[];
@@ -19,8 +20,8 @@ type Props = {
 
 const HomeRoomList = (props: Props) => {
   const [isDataEmpty, setIsDataEmpty] = useState(false);
-  // const [filteredResources, setFilteredResources] = useState<ResourceData[]>(props.resourceData);
-  // const [filteredSubscriptions, setFilteredSubscriptions] = useState<SubscriptionData[]>(props.subscriptionData);
+  const [filteredResources, setFilteredResources] = useState<ResourceData[]>(props.resourceData);
+  const [filteredSubscriptions, setFilteredSubscriptions] = useState<SubscriptionData[]>(props.subscriptionData);
   const [filteredResourcesAndSubscriptions, setFilteredResourcesAndSubscriptions] = useState<(ResourceData | SubscriptionData)[]>([
     ...props.subscriptionData,
     ...props.resourceData,
@@ -32,26 +33,43 @@ const HomeRoomList = (props: Props) => {
     if (props.searchedInput.length > 0) {
       resourceData = props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i')));
       subscriptionData = props.subscriptionData.filter(subscription => subscription.name.match(new RegExp(props.searchedInput, 'i')));
-      // setFilteredResources(resourceData);
-      // setFilteredSubscriptions(subscriptionData);
+      setFilteredResources(resourceData);
+      setFilteredSubscriptions(subscriptionData);
       setFilteredResourcesAndSubscriptions([...resourceData, ...subscriptionData]);
     } else if (props.rvClicked) {
       resourceData = props.resourceData.filter(resource =>
         recentlyVisitedMap.some(rvMap => resource.id === rvMap.resource_id && rvMap.user_id === props.currentUser.id),
       );
+      setFilteredResources(resourceData);
+      setFilteredSubscriptions(subscriptionData);
       setFilteredResourcesAndSubscriptions([...resourceData]);
-      // setFilteredResources(resourceData);
     } else {
       resourceData = props.resourceData.filter(resource =>
         bookmarkMap.some(bkMap => resource.id === bkMap.resource_id && bkMap.user_id === props.currentUser.id),
       );
+      setFilteredResources(resourceData);
+      setFilteredSubscriptions(subscriptionData);
       setFilteredResourcesAndSubscriptions([...resourceData]);
-      // setFilteredResources(resourceData);
     }
-    if (resourceData.length === 0 && subscriptionData.length === 0) {
-      setIsDataEmpty(true);
+
+    if (props.stateValue === 'all') {
+      if (resourceData.length === 0 && subscriptionData.length === 0) {
+        setIsDataEmpty(true);
+      } else {
+        setIsDataEmpty(false);
+      }
+    } else if (props.stateValue === 'rooms') {
+      if (resourceData.length === 0) {
+        setIsDataEmpty(true);
+      } else {
+        setIsDataEmpty(false);
+      }
     } else {
-      setIsDataEmpty(false);
+      if (subscriptionData.length === 0) {
+        setIsDataEmpty(true);
+      } else {
+        setIsDataEmpty(false);
+      }
     }
 
     console.log(filteredResourcesAndSubscriptions);
@@ -60,14 +78,28 @@ const HomeRoomList = (props: Props) => {
   return (
     <>
       <Box className='py-20'>
-        {!isDataEmpty && (
-          <>
-            <Grid item container spacing={3.5}>
-              {filteredResourcesAndSubscriptions.map(resource => (
-                <ResourceContainer key={resource.id} data={resource} tagData={props.tagData} />
-              ))}
-            </Grid>
-          </>
+        {!isDataEmpty && props.stateValue === 'all' && (
+          <Grid item container spacing={3.5}>
+            {filteredResourcesAndSubscriptions.map(resource => (
+              <ResourceContainer key={resource.id} data={resource} tagData={props.tagData} />
+            ))}
+          </Grid>
+        )}
+
+        {!isDataEmpty && props.stateValue === 'rooms' && (
+          <Grid item container spacing={3.5}>
+            {filteredResources.map(resource => (
+              <ResourceContainer key={resource.id} data={resource} tagData={props.tagData} />
+            ))}
+          </Grid>
+        )}
+
+        {!isDataEmpty && props.stateValue === 'subscriptions' && (
+          <Grid item container spacing={3.5}>
+            {filteredSubscriptions.map(resource => (
+              <ResourceContainer key={resource.id} data={resource} tagData={props.tagData} />
+            ))}
+          </Grid>
         )}
 
         {isDataEmpty && (

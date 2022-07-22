@@ -43,13 +43,18 @@ const Home = () => {
 
   const currentUser = useSelector(getCurrentUser);
   const currentSchool = useSelector(getCurrentSchool);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState<string>('');
+  const [stateValue, setStateValue] = useState<string>('all');
   const [resources, setResources] = useState<ResourceData[]>([]);
   const [subscriptions, setSubscriptions] = useState<SubscriptionData[]>([]);
   const [tags, setTags] = useState<TagData[]>([]);
 
   const onInputChangeHandler = (enteredValue: string): void => {
     setInputValue(enteredValue);
+  };
+
+  const onStateChangeHandler = (state: string): void => {
+    setStateValue(state);
   };
 
   useEffect(() => {
@@ -71,10 +76,11 @@ const Home = () => {
             <Stack spacing={3}>
               <Stack spacing={-4}>
                 <HomeBanner schoolId={1} />
-                <HomeSearchBar onInputChange={onInputChangeHandler} />
+                <HomeSearchBar onInputChange={onInputChangeHandler} onStateChange={onStateChangeHandler} />
               </Stack>
               <HomeResources
                 searchedInput={inputValue}
+                stateValue={stateValue}
                 resourceData={resources}
                 subscriptionData={subscriptions}
                 tagData={tags}

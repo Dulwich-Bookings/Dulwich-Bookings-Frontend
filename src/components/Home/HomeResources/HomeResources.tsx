@@ -11,6 +11,7 @@ import { SubscriptionData } from '@/modules/subscription/types';
 
 type Props = {
   searchedInput: string;
+  stateValue: string;
   resourceData: ResourceData[];
   subscriptionData: SubscriptionData[];
   tagData: TagData[];
@@ -36,6 +37,7 @@ const HomeRooms = (props: Props) => {
         <SearchFilterView searchedInput={props.searchedInput} bookmarksClicked={bookmarksClickedHandler} rvClicked={rvClickedHandler} />
         <HomeResourceList
           resourceData={props.resourceData}
+          stateValue={props.stateValue}
           subscriptionData={props.subscriptionData}
           searchedInput={props.searchedInput}
           tagData={props.tagData}
