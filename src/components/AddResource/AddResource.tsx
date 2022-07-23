@@ -4,6 +4,7 @@ import { Grid, Stack, Typography } from '@mui/material';
 import BackButton from '@components/AddResource/BackButton/BackButton';
 import { useHistory } from 'react-router-dom';
 import { Box } from '@mui/system';
+import ResourceCard from './ResourceCard/ResourceCard';
 
 const AddResource = () => {
   const history = useHistory();
@@ -18,40 +19,23 @@ const AddResource = () => {
 
   return (
     <Grid container className='pl-0 justify-center mt-10 w-screen'>
-      <Stack className=' max-w-[1312px]'>
-        <Box onClick={returnHomePage}>
+      <Stack className='max-w-[1400px]'>
+        <Box className='w-16' onClick={returnHomePage}>
           <BackButton buttonName='Home' />
         </Box>
-        <Typography className='font-Inter text-[36px]'>Add Resource</Typography>
-        <Grid container className='h-[621px] '>
-          <Grid
-            item
-            className="bg-[url('@/assets/images/Resource-Sample-1.jpg')] bg-cover bg-center mr-5 w-[424px] rounded-xl mt-14 cursor-pointer 
-            hover:border"
-            onClick={returnAddRoomPage}
-          >
-            <div className='flex w-full h-full justify-center items-center bg-bgBlur hover:bg-bgBlur/[.25]'>
-              <div className='font-Inter text-[36px]'>Room</div>
-            </div>
-          </Grid>
-          <Grid
-            item
-            className="bg-[url('@/assets/images/Resource-Sample-2.png')] bg-cover bg-center mr-5 w-[424px] rounded-xl mt-14 cursor-not-allowed
-            hover:border"
-          >
-            <div className='flex w-full h-full justify-center items-center bg-bgBlur hover:bg-bgBlur/[.25]'>
-              <div className='font-Inter text-[36px]'>Tag</div>
-            </div>
-          </Grid>
-          <Grid
-            item
-            className="bg-[url('@/assets/images/Resource-Sample-3.jpg')] bg-cover bg-center w-[424px] rounded-xl mt-14 cursor-not-allowed
-            hover:border"
-          >
-            <div className='flex w-full h-full justify-center items-center bg-bgBlur hover:bg-bgBlur/[.25]'>
-              <div className='font-Inter text-[36px]'>Subscription</div>
-            </div>
-          </Grid>
+        <Typography className='font-Inter text-[36px] mb-14 lg:mb-0'>Add Resource</Typography>
+        <Grid
+          container
+          className='lg:h-[621px]'
+          spacing={3}
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', lg: 'row' },
+          }}
+        >
+          <ResourceCard type={1} cardName='Room' onClickHandler={returnAddRoomPage} />
+          <ResourceCard type={2} cardName='Tag' />
+          <ResourceCard type={3} cardName='Subscription' />
         </Grid>
       </Stack>
     </Grid>

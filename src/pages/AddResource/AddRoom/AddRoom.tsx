@@ -47,8 +47,8 @@ const AddRoom = () => {
             <div className='hidden addRoomLaptop:block'>
               <AddRoomForm tagData={tags} userData={users} />
             </div>
-            <div className='flex w-screen h-screen justify-center items-center mx-5 addRoomLaptop:hidden'>
-              <div className='font-Inter text-[24px]'>This page is not supported for mobile devices.</div>
+            <div className='flex w-screen justify-center h-screen items-center addRoomLaptop:hidden'>
+              <div className='font-Inter text-[24px] text-center pb-20'>This page is not supported for mobile devices.</div>
             </div>
           </main>
         </>
