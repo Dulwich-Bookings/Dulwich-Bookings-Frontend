@@ -1,7 +1,7 @@
 import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
 import ApiService, { ApiData } from '../ApiService';
 
-export default class BookmarksService {
+export default class BookmarkService {
   private static getBookmarksUrl() {
     return 'bookmark';
   }
