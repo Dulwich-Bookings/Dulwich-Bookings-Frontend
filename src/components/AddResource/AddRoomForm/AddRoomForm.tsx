@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 
 import { TagData } from '@/modules/tag/types';
-import { UserData } from '@/modules/user/types';
+import { Role, UserData } from '@/modules/user/types';
 import { useHistory } from 'react-router-dom';
 import BackButton from '@components/AddResource/BackButton/BackButton';
 import ResourceSample1 from '@/assets/images/Resource-Sample-1.jpg';
@@ -26,6 +26,10 @@ import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWith
 import InputWithRadio from '@/components/Inputs/InputWithRadio/InputWithRadio';
 
 import { role } from '@/consts/constants';
+import { CreateResourceData } from '@/modules/resource/types';
+import ResourceService from '@/api/resource/ResourceService';
+import { useApi } from '@/api/ApiHandler';
+import FormSubmitButton from './FormSubmitButton/FormSubmitButton';
 
 type Props = {
   tagData: TagData[];
@@ -34,12 +38,14 @@ type Props = {
 
 const AddRoom = (props: Props) => {
   const noError: InputValidation = { isError: false, errorHelperText: '' };
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [roomName, setRoomName] = useState<string>('');
   const [roomError, setRoomError] = useState<InputValidation>(noError);
 
   const [description, setDescription] = useState<string>('');
 
-  const [weekProfile, setWeekProfile] = useState<string>('weekly');
+  const [weekProfile, setWeekProfile] = useState<'Weekly' | 'BiWeekly'>('Weekly');
 
   const [accessRights, setAccessRights] = useState({ studentAccessRights: false, teacherAccessRights: false });
   const { studentAccessRights, teacherAccessRights } = accessRights;
@@ -59,30 +65,10 @@ const AddRoom = (props: Props) => {
   const [showTags, setShowTags] = useState<boolean>(false);
   const [tagError, setTagError] = useState<InputValidation>(noError);
 
-  const formValidation = () => {
-    const errorText = 'Field Cannot be Empty';
-    const errorObj: InputValidation = {
-      isError: true,
-      errorHelperText: errorText,
-    };
+  const [createResource] = useApi((data: CreateResourceData) => ResourceService.createResource(data ?? null), true, true);
 
-    const isValidRoomName = roomName.length !== 0;
-    const isValidTag = selectedTags.length !== 0;
-    const isValidAccessRights = [studentAccessRights, teacherAccessRights].filter(d => d).length > 0;
-    const isValidBookingRights = [studentBookingRights, teacherBookingRights].filter(d => d).length >= 1;
-
-    setRoomError(isValidRoomName ? noError : errorObj);
-    setTagError(isValidTag ? noError : errorObj);
-    setAccessError(isValidAccessRights ? false : true);
-    setBookingError(isValidBookingRights ? false : true);
-
-    if (!isValidRoomName || !isValidTag || !isValidAccessRights || !isValidBookingRights) {
-      throw new Error('Form Invalid');
-    }
-  };
-
-  const handleRightsToArray = (teacher: boolean, student: boolean): string[] => {
-    const arr: string[] = [role.ADMIN];
+  const handleRightsToArray = (teacher: boolean, student: boolean): Role[] => {
+    const arr: Role[] = [role.ADMIN];
 
     if (teacher) {
       arr.push(role.TEACHER);
@@ -92,27 +78,6 @@ const AddRoom = (props: Props) => {
     }
 
     return arr;
-  };
-
-  const handleCreateResource = () => {
-    try {
-      formValidation();
-      const filteredAccessRights = handleRightsToArray(accessRights.teacherAccessRights, accessRights.studentAccessRights);
-      const filteredBookingRights = handleRightsToArray(bookingRights.teacherBookingRights, bookingRights.studentBookingRights);
-
-      const createResourceData = {
-        name: roomName,
-        description: description,
-        accessRights: filteredAccessRights,
-        bookingRights: filteredBookingRights,
-        tags: selectedTags,
-        addOthers: selectedOtherUsers,
-        weekProfile: weekProfile,
-      };
-      console.log(createResourceData);
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   const history = useHistory();
@@ -126,7 +91,11 @@ const AddRoom = (props: Props) => {
   };
 
   const weekProfileChangeHandler = (value: string): void => {
-    setWeekProfile(value);
+    if (value === 'Weekly') {
+      setWeekProfile('Weekly');
+    } else {
+      setWeekProfile('BiWeekly');
+    }
   };
 
   const accessRightsHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -164,6 +133,58 @@ const AddRoom = (props: Props) => {
 
   const returnResourcePage = () => {
     history.push('/addResource');
+  };
+
+  const formValidation = () => {
+    const errorText = 'Field Cannot be Empty';
+    const errorObj: InputValidation = {
+      isError: true,
+      errorHelperText: errorText,
+    };
+
+    const isValidRoomName = roomName.length !== 0;
+    const isValidTag = selectedTags.length !== 0;
+    const isValidAccessRights = [studentAccessRights, teacherAccessRights].filter(d => d).length > 0;
+    const isValidBookingRights = [studentBookingRights, teacherBookingRights].filter(d => d).length >= 1;
+
+    setRoomError(isValidRoomName ? noError : errorObj);
+    setTagError(isValidTag ? noError : errorObj);
+    setAccessError(isValidAccessRights ? false : true);
+    setBookingError(isValidBookingRights ? false : true);
+
+    if (!isValidRoomName || !isValidTag || !isValidAccessRights || !isValidBookingRights) {
+      throw new Error('Form Invalid');
+    }
+  };
+
+  const handleCreateResource = () => {
+    try {
+      setIsLoading(true);
+      formValidation();
+      const filteredAccessRights = handleRightsToArray(accessRights.teacherAccessRights, accessRights.studentAccessRights);
+      const filteredBookingRights = handleRightsToArray(bookingRights.teacherBookingRights, bookingRights.studentBookingRights);
+
+      const resourceData: CreateResourceData = {
+        resource: {
+          name: roomName,
+          description: description,
+          accessRights: filteredAccessRights,
+          bookingRights: filteredBookingRights,
+          // hard coded values will be changed subsequently in the future
+          inAdvance: 0,
+          isBookingDescriptionOptional: true,
+
+          weekProfile: weekProfile,
+        },
+        tags: selectedTags.map(tag => tag.id),
+        users: selectedOtherUsers.map(user => user.id),
+      };
+      createResource(resourceData);
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      console.log(err);
+    }
   };
 
   return (
@@ -406,9 +427,7 @@ const AddRoom = (props: Props) => {
 
           <Stack>
             <Stack direction='row' spacing={5}>
-              <Button className='w-56 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter text-xl' onClick={handleCreateResource}>
-                Add Room
-              </Button>
+              <FormSubmitButton buttonText='Add Room' handleOnClick={handleCreateResource} loading={isLoading} />
               <Button className='w-72 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter text-xl'>Upload Template</Button>
             </Stack>
           </Stack>

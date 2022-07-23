@@ -17,8 +17,8 @@ const AddResource = () => {
   };
 
   return (
-    <Grid container className='pl-10 justify-center pl-0 mt-10'>
-      <Stack className='w-screen max-w-[1312px]'>
+    <Grid container className='pl-0 justify-center mt-10 w-screen'>
+      <Stack className=' max-w-[1312px]'>
         <Box onClick={returnHomePage}>
           <BackButton buttonName='Home' />
         </Box>
