@@ -30,6 +30,7 @@ import { CreateResourceData } from '@/modules/resource/types';
 import ResourceService from '@/api/resource/ResourceService';
 import { useApi } from '@/api/ApiHandler';
 import FormSubmitButton from './FormSubmitButton/FormSubmitButton';
+import TemplateSubmitButton from './TemplateSubmitButton/TemplateSubmitButton';
 
 type Props = {
   tagData: TagData[];
@@ -65,7 +66,11 @@ const AddRoom = (props: Props) => {
   const [showTags, setShowTags] = useState<boolean>(false);
   const [tagError, setTagError] = useState<InputValidation>(noError);
 
+  const [templateFormName, setTemplateFormName] = useState<string>('');
+
   const [createResource] = useApi((data: CreateResourceData) => ResourceService.createResource(data ?? null), true, true);
+
+  const history = useHistory();
 
   const handleRightsToArray = (teacher: boolean, student: boolean): Role[] => {
     const arr: Role[] = [role.ADMIN];
@@ -80,7 +85,14 @@ const AddRoom = (props: Props) => {
     return arr;
   };
 
-  const history = useHistory();
+  const handleUploadTemplate = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files ? event.target.files[0] : null;
+    if (!file) {
+      return;
+    }
+    const message: string = 'Successfully uploaded ' + file.name;
+    setTemplateFormName(message);
+  };
 
   const userDelete = (userToDelete: number) => () => {
     setSelectedOtherUsers(selectedOtherUsers.filter(user => user.id !== userToDelete));
@@ -428,7 +440,7 @@ const AddRoom = (props: Props) => {
           <Stack>
             <Stack direction='row' spacing={5}>
               <FormSubmitButton buttonText='Add Room' handleOnClick={handleCreateResource} loading={isLoading} />
-              <Button className='w-72 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter text-xl'>Upload Template</Button>
+              <TemplateSubmitButton buttonText='Upload Template' helperText={templateFormName} handleOnClick={handleUploadTemplate} />
             </Stack>
           </Stack>
         </Stack>
