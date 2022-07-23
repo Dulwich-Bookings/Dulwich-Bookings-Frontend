@@ -1,4 +1,4 @@
-import { CreateRecentlyVisitedData } from '@/modules/recently visited/Types';
+import { CreateRecentlyVisitedData } from '@/modules/recentlyVisited/Types';
 import ApiService, { ApiData } from '../ApiService';
 
 export default class RecentlyVisitedService {

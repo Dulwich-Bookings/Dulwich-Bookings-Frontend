@@ -7,7 +7,7 @@ import SubscriptionService from '@/api/subscription/SubscriptionService';
 import ResourceService from '@/api/resource/ResourceService';
 import SchoolService from '@/api/school/SchoolService';
 import DateTime from '@/modules/DateTime/DateTime';
-import RecentlyVisitedService from '@/api/recently visited/RecentlyVisitedService';
+import RecentlyVisitedService from '@/api/recentlyVisited/RecentlyVisitedService';
 
 import { CreateSubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
 import { CreateSchoolData, SchoolPutData } from '@/modules/school/types';
@@ -17,7 +17,7 @@ import { isSuccess } from '@/api/ApiHandler';
 import { timezone, role } from '@/consts/constants';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
-import { CreateRecentlyVisitedData } from '@/modules/recently visited/Types';
+import { CreateRecentlyVisitedData } from '@/modules/recentlyVisited/Types';
 
 const Input = styled('input')({
   display: 'none',
