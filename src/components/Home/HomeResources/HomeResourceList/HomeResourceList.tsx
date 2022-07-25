@@ -1,211 +1,165 @@
 import React, { useEffect, useState } from 'react';
+
 import { Box, Grid, Typography } from '@mui/material';
+
 import ResourceContainer from '@components/Home/HomeResources/HomeResourceContainer/HomeResourceContainer';
+
+import BookmarkService from '@/api/bookmarks/BookmarkService';
+// import RecentlyVisitedService from '@/api/recentlyVisited/RecentlyVisitedService';
+import { useApi } from '@/api/ApiHandler';
+import { retrieveAllData } from '@/utilities/api';
+
+import { resourceTypes, searchStateMap, SearchState } from '@/consts/constants';
 import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
 import { SubscriptionData } from '@/modules/subscription/types';
 import { TagMapData } from '@/modules/tagMap/types';
-import { resourceTypes, viewState } from '@/consts/constants';
-
-import { useApi } from '@/api/ApiHandler';
-import { ApiData } from '@/api/ApiService';
-import { isSuccess } from '@/api/ApiHandler';
-
-import { RecentlyVisitedData } from '@/modules/recentlyVisited/Types';
-import RecentlyVisitedService from '@/api/recentlyVisited/RecentlyVisitedService';
-
-import { BookmarkData } from '@/modules/Bookmarks/Types';
-import BookmarkService from '@/api/bookmarks/BookmarkService';
-import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
+import { BookmarkData, CreateBookmarkData } from '@/modules/Bookmarks/Types';
+// import { RecentlyVisitedData } from '@/modules/recentlyVisited/Types';
 
 type Props = {
   searchedInput: string;
-  viewState: string;
+  searchState: SearchState;
   tagData: TagData[];
   tagMapData: TagMapData[];
   resourceData: ResourceData[];
   subscriptionData: SubscriptionData[];
-  bookmarksClicked: boolean;
-  rvClicked: boolean;
+  isBookmarksViewClicked: boolean;
+  isRvViewClicked: boolean;
   currentUser: UserData;
 };
 
+const sortResourcesByName = (resourceAndSubscriptions: (ResourceData | SubscriptionData)[]) =>
+  resourceAndSubscriptions.sort((x, y) => x.name.localeCompare(y.name));
+
 const HomeRoomList = (props: Props) => {
-  const retrieveAllData = async (func: () => Promise<ApiData & isSuccess>) => {
-    const res = await func();
-    if (res.isSuccess) {
-      return res.data;
-    }
+  // react hooks
+  const initResourceAndSubscriptionData = sortResourcesByName([...props.subscriptionData, ...props.resourceData]);
+  const [bookmarks, setBookmarks] = useState<BookmarkData[]>([]);
+  const [allResourceAndSubscriptions, setAllResourceAndSubcription] =
+    useState<(ResourceData | SubscriptionData)[]>(initResourceAndSubscriptionData);
+
+  // useApi hooks
+  const [getMyBookmarks] = useApi(() => BookmarkService.getSelf(), false, true, false);
+  const [createBookmark] = useApi((data: CreateBookmarkData) => BookmarkService.createBookmark(data ?? null), false, true, false);
+  const [deleteBookmarkById] = useApi((id: number) => BookmarkService.deleteBookmarkById(id), false, true, false);
+
+  // helper functions
+  const isEmptyArray = (arr: unknown[]) => arr.length === 0;
+  const isBookmark = (r: SubscriptionData | ResourceData) =>
+    r.type === resourceTypes.RESOURCE
+      ? !isEmptyArray(bookmarks.filter(b => b.resourceId === r.id))
+      : !isEmptyArray(bookmarks.filter(b => b.subscriptionId === r.id));
+
+  const fetchData = async () => {
+    const myBookmarks = await retrieveAllData<BookmarkData[]>(getMyBookmarks);
+    setBookmarks(myBookmarks ?? []);
   };
 
-  const [getAllRecentlyVisited] = useApi(() => RecentlyVisitedService.getSelf(), false, true, false);
-  const [recentlyVisited, setRecentlyVisited] = useState<RecentlyVisitedData[]>([]);
+  const onBookmarkHandler = async (id: number, type: SearchState): Promise<void> => {
+    const newBookmark: BookmarkData =
+      type === resourceTypes.RESOURCE
+        ? ({ resourceId: id, subscriptionId: null, userId: props.currentUser?.id, id: Math.random() } as BookmarkData)
+        : ({ resourceId: null, subscriptionId: id, userId: props.currentUser?.id, id: Math.random() } as BookmarkData);
+    const newBookMarkList: BookmarkData[] = [...bookmarks, newBookmark];
+    setBookmarks(newBookMarkList);
 
-  const [getAllBookmarks] = useApi(() => BookmarkService.getSelf(), false, false, false);
-  const [createBookmark] = useApi((data: CreateBookmarkData) => BookmarkService.createBookmark(data ?? null), false, false, false);
-  const [deleteBookmarkById] = useApi((id: number) => BookmarkService.deleteBookmarkById(id), false, false, false);
+    const createBookmarkData = type === resourceTypes.RESOURCE ? { resourceId: id } : { subscriptionId: id };
+    await createBookmark(createBookmarkData);
+    await fetchData();
+  };
 
-  const [bookmarksList, setBookmarksList] = useState<BookmarkData[]>([]);
+  const onUnBookmarkHandler = async (id: number, type: SearchState): Promise<void> => {
+    const isToDeleteBookmark = (b: BookmarkData): boolean =>
+      type === resourceTypes.RESOURCE ? b.resourceId === id : b.subscriptionId === id;
+    const newBookmarkList = bookmarks.filter(bookmark => !isToDeleteBookmark(bookmark));
+    setBookmarks(newBookmarkList);
 
+    const deletionId = bookmarks.find(b => (type === resourceTypes.RESOURCE ? b.resourceId === id : b.subscriptionId === id))?.id;
+    await deleteBookmarkById(deletionId);
+    await fetchData();
+  };
+
+  // Fetch Data from API
   useEffect(() => {
-    retrieveAllData(getAllBookmarks).then(d => setBookmarksList(r => [...r, ...d]));
+    fetchData();
   }, []);
 
-  const [isLoaded, setIsLoaded] = useState(false);
+  // update useStates upon prop change
   useEffect(() => {
-    retrieveAllData(getAllRecentlyVisited).then(d => {
-      setRecentlyVisited(r => [...r, ...d]), setIsLoaded(true);
-    }),
-      retrieveAllData(getAllBookmarks).then(d => setBookmarksList(r => [...r, ...d]));
-  }, []);
+    const resourceData: ResourceData[] = props.resourceData;
+    const subscriptionData: SubscriptionData[] = props.subscriptionData;
+    setAllResourceAndSubcription(sortResourcesByName([...resourceData, ...subscriptionData]));
+  }, [props.subscriptionData, props.resourceData]);
 
-  const isBookmarkHandler = (id: number, type: string) => {
-    if (
-      bookmarksList.filter(bookmark => bookmark.resourceId === id && type === resourceTypes.RESOURCE).length === 0 &&
-      bookmarksList.filter(bookmark => bookmark.subscriptionId === id && type === resourceTypes.SUBSCRIPTION).length === 0
-    ) {
-      if (type === resourceTypes.RESOURCE) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        setBookmarksList([...bookmarksList, convertResourcetoBk(props.resourceData.find(resource => resource.id === id)!)]);
-        createBookmark({ resourceId: id });
-      } else {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        setBookmarksList([...bookmarksList, convertSubscriptiontoBk(props.subscriptionData.find(subscription => subscription.id === id)!)]);
-        createBookmark({ subscriptionId: id });
-      }
-    } else {
-      if (type === resourceTypes.RESOURCE) {
-        setBookmarksList(bookmarksList.filter(bookmark => bookmark.resourceId !== id));
-        getAllBookmarks().then(bookmarks =>
-          deleteBookmarkById(bookmarks.data.find((bookmark: BookmarkData) => bookmark.resourceId === id).id),
-        );
-      } else {
-        setBookmarksList(bookmarksList.filter(bookmark => bookmark.subscriptionId !== id));
-        getAllBookmarks().then(bookmarks =>
-          deleteBookmarkById(bookmarks.data.find((bookmark: BookmarkData) => bookmark.subscriptionId === id).id),
-        );
-      }
-    }
-  };
-
-  const convertResourcetoBk = (resource: ResourceData) => {
-    return { id: Math.random(), resourceId: resource.id, userId: Math.random(), subscriptionId: null };
-  };
-  const convertSubscriptiontoBk = (subscription: SubscriptionData) => {
-    return { id: Math.random(), resourceId: null, userId: Math.random(), subscriptionId: subscription.id };
-  };
-
-  const [isDataEmpty, setIsDataEmpty] = useState(false);
-  const [filteredResources, setFilteredResources] = useState<ResourceData[]>(props.resourceData);
-  const [filteredSubscriptions, setFilteredSubscriptions] = useState<SubscriptionData[]>(props.subscriptionData);
-  const [filteredResourcesAndSubscriptions, setFilteredResourcesAndSubscriptions] = useState<(ResourceData | SubscriptionData)[]>([
-    ...props.subscriptionData,
-    ...props.resourceData,
-  ]);
-
+  // Check and Swap View State (isRvView or isBookmarksView or UserSearchView) &&
+  // Check and Swap searchState Filter (isAll or isRoom or isSubscription)
   useEffect(() => {
-    let resourceData: ResourceData[] = [];
-    let subscriptionData: SubscriptionData[] = [];
-    if (props.searchedInput.length > 0) {
-      resourceData = props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i')));
-      subscriptionData = props.subscriptionData.filter(subscription => subscription.name.match(new RegExp(props.searchedInput, 'i')));
-    } else if (props.rvClicked) {
-      resourceData = props.resourceData.filter(resource => recentlyVisited.some(rvMap => resource.id === rvMap.resourceId));
-      subscriptionData = props.subscriptionData.filter(subscription =>
-        recentlyVisited.some(rvMap => subscription.id === rvMap.subscriptionId),
-      );
-    } else {
-      resourceData = props.resourceData.filter(resource => bookmarksList.some(bkMap => resource.id === bkMap.resourceId));
-      subscriptionData = props.subscriptionData.filter(subscription =>
-        bookmarksList.some(bkMap => subscription.id === bkMap.subscriptionId),
-      );
+    const resourceData: ResourceData[] = props.resourceData;
+    const subscriptionData: SubscriptionData[] = props.subscriptionData;
+    let newCombinedData = sortResourcesByName([...resourceData, ...subscriptionData]);
+    const searchInput = props.searchedInput;
+
+    // Check and Swap View State (isRvView or isBookmarksView or UserSearchView)
+    const isSearchEmpty = searchInput.length === 0;
+    if (!isSearchEmpty) {
+      const isSearchInputInString = (str: string): boolean => str.toUpperCase().indexOf(searchInput.toUpperCase()) > -1;
+      const filteredResourceData = resourceData.filter(resource => isSearchInputInString(resource.name));
+      const filteredSubscriptionData = subscriptionData.filter(subscription => isSearchInputInString(subscription.name));
+      newCombinedData = sortResourcesByName([...filteredResourceData, ...filteredSubscriptionData]);
+      setAllResourceAndSubcription(newCombinedData);
     }
 
-    if (props.viewState === viewState.ALL) {
-      if (resourceData.length === 0 && subscriptionData.length === 0) {
-        setIsDataEmpty(true);
-      } else {
-        setIsDataEmpty(false);
-        setFilteredResources(resourceData);
-        setFilteredSubscriptions(subscriptionData);
-        setFilteredResourcesAndSubscriptions([...resourceData, ...subscriptionData]);
-      }
-    } else if (props.viewState === viewState.RESOURCES) {
-      if (resourceData.length === 0) {
-        setIsDataEmpty(true);
-      } else {
-        setIsDataEmpty(false);
-        setFilteredResources(resourceData);
-        setFilteredSubscriptions(subscriptionData);
-        setFilteredResourcesAndSubscriptions([...resourceData, ...subscriptionData]);
-      }
-    } else {
-      if (subscriptionData.length === 0) {
-        setIsDataEmpty(true);
-      } else {
-        setIsDataEmpty(false);
-        setFilteredResources(resourceData);
-        setFilteredSubscriptions(subscriptionData);
-        setFilteredResourcesAndSubscriptions([...resourceData, ...subscriptionData]);
-      }
+    if (props.isBookmarksViewClicked) {
+      const allBookmarkedResourcesAndSubcriptions = [...resourceData, ...subscriptionData].filter(r => isBookmark(r));
+      newCombinedData = sortResourcesByName(allBookmarkedResourcesAndSubcriptions);
+      setAllResourceAndSubcription(newCombinedData);
+    }
+
+    // if (props.isRvViewClicked) {
+    //   resourceData = props.resourceData.filter(resource => recentlyVisited.some(rvMap => resource.id === rvMap.resourceId));
+    //   subscriptionData = props.subscriptionData.filter(subscription =>
+    //     recentlyVisited.some(rvMap => subscription.id === rvMap.subscriptionId),
+    //   );
+    // }
+
+    // Check and Swap searchState Filter (isAll or isRoom or isSubscription)
+    if (props.searchState === searchStateMap.ALL) {
+      setAllResourceAndSubcription(newCombinedData);
+    }
+    if (props.searchState === searchStateMap.RESOURCES) {
+      const filteredData = newCombinedData.filter(r => r.type === searchStateMap.RESOURCES);
+      setAllResourceAndSubcription(filteredData);
+    }
+    if (props.searchState === searchStateMap.SUBSCRIPTIONS) {
+      const filteredData = newCombinedData.filter(r => r.type === searchStateMap.SUBSCRIPTIONS);
+      setAllResourceAndSubcription(filteredData);
     }
   }, [
     props.searchedInput,
-    props.rvClicked,
-    props.bookmarksClicked,
     props.resourceData,
     props.subscriptionData,
-    props.tagData,
-    props.tagMapData,
-    props.viewState,
-    isLoaded,
-    bookmarksList,
+    props.isBookmarksViewClicked,
+    props.isRvViewClicked,
+    props.searchState,
+    bookmarks,
   ]);
 
+  const isDataEmpty = allResourceAndSubscriptions.length === 0;
   return (
     <>
       <Box className='py-20'>
-        {!isDataEmpty && props.viewState === viewState.ALL && (
+        {!isDataEmpty && (
           <Grid item container spacing={3.5}>
-            {filteredResourcesAndSubscriptions.map(resource => (
+            {allResourceAndSubscriptions.map(resource => (
               <ResourceContainer
                 key={resource.type === resourceTypes.RESOURCE ? `Room:${resource.id}` : `Subscription:${resource.id}`}
                 data={resource}
                 tagData={props.tagData}
                 tagMapData={props.tagMapData}
-                bookmarkListData={bookmarksList}
-                isBookmarkHandler={isBookmarkHandler}
-              />
-            ))}
-          </Grid>
-        )}
-
-        {!isDataEmpty && props.viewState === viewState.RESOURCES && (
-          <Grid item container spacing={3.5}>
-            {filteredResources.map(resource => (
-              <ResourceContainer
-                key={resource.id}
-                data={resource}
-                tagData={props.tagData}
-                tagMapData={props.tagMapData}
-                bookmarkListData={bookmarksList}
-                isBookmarkHandler={isBookmarkHandler}
-              />
-            ))}
-          </Grid>
-        )}
-
-        {!isDataEmpty && props.viewState === viewState.SUBSCRIPTIONS && (
-          <Grid item container spacing={3.5}>
-            {filteredSubscriptions.map(resource => (
-              <ResourceContainer
-                key={resource.id}
-                data={resource}
-                tagData={props.tagData}
-                tagMapData={props.tagMapData}
-                bookmarkListData={bookmarksList}
-                isBookmarkHandler={isBookmarkHandler}
+                isBookmark={isBookmark(resource)}
+                onBookmarkChangeHandler={isBookmark(resource) ? onUnBookmarkHandler : onBookmarkHandler}
               />
             ))}
           </Grid>

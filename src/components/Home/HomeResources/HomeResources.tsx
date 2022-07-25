@@ -4,15 +4,17 @@ import { Stack, Grid } from '@mui/material';
 
 import SearchFilterView from '@/components/Home/HomeResources/SearchFilterView/SearchFilterView';
 import HomeResourceList from '@/components/Home/HomeResources/HomeResourceList/HomeResourceList';
+
 import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
 import { SubscriptionData } from '@/modules/subscription/types';
 import { TagMapData } from '@/modules/tagMap/types';
+import { SearchState } from '@/consts/constants';
 
 type Props = {
   searchedInput: string;
-  viewState: string;
+  searchState: SearchState;
   resourceData: ResourceData[];
   subscriptionData: SubscriptionData[];
   tagData: TagData[];
@@ -39,13 +41,13 @@ const HomeRooms = (props: Props) => {
         <SearchFilterView searchedInput={props.searchedInput} bookmarksClicked={bookmarksClickedHandler} rvClicked={rvClickedHandler} />
         <HomeResourceList
           resourceData={props.resourceData}
-          viewState={props.viewState}
+          searchState={props.searchState}
           subscriptionData={props.subscriptionData}
           searchedInput={props.searchedInput}
           tagData={props.tagData}
           tagMapData={props.tagMapData}
-          bookmarksClicked={bookmarksClicked}
-          rvClicked={rvClicked}
+          isBookmarksViewClicked={bookmarksClicked}
+          isRvViewClicked={rvClicked}
           currentUser={props.currentUser}
         />
       </Stack>

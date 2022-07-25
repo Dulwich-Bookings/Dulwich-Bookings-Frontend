@@ -1,42 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { Grid, Card, CardContent, Typography, Stack } from '@mui/material';
 
 import { Bookmark, PersonOutlineOutlined, Circle } from '@mui/icons-material';
 import { ResourceData } from '@/modules/resource/types';
+import { SearchState, resourceTypes } from '@/consts/constants';
 import { TagData } from '@/modules/tag/types';
 import ResourceTag from '@/components/Home/HomeResources/HomeResourceContainer/ResourceTag/ResourceTag';
 import ResourceRights from '@/components/Home/HomeResources/HomeResourceContainer/ResourceRights/ResourceRights';
 import { SubscriptionData } from '@/modules/subscription/types';
 import { TagMapData } from '@/modules/tagMap/types';
-import { BookmarkData } from '@/modules/Bookmarks/Types';
-import { resourceTypes } from '@/consts/constants';
 
 type Props = {
   data: ResourceData | SubscriptionData;
   tagData: TagData[];
   tagMapData: TagMapData[];
-  bookmarkListData: BookmarkData[];
-  isBookmarkHandler: (id: number, type: string) => void;
+  isBookmark: boolean;
+  onBookmarkChangeHandler: (id: number, type: SearchState) => void;
 };
 
 const vacancy = true;
 
 const HomeRoomItem = (props: Props) => {
-  const [isBookmark, setIsBookmark] = useState(false);
-
-  useEffect(() => {
-    if (
-      (props.bookmarkListData.filter(bookmark => bookmark.resourceId === props.data.id).length === 0 &&
-        props.data.type === resourceTypes.RESOURCE) ||
-      (props.bookmarkListData.filter(bookmark => bookmark.subscriptionId === props.data.id).length === 0 &&
-        props.data.type === resourceTypes.SUBSCRIPTION)
-    ) {
-      setIsBookmark(false);
-    } else {
-      setIsBookmark(true);
-    }
-  }, [props.bookmarkListData]);
+  const [isBookmark, setIsBookmark] = useState(props.isBookmark);
 
   const filterTagMaps = (): TagMapData[] => {
     if (props.data.type === resourceTypes.RESOURCE) {
@@ -59,7 +45,10 @@ const HomeRoomItem = (props: Props) => {
           <Stack spacing={-2}>
             <div className='w-72 z-10'>
               <Bookmark
-                onClick={() => props.isBookmarkHandler(props.data.id, props.data.type)}
+                onClick={() => {
+                  setIsBookmark(!props.isBookmark);
+                  props.onBookmarkChangeHandler(props.data.id, props.data.type);
+                }}
                 className='float-right text-3xl'
                 sx={{ color: `${isBookmark ? '#000000' : '#D9D9D9'}` }}
               />

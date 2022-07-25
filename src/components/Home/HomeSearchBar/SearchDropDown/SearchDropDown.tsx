@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { viewState } from '@/consts/constants';
+import { searchStateMap, SearchState } from '@/consts/constants';
 
 type Props = {
   selectedState(state: string): void;
 };
 
 const HomeMenu = (props: Props) => {
-  const [selectedIndex, setSelectedIndex] = useState<string>(viewState.ALL);
+  const [selectedIndex, setSelectedIndex] = useState<SearchState>(searchStateMap.ALL);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setSelectedIndex(event.target.value);
+    setSelectedIndex(event.target.value as SearchState);
     props.selectedState(event.target.value);
   };
 
@@ -33,13 +33,13 @@ const HomeMenu = (props: Props) => {
             },
           }}
         >
-          <MenuItem className='bg-white hover:bg-dulwichRedHover' value={viewState.ALL}>
+          <MenuItem className='bg-white hover:bg-dulwichRedHover' value={searchStateMap.ALL}>
             All
           </MenuItem>
-          <MenuItem className='bg-white hover:bg-dulwichRedHover' value={viewState.RESOURCES}>
+          <MenuItem className='bg-white hover:bg-dulwichRedHover' value={searchStateMap.RESOURCES}>
             Rooms
           </MenuItem>
-          <MenuItem className='bg-white hover:bg-dulwichRedHover' value={viewState.SUBSCRIPTIONS}>
+          <MenuItem className='bg-white hover:bg-dulwichRedHover' value={searchStateMap.SUBSCRIPTIONS}>
             Subscriptions
           </MenuItem>
         </Select>

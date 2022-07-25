@@ -6,6 +6,19 @@ import LandingImage1 from '@/assets/images/Landing-Sample-1.png';
 import LandingImage2 from '@/assets/images/Landing-Sample-2.png';
 import LandingImage3 from '@/assets/images/Landing-Sample-3.png';
 
+export type SearchState = 'all' | 'resources' | 'subscriptions';
+
+export const searchStateMap = {
+  ALL: 'all' as SearchState,
+  RESOURCES: 'resource' as SearchState,
+  SUBSCRIPTIONS: 'subscription' as SearchState,
+};
+
+export const resourceTypes = {
+  RESOURCE: 'resource' as SearchState,
+  SUBSCRIPTION: 'subscription' as SearchState,
+};
+
 export const locationImages = [
   {
     id: 1,
@@ -45,15 +58,4 @@ export const role = {
   ADMIN: 'Admin' as Role,
   STUDENT: 'Student' as Role,
   TEACHER: 'Teacher' as Role,
-};
-
-export const resourceTypes = {
-  RESOURCE: 'resource',
-  SUBSCRIPTION: 'subscription',
-};
-
-export const viewState = {
-  ALL: 'all',
-  RESOURCES: 'resources',
-  SUBSCRIPTIONS: 'subscriptions',
 };
