@@ -57,23 +57,15 @@ const HomeRoomList = (props: Props) => {
     if (props.searchedInput.length > 0) {
       resourceData = props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i')));
       subscriptionData = props.subscriptionData.filter(subscription => subscription.name.match(new RegExp(props.searchedInput, 'i')));
-      setFilteredResources(resourceData);
-      setFilteredSubscriptions(subscriptionData);
-      setFilteredResourcesAndSubscriptions([...resourceData, ...subscriptionData]);
     } else if (props.rvClicked) {
-      resourceData = props.resourceData.filter(resource =>
-        recentlyVisited.some(rvMap => resource.id === rvMap.resourceId || resource.id === rvMap.subscriptionId),
+      resourceData = props.resourceData.filter(resource => recentlyVisited.some(rvMap => resource.id === rvMap.resourceId));
+      subscriptionData = props.subscriptionData.filter(subscription =>
+        recentlyVisited.some(rvMap => subscription.id === rvMap.subscriptionId),
       );
-      setFilteredResources(resourceData);
-      setFilteredSubscriptions(subscriptionData);
-      setFilteredResourcesAndSubscriptions([...resourceData]);
     } else {
       resourceData = props.resourceData.filter(resource =>
         bookmarkMap.some(bkMap => resource.id === bkMap.resource_id && bkMap.user_id === props.currentUser.id),
       );
-      setFilteredResources(resourceData);
-      setFilteredSubscriptions(subscriptionData);
-      setFilteredResourcesAndSubscriptions([...resourceData]);
     }
 
     if (props.viewState === viewState.ALL) {
@@ -81,18 +73,27 @@ const HomeRoomList = (props: Props) => {
         setIsDataEmpty(true);
       } else {
         setIsDataEmpty(false);
+        setFilteredResources(resourceData);
+        setFilteredSubscriptions(subscriptionData);
+        setFilteredResourcesAndSubscriptions([...resourceData, ...subscriptionData]);
       }
     } else if (props.viewState === viewState.RESOURCES) {
       if (resourceData.length === 0) {
         setIsDataEmpty(true);
       } else {
         setIsDataEmpty(false);
+        setFilteredResources(resourceData);
+        setFilteredSubscriptions(subscriptionData);
+        setFilteredResourcesAndSubscriptions([...resourceData, ...subscriptionData]);
       }
     } else {
       if (subscriptionData.length === 0) {
         setIsDataEmpty(true);
       } else {
         setIsDataEmpty(false);
+        setFilteredResources(resourceData);
+        setFilteredSubscriptions(subscriptionData);
+        setFilteredResourcesAndSubscriptions([...resourceData, ...subscriptionData]);
       }
     }
 
@@ -106,6 +107,7 @@ const HomeRoomList = (props: Props) => {
     props.tagData,
     props.tagMapData,
     props.viewState,
+    retrieveAllData,
   ]);
 
   return (
