@@ -36,7 +36,7 @@ const HomeRoomList = (props: Props) => {
     }
   };
 
-  const [getAllRecentlyVisited] = useApi(() => RecentlyVisitedService.getSelf(), true, true);
+  const [getAllRecentlyVisited] = useApi(() => RecentlyVisitedService.getSelf(), false, true, false);
   const [recentlyVisited, setRecentlyVisited] = useState<RecentlyVisitedData[]>([]);
 
   useEffect(() => {
