@@ -16,6 +16,8 @@ import { isSuccess } from '@/api/ApiHandler';
 import { RecentlyVisitedData } from '@/modules/recentlyVisited/Types';
 import RecentlyVisitedService from '@/api/recentlyVisited/RecentlyVisitedService';
 
+import { BookmarkData } from '@/modules/Bookmarks/Types';
+
 type Props = {
   searchedInput: string;
   viewState: string;
@@ -26,6 +28,7 @@ type Props = {
   bookmarksClicked: boolean;
   rvClicked: boolean;
   currentUser: UserData;
+  bookmarksList: BookmarkData[];
 };
 
 const HomeRoomList = (props: Props) => {
@@ -39,8 +42,11 @@ const HomeRoomList = (props: Props) => {
   const [getAllRecentlyVisited] = useApi(() => RecentlyVisitedService.getSelf(), false, true, false);
   const [recentlyVisited, setRecentlyVisited] = useState<RecentlyVisitedData[]>([]);
 
+  const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
-    retrieveAllData(getAllRecentlyVisited).then(d => setRecentlyVisited(r => [...r, ...d]));
+    retrieveAllData(getAllRecentlyVisited).then(d => {
+      setRecentlyVisited(r => [...r, ...d]), setIsLoaded(true);
+    });
   }, []);
 
   const [isDataEmpty, setIsDataEmpty] = useState(false);
@@ -96,8 +102,6 @@ const HomeRoomList = (props: Props) => {
         setFilteredResourcesAndSubscriptions([...resourceData, ...subscriptionData]);
       }
     }
-
-    console.log(filteredResourcesAndSubscriptions);
   }, [
     props.searchedInput,
     props.rvClicked,
@@ -107,7 +111,7 @@ const HomeRoomList = (props: Props) => {
     props.tagData,
     props.tagMapData,
     props.viewState,
-    retrieveAllData,
+    isLoaded,
   ]);
 
   return (
