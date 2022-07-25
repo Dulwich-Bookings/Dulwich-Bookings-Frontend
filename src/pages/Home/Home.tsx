@@ -14,14 +14,15 @@ import { getCurrentSchool } from '@/modules/school/schoolSlice';
 import { useApi } from '@/api/ApiHandler';
 import { ApiData } from '@/api/ApiService';
 import { ResourceData } from '@/modules/resource/types';
+import { TagData } from '@/modules/tag/types';
+import { TagMapData } from '@/modules/tagMap/types';
+
 import ResourceService from '@/api/resource/ResourceService';
 import TagService from '@/api/tag/TagService';
-import { isSuccess } from '@/api/ApiHandler';
-import { TagData } from '@/modules/tag/types';
-import { SubscriptionData } from '@/modules/subscription/types';
 import SubscriptionService from '@/api/subscription/SubscriptionService';
 import TagMapService from '@/api/tagMap/TagMapService';
-import { TagMapData } from '@/modules/tagMap/types';
+import { isSuccess } from '@/api/ApiHandler';
+import { SubscriptionData } from '@/modules/subscription/types';
 import { resourceTypes } from '@/consts/constants';
 
 const processResourceType = (input: ResourceData): ResourceData => {

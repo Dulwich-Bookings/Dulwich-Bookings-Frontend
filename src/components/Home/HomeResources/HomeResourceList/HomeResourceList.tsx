@@ -4,10 +4,17 @@ import ResourceContainer from '@components/Home/HomeResources/HomeResourceContai
 import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
-import { recentlyVisitedMap, bookmarkMap } from '@/consts/dummyMaps';
+import { bookmarkMap } from '@/consts/dummyMaps';
 import { SubscriptionData } from '@/modules/subscription/types';
 import { TagMapData } from '@/modules/tagMap/types';
 import { resourceTypes, viewState } from '@/consts/constants';
+
+import { useApi } from '@/api/ApiHandler';
+import { ApiData } from '@/api/ApiService';
+import { isSuccess } from '@/api/ApiHandler';
+
+import { RecentlyVisitedData } from '@/modules/recentlyVisited/Types';
+import RecentlyVisitedService from '@/api/recentlyVisited/RecentlyVisitedService';
 
 type Props = {
   searchedInput: string;
@@ -22,6 +29,20 @@ type Props = {
 };
 
 const HomeRoomList = (props: Props) => {
+  const retrieveAllData = async (func: () => Promise<ApiData & isSuccess>) => {
+    const res = await func();
+    if (res.isSuccess) {
+      return res.data;
+    }
+  };
+
+  const [getAllRecentlyVisited] = useApi(() => RecentlyVisitedService.getSelf(), true, true);
+  const [recentlyVisited, setRecentlyVisited] = useState<RecentlyVisitedData[]>([]);
+
+  useEffect(() => {
+    retrieveAllData(getAllRecentlyVisited).then(d => setRecentlyVisited(r => [...r, ...d]));
+  }, []);
+
   const [isDataEmpty, setIsDataEmpty] = useState(false);
   const [filteredResources, setFilteredResources] = useState<ResourceData[]>(props.resourceData);
   const [filteredSubscriptions, setFilteredSubscriptions] = useState<SubscriptionData[]>(props.subscriptionData);
@@ -41,7 +62,7 @@ const HomeRoomList = (props: Props) => {
       setFilteredResourcesAndSubscriptions([...resourceData, ...subscriptionData]);
     } else if (props.rvClicked) {
       resourceData = props.resourceData.filter(resource =>
-        recentlyVisitedMap.some(rvMap => resource.id === rvMap.resource_id && rvMap.user_id === props.currentUser.id),
+        recentlyVisited.some(rvMap => resource.id === rvMap.resourceId || resource.id === rvMap.subscriptionId),
       );
       setFilteredResources(resourceData);
       setFilteredSubscriptions(subscriptionData);
