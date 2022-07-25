@@ -4,7 +4,6 @@ import ResourceContainer from '@components/Home/HomeResources/HomeResourceContai
 import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
-import { bookmarkMap } from '@/consts/dummyMaps';
 import { SubscriptionData } from '@/modules/subscription/types';
 import { TagMapData } from '@/modules/tagMap/types';
 import { resourceTypes, viewState } from '@/consts/constants';
@@ -17,6 +16,8 @@ import { RecentlyVisitedData } from '@/modules/recentlyVisited/Types';
 import RecentlyVisitedService from '@/api/recentlyVisited/RecentlyVisitedService';
 
 import { BookmarkData } from '@/modules/Bookmarks/Types';
+import BookmarkService from '@/api/bookmarks/BookmarkService';
+import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
 
 type Props = {
   searchedInput: string;
@@ -28,7 +29,6 @@ type Props = {
   bookmarksClicked: boolean;
   rvClicked: boolean;
   currentUser: UserData;
-  bookmarksList: BookmarkData[];
 };
 
 const HomeRoomList = (props: Props) => {
@@ -42,12 +42,59 @@ const HomeRoomList = (props: Props) => {
   const [getAllRecentlyVisited] = useApi(() => RecentlyVisitedService.getSelf(), false, true, false);
   const [recentlyVisited, setRecentlyVisited] = useState<RecentlyVisitedData[]>([]);
 
+  const [getAllBookmarks] = useApi(() => BookmarkService.getSelf(), false, false, false);
+  const [createBookmark] = useApi((data: CreateBookmarkData) => BookmarkService.createBookmark(data ?? null), false, false, false);
+  const [deleteBookmarkById] = useApi((id: number) => BookmarkService.deleteBookmarkById(id), false, false, false);
+
+  const [bookmarksList, setBookmarksList] = useState<BookmarkData[]>([]);
+
+  useEffect(() => {
+    retrieveAllData(getAllBookmarks).then(d => setBookmarksList(r => [...r, ...d]));
+  }, []);
+
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     retrieveAllData(getAllRecentlyVisited).then(d => {
       setRecentlyVisited(r => [...r, ...d]), setIsLoaded(true);
-    });
+    }),
+      retrieveAllData(getAllBookmarks).then(d => setBookmarksList(r => [...r, ...d]));
   }, []);
+
+  const isBookmarkHandler = (id: number, type: string) => {
+    if (
+      bookmarksList.filter(bookmark => bookmark.resourceId === id && type === resourceTypes.RESOURCE).length === 0 &&
+      bookmarksList.filter(bookmark => bookmark.subscriptionId === id && type === resourceTypes.SUBSCRIPTION).length === 0
+    ) {
+      if (type === resourceTypes.RESOURCE) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        setBookmarksList([...bookmarksList, convertResourcetoBk(props.resourceData.find(resource => resource.id === id)!)]);
+        createBookmark({ resourceId: id });
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        setBookmarksList([...bookmarksList, convertSubscriptiontoBk(props.subscriptionData.find(subscription => subscription.id === id)!)]);
+        createBookmark({ subscriptionId: id });
+      }
+    } else {
+      if (type === resourceTypes.RESOURCE) {
+        setBookmarksList(bookmarksList.filter(bookmark => bookmark.resourceId !== id));
+        getAllBookmarks().then(bookmarks =>
+          deleteBookmarkById(bookmarks.data.find((bookmark: BookmarkData) => bookmark.resourceId === id).id),
+        );
+      } else {
+        setBookmarksList(bookmarksList.filter(bookmark => bookmark.subscriptionId !== id));
+        getAllBookmarks().then(bookmarks =>
+          deleteBookmarkById(bookmarks.data.find((bookmark: BookmarkData) => bookmark.subscriptionId === id).id),
+        );
+      }
+    }
+  };
+
+  const convertResourcetoBk = (resource: ResourceData) => {
+    return { id: Math.random(), resourceId: resource.id, userId: Math.random(), subscriptionId: null };
+  };
+  const convertSubscriptiontoBk = (subscription: SubscriptionData) => {
+    return { id: Math.random(), resourceId: null, userId: Math.random(), subscriptionId: subscription.id };
+  };
 
   const [isDataEmpty, setIsDataEmpty] = useState(false);
   const [filteredResources, setFilteredResources] = useState<ResourceData[]>(props.resourceData);
@@ -69,8 +116,9 @@ const HomeRoomList = (props: Props) => {
         recentlyVisited.some(rvMap => subscription.id === rvMap.subscriptionId),
       );
     } else {
-      resourceData = props.resourceData.filter(resource =>
-        bookmarkMap.some(bkMap => resource.id === bkMap.resource_id && bkMap.user_id === props.currentUser.id),
+      resourceData = props.resourceData.filter(resource => bookmarksList.some(bkMap => resource.id === bkMap.resourceId));
+      subscriptionData = props.subscriptionData.filter(subscription =>
+        bookmarksList.some(bkMap => subscription.id === bkMap.subscriptionId),
       );
     }
 
@@ -112,6 +160,7 @@ const HomeRoomList = (props: Props) => {
     props.tagMapData,
     props.viewState,
     isLoaded,
+    bookmarksList,
   ]);
 
   return (
@@ -125,6 +174,8 @@ const HomeRoomList = (props: Props) => {
                 data={resource}
                 tagData={props.tagData}
                 tagMapData={props.tagMapData}
+                bookmarkListData={bookmarksList}
+                isBookmarkHandler={isBookmarkHandler}
               />
             ))}
           </Grid>
@@ -133,7 +184,14 @@ const HomeRoomList = (props: Props) => {
         {!isDataEmpty && props.viewState === viewState.RESOURCES && (
           <Grid item container spacing={3.5}>
             {filteredResources.map(resource => (
-              <ResourceContainer key={resource.id} data={resource} tagData={props.tagData} tagMapData={props.tagMapData} />
+              <ResourceContainer
+                key={resource.id}
+                data={resource}
+                tagData={props.tagData}
+                tagMapData={props.tagMapData}
+                bookmarkListData={bookmarksList}
+                isBookmarkHandler={isBookmarkHandler}
+              />
             ))}
           </Grid>
         )}
@@ -141,7 +199,14 @@ const HomeRoomList = (props: Props) => {
         {!isDataEmpty && props.viewState === viewState.SUBSCRIPTIONS && (
           <Grid item container spacing={3.5}>
             {filteredSubscriptions.map(resource => (
-              <ResourceContainer key={resource.id} data={resource} tagData={props.tagData} tagMapData={props.tagMapData} />
+              <ResourceContainer
+                key={resource.id}
+                data={resource}
+                tagData={props.tagData}
+                tagMapData={props.tagMapData}
+                bookmarkListData={bookmarksList}
+                isBookmarkHandler={isBookmarkHandler}
+              />
             ))}
           </Grid>
         )}

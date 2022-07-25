@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { Stack, Grid } from '@mui/material';
 
@@ -9,13 +9,6 @@ import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
 import { SubscriptionData } from '@/modules/subscription/types';
 import { TagMapData } from '@/modules/tagMap/types';
-
-import { useApi } from '@/api/ApiHandler';
-import { ApiData } from '@/api/ApiService';
-import { isSuccess } from '@/api/ApiHandler';
-
-import { BookmarkData } from '@/modules/Bookmarks/Types';
-import BookmarkService from '@/api/bookmarks/BookmarkService';
 
 type Props = {
   searchedInput: string;
@@ -28,21 +21,6 @@ type Props = {
 };
 
 const HomeRooms = (props: Props) => {
-  const retrieveAllData = async (func: () => Promise<ApiData & isSuccess>) => {
-    const res = await func();
-    if (res.isSuccess) {
-      return res.data;
-    }
-  };
-
-  const [getAllBookmarks] = useApi(() => BookmarkService.getSelf(), false, false, false);
-  const [bookmarksList, setBookmarksList] = useState<BookmarkData[]>([]);
-
-  useEffect(() => {
-    retrieveAllData(getAllBookmarks).then(d => setBookmarksList(r => [...r, ...d]));
-    console.log('hi');
-  }, []);
-
   const [bookmarksClicked, setBookmarksClicked] = useState(false);
   const [rvClicked, setRVClicked] = useState(true);
 
@@ -69,7 +47,6 @@ const HomeRooms = (props: Props) => {
           bookmarksClicked={bookmarksClicked}
           rvClicked={rvClicked}
           currentUser={props.currentUser}
-          bookmarksList={bookmarksList}
         />
       </Stack>
     </Grid>
