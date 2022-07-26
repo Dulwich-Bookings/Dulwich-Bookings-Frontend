@@ -1,7 +1,7 @@
 export interface RecentlyVisitedData {
   id: number;
   resourceId: number | null;
-  tagId: number;
+  userId: number;
   subscriptionId: number | null;
 }
 

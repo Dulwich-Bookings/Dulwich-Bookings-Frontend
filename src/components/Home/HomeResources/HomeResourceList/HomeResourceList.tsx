@@ -5,7 +5,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import ResourceContainer from '@components/Home/HomeResources/HomeResourceContainer/HomeResourceContainer';
 
 import BookmarkService from '@/api/bookmarks/BookmarkService';
-// import RecentlyVisitedService from '@/api/recentlyVisited/RecentlyVisitedService';
+import RecentlyVisitedService from '@/api/recentlyVisited/RecentlyVisitedService';
 import { useApi } from '@/api/ApiHandler';
 import { retrieveAllData } from '@/utilities/api';
 
@@ -16,7 +16,7 @@ import { UserData } from '@/modules/user/types';
 import { SubscriptionData } from '@/modules/subscription/types';
 import { TagMapData } from '@/modules/tagMap/types';
 import { BookmarkData, CreateBookmarkData } from '@/modules/Bookmarks/Types';
-// import { RecentlyVisitedData } from '@/modules/recentlyVisited/Types';
+import { RecentlyVisitedData, CreateRecentlyVisitedData } from '@/modules/recentlyVisited/Types';
 
 type Props = {
   searchedInput: string;
@@ -37,6 +37,7 @@ const HomeRoomList = (props: Props) => {
   // react hooks
   const initResourceAndSubscriptionData = sortResourcesByName([...props.subscriptionData, ...props.resourceData]);
   const [bookmarks, setBookmarks] = useState<BookmarkData[]>([]);
+  const [recentlyVisited, setRecentlyVisited] = useState<RecentlyVisitedData[]>([]);
   const [allResourceAndSubscriptions, setAllResourceAndSubcription] =
     useState<(ResourceData | SubscriptionData)[]>(initResourceAndSubscriptionData);
 
@@ -44,6 +45,13 @@ const HomeRoomList = (props: Props) => {
   const [getMyBookmarks] = useApi(() => BookmarkService.getSelf(), false, true, false);
   const [createBookmark] = useApi((data: CreateBookmarkData) => BookmarkService.createBookmark(data ?? null), false, true, false);
   const [deleteBookmarkById] = useApi((id: number) => BookmarkService.deleteBookmarkById(id), false, true, false);
+  const [getMyRecentlyVisited] = useApi(() => RecentlyVisitedService.getSelf(), false, true, false);
+  const [createRecentlyVisited] = useApi(
+    (data: CreateRecentlyVisitedData) => RecentlyVisitedService.createRecentlyVisited(data ?? null),
+    false,
+    true,
+    false,
+  );
 
   // helper functions
   const isEmptyArray = (arr: unknown[]) => arr.length === 0;
@@ -51,10 +59,19 @@ const HomeRoomList = (props: Props) => {
     r.type === resourceTypes.RESOURCE
       ? !isEmptyArray(bookmarks.filter(b => b.resourceId === r.id))
       : !isEmptyArray(bookmarks.filter(b => b.subscriptionId === r.id));
+  const isRecentlyVisited = (r: SubscriptionData | ResourceData) =>
+    r.type === resourceTypes.RESOURCE
+      ? !isEmptyArray(recentlyVisited.filter(b => b.resourceId === r.id))
+      : !isEmptyArray(recentlyVisited.filter(b => b.subscriptionId === r.id));
 
-  const fetchData = async () => {
+  const fetchBookmarksData = async () => {
     const myBookmarks = await retrieveAllData<BookmarkData[]>(getMyBookmarks);
     setBookmarks(myBookmarks ?? []);
+  };
+
+  const fetchRecentlyVisitedData = async () => {
+    const myRecentlyVisited = await retrieveAllData<RecentlyVisitedData[]>(getMyRecentlyVisited);
+    setRecentlyVisited(myRecentlyVisited ?? []);
   };
 
   const onBookmarkHandler = async (id: number, type: SearchState): Promise<void> => {
@@ -67,7 +84,7 @@ const HomeRoomList = (props: Props) => {
 
     const createBookmarkData = type === resourceTypes.RESOURCE ? { resourceId: id } : { subscriptionId: id };
     await createBookmark(createBookmarkData);
-    await fetchData();
+    await fetchBookmarksData();
   };
 
   const onUnBookmarkHandler = async (id: number, type: SearchState): Promise<void> => {
@@ -78,12 +95,28 @@ const HomeRoomList = (props: Props) => {
 
     const deletionId = bookmarks.find(b => (type === resourceTypes.RESOURCE ? b.resourceId === id : b.subscriptionId === id))?.id;
     await deleteBookmarkById(deletionId);
-    await fetchData();
+    await fetchBookmarksData();
+  };
+
+  const onRecentlyVisitedHandler = async (id: number, type: SearchState, isRecentlyVisited: boolean): Promise<void> => {
+    if (!isRecentlyVisited) {
+      const newRecentlyVisited: RecentlyVisitedData =
+        type === resourceTypes.RESOURCE
+          ? ({ resourceId: id, subscriptionId: null, userId: props.currentUser?.id, id: Math.random() } as RecentlyVisitedData)
+          : ({ resourceId: null, subscriptionId: id, userId: props.currentUser?.id, id: Math.random() } as RecentlyVisitedData);
+      const newRecentlyVisitedList: RecentlyVisitedData[] = [...recentlyVisited, newRecentlyVisited];
+      setRecentlyVisited(newRecentlyVisitedList);
+
+      const createRecentlyVisitedData = type === resourceTypes.RESOURCE ? { resourceId: id } : { subscriptionId: id };
+      await createRecentlyVisited(createRecentlyVisitedData);
+      await fetchRecentlyVisitedData();
+    }
   };
 
   // Fetch Data from API
   useEffect(() => {
-    fetchData();
+    fetchBookmarksData();
+    fetchRecentlyVisitedData();
   }, []);
 
   // update useStates upon prop change
@@ -111,18 +144,17 @@ const HomeRoomList = (props: Props) => {
       setAllResourceAndSubcription(newCombinedData);
     }
 
-    if (props.isBookmarksViewClicked) {
+    if (props.isBookmarksViewClicked && isSearchEmpty) {
       const allBookmarkedResourcesAndSubcriptions = [...resourceData, ...subscriptionData].filter(r => isBookmark(r));
       newCombinedData = sortResourcesByName(allBookmarkedResourcesAndSubcriptions);
       setAllResourceAndSubcription(newCombinedData);
     }
 
-    // if (props.isRvViewClicked) {
-    //   resourceData = props.resourceData.filter(resource => recentlyVisited.some(rvMap => resource.id === rvMap.resourceId));
-    //   subscriptionData = props.subscriptionData.filter(subscription =>
-    //     recentlyVisited.some(rvMap => subscription.id === rvMap.subscriptionId),
-    //   );
-    // }
+    if (props.isRvViewClicked && isSearchEmpty) {
+      const allRecentlyVisitedResourcesAndSubcriptions = [...resourceData, ...subscriptionData].filter(r => isRecentlyVisited(r));
+      newCombinedData = sortResourcesByName(allRecentlyVisitedResourcesAndSubcriptions);
+      setAllResourceAndSubcription(newCombinedData);
+    }
 
     // Check and Swap searchState Filter (isAll or isRoom or isSubscription)
     if (props.searchState === searchStateMap.ALL) {
@@ -159,7 +191,9 @@ const HomeRoomList = (props: Props) => {
                 tagData={props.tagData}
                 tagMapData={props.tagMapData}
                 isBookmark={isBookmark(resource)}
+                isRecentlyVisited={isRecentlyVisited(resource)}
                 onBookmarkChangeHandler={isBookmark(resource) ? onUnBookmarkHandler : onBookmarkHandler}
+                onRecentlyVisitedHandler={onRecentlyVisitedHandler}
               />
             ))}
           </Grid>
