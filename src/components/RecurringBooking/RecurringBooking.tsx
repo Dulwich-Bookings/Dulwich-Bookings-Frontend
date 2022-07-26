@@ -1,63 +1,73 @@
 import * as React from 'react';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import { Stack, Input, Typography, Box, TextField } from '@mui/material';
+import { Stack, Input, Typography, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import InputAdornment from '@mui/material/InputAdornment';
 
 export default function RecurringBooking() {
-  const [recurring, setRecurring] = React.useState<string>('');
+  const [recurrence, setRecurrence] = React.useState<string>('');
   const [endDate, setEndDate] = React.useState<string>('');
-  const [frequency, setFrequency] = React.useState<number>();
+  const [frequency, setFrequency] = React.useState<number>(0);
 
   const handleRecurringChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.defaultValue);
-    setRecurring(event.target.defaultValue);
+    setRecurrence(event.target.defaultValue);
   };
   const endDatePicker: JSX.Element = (
     <Stack direction='row' spacing={4}>
       <Typography className='font-Inter text-bgGray'>On</Typography>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DatePicker
-          disableFuture
-          label='Responsive'
-          openTo='year'
-          views={['year', 'month', 'day']}
-          value={endDate}
-          onChange={newValue => {
-            setEndDate(newValue as string);
-          }}
-          renderInput={({ inputRef, inputProps }) => (
-            <input
-              ref={inputRef}
-              {...inputProps}
-              className='font-Inter object-right align-center box-content rounded-md w-4/12 bg-bgWhiteDim'
-            />
-          )}
-        />
-      </LocalizationProvider>
+      {recurrence == 'on' ? (
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DatePicker
+            disableFuture
+            label='Responsive'
+            openTo='year'
+            views={['year', 'month', 'day']}
+            value={endDate}
+            onChange={newValue => {
+              setEndDate(newValue as string);
+            }}
+            renderInput={({ inputRef, inputProps }) => (
+              <input
+                ref={inputRef}
+                {...inputProps}
+                className='font-Inter object-right align-center box-content rounded-md w-6/12 bg-bgWhiteDim'
+              />
+            )}
+          />
+        </LocalizationProvider>
+      ) : (
+        <></>
+      )}
     </Stack>
   );
 
   const ocurrences: JSX.Element = (
     <Stack direction='row' spacing={2}>
       <Typography className='font-Inter text-bgGray'>After</Typography>
-      <Input
-        type='number'
-        className='font-Inter object-right align-center box-content rounded-md w-5/12 bg-bgWhiteDim'
-        defaultValue={0}
-        disableUnderline
-        endAdornment={
-          <InputAdornment position='end' className='font-Inter text-sm'>
-            occuranes
-          </InputAdornment>
-        }
-      />
+      {recurrence == 'after' ? (
+        <Stack direction='row' spacing={0}>
+          <Input
+            type='number'
+            className='font-Inter object-right align-center box-content rounded-md w-2/6 bg-bgWhiteDim h-auto'
+            value={frequency}
+            disableUnderline
+            onChange={event => {
+              setFrequency(parseInt(event.target.value));
+              console.log(event);
+            }}
+          />
+          <Input
+            type='string'
+            className='font-Inter object-right align-center box-content rounded-md w-1/2 bg-bgWhiteDim h-auto'
+            value='ocurrances'
+            disableUnderline
+            readOnly
+          />
+        </Stack>
+      ) : (
+        <></>
+      )}
     </Stack>
   );
 
