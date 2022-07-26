@@ -33,6 +33,8 @@ type Props<inputType> = {
   inputHandleOnChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   ref?: React.RefObject<HTMLDivElement>;
   acceptInput?: boolean;
+  inputProp?: object;
+  customInput?: JSX.Element;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -55,6 +57,16 @@ const InputWithIcon = <T extends Object>(props: Props<T>) => {
             onFocus={props.onFocus}
             onBlur={props.onBlur}
           />
+        </>
+      </Stack>
+    );
+  }
+  if (props.customInput) {
+    return (
+      <Stack direction='row' className='w-full' spacing={props.spacing} alignItems='center'>
+        <>
+          {props.icon}
+          {props.customInput}
         </>
       </Stack>
     );

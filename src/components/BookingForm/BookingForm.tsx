@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Modal, createTheme, Stack, ThemeProvider, Box, Input } from '@mui/material';
-import { FormatAlignLeft, AccessTime, Close, CircleOutlined, RadioButtonCheckedOutlined } from '@mui/icons-material';
+import { FormatAlignLeft, Close } from '@mui/icons-material';
 import BookingFormFooter from '../BookingFormFooter/BookingFormFooter';
 import InputWithIcon from '../InputWithIcon/InputWithIcon';
-import Checkbox from '@mui/material/Checkbox';
-import BookingTimePicker from '../BookingTimePicker/BookingTimePicker';
+import TimePickerWrapper from '../BookingTimePicker/TimePickerWrapper';
+import RecurringBookingWrapper from '../RecurringBooking/RecurringBookingWrapper';
 
 const theme = createTheme({
   breakpoints: {
@@ -27,6 +27,7 @@ type Props = {
   editable: string;
   start: string;
   end: string;
+  recurring: string;
 };
 
 const BookingForm = (props: Props) => {
@@ -39,8 +40,7 @@ const BookingForm = (props: Props) => {
   const [multiline, setMultiline] = useState<boolean>(false);
   const [rows, setRows] = useState<number>(1);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [recurring, setRecurring] = useState<boolean>(false);
-  const [timeModal, setTimeModal] = useState<boolean>(false);
+  const [recurring, setRecurring] = useState<string>(props.recurring);
 
   const handleOnBook = async () => {
     setIsLoading(true);
@@ -56,21 +56,6 @@ const BookingForm = (props: Props) => {
 
   const handleOnContact = async () => {
     null;
-  };
-
-  const handleTimeClick = async () => {
-    setTimeModal(true);
-  };
-
-  const handleCloseTimePicker = async () => {
-    setTimeModal(false);
-  };
-
-  const handleRecurringClick = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (props.editable == 'editable' || props.editable == 'new') {
-      console.log(event.target.checked);
-      setRecurring(event.target.checked);
-    }
   };
 
   const handleTitleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,7 +91,6 @@ const BookingForm = (props: Props) => {
 
   return (
     <>
-      <BookingTimePicker startTime={props.start} endTime={props.end} openState={timeModal} handleCloseModal={handleCloseTimePicker} />
       <ThemeProvider theme={theme}>
         <Modal
           className='flex justify-center items-center'
@@ -115,7 +99,7 @@ const BookingForm = (props: Props) => {
           BackdropProps={{ style: { backgroundColor: 'transparent' } }}
           disableAutoFocus
         >
-          <Box className='laptop:rounded-lg w-96 h-fit pl-5 pr-3 pt-2 pb-6 bg-bgWhite shadow-lg border-2 border-bgGray ring-0'>
+          <Box className='laptop:rounded-lg w-96 h-fit pl-5 pr-3 pt-2 pb-6 bg-bgWhite shadow-lg  ring-0'>
             <Close onClick={props.handleCloseModal} fontSize='small' className='float-right cursor-pointer hover:text-grayAccent' />
             <Stack direction='column' className='h-full' spacing={{ xs: 2, md: 2 }} alignItems='justified'>
               <Input
@@ -125,19 +109,8 @@ const BookingForm = (props: Props) => {
                 className='w-full h-1/6 text-xxl ml-2 font-Inter'
                 onChange={handleTitleChange}
               ></Input>
-              <Stack direction='column' spacing={{ xs: 1, md: 1 }} alignItems='center'>
-                <InputWithIcon
-                  inputType='string'
-                  inputValue={time}
-                  inputClassname='w-10/12 font-Inter'
-                  icon={<AccessTime className='ml-2' />}
-                  spacing={2}
-                  multiline={true}
-                  rows={2}
-                  acceptInput={false}
-                  handleOnClick={handleTimeClick}
-                />
-
+              <Stack direction='column' spacing={{ xs: 0, md: 0 }} alignItems='justified'>
+                <TimePickerWrapper bookingDate={time} startTime={props.start} endTime={props.end} />
                 <div ref={ref} className='w-full'>
                   <InputWithIcon
                     inputType='string'
@@ -155,14 +128,7 @@ const BookingForm = (props: Props) => {
                     onBlur={() => setMultiline(false)}
                   />
                 </div>
-                <InputWithIcon
-                  inputType='string'
-                  inputValue={'Recurring Booking'}
-                  inputClassname='w-6/12 font-Inter font-light'
-                  icon={<Checkbox icon={<CircleOutlined />} checkedIcon={<RadioButtonCheckedOutlined />} onChange={handleRecurringClick} />}
-                  spacing={1}
-                  acceptInput={false}
-                />
+                <RecurringBookingWrapper />
                 <BookingFormFooter
                   type={props.editable}
                   handleOnBook={handleOnBook}

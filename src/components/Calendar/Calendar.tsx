@@ -42,6 +42,7 @@ const Calendar = ({ data }: Props) => {
   const [endBook, setEndBook] = useState<string>('');
   const [bookingDescription, setBookingDescription] = useState<string>('');
   const [editable, setEditable] = useState<string>('');
+  const [recurring, setRecurring] = useState<string>('');
   const theme = useTheme();
   const isMobile = !useMediaQuery(theme.breakpoints.up('sm'));
 
@@ -52,7 +53,8 @@ const Calendar = ({ data }: Props) => {
     setBookingTitle('');
     setBookingDescription('');
     setEditable('new');
-    setBookingTime(time + '\n' + startTime + ' - ' + endTime);
+    setRecurring('none');
+    setBookingTime(time);
     setStartBook(startTime);
     setEndBook(endTime);
     setOpenBookingModal(true);
@@ -62,11 +64,14 @@ const Calendar = ({ data }: Props) => {
     const start = moment(e.event._instance?.range.start).format('dddd, MMMM D');
     const startTime = moment(e.event._instance?.range.start).format('HH:mm');
     const endTime = moment(e.event._instance?.range.end).format('HH:mm');
-    setBookingTime(start + '\n' + startTime + ' - ' + endTime);
+    setBookingTime(start);
+    setStartBook(startTime);
+    setEndBook(endTime);
     setBookingTitle(e.event.title);
     setBookingDescription(e.event.extendedProps.description);
     e.event.startEditable ? setEditable('editable') : setEditable('noneditable');
     setOpenBookingModal(true);
+    setRecurring('none');
   };
 
   return (
@@ -82,6 +87,7 @@ const Calendar = ({ data }: Props) => {
         editable={editable}
         start={startBook}
         end={endBook}
+        recurring={recurring}
       />
       <Box className='h-full'>
         <FullCalendar

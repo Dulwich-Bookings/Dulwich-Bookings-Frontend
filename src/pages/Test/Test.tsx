@@ -141,6 +141,7 @@ const Test = () => {
                 Logout
               </Button>
             </Stack>
+
             <Typography variant='h5'>Tag</Typography>
             <Stack spacing={2} direction='row'>
               <Button variant='contained' onClick={() => handleButtonClick(getAllTags)}>
@@ -153,12 +154,6 @@ const Test = () => {
                 Get All Users
               </Button>
             </Stack>
-          </Stack>
-          <Typography variant='h4'>Calendar Modal</Typography>
-          <Stack spacing={2} direction='row'>
-            <Button variant='contained' onClick={() => setOpenCalendarModal(true)}>
-              Open Modal
-            </Button>
           </Stack>
           <Typography variant='h5'>Tag</Typography>
           <Stack spacing={2} direction='row'>
@@ -228,6 +223,13 @@ const Test = () => {
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(deleteResourceById)}>
               Delete Resource By Id
+            </Button>
+          </Stack>
+
+          <Typography variant='h4'>Calendar Modal</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => setOpenCalendarModal(true)}>
+              Open Modal
             </Button>
           </Stack>
         </Stack>

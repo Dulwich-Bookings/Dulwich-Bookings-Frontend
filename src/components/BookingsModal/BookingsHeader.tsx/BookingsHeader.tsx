@@ -19,7 +19,7 @@ const BookingsHeader = ({ id, title, description }: Props) => {
         <Typography variant='h4'>{title}</Typography>
         <AddCalendarButton id={id} />
       </Stack>
-      <Typography className='bookingSafe:block w-1/3 h-14 font-Inter' variant='subtitle2'>
+      <Typography className='laptop:block hidden w-1/3 h-14 font-Inter' variant='subtitle2'>
         {description}
       </Typography>
     </Box>
