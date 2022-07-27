@@ -6,16 +6,15 @@ import TagService from '@/api/tag/TagService';
 import { Button, Stack, Typography } from '@mui/material';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
-import BookingsModal from '@/components/BookingsModal/BookingsModal';
 import SubscriptionService from '@/api/subscription/SubscriptionService';
 import ResourceService from '@/api/resource/ResourceService';
 import SchoolService from '@/api/school/SchoolService';
 import DateTime from '@/modules/DateTime/DateTime';
-
 import { CreateSubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
 import { CreateSchoolData, SchoolPutData } from '@/modules/school/types';
 import { CreateResourceData } from '@/modules/resource/types';
 import { timezone, role } from '@/consts/constants';
+import BookingsModal from '@/components/BookingsModal/BookingsModal';
 
 const createSchoolData: CreateSchoolData = {
   name: 'London',
