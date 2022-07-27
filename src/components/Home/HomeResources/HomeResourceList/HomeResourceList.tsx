@@ -1,30 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import ResourceContainer from '@components/Home/HomeResources/HomeResourceContainer/HomeResourceContainer';
-import Room from '@/models/room';
+import { ResourceData } from '@/modules/resource/types';
+import { TagData } from '@/modules/tag/types';
+import { UserData } from '@/modules/user/types';
+import { recentlyVisitedMap, bookmarkMap } from '@/consts/dummyMaps';
 
 type Props = {
-  rooms: Room[];
+  searchedInput: string;
+  tagData: TagData[];
+  resourceData: ResourceData[];
+  isBookmarksClicked: boolean;
+  isRvClicked: boolean;
+  currentUser: UserData;
 };
 
 const HomeRoomList = (props: Props) => {
   const [isResourceEmpty, setIsResourceEmpty] = useState(false);
+  const [filteredResources, setFilteredResources] = useState(
+    props.resourceData.filter(resource =>
+      recentlyVisitedMap.some(rvMap => resource.id === rvMap.resource_id && rvMap.user_id === props.currentUser.id),
+    ),
+  );
+
   useEffect(() => {
-    if (props.rooms.length == 0) {
-      setIsResourceEmpty(true);
-    } else {
-      setIsResourceEmpty(false);
+    let data: ResourceData[] = [];
+
+    if (props.searchedInput.length > 0) {
+      data = props.resourceData.filter(resource => resource.name.match(new RegExp(props.searchedInput, 'i')));
+      setFilteredResources(data);
+    } else if (props.isRvClicked) {
+      data = props.resourceData.filter(resource =>
+        recentlyVisitedMap.some(rvMap => resource.id === rvMap.resource_id && rvMap.user_id === props.currentUser.id),
+      );
+      setFilteredResources(data);
+    } else if (props.isBookmarksClicked) {
+      data = props.resourceData.filter(resource =>
+        bookmarkMap.some(bkMap => resource.id === bkMap.resource_id && bkMap.user_id === props.currentUser.id),
+      );
+      setFilteredResources(data);
     }
 
-    console.log('Rooms Found');
-  }, [props.rooms]);
+    data.length === 0 ? setIsResourceEmpty(true) : setIsResourceEmpty(false);
+  }, [props.searchedInput, props.isRvClicked, props.isBookmarksClicked]);
 
   return (
     <Box className='py-20'>
       {!isResourceEmpty && (
         <Grid item container spacing={3.5}>
-          {props.rooms.map(room => (
-            <ResourceContainer key={room.id} id={room.id} roomName={room.roomName} vacancy={room.vacancy} bookmark={room.bookmark} />
+          {filteredResources.map(resource => (
+            <ResourceContainer key={resource.id} resource={resource} tagData={props.tagData} />
           ))}
         </Grid>
       )}

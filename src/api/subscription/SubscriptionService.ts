@@ -52,8 +52,12 @@ export default class SubscriptionService {
           url: `${this.getSubscriptionUrl()}/`,
           method: 'POST',
           data: {
-            ...createSubscriptionData,
-            expiry: createSubscriptionData.expiry ? createSubscriptionData.expiry.toString() : null,
+            subscription: {
+              ...createSubscriptionData.subscription,
+              expiry: createSubscriptionData.subscription.expiry ? createSubscriptionData.subscription.expiry.toString() : null,
+            },
+            tags: createSubscriptionData.tags,
+            users: createSubscriptionData.users,
           },
         },
         true,
@@ -66,11 +70,15 @@ export default class SubscriptionService {
   }
 
   public static async updateSubscriptionById(id: number, subscriptionData: SubscriptionPutData): Promise<ApiData> {
-    delete subscriptionData['id'];
+    subscriptionData && subscriptionData.subscription && delete subscriptionData.subscription['id'];
     try {
       const newSubscriptionData = {
-        ...subscriptionData,
-        expiry: subscriptionData.expiry ? subscriptionData.expiry.toString() : null,
+        subscription: {
+          ...subscriptionData.subscription,
+          expiry: subscriptionData.subscription?.expiry ? subscriptionData.subscription.expiry.toString() : null,
+        },
+        tags: subscriptionData.tags,
+        users: subscriptionData.users,
       };
       const response = await ApiService.request(
         {

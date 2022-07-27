@@ -11,7 +11,8 @@ export interface isSuccess {
 }
 
 export function useApi<T>(
-  apiPromise: (id?: number) => Promise<ApiData<T>>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  apiPromise: (data?: any) => Promise<ApiData<T>>,
   withSuccessNotification = false,
   withFailureNotification = false,
   withLoadingNotification = true,
@@ -20,12 +21,13 @@ export function useApi<T>(
   const history = useHistory();
   const dispatch = useDispatch();
 
-  async function fetchApi(id?: number): Promise<ApiData<T> & isSuccess> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async function fetchApi(data?: any): Promise<ApiData<T> & isSuccess> {
     if (withLoadingNotification) {
       dispatch(toggleShowNotification({ message: 'Loading...', severity: severity.LOADING }));
     }
     try {
-      const response = await apiPromise(id);
+      const response = await apiPromise(data);
       if (response?.message && withSuccessNotification) {
         dispatch(toggleShowNotification({ message: response.message, severity: severity.SUCCESS }));
       } else if (response && withSuccessNotification) {
@@ -48,10 +50,11 @@ export function useApi<T>(
     }
   }
 
-  async function callApi(id?: number) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async function callApi(data?: any) {
     if (!isLoading) {
       setIsLoading(true);
-      const response = await fetchApi(id);
+      const response = await fetchApi(data);
       return response;
     }
     return { message: 'Internal Server Error', isSuccess: false };
