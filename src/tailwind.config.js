@@ -1,22 +1,29 @@
 const TailWindTheme = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: false,
   important: true,
   theme: {
+    fontWeight: {
+      extra: 100,
+      light: 300,
+      normal: 400,
+      medium: 500,
+    },
     extend: {},
     fontFamily: { Inter: ['Inter', 'sans-serif'] },
     colors: {
       bgBlack: '#000000',
       bgPurple: '#757AEC',
       bgWhite: '#feffff',
-      bgGray: '#F3F3F4',
+      bgGray: '#595959',
       dulwichRed: '#E33939',
       dulwichRedHover: '#FDECEC',
+      bgWhiteDim: '#F2F2F2',
     },
     fontSize: {
       sm: 12,
       md: 14,
-      lg: 19,
+      lg: 17,
       xl: 20,
       xxl: 24,
       '3xl': 30,
