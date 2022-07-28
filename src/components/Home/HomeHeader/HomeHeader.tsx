@@ -7,6 +7,7 @@ import AddResourceButton from '@components/Home/HomeHeader/AddResourceButton/Add
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 import { useHistory } from 'react-router-dom';
+import { isTeacher } from '@/utilities/authorisation';
 
 type Props = {
   currentUser: UserData;
@@ -15,6 +16,7 @@ type Props = {
 
 const HomeHeader = ({ currentUser, currentSchool }: Props) => {
   const history = useHistory();
+  const Teacher = isTeacher(currentUser);
   const handleSchoolLogoClick = () => {
     history.push('/home');
   };
@@ -33,7 +35,7 @@ const HomeHeader = ({ currentUser, currentSchool }: Props) => {
         </Grid>
         <Grid container className='w-1/2  justify-end' direction='row'>
           <Grid item className='flex items-center '>
-            <AddResourceButton handleOnClick={handleAddResource} />
+            {Teacher && <AddResourceButton handleOnClick={handleAddResource} />}
             <UserProfileCircle email={currentUser?.email} className='mr-8' />
           </Grid>
         </Grid>
