@@ -64,7 +64,6 @@ const AddRoom = (props: Props) => {
   const [filteredTags, setFilteredTags] = useState<TagData[]>([]);
   const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
   const [showTags, setShowTags] = useState<boolean>(false);
-  const [tagError, setTagError] = useState<InputValidation>(noError);
 
   const [templateFormName, setTemplateFormName] = useState<string>('');
 
@@ -160,7 +159,6 @@ const AddRoom = (props: Props) => {
     const isValidBookingRights = [studentBookingRights, teacherBookingRights].filter(d => d).length >= 1;
 
     setRoomError(isValidRoomName ? noError : errorObj);
-    setTagError(isValidTag ? noError : errorObj);
     setAccessError(isValidAccessRights ? false : true);
     setBookingError(isValidBookingRights ? false : true);
 
@@ -266,9 +264,7 @@ const AddRoom = (props: Props) => {
                 labelClassName='text-[#404040] text-xl font-inter'
                 inputPlaceholder='Type to add tag'
                 inputType='text'
-                inputValidation={tagError}
                 inputClassName='bg-bgGray rounded-xl w-full focus-within:bg-bgWhite'
-                required
               />
               {showTags && (
                 <ButtonGroup
