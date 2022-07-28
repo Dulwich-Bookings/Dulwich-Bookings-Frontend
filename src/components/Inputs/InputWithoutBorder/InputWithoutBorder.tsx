@@ -54,12 +54,23 @@ const InputWithoutBorder = <T extends Object>(props: Props<T>) => {
             '& fieldset': {
               borderWidth: '0px',
             },
-            '&:hover fieldset': {
-              borderColor: '#F3F3F4',
-            },
             '&.Mui-focused fieldset': {
               border: 1,
               borderColor: '#E33939',
+            },
+          },
+          '& .Mui-error': {
+            '& fieldset': {
+              border: 1,
+              borderColor: '#E33939',
+            },
+            '& input': {
+              backgroundColor: 'white',
+            },
+            '&.MuiFormHelperText-root': {
+              backgroundColor: 'white',
+              marginX: '0',
+              paddingX: '14px',
             },
           },
         }}
