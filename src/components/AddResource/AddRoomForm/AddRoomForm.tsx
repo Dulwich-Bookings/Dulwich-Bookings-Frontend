@@ -52,19 +52,6 @@ const AddRoom = (props: Props) => {
 
   const history = useHistory();
 
-  // const handleRightsToArray = (teacher: boolean, student: boolean): Role[] => {
-  //   const arr: Role[] = [role.ADMIN];
-
-  //   if (teacher) {
-  //     arr.push(role.TEACHER);
-  //   }
-  //   if (student) {
-  //     arr.push(role.STUDENT);
-  //   }
-
-  //   return arr;
-  // };
-
   const handleUploadTemplate = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (!file) {
@@ -132,7 +119,7 @@ const AddRoom = (props: Props) => {
     }
   };
 
-  const handleCreateResource = () => {
+  const handleCreateResource = async () => {
     try {
       setIsLoading(true);
       formValidation();
@@ -140,9 +127,9 @@ const AddRoom = (props: Props) => {
       const resourceData: CreateResourceData = {
         resource: {
           name: roomName,
-          description: description === '' ? 'N/A' : description,
-          accessRights: [],
-          bookingRights: [],
+          description: description === '' ? 'NA' : description,
+          accessRights: accessRights,
+          bookingRights: bookingRights,
           // hard coded values will be changed subsequently in the future
           inAdvance: 0,
           isBookingDescriptionOptional: true,
@@ -151,10 +138,12 @@ const AddRoom = (props: Props) => {
         tags: selectedTags.map(tag => tag.id),
         users: selectedOtherUsers.map(user => user.id),
       };
-      console.log(resourceData);
-      createResource(resourceData);
+      const status = await createResource(resourceData);
       setIsLoading(false);
-      history.push('/home');
+      console.log(resourceData);
+      if (status.isSuccess) {
+        history.push('/home');
+      }
     } catch (err) {
       setIsLoading(false);
       console.log(err);
