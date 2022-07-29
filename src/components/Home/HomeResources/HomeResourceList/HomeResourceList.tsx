@@ -181,9 +181,9 @@ const HomeRoomList = (props: Props) => {
   const isDataEmpty = allResourceAndSubscriptions.length === 0;
   return (
     <>
-      <Box className='py-20'>
+      <Box className='py-20 justify-center w-full'>
         {!isDataEmpty && (
-          <Grid item container spacing={3.5}>
+          <Grid item container spacing={3.5} className='justify-start'>
             {allResourceAndSubscriptions.map(resource => (
               <ResourceContainer
                 key={resource.type === resourceTypes.RESOURCE ? `Room:${resource.id}` : `Subscription:${resource.id}`}

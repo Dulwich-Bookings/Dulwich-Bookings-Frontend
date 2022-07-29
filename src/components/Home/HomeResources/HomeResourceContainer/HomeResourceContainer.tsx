@@ -41,8 +41,8 @@ const HomeRoomItem = (props: Props) => {
   );
 
   return (
-    <Grid item>
-      <Card className='bg-bgGray rounded-xl w-80 h-48 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)] cursor-pointer'>
+    <Grid item className='w-full homeLaptop:w-auto'>
+      <Card className='bg-bgGray rounded-xl w-full homeLaptop:w-80 h-48 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)] cursor-pointer'>
         <div
           className='w-full h-full'
           onClick={() => {
@@ -51,7 +51,7 @@ const HomeRoomItem = (props: Props) => {
         >
           <CardContent className='grow'>
             <Stack spacing={-2}>
-              <div className='w-72 z-10'>
+              <div className='w-full z-10'>
                 <Bookmark
                   onClick={() => {
                     setIsBookmark(!props.isBookmark);

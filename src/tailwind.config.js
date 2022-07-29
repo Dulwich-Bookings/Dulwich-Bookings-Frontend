@@ -32,9 +32,12 @@ const TailWindTheme = {
       md: '900px',
       lg: '1200px',
       xl: '1536px',
+      //custom breakpoints for respective pages
       phone: '640px',
       laptop: '900px',
       addRoomLaptop: '750px',
+      homePhone: '450px',
+      homeLaptop: '1100px',
     },
   },
   variants: {

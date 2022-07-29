@@ -36,7 +36,7 @@ const HomeRooms = (props: Props) => {
   };
 
   return (
-    <Grid container className='pl-10 md:justify-center md:pl-0'>
+    <Grid container className='px-10 justify-center'>
       <Stack spacing={-7} className='w-screen max-w-5xl'>
         <SearchFilterView searchedInput={props.searchedInput} bookmarksClicked={bookmarksClickedHandler} rvClicked={rvClickedHandler} />
         <HomeResourceList

@@ -8,16 +8,16 @@ type Props = {
 
 const RecentlySearchedButton = (props: Props) => {
   return (
-    <Grid item className='scale-[0.8] pl-0 sm:scale-100 sm:pl-6'>
+    <Grid item>
       <Button className='p-0 hover:bg-[transparent] ' disableRipple={true} onClick={props.onClick}>
-        <Typography
-          className={`${'font-Inter '} ${props.clicked && 'underline decoration-dulwichRed'} ${!props.clicked && 'text-[#404040]'}`}
-          variant='h5'
-          textTransform='capitalize'
-          color='black'
+        <div
+          className={`${'font-Inter '} ${props.clicked && 'underline decoration-dulwichRed text-bgBlack'} ${
+            !props.clicked && 'text-[#404040]'
+          } 
+          text-lg homeLaptop:text-xxl capitalize `}
         >
           Recently Searched
-        </Typography>
+        </div>
       </Button>
     </Grid>
   );
