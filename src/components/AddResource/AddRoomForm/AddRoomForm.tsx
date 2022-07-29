@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+
 import { Stack, Grid } from '@mui/material';
 
-import { TagData } from '@/modules/tag/types';
-import { Role, UserData } from '@/modules/user/types';
-import { useHistory } from 'react-router-dom';
-import ResourceSample1 from '@/assets/images/Resource-Sample-1.jpg';
-
-import { InputValidation } from '@/modules/inputValidation/types';
+import TagInput from '@components/AddResource/AddRoomForm/TagInput/TagInput';
+import InputCheckBox from '@/components/Inputs/InputCheckBox/InputCheckBox';
+import OtherUserInput from '@components/AddResource/AddRoomForm/OtherUserInput/OtherUserInput';
+import FormHeader from '@components/AddResource/FormHeader/FormHeader';
+import TemplateSubmitButton from '@/components/AddResource/AddRoomForm/TemplateSubmitButton/TemplateSubmitButton';
+import FormSubmitButton from '@/components/AddResource/AddRoomForm/FormSubmitButton/FormSubmitButton';
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
 import InputWithRadio from '@/components/Inputs/InputWithRadio/InputWithRadio';
+import ResourceSample1 from '@/assets/images/Resource-Sample-1.jpg';
 
-import { role } from '@/consts/constants';
-import { CreateResourceData } from '@/modules/resource/types';
 import ResourceService from '@/api/resource/ResourceService';
 import { useApi } from '@/api/ApiHandler';
-import FormSubmitButton from './FormSubmitButton/FormSubmitButton';
-import TemplateSubmitButton from './TemplateSubmitButton/TemplateSubmitButton';
-import FormHeader from '../FormHeader/FormHeader';
-import TagInput from './TagInput/TagInput';
-import OtherUserInput from './OtherUserInput/OtherUserInput';
-import InputCheckBox from '@/components/Inputs/InputCheckBox/InputCheckBox';
+
+import { role } from '@/consts/constants';
+import { InputValidation } from '@/modules/inputValidation/types';
+import { CreateResourceData } from '@/modules/resource/types';
+import { TagData } from '@/modules/tag/types';
+import { Role, UserData } from '@/modules/user/types';
 
 type Props = {
   tagData: TagData[];
