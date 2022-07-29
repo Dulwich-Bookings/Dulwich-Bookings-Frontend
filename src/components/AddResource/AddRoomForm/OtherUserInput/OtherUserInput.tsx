@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
 import { Button, ButtonGroup, Stack } from '@mui/material';
-import UserChip from '../UserChip/UserChip';
+import UserChip from '@/components/AddResource/AddRoomForm/OtherUserInput/UserChip/UserChip';
 import { UserData } from '@/modules/user/types';
 
 type Props = {

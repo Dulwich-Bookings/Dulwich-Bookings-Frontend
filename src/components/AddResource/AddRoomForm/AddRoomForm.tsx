@@ -27,41 +27,30 @@ type Props = {
   userData: UserData[];
 };
 
-const AddRoom = (props: Props) => {
+const AddRoomForm = (props: Props) => {
   const noError: InputValidation = { isError: false, errorHelperText: '' };
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // react hooks
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [roomName, setRoomName] = useState<string>('');
   const [roomError, setRoomError] = useState<InputValidation>(noError);
-
   const [description, setDescription] = useState<string>('');
-
   const [weekProfile, setWeekProfile] = useState<'Weekly' | 'BiWeekly'>('Weekly');
-
   const [accessRights, setAccessRights] = useState<Role[]>([]);
   const [accessError, setAccessError] = useState<InputValidation>(noError);
-
   const [bookingRights, setBookingRights] = useState<Role[]>([]);
   const [bookingError, setBookingError] = useState<InputValidation>(noError);
-
   const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
   const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>([]);
-
   const [templateFormName, setTemplateFormName] = useState<string>('');
 
+  // useApi hook
   const [createResource] = useApi((data: CreateResourceData) => ResourceService.createResource(data ?? null), true, true);
 
+  // useHistory hook
   const history = useHistory();
 
-  const handleUploadTemplate = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files ? event.target.files[0] : null;
-    if (!file) {
-      return;
-    }
-    const message: string = 'Successfully uploaded ' + file.name;
-    setTemplateFormName(message);
-  };
-
+  // helper functions
   const weekProfileChangeHandler = (value: string): void => {
     if (value === 'Weekly') {
       setWeekProfile('Weekly');
@@ -100,6 +89,15 @@ const AddRoom = (props: Props) => {
     setBookingRights(arr);
   };
 
+  const handleUploadTemplate = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files ? event.target.files[0] : null;
+    if (!file) {
+      return;
+    }
+    const message: string = 'Successfully uploaded ' + file.name;
+    setTemplateFormName(message);
+  };
+
   const formValidation = () => {
     const errorText = 'Field Cannot be Empty';
     const errorObj: InputValidation = {
@@ -108,6 +106,7 @@ const AddRoom = (props: Props) => {
     };
 
     const isValidRoomName = roomName.length !== 0;
+    // by default role.ADMIN has access
     const isValidAccessRights = accessRights.filter(d => d).length > 1;
     const isValidBookingRights = bookingRights.filter(d => d).length > 1;
 
@@ -120,6 +119,7 @@ const AddRoom = (props: Props) => {
     }
   };
 
+  // Create Resource Data from API
   const handleCreateResource = async () => {
     try {
       setIsLoading(true);
@@ -131,17 +131,16 @@ const AddRoom = (props: Props) => {
           description: description === '' ? 'NA' : description,
           accessRights: accessRights,
           bookingRights: bookingRights,
+          weekProfile: weekProfile,
           // hard coded values will be changed subsequently in the future
           inAdvance: 0,
           isBookingDescriptionOptional: true,
-          weekProfile: weekProfile,
         },
         tags: selectedTags.map(tag => tag.id),
         users: selectedOtherUsers.map(user => user.id),
       };
       const status = await createResource(resourceData);
       setIsLoading(false);
-      console.log(resourceData);
       if (status.isSuccess) {
         history.push('/home');
       }
@@ -198,32 +197,28 @@ const AddRoom = (props: Props) => {
             <OtherUserInput inputClassName='w-1/2 pl-[70px]' userData={props.userData} updateUsers={updateUserHandler} />
           </Grid>
 
-          <Stack>
-            <Stack direction='row'>
-              <InputCheckBox
-                inputClassName='w-1/2'
-                labelText='Access Rights'
-                inputLabelText={['Student', 'Teacher']}
-                inputHandleOnChange={updateARHandler}
-                inputValidation={accessError}
-                required
-              />
-              <InputCheckBox
-                inputClassName='w-1/2 px-[70px]'
-                labelText='Booking Rights'
-                inputLabelText={['Student', 'Teacher']}
-                inputHandleOnChange={updateBRHandler}
-                inputValidation={bookingError}
-                required
-              />
-            </Stack>
-          </Stack>
+          <Grid container>
+            <InputCheckBox
+              inputClassName='w-1/2'
+              labelText='Access Rights'
+              inputLabelText={['Student', 'Teacher']}
+              inputHandleOnChange={updateARHandler}
+              inputValidation={accessError}
+              required
+            />
+            <InputCheckBox
+              inputClassName='w-1/2 px-[70px]'
+              labelText='Booking Rights'
+              inputLabelText={['Student', 'Teacher']}
+              inputHandleOnChange={updateBRHandler}
+              inputValidation={bookingError}
+              required
+            />
+          </Grid>
 
-          <Stack>
-            <Stack direction='row' spacing={5}>
-              <FormSubmitButton buttonText='Add Room' handleOnClick={handleCreateResource} loading={isLoading} />
-              <TemplateSubmitButton buttonText='Upload Template' helperText={templateFormName} handleOnClick={handleUploadTemplate} />
-            </Stack>
+          <Stack direction='row' spacing={5}>
+            <FormSubmitButton buttonText='Add Room' handleOnClick={handleCreateResource} loading={isLoading} />
+            <TemplateSubmitButton buttonText='Upload Template' helperText={templateFormName} handleOnClick={handleUploadTemplate} />
           </Stack>
         </Stack>
         <img className='hidden w-1/3 h-screen float-right object-cover lg:block' src={ResourceSample1} />
@@ -232,4 +227,4 @@ const AddRoom = (props: Props) => {
   );
 };
 
-export default AddRoom;
+export default AddRoomForm;
