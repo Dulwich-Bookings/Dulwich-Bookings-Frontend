@@ -23,9 +23,9 @@ const ResourceCard = (props: Props) => {
   useEffect(() => setBG(), []);
 
   return (
-    <Grid item>
+    <Grid item className=''>
       <Card
-        className={`${cardUrl} bg-cover bg-center w-[500px] h-[200px] lg:w-[380px] lg:h-full rounded-xl lg:mt-14 cursor-pointer
+        className={`${cardUrl} bg-cover bg-center w-full h-[200px] lg:w-[355px] lg:h-full rounded-xl lg:mt-14 cursor-pointer
       hover:border`}
         onClick={props.onClickHandler}
       >
