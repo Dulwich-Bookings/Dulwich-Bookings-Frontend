@@ -55,7 +55,7 @@ export default class ResourceService {
   }
 
   public static async updateResourceById(id: number, resourceData: ResourcePutData): Promise<ApiData> {
-    delete resourceData['id'];
+    resourceData && resourceData.resource && delete resourceData.resource['id'];
     try {
       const response = await ApiService.request(
         {

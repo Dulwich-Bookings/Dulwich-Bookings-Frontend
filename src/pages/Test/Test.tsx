@@ -6,20 +6,25 @@ import TagService from '@/api/tag/TagService';
 import SubscriptionService from '@/api/subscription/SubscriptionService';
 import ResourceService from '@/api/resource/ResourceService';
 import SchoolService from '@/api/school/SchoolService';
+import TagMapService from '@/api/tagMap/TagMapService';
 import DateTime from '@/modules/DateTime/DateTime';
-import BookmarksService from '@/api/bookmarks/BookmarksService';
+import BookmarkService from '@/api/bookmarks/BookmarkService';
+import RecentlyVisitedService from '@/api/recentlyVisited/RecentlyVisitedService';
+import ResourceMapService from '@/api/resourceMap/ResourceMapService';
 
 import { CreateSubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
 import { CreateSchoolData, SchoolPutData } from '@/modules/school/types';
-import { CreateResourceData } from '@/modules/resource/types';
+import { CreateResourceData, ResourcePutData } from '@/modules/resource/types';
+import { CreateTagMapData } from '@/modules/tagMap/types';
+import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
+import { CreateRecentlyVisitedData } from '@/modules/recentlyVisited/Types';
+import { CreateResourceMapData } from '@/modules/resourceMap/types';
+
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
 import { timezone, role } from '@/consts/constants';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
-import ResourceMapService from '@/api/resourceMap/ResourceMapService';
-import { CreateResourceMapData } from '@/modules/resourceMap/types';
-import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
 
 const Input = styled('input')({
   display: 'none',
@@ -36,27 +41,47 @@ const updateSchoolData: SchoolPutData = {
 };
 
 const createSubscriptionData: CreateSubscriptionData = {
-  name: 'Adobe Photoshop',
-  description: 'For photo editing',
-  accessRights: [role.ADMIN, role.TEACHER],
-  credentials: 'test123',
-  expiry: DateTime.newDateTimeFromDate(new Date()),
-  remindMe: true,
-  schoolId: 1,
+  subscription: {
+    name: 'Adobe Photoshop',
+    description: 'For photo editing',
+    accessRights: [role.ADMIN, role.TEACHER],
+    credentials: 'test123',
+    expiry: DateTime.newDateTimeFromDate(new Date()),
+    remindMe: true,
+  },
+  users: [1, 2],
+  tags: [1, 2],
 };
 
 const updateSubscriptionData: SubscriptionPutData = {
-  name: 'Adobe Acrobat',
+  subscription: { name: 'Adobe Acrobat' },
+  tags: [1, 3],
+  users: [1, 3],
 };
 
 const createResourceData: CreateResourceData = {
-  name: 'A113',
-  description: 'This is an intriguing room.',
-  accessRights: [role.ADMIN, role.TEACHER],
-  bookingRights: [role.ADMIN, role.TEACHER],
-  inAdvance: 3,
-  isBookingDescriptionOptional: true,
-  schoolId: 1,
+  resource: {
+    name: 'A113',
+    description: 'This is an intriguing room.',
+    accessRights: [role.ADMIN, role.TEACHER],
+    bookingRights: [role.ADMIN, role.TEACHER],
+    inAdvance: 3,
+    isBookingDescriptionOptional: true,
+    weekProfile: 'Weekly',
+  },
+  tags: [1, 2],
+  users: [1, 2],
+};
+
+const updateResourceData: ResourcePutData = {
+  resource: {
+    name: 'B113',
+    description: 'This is an intriguing room.',
+    accessRights: [role.ADMIN, role.TEACHER],
+    bookingRights: [role.ADMIN, role.TEACHER],
+  },
+  tags: [1, 3],
+  users: [1, 3],
 };
 
 let isFirstLoaded = true;
@@ -80,14 +105,14 @@ const Test = () => {
   const [createSubscription] = useApi(() => SubscriptionService.createSubscription(createSubscriptionData), true, true);
   const [getAllSubscriptions] = useApi(() => SubscriptionService.getAllSubscriptions(), true, true);
   const [getSubscriptionById] = useApi(() => SubscriptionService.getSubscriptionById(2), true, true);
-  const [updateSubscriptionById] = useApi(() => SubscriptionService.updateSubscriptionById(2, updateSubscriptionData), true, true);
-  const [deleteSubscriptionById] = useApi(() => SubscriptionService.deleteSubscriptionById(1), true, true);
+  const [updateSubscriptionById] = useApi(() => SubscriptionService.updateSubscriptionById(6, updateSubscriptionData), true, true);
+  const [deleteSubscriptionById] = useApi(() => SubscriptionService.deleteSubscriptionById(2), true, true);
 
   const [createResource] = useApi(() => ResourceService.createResource(createResourceData), true, true);
   const [getAllResources] = useApi(() => ResourceService.getAllResources(), true, true);
-  const [getResourceById] = useApi(() => ResourceService.getResourceById(3), true, true);
-  const [updateResourceById] = useApi(() => ResourceService.updateResourceById(3, createResourceData), true, true);
-  const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(3), true, true);
+  const [getResourceById] = useApi(() => ResourceService.getResourceById(27), true, true);
+  const [updateResourceById] = useApi(() => ResourceService.updateResourceById(27, updateResourceData), true, true);
+  const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(27), true, true);
 
   const [createResourceMap] = useApi((data: CreateResourceMapData) => ResourceMapService.createResourceMap(data ?? null), true, true);
   const [getAllResourceMaps] = useApi(() => ResourceMapService.getAllResourceMaps(), true, true);
@@ -101,11 +126,28 @@ const Test = () => {
   );
   const [bulkDeleteResourceMap] = useApi(() => ResourceMapService.bulkDeleteResourceMapByid([4, 5]), true, true);
 
-  const [createBookmark] = useApi((data: CreateBookmarkData) => BookmarksService.createBookmark(data ?? null), true, true);
-  const [getAllBookmarks] = useApi(() => BookmarksService.getAllBookmarks(), true, true);
-  const [getBookmarkdById] = useApi(() => BookmarksService.getBookmarkById(3), true, true);
-  const [getSelfBookmark] = useApi(() => BookmarksService.getSelf(), true, true);
-  const [deleteBookmarkById] = useApi(() => BookmarksService.deleteBookmarkById(17), true, true);
+  const [createBookmark] = useApi((data: CreateBookmarkData) => BookmarkService.createBookmark(data ?? null), true, true);
+  const [getAllBookmarks] = useApi(() => BookmarkService.getAllBookmarks(), true, true);
+  const [getBookmarkdById] = useApi(() => BookmarkService.getBookmarkById(3), true, true);
+  const [getSelfBookmark] = useApi(() => BookmarkService.getSelf(), true, true);
+  const [deleteBookmarkById] = useApi(() => BookmarkService.deleteBookmarkById(17), true, true);
+
+  const [createTagMap] = useApi((data: CreateTagMapData) => TagMapService.createTagMap(data ?? null), true, true);
+  const [bulkCreateTagMap] = useApi((data: CreateTagMapData[]) => TagMapService.bulkCreateTagMap(data ?? null), true, true);
+  const [getAllTagMap] = useApi(() => TagMapService.getAllTagMap(), true, true);
+  const [getTagMapById] = useApi(() => TagMapService.getTagMapById(1), true, true);
+  const [deleteTagMapById] = useApi(() => TagMapService.deleteTagMapById(13), true, true);
+  const [bulkDeleteTagMap] = useApi(() => TagMapService.bulkDeleteUserByid([19, 20]), true, true);
+
+  const [createRecentlyVisited] = useApi(
+    (data: CreateRecentlyVisitedData) => RecentlyVisitedService.createRecentlyVisited(data ?? null),
+    true,
+    true,
+  );
+  const [getAllRecentlyVisited] = useApi(() => RecentlyVisitedService.getAllRecentlyVisited(), true, true);
+  const [getRecentlyVisitedById] = useApi(() => RecentlyVisitedService.getRecentlyVisitedById(3), true, true);
+  const [getSelfRecentlyVisited] = useApi(() => RecentlyVisitedService.getSelf(), true, true);
+  const [deleteRecentlyVisitedById] = useApi(() => RecentlyVisitedService.deleteRecentlyVisitedById(3), true, true);
 
   const handleButtonClick = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();
@@ -261,12 +303,45 @@ const Test = () => {
                 )
               }
             >
-              Create Resource Map (Bulk)
+              Bulk Create Resource Map
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(bulkDeleteResourceMap)}>
-              Bulk Delete Resource Map (Bulk)
+              Bulk Delete Resource Map
             </Button>
           </Stack>
+
+          <Typography variant='h5'>TagMap</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => handleButtonClick(() => createTagMap({ tagId: 5, resourceId: 1 }))}>
+              Create Tag Map
+            </Button>
+            <Button
+              variant='contained'
+              onClick={() =>
+                handleButtonClick(() =>
+                  bulkCreateTagMap([
+                    { tagId: 5, resourceId: 1 },
+                    { tagId: 4, resourceId: 1 },
+                  ]),
+                )
+              }
+            >
+              Create Tag Map (Bulk)
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getAllTagMap)}>
+              Get all Tag Map
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getTagMapById)}>
+              Get Tag Map by Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(deleteTagMapById)}>
+              Delete Tag Map By Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(bulkDeleteTagMap)}>
+              Delete Tag Map (Bulk)
+            </Button>
+          </Stack>
+
           <Typography variant='h5'>Bookmarks</Typography>
           <Stack spacing={2} direction='row'>
             <Button variant='contained' onClick={() => handleButtonClick(() => createBookmark({ resourceId: 1 }))}>
@@ -283,6 +358,25 @@ const Test = () => {
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(deleteBookmarkById)}>
               Delete Bookmark By Id
+            </Button>
+          </Stack>
+
+          <Typography variant='h5'>Recently Visited</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => handleButtonClick(() => createRecentlyVisited({ resourceId: 1 }))}>
+              Create Recently Visited
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getAllRecentlyVisited)}>
+              Get All Recently Visited
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getRecentlyVisitedById)}>
+              Get Recently Visited by Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getSelfRecentlyVisited)}>
+              Get Self
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(deleteRecentlyVisitedById)}>
+              Delete Recently Visited By Id
             </Button>
           </Stack>
         </Stack>
