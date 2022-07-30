@@ -5,20 +5,12 @@ import { Stack, Grid } from '@mui/material';
 import SearchFilterView from '@/components/Home/HomeResources/SearchFilterView/SearchFilterView';
 import HomeResourceList from '@/components/Home/HomeResources/HomeResourceList/HomeResourceList';
 
-import { ResourceData } from '@/modules/resource/types';
-import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
-import { SubscriptionData } from '@/modules/subscription/types';
-import { TagMapData } from '@/modules/tagMap/types';
 import { SearchState } from '@/consts/constants';
 
 type Props = {
   searchedInput: string;
   searchState: SearchState;
-  resourceData: ResourceData[];
-  subscriptionData: SubscriptionData[];
-  tagData: TagData[];
-  tagMapData: TagMapData[];
   currentUser: UserData;
 };
 
@@ -40,12 +32,8 @@ const HomeRooms = (props: Props) => {
       <Stack spacing={-7} className='w-screen max-w-5xl'>
         <SearchFilterView searchedInput={props.searchedInput} bookmarksClicked={bookmarksClickedHandler} rvClicked={rvClickedHandler} />
         <HomeResourceList
-          resourceData={props.resourceData}
           searchState={props.searchState}
-          subscriptionData={props.subscriptionData}
           searchedInput={props.searchedInput}
-          tagData={props.tagData}
-          tagMapData={props.tagMapData}
           isBookmarksViewClicked={bookmarksClicked}
           isRvViewClicked={rvClicked}
           currentUser={props.currentUser}

@@ -53,9 +53,9 @@ const HomeRoomItem = (props: Props) => {
             <Stack spacing={-2}>
               <div className='w-full z-10'>
                 <Bookmark
-                  onClick={() => {
+                  onClick={async () => {
                     setIsBookmark(!props.isBookmark);
-                    props.onBookmarkChangeHandler(props.data.id, props.data.type);
+                    await props.onBookmarkChangeHandler(props.data.id, props.data.type);
                   }}
                   className='float-right text-3xl'
                   sx={{ color: `${isBookmark ? '#000000' : '#D9D9D9'}` }}
