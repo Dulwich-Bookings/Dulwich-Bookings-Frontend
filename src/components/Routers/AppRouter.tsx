@@ -60,12 +60,10 @@ const AppRouter = () => {
 
   // update redux store with current school
   useEffect(() => {
-    console.log('calling useEffect');
     if (!currentUser || !allSchools) return;
     const currentSchool = allSchools.find(school => school.id === currentUser.schoolId);
-    console.log(currentSchool);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    dispatch(updateCurrentSchool(currentSchool!));
+    if (!currentSchool) return;
+    dispatch(updateCurrentSchool(currentSchool));
   }, [currentUser, allSchools]);
 
   return (
