@@ -7,6 +7,6 @@ export interface ResourceMapData {
 
 export interface CreateResourceMapData {
   userId: number;
-  resourceId: number | null;
-  subscriptionId: number | null;
+  resourceId?: number | null;
+  subscriptionId?: number | null;
 }

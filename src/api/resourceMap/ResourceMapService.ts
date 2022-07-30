@@ -1,5 +1,5 @@
 import ApiService, { ApiData } from '@/api/ApiService';
-import { CreateResourceMapData } from '@/modules/resource/resourceMap/types';
+import { CreateResourceMapData } from '@/modules/resourceMap/types';
 
 export default class ResourceMapService {
   private static getResourceMapUrl() {

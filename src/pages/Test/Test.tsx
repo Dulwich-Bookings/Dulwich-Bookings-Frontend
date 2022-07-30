@@ -18,7 +18,7 @@ import { timezone, role } from '@/consts/constants';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
 import ResourceMapService from '@/api/resourceMap/ResourceMapService';
-import { CreateResourceMapData } from '@/modules/resource/resourceMap/types';
+import { CreateResourceMapData } from '@/modules/resourceMap/types';
 import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
 
 const Input = styled('input')({
