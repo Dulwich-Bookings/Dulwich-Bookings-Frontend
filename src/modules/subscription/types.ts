@@ -1,4 +1,5 @@
 import { Role } from '@/modules/user/types';
+import { SearchState } from '@/consts/constants';
 import DateTime from '@/modules/DateTime/DateTime';
 
 export interface SubscriptionData {
@@ -10,6 +11,7 @@ export interface SubscriptionData {
   expiry?: DateTime;
   remindMe: boolean;
   schoolId: number;
+  type: SearchState;
 }
 
 export interface CreateSubscriptionData {

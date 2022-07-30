@@ -17,6 +17,9 @@ import SignUp from '@pages/Landing/SignUp/SignUp';
 import IsTemporaryUser from '@pages/Landing/IsTemporaryUser/IsTemporaryUser';
 import Home from '@pages/Home/Home';
 import Test from '@pages/Test/Test';
+import AddResource from '@pages/AddResource/AddResource';
+import AddRoom from '@/pages/AddResource/AddRoom/AddRoom';
+import { isTeacher } from '@/utilities/authorisation';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -25,6 +28,7 @@ const AppRouter = () => {
   const accessToken: string | null = getLocalStorageValue('accessToken') ?? null;
   const currentUser = useSelector(getCurrentUser);
   const allSchools = useSelector(getAllSchools);
+  const Teacher = isTeacher(currentUser);
   const isTemp = !currentUser?.isConfirmed && currentUser?.isTemporary;
 
   const fetchSelf = async () => {
@@ -76,6 +80,8 @@ const AppRouter = () => {
       <Route exact path={Routes.authentication.confirmEmail} component={ConfirmEmail} />
       {accessToken && <Route exact path={Routes.authentication.isTempUser} component={IsTemporaryUser} />}
       {accessToken && !isTemp && <Route exact path={Routes.home} component={Home} />}
+      {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.main} component={AddResource} />}
+      {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.addRoom} component={AddRoom} />}
       <Route exact path={Routes.test} component={Test} />
       <Route exact path='*'>
         <Redirect to={Routes.base} />

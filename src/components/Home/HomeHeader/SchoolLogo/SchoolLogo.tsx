@@ -16,7 +16,7 @@ const SchoolName = ({ name, alternativeName }: Props) => {
           <img className='h-16' src={SchoolLogoImage} />
         </Box>
       </Grid>
-      <Grid item>
+      <Grid item className='md:block hidden '>
         <Grid container>
           <Stack direction='column' spacing={0}>
             <Stack direction='row' spacing={1}>

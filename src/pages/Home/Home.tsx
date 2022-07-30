@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { Stack } from '@mui/material';
 
@@ -11,40 +11,17 @@ import { useSelector } from 'react-redux';
 import { getCurrentUser } from '@/modules/user/userSlice';
 import { getCurrentSchool } from '@/modules/school/schoolSlice';
 
-import { useApi } from '@/api/ApiHandler';
-import { ApiData } from '@/api/ApiService';
-import { ResourceData } from '@/modules/resource/types';
-import ResourceService from '@/api/resource/ResourceService';
-import TagService from '@/api/tag/TagService';
-import { isSuccess } from '@/api/ApiHandler';
-import { TagData } from '@/modules/tag/types';
-
-const resources: ResourceData[] = [];
-const tags: TagData[] = [];
+import { SearchState, searchStateMap } from '@/consts/constants';
 
 const Home = () => {
-  const retrieveAllData = async (func: () => Promise<ApiData & isSuccess>) => {
-    const res = await func();
-    if (res.isSuccess) {
-      return res.data;
-    }
-  };
-
-  const [getAllResources] = useApi(() => ResourceService.getAllResources(), true, true);
-  const [getAllTags] = useApi(() => TagService.getAllTags(), true, true);
-
   const currentUser = useSelector(getCurrentUser);
   const currentSchool = useSelector(getCurrentSchool);
-  const [inputValue, setInputValue] = useState('');
 
-  const onInputChangeHandler = (enteredValue: string): void => {
-    setInputValue(enteredValue);
-  };
+  const [inputValue, setInputValue] = useState<string>('');
+  const [searchState, setSearchState] = useState<SearchState>(searchStateMap.ALL);
 
-  useEffect(() => {
-    retrieveAllData(getAllResources).then(d => d.filter((x: ResourceData) => resources.push(x)));
-    retrieveAllData(getAllTags).then(d => d.filter((x: TagData) => tags.push(x)));
-  }, [resources, tags]);
+  const onInputChangeHandler = (enteredValue: string): void => setInputValue(enteredValue);
+  const onSearchStateChangeHandler = (state: SearchState): void => setSearchState(state);
 
   return (
     <>
@@ -55,9 +32,9 @@ const Home = () => {
             <Stack spacing={3}>
               <Stack spacing={-4}>
                 <HomeBanner schoolId={1} />
-                <HomeSearchBar onInputChange={onInputChangeHandler} />
+                <HomeSearchBar onInputChange={onInputChangeHandler} onStateChange={onSearchStateChangeHandler} />
               </Stack>
-              <HomeResources searchedInput={inputValue} resourceData={resources} tagData={tags} currentUser={currentUser} />
+              <HomeResources searchedInput={inputValue} searchState={searchState} currentUser={currentUser} />
             </Stack>
           </main>
         </>

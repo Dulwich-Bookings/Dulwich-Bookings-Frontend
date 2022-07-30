@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Stack } from '@mui/material';
-import InputWithLabel from '@/components/InputWithLabel/InputWithLabel';
 import LandingFormHeader from '@components/Landing/LandingFormHeader/LandingFormHeader';
 import LandingFormFooter from '@components/Landing/LandingFormFooter/LandingFormFooter';
-import { InputValidation } from '@/components/InputWithLabel/InputWithLabel';
 import { LandingRoute } from '@/consts/constants';
 import Routes from '@/utilities/routes';
 import { useApi } from '@/api/ApiHandler';
 import AuthService from '@/api/auth/AuthService';
 import { UserSignUpData } from '@/modules/user/types';
+import InputWithLabel from '@/components/Inputs/InputWithLabel/InputWithLabel';
+import { InputValidation } from '@/modules/inputValidation/types';
 
 type Props = {
   schoolId: number;

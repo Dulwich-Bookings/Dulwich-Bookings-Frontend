@@ -1,5 +1,5 @@
 import { Role } from '@/modules/user/types';
-
+import { SearchState } from '@/consts/constants';
 export interface ResourceData {
   id: number;
   name: string;
@@ -10,6 +10,7 @@ export interface ResourceData {
   isBookingDescriptionOptional: boolean;
   schoolId: number;
   weekProfile: 'Weekly' | 'BiWeekly';
+  type: SearchState;
 }
 
 export interface CreateResourceData {

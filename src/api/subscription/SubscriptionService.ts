@@ -1,4 +1,5 @@
 import { SubscriptionPutData, CreateSubscriptionData, SubscriptionData } from '@/modules/subscription/types';
+import { resourceTypes } from '@/consts/constants';
 import ApiService, { ApiData } from '@/api/ApiService';
 import DateTime from '@/modules/DateTime/DateTime';
 
@@ -20,6 +21,7 @@ export default class SubscriptionService {
         return {
           ...subscription,
           expiry: subscription.expiry ? DateTime.newDateTimeFromUTCString(subscription.expiry as unknown as string) : null,
+          type: resourceTypes.SUBSCRIPTION,
         };
       });
       response.data = subscriptionData;
@@ -55,6 +57,7 @@ export default class SubscriptionService {
             subscription: {
               ...createSubscriptionData.subscription,
               expiry: createSubscriptionData.subscription.expiry ? createSubscriptionData.subscription.expiry.toString() : null,
+              type: resourceTypes.SUBSCRIPTION,
             },
             tags: createSubscriptionData.tags,
             users: createSubscriptionData.users,
