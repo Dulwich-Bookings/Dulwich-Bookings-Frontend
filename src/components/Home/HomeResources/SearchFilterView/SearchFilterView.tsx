@@ -37,7 +37,7 @@ const HomeRoomHeader = (props: Props) => {
   }, [props.searchedInput]);
 
   return (
-    <Grid container direction='row' spacing={3}>
+    <Grid container direction='row' spacing={1.9}>
       {!filterText && <RecentlySearchedButton onClick={onRecentClickHandler} clicked={recentClick} />}
       {!filterText && <BookmarksButton onClick={onBookmarkClickHandler} clicked={bookmarkClick} />}
       {filterText && (
