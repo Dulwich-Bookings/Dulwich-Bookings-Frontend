@@ -1,8 +1,11 @@
 import React from 'react';
+
 import { AppBar, Grid } from '@mui/material';
+import { Add, FormatListBulleted } from '@mui/icons-material';
+
 import SchoolLogo from '@components/Home/HomeHeader/SchoolLogo/SchoolLogo';
 import UserProfileCircle from '@components/Home/HomeHeader/UserProfileCircle/UserProfileCircle';
-import AddResourceButton from '@components/Home/HomeHeader/AddResourceButton/AddResourceButton';
+import HeaderButton from '@/components/Home/HomeHeader/HeaderButton/HeaderButton';
 
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
@@ -35,7 +38,16 @@ const HomeHeader = ({ currentUser, currentSchool }: Props) => {
         </Grid>
         <Grid container className='w-1/2  justify-end' direction='row'>
           <Grid item className='flex items-center '>
-            {Teacher && <AddResourceButton handleOnClick={handleAddResource} />}
+            {Teacher && (
+              <HeaderButton
+                handleOnClick={handleAddResource}
+                className='mr-3'
+                title='Resources'
+                Icon={<Add className='stroke-0 stroke-black' />}
+              />
+            )}
+
+            <HeaderButton title='View All' className='mr-6' Icon={<FormatListBulleted className='w-5' />} />
             <UserProfileCircle email={currentUser?.email} className='mr-8' />
           </Grid>
         </Grid>
