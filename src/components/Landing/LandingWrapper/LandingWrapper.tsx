@@ -54,7 +54,7 @@ const LandingWrapper = ({ children, spacing, showSelectLocation, Form }: Props) 
   return (
     <Grid container direction='row' className='h-screen'>
       <Grid item className='laptop:block hidden' xs={0} md={6}>
-        {img && <img className='object-none h-screen' width='100%' src={img} />}
+        {img && <img className='object-cover h-screen' width='100%' src={img} />}
       </Grid>
       <Grid item xs={12} md={6}>
         {locations && (

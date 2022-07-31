@@ -2,9 +2,8 @@ import { Severity } from '@components/Notifier/Notifier';
 import { Timezone } from '@/modules/DateTime/types';
 import { Role } from '@/modules/user/types';
 
-import LandingImage1 from '@/assets/images/Landing-Sample-1.png';
-import LandingImage2 from '@/assets/images/Landing-Sample-2.png';
-import LandingImage3 from '@/assets/images/Landing-Sample-3.png';
+import DCB from '@/assets/images/Dulwich-College-Beijing.jpg';
+import LandingSample1 from '@/assets/images/Landing-Sample-1.png';
 
 export type SearchState = 'all' | 'resources' | 'subscriptions';
 
@@ -22,15 +21,11 @@ export const resourceTypes = {
 export const locationImages = [
   {
     id: 1,
-    img: LandingImage3,
+    img: DCB,
   },
   {
     id: 2,
-    img: LandingImage1,
-  },
-  {
-    id: 3,
-    img: LandingImage2,
+    img: LandingSample1,
   },
 ];
 
