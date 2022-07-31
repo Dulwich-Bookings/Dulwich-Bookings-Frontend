@@ -108,7 +108,7 @@ export default class TagMapService {
     }
   }
 
-  public static async bulkDeleteUserByid(ids: number[]): Promise<ApiData> {
+  public static async bulkDeleteTagMap(ids: number[]): Promise<ApiData> {
     try {
       const response = await ApiService.request(
         {
