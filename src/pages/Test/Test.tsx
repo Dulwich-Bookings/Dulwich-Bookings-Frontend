@@ -19,6 +19,7 @@ import { CreateTagMapData } from '@/modules/tagMap/types';
 import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
 import { CreateRecentlyVisitedData } from '@/modules/recentlyVisited/Types';
 import { CreateResourceMapData } from '@/modules/resourceMap/types';
+
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
 import { timezone, role } from '@/consts/constants';
@@ -113,13 +114,6 @@ const Test = () => {
   const [updateResourceById] = useApi(() => ResourceService.updateResourceById(27, updateResourceData), true, true);
   const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(27), true, true);
 
-  const [createTagMap] = useApi((data: CreateTagMapData) => TagMapService.createTagMap(data ?? null), true, true);
-  const [bulkCreateTagMap] = useApi((data: CreateTagMapData[]) => TagMapService.bulkCreateTagMap(data ?? null), true, true);
-  const [getAllTagMap] = useApi(() => TagMapService.getAllTagMap(), true, true);
-  const [getTagMapById] = useApi(() => TagMapService.getTagMapById(1), true, true);
-  const [deleteTagMapById] = useApi(() => TagMapService.deleteTagMapById(13), true, true);
-  const [bulkDeleteTagMap] = useApi(() => TagMapService.bulkDeleteUserByid([19, 20]), true, true);
-
   const [createResourceMap] = useApi((data: CreateResourceMapData) => ResourceMapService.createResourceMap(data ?? null), true, true);
   const [getAllResourceMaps] = useApi(() => ResourceMapService.getAllResourceMaps(), true, true);
   const [getResourceMapById] = useApi(() => ResourceMapService.getResourceMapById(1), true, true);
@@ -130,13 +124,19 @@ const Test = () => {
     true,
     true,
   );
-  const [bulkDeleteResourceMap] = useApi(() => ResourceMapService.bulkDeleteResourceMapByid([4, 5]), true, true);
 
   const [createBookmark] = useApi((data: CreateBookmarkData) => BookmarkService.createBookmark(data ?? null), true, true);
   const [getAllBookmarks] = useApi(() => BookmarkService.getAllBookmarks(), true, true);
   const [getBookmarkdById] = useApi(() => BookmarkService.getBookmarkById(3), true, true);
   const [getSelfBookmark] = useApi(() => BookmarkService.getSelf(), true, true);
   const [deleteBookmarkById] = useApi(() => BookmarkService.deleteBookmarkById(17), true, true);
+
+  const [createTagMap] = useApi((data: CreateTagMapData) => TagMapService.createTagMap(data ?? null), true, true);
+  const [bulkCreateTagMap] = useApi((data: CreateTagMapData[]) => TagMapService.bulkCreateTagMap(data ?? null), true, true);
+  const [getAllTagMap] = useApi(() => TagMapService.getAllTagMap(), true, true);
+  const [getTagMapById] = useApi(() => TagMapService.getTagMapById(1), true, true);
+  const [deleteTagMapById] = useApi(() => TagMapService.deleteTagMapById(13), true, true);
+  const [bulkDeleteTagMap] = useApi(() => TagMapService.bulkDeleteUserByid([19, 20]), true, true);
 
   const [createRecentlyVisited] = useApi(
     (data: CreateRecentlyVisitedData) => RecentlyVisitedService.createRecentlyVisited(data ?? null),
@@ -274,6 +274,41 @@ const Test = () => {
             </Button>
           </Stack>
 
+          <Typography variant='h5'>Resource Map</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => handleButtonClick(() => createResourceMap({ userId: 2, resourceId: 1 }))}>
+              Create Resource Map
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getAllResourceMaps)}>
+              Get all resources maps
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getResourceMapById)}>
+              Get Resource Map by Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getResourceMapSelf)}>
+              Get Resource Map Self
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(deleteResourceMapById)}>
+              Delete Resource Map By Id
+            </Button>
+            <Button
+              variant='contained'
+              onClick={() =>
+                handleButtonClick(() =>
+                  bulkCreateResourceMap([
+                    { userId: 2, resourceId: 1 },
+                    { userId: 2, resourceId: 2 },
+                  ]),
+                )
+              }
+            >
+              Bulk Create Resource Map
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(bulkDeleteResourceMap)}>
+              Bulk Delete Resource Map
+            </Button>
+          </Stack>
+
           <Typography variant='h5'>TagMap</Typography>
           <Stack spacing={2} direction='row'>
             <Button variant='contained' onClick={() => handleButtonClick(() => createTagMap({ tagId: 5, resourceId: 1 }))}>
@@ -304,41 +339,6 @@ const Test = () => {
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(bulkDeleteTagMap)}>
               Delete Tag Map (Bulk)
-            </Button>
-          </Stack>
-
-          <Typography variant='h5'>Resource Map</Typography>
-          <Stack spacing={2} direction='row'>
-            <Button variant='contained' onClick={() => handleButtonClick(() => createResourceMap({ userId: 2, resourceId: 1 }))}>
-              Create Resource Map
-            </Button>
-            <Button variant='contained' onClick={() => handleButtonClick(getAllResourceMaps)}>
-              Get all resources maps
-            </Button>
-            <Button variant='contained' onClick={() => handleButtonClick(getResourceMapById)}>
-              Get Resource Map by Id
-            </Button>
-            <Button variant='contained' onClick={() => handleButtonClick(getResourceMapSelf)}>
-              Get Resource Map Self
-            </Button>
-            <Button variant='contained' onClick={() => handleButtonClick(deleteResourceMapById)}>
-              Delete Resource Map By Id
-            </Button>
-            <Button
-              variant='contained'
-              onClick={() =>
-                handleButtonClick(() =>
-                  bulkCreateResourceMap([
-                    { userId: 2, resourceId: 1 },
-                    { userId: 2, resourceId: 2 },
-                  ]),
-                )
-              }
-            >
-              Create Resource Map (Bulk)
-            </Button>
-            <Button variant='contained' onClick={() => handleButtonClick(bulkDeleteResourceMap)}>
-              Bulk Delete Resource Map (Bulk)
             </Button>
           </Stack>
 
