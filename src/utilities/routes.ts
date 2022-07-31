@@ -9,7 +9,14 @@ const Routes = {
     isTempUser: '/auth/isTempUser',
   },
   base: '/',
-  home: '/home',
+  home: {
+    main: '/home',
+    viewAll: '/home/viewAll',
+  },
+  addResource: {
+    main: '/addResource',
+    addRoom: '/addResource/room',
+  },
 };
 
 export default Routes;

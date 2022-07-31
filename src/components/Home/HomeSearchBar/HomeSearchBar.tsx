@@ -5,11 +5,16 @@ import SearchDropDown from '@components/Home/HomeSearchBar/SearchDropDown/Search
 
 type Props = {
   onInputChange(enteredValue: string): void;
+  onStateChange(state: string): void;
 };
 
 const HomeSearchBar = (props: Props) => {
-  const roomInputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const resourceInputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     props.onInputChange(event.target.value);
+  };
+
+  const dropDownChangeHandler = (state: string): void => {
+    props.onStateChange(state);
   };
 
   return (
@@ -21,7 +26,7 @@ const HomeSearchBar = (props: Props) => {
           classes={{ notchedOutline: `border: 'none'` }}
           startAdornment={
             <InputAdornment position='start'>
-              <SearchDropDown />
+              <SearchDropDown selectedState={dropDownChangeHandler} />
             </InputAdornment>
           }
           endAdornment={
@@ -29,7 +34,7 @@ const HomeSearchBar = (props: Props) => {
               <Search className='text-bgBlack' />
             </InputAdornment>
           }
-          onChange={roomInputChangeHandler}
+          onChange={resourceInputChangeHandler}
           placeholder='Search...'
           sx={{
             '& .MuiOutlinedInput-notchedOutline': {

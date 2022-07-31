@@ -4,40 +4,39 @@ import { Stack, Grid } from '@mui/material';
 
 import SearchFilterView from '@/components/Home/HomeResources/SearchFilterView/SearchFilterView';
 import HomeResourceList from '@/components/Home/HomeResources/HomeResourceList/HomeResourceList';
-import { ResourceData } from '@/modules/resource/types';
-import { TagData } from '@/modules/tag/types';
+
 import { UserData } from '@/modules/user/types';
+import { SearchState } from '@/consts/constants';
 
 type Props = {
   searchedInput: string;
-  resourceData: ResourceData[];
-  tagData: TagData[];
+  searchState: SearchState;
   currentUser: UserData;
 };
 
-const HomeRooms = (props: Props) => {
-  const [isBookmarksClicked, setIsBookmarksClicked] = useState(false);
-  const [isRvClicked, setIsRVClicked] = useState(true);
+const HomeResources = (props: Props) => {
+  const [bookmarksClicked, setBookmarksClicked] = useState(false);
+  const [rvClicked, setRVClicked] = useState(true);
 
   const bookmarksClickedHandler = (value: boolean) => {
-    setIsBookmarksClicked(value);
-    setIsRVClicked(!value);
+    setBookmarksClicked(value);
+    setRVClicked(!value);
   };
   const rvClickedHandler = (value: boolean) => {
-    setIsRVClicked(value);
-    setIsBookmarksClicked(!value);
+    setRVClicked(value);
+    setBookmarksClicked(!value);
   };
 
   return (
-    <Grid container className='pl-10 md:justify-center md:pl-0'>
+    <Grid container className='px-10 justify-center'>
       <Stack spacing={-7} className='w-screen max-w-5xl'>
         <SearchFilterView searchedInput={props.searchedInput} bookmarksClicked={bookmarksClickedHandler} rvClicked={rvClickedHandler} />
         <HomeResourceList
-          resourceData={props.resourceData}
+          searchState={props.searchState}
           searchedInput={props.searchedInput}
-          tagData={props.tagData}
-          isBookmarksClicked={isBookmarksClicked}
-          isRvClicked={isRvClicked}
+          isBookmarksViewClicked={bookmarksClicked}
+          isRvViewClicked={rvClicked}
+          className={'py-20'}
           currentUser={props.currentUser}
         />
       </Stack>
@@ -45,4 +44,4 @@ const HomeRooms = (props: Props) => {
   );
 };
 
-export default HomeRooms;
+export default HomeResources;

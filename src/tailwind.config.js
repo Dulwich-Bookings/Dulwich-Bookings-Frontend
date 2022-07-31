@@ -12,6 +12,7 @@ const TailWindTheme = {
       bgGray: '#F3F3F4',
       dulwichRed: '#E33939',
       dulwichRedHover: '#FDECEC',
+      bgBlur: 'rgba(255, 255, 255, 0.5)',
     },
     fontSize: {
       sm: 12,
@@ -31,8 +32,13 @@ const TailWindTheme = {
       md: '900px',
       lg: '1200px',
       xl: '1536px',
+      //custom breakpoints for respective pages
       phone: '640px',
       laptop: '900px',
+      homePhone: '450px',
+      homeLaptop: '1100px',
+      addRoomLaptop: '1369px',
+      addRoomSmallerLaptop: '913px',
     },
   },
   variants: {

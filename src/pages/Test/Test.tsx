@@ -124,7 +124,7 @@ const Test = () => {
     true,
     true,
   );
-  const [bulkDeleteResourceMap] = useApi(() => ResourceMapService.bulkDeleteResourceMapByid([4, 5]), true, true);
+  const [bulkDeleteResourceMap] = useApi(() => ResourceMapService.bulkDeleteResourceMap([1, 2]), true, true);
 
   const [createBookmark] = useApi((data: CreateBookmarkData) => BookmarkService.createBookmark(data ?? null), true, true);
   const [getAllBookmarks] = useApi(() => BookmarkService.getAllBookmarks(), true, true);
@@ -137,7 +137,7 @@ const Test = () => {
   const [getAllTagMap] = useApi(() => TagMapService.getAllTagMap(), true, true);
   const [getTagMapById] = useApi(() => TagMapService.getTagMapById(1), true, true);
   const [deleteTagMapById] = useApi(() => TagMapService.deleteTagMapById(13), true, true);
-  const [bulkDeleteTagMap] = useApi(() => TagMapService.bulkDeleteUserByid([19, 20]), true, true);
+  const [bulkDeleteTagMap] = useApi(() => TagMapService.bulkDeleteTagMap([19, 20]), true, true);
 
   const [createRecentlyVisited] = useApi(
     (data: CreateRecentlyVisitedData) => RecentlyVisitedService.createRecentlyVisited(data ?? null),
@@ -315,6 +315,7 @@ const Test = () => {
             <Button variant='contained' onClick={() => handleButtonClick(() => createTagMap({ tagId: 5, resourceId: 1 }))}>
               Create Tag Map
             </Button>
+
             <Button
               variant='contained'
               onClick={() =>

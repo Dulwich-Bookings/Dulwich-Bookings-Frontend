@@ -1,10 +1,6 @@
 import React from 'react';
 import { Typography, TextField, Stack } from '@mui/material';
-
-export type InputValidation = {
-  isError: boolean;
-  errorHelperText: string;
-};
+import { InputValidation } from '@/modules/inputValidation/types';
 
 type Props<inputType> = {
   spacing?: number; // Optional definition for the space between Label and Input

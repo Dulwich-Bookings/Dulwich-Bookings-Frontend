@@ -131,7 +131,7 @@ export default class ResourceMapService {
     }
   }
 
-  public static async bulkDeleteResourceMapByid(ids: number[]): Promise<ApiData> {
+  public static async bulkDeleteResourceMap(ids: number[]): Promise<ApiData> {
     try {
       const response = await ApiService.request(
         {

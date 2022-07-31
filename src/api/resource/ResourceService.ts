@@ -1,9 +1,15 @@
-import { ResourcePutData, CreateResourceData } from '@/modules/resource/types';
+import { ResourcePutData, CreateResourceData, ResourceData } from '@/modules/resource/types';
+import { resourceTypes } from '@/consts/constants';
 import ApiService, { ApiData } from '@/api/ApiService';
 
 export default class ResourceService {
   private static getResourceUrl() {
     return 'resource';
+  }
+
+  // Process 'Resource' by Adding it's resource type
+  private static processResourceType(input: ResourceData): ResourceData {
+    return { ...input, type: resourceTypes.RESOURCE };
   }
 
   public static async getAllResources(): Promise<ApiData> {
@@ -15,6 +21,7 @@ export default class ResourceService {
         },
         true,
       );
+      response.data = response.data.map((r: ResourceData) => ResourceService.processResourceType(r));
       return response;
     } catch (error) {
       return Promise.reject(error);
@@ -30,6 +37,7 @@ export default class ResourceService {
         },
         true,
       );
+      response.data = ResourceService.processResourceType(response.data);
       return response;
     } catch (error) {
       return Promise.reject(error);
