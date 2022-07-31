@@ -34,6 +34,7 @@ const AddRoomForm = (props: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [roomName, setRoomName] = useState<string>('');
   const [roomError, setRoomError] = useState<InputValidation>(noError);
+  const [descriptionError, setDescriptionError] = useState<InputValidation>(noError);
   const [description, setDescription] = useState<string>('');
   const [weekProfile, setWeekProfile] = useState<'Weekly' | 'BiWeekly'>('Weekly');
   const [accessRights, setAccessRights] = useState<Role[]>([]);
@@ -109,12 +110,14 @@ const AddRoomForm = (props: Props) => {
     // by default role.ADMIN has access
     const isValidAccessRights = accessRights.filter(d => d).length > 1;
     const isValidBookingRights = bookingRights.filter(d => d).length > 1;
+    const isValidDescription = description.length !== 0;
 
     setRoomError(isValidRoomName ? noError : errorObj);
     setAccessError(isValidAccessRights ? noError : errorObj);
     setBookingError(isValidBookingRights ? noError : errorObj);
+    setDescriptionError(isValidDescription ? noError : errorObj);
 
-    if (!isValidRoomName || !isValidAccessRights || !isValidBookingRights) {
+    if (!isValidRoomName || !isValidAccessRights || !isValidBookingRights || !isValidDescription) {
       throw new Error('Form Invalid');
     }
   };
@@ -128,7 +131,7 @@ const AddRoomForm = (props: Props) => {
       const resourceData: CreateResourceData = {
         resource: {
           name: roomName,
-          description: description === '' ? 'NA' : description,
+          description: description,
           accessRights: accessRights,
           bookingRights: bookingRights,
           weekProfile: weekProfile,
@@ -187,9 +190,11 @@ const AddRoomForm = (props: Props) => {
             labelClassName='text-[#404040] text-xl font-inter'
             inputPlaceholder='Add the room name'
             inputType='text'
+            inputValidation={descriptionError}
             inputClassName='bg-bgGray w-full rounded-xl focus-within:bg-bgWhite'
             inputRow={3}
             multiline={true}
+            required={true}
           />
 
           <Grid container className='z-10'>
