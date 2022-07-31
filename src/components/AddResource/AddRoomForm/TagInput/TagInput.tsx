@@ -81,7 +81,7 @@ const TagInput = (props: Props) => {
           </ButtonGroup>
         )}
       </Stack>
-      <Grid container className={'pl-52 pt-12 w-full max-h-40 overflow-auto'} spacing={1}>
+      <Grid container className={'ml-52 pt-12 w-full max-h-40 overflow-auto'} spacing={1}>
         {selectedTags.map(tag => (
           <TagChip key={tag.id} tagData={tag} onDelete={tagDelete(tag.id)} />
         ))}
