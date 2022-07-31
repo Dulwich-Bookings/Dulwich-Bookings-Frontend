@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
-import { Button, ButtonGroup, Stack, useRadioGroup } from '@mui/material';
+import { Button, ButtonGroup, Stack } from '@mui/material';
 import UserChip from '@/components/AddResource/AddRoomForm/OtherUserInput/UserChip/UserChip';
 import { UserData } from '@/modules/user/types';
 import { useSelector } from 'react-redux';
