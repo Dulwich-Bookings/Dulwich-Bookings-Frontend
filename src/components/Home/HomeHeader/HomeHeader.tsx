@@ -46,6 +46,7 @@ const HomeHeader = ({ currentUser, currentSchool }: Props) => {
               <HeaderButton
                 handleOnClick={handleAddResource}
                 title='Resources'
+                mobileTitle='Reso'
                 className='mr-3'
                 Icon={<Add className='stroke-0 stroke-black' />}
               />
