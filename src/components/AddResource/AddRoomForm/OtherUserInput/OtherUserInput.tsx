@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
-import { Button, ButtonGroup, Stack } from '@mui/material';
+import { Button, ButtonGroup, Stack, useRadioGroup } from '@mui/material';
 import UserChip from '@/components/AddResource/AddRoomForm/OtherUserInput/UserChip/UserChip';
 import { UserData } from '@/modules/user/types';
+import { useSelector } from 'react-redux';
+import { getCurrentUser } from '@/modules/user/userSlice';
 
 type Props = {
   inputClassName?: string; // Optional ClassNames for Input
@@ -12,21 +14,27 @@ type Props = {
 };
 
 const OtherUserInput = (props: Props) => {
+  const currentUser = useSelector(getCurrentUser);
   const [addOtherUsersValue, setOtherUsersInputValue] = useState('');
   const [filteredOtherUsers, setFilteredOtherUsers] = useState<UserData[]>([]);
   const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>([]);
 
+  // Helper Functions
+  const isUserAlreadySelected = (user: UserData) =>
+    selectedOtherUsers.filter(u => u.email.toUpperCase() === user.email.toUpperCase()).length !== 0;
+  const isCurrentUser = (user: UserData) => user.email === currentUser?.email;
+  const isEmailMatch = (user: UserData, input: string) => user.email.toUpperCase().indexOf(input.toUpperCase()) > -1;
+
   const otherUsersChangeHandler = (input: string): void => {
     setOtherUsersInputValue(input);
-    setFilteredOtherUsers(props.userData.filter(user => user.email.match(new RegExp(input, 'i'))));
-    if (input.trim() === '') {
-      setFilteredOtherUsers([]);
-    }
+    setFilteredOtherUsers(props.userData.filter(user => isEmailMatch(user, input) && !isCurrentUser(user) && !isUserAlreadySelected(user)));
+    if (input.trim() === '') setFilteredOtherUsers([]);
   };
 
   const userDelete = (userToDelete: number) => () => {
     setSelectedOtherUsers(selectedOtherUsers.filter(user => user.id !== userToDelete));
   };
+
   return (
     <div className={props.inputClassName}>
       <Stack spacing={1} position='absolute' className='w-80 z-10'>
@@ -63,7 +71,7 @@ const OtherUserInput = (props: Props) => {
           ))}
         </ButtonGroup>
       </Stack>
-      <Stack className={'max-h-24 overflow-auto mt-24 z-0'} spacing={1}>
+      <Stack className={'h-24 mt-24 z-0 overflow-y-scroll'} spacing={1}>
         {selectedOtherUsers.map(user => (
           <UserChip key={user.id} userData={user} onDelete={userDelete(user.id)} />
         ))}

@@ -21,20 +21,22 @@ const TagInput = (props: Props) => {
     props.updateTags(selectedTags);
   }, [selectedTags]);
 
+  // Helper Functions
+  const isTagAlreadySelected = (tag: TagData) => selectedTags.filter(t => t.id === tag.id).length !== 0;
+  const isTagNameMatch = (tag: TagData, input: string) => tag.name.toUpperCase().indexOf(input.toUpperCase()) > -1;
+
   const tagDelete = (tagToDelete: number) => () => {
     setSelectedTags(selectedTags.filter(tag => tag.id !== tagToDelete));
   };
 
   const TagChangeHandler = (input: string): void => {
     setTagInputValue(input);
-    setFilteredTags(props.tags.filter(tag => tag.name.match(new RegExp(input, 'i'))));
-    if (input.trim() === '') {
-      setFilteredTags([]);
-    }
+    setFilteredTags(props.tags.filter(tag => isTagNameMatch(tag, input) && !isTagAlreadySelected(tag)));
+    if (input.trim() === '') setFilteredTags([]);
   };
 
   const TagFocusHandler = (input: string) => {
-    setFilteredTags(props.tags.filter(tag => tag.name.match(new RegExp(input, 'i'))));
+    setFilteredTags(props.tags.filter(tag => isTagNameMatch(tag, input) && !isTagAlreadySelected(tag)));
     setShowTags(true);
   };
 
@@ -81,7 +83,7 @@ const TagInput = (props: Props) => {
           </ButtonGroup>
         )}
       </Stack>
-      <Grid container className={'ml-52 pt-12 w-full max-h-40 overflow-auto'} spacing={1}>
+      <Grid container className={'ml-52 pt-12 w-2/3 max-h-40 overflow-auto'} spacing={1}>
         {selectedTags.map(tag => (
           <TagChip key={tag.id} tagData={tag} onDelete={tagDelete(tag.id)} />
         ))}
