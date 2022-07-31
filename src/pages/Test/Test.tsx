@@ -25,12 +25,7 @@ import { CreateResourceMapData } from '@/modules/resourceMap/types';
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
 import { timezone, role } from '@/consts/constants';
-import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
-
-const Input = styled('input')({
-  display: 'none',
-});
 
 const createSchoolData: CreateSchoolData = {
   name: 'London',
@@ -403,15 +398,16 @@ const Test = () => {
               Delete Recently Visited By Id
             </Button>
           </Stack>
-        </Stack>
-
-        <Typography variant='h4'>Calendar Modal</Typography>
-        <Stack spacing={2} direction='row'>
-          <Button variant='contained' onClick={() => setOpenCalendarModal(true)}>
-            Open Modal
-          </Button>
+          <Typography variant='h4'>Calendar Modal</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => setOpenCalendarModal(true)}>
+              Open Modal
+            </Button>
+          </Stack>
         </Stack>
       </div>
+      <br />
+      <br />
     </>
   );
 };

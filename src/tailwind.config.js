@@ -42,11 +42,9 @@ const TailWindTheme = {
       homeLaptop: '1100px',
       addRoomLaptop: '1369px',
       addRoomSmallerLaptop: '913px',
-    },
-    screens: {
       bookingSafe: '960px',
-      phone: '576px',
-      laptop: '900px',
+      calendarPhone: '576px',
+      calendarLaptop: '900px',
     },
   },
   variants: {
