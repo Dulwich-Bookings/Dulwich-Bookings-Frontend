@@ -43,11 +43,11 @@ const AddRoom = () => {
         <>
           <HomeHeader currentSchool={currentSchool} currentUser={currentUser} />
           <main>
-            <div className='hidden addRoomLaptop:block'>
+            <div className='hidden addRoomSmallerLaptop:block'>
               <AddRoomForm tagData={tags} userData={users} />
             </div>
-            <div className='flex w-screen justify-center h-screen items-center addRoomLaptop:hidden'>
-              <div className='font-Inter text-[24px] text-center pb-20'>This page is not supported for mobile devices.</div>
+            <div className='flex w-screen justify-center h-screen items-center addRoomSmallerLaptop:hidden'>
+              <div className='font-Inter text-[24px] text-center pb-20 px-5'>This page is not supported for small screens</div>
             </div>
           </main>
         </>

@@ -153,7 +153,7 @@ const AddRoomForm = (props: Props) => {
   return (
     <>
       <Stack direction='row' className='w-screen justify-start'>
-        <Stack className='lg:w-2/3 w-screen py-10 px-24' spacing={2}>
+        <Stack className='addRoomLaptop:w-2/3 w-screen py-10 px-24' spacing={2}>
           <FormHeader title='Add Room' />
 
           <Grid container>
@@ -221,7 +221,7 @@ const AddRoomForm = (props: Props) => {
             <TemplateSubmitButton buttonText='Upload Template' helperText={templateFormName} handleOnClick={handleUploadTemplate} />
           </Stack>
         </Stack>
-        <img className='hidden w-1/3 h-screen float-right object-cover lg:block' src={ResourceSample1} />
+        <img className='hidden w-1/3 h-screen float-right object-cover addRoomLaptop:block' src={ResourceSample1} />
       </Stack>
     </>
   );
