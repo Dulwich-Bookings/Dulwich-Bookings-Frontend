@@ -1,9 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import uiReducer from '@/modules/ui/uiSlice';
+import userReducer from '@/modules/user/userSlice';
+import schoolReducer from '@/modules/school/schoolSlice';
 
 export const store = configureStore({
   reducer: {
     ui: uiReducer,
+    users: userReducer,
+    school: schoolReducer,
   },
 });
 
