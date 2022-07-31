@@ -24,7 +24,7 @@ const HomeViewAllBody = (props: Props) => {
     <Grid container className='justify-center'>
       <Stack spacing={1} className='w-screen max-w-[1100px] px-10'>
         <div className={'font-Inter text-bgBlack text-[48px] capitalize'}>{title}</div>
-        <Stack spacing={5}>
+        <Stack className='pb-5' spacing={5}>
           <HomeSearchBar onInputChange={onInputChangeHandler} onStateChange={onSearchStateChangeHandler} />
           <HomeResourceList
             searchState={searchState}

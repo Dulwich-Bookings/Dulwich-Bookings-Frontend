@@ -34,13 +34,13 @@ const HomeHeader = ({ currentUser, currentSchool }: Props) => {
 
   return (
     <AppBar elevation={0} className='bg-bgWhite border-b-[1px] border-bgBlack border-opacity-25 w-screen' position='sticky'>
-      <Grid container className='w-screen h-20 items-center flex ' direction='row'>
-        <Grid container className='w-1/2  justify-start ' direction='row'>
+      <Grid container className='w-screen h-20 items-center flex' direction='row'>
+        <Grid container className='w-1/2  justify-start' direction='row'>
           <Grid item className='cursor-pointer' onClick={handleSchoolLogoClick}>
             <SchoolLogo name={currentSchool.name} alternativeName={currentSchool.alternativeName} />
           </Grid>
         </Grid>
-        <Grid container className='w-1/2  justify-end' direction='row'>
+        <Grid container className='w-1/2 justify-end' direction='row'>
           <Grid item className='flex items-center '>
             {Teacher && (
               <HeaderButton
@@ -51,7 +51,13 @@ const HomeHeader = ({ currentUser, currentSchool }: Props) => {
               />
             )}
 
-            <HeaderButton handleOnClick={handleViewAll} title='View All' className='mr-6' Icon={<FormatListBulleted className='w-5' />} />
+            <HeaderButton
+              handleOnClick={handleViewAll}
+              title='View All'
+              mobileTitle='All'
+              className='mr-6'
+              Icon={<FormatListBulleted className='w-5' />}
+            />
             <UserProfileCircle email={currentUser?.email} className='mr-8' />
           </Grid>
         </Grid>
