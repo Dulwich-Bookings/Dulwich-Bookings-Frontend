@@ -28,13 +28,14 @@ type Props = {
   searchState: SearchState;
   isBookmarksViewClicked: boolean;
   isRvViewClicked: boolean;
+  className?: string;
   currentUser: UserData;
 };
 
 const sortResourcesByName = (resourceAndSubscriptions: (ResourceData | SubscriptionData)[]) =>
   resourceAndSubscriptions.sort((x, y) => x.name.localeCompare(y.name));
 
-const HomeRoomList = (props: Props) => {
+const HomeResourceList = (props: Props) => {
   // react hooks
   const [bookmarks, setBookmarks] = useState<BookmarkData[]>([]);
   const [recentlyVisited, setRecentlyVisited] = useState<RecentlyVisitedData[]>([]);
@@ -203,7 +204,7 @@ const HomeRoomList = (props: Props) => {
   const isDataEmpty = allResourceAndSubscriptions.length === 0;
   return (
     <>
-      <Box className='py-20 w-full'>
+      <Box className={props.className}>
         {isLoading ? (
           <Loading />
         ) : !isDataEmpty ? (
@@ -231,4 +232,4 @@ const HomeRoomList = (props: Props) => {
   );
 };
 
-export default HomeRoomList;
+export default HomeResourceList;

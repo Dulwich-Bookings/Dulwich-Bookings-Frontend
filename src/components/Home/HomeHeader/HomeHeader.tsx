@@ -24,6 +24,10 @@ const HomeHeader = ({ currentUser, currentSchool }: Props) => {
     history.push('/home');
   };
 
+  const handleViewAll = () => {
+    history.push('/home/viewAll');
+  };
+
   const handleAddResource = () => {
     history.push('/addResource');
   };
@@ -41,13 +45,13 @@ const HomeHeader = ({ currentUser, currentSchool }: Props) => {
             {Teacher && (
               <HeaderButton
                 handleOnClick={handleAddResource}
-                className='mr-3'
                 title='Resources'
+                className='mr-3'
                 Icon={<Add className='stroke-0 stroke-black' />}
               />
             )}
 
-            <HeaderButton title='View All' className='mr-6' Icon={<FormatListBulleted className='w-5' />} />
+            <HeaderButton handleOnClick={handleViewAll} title='View All' className='mr-6' Icon={<FormatListBulleted className='w-5' />} />
             <UserProfileCircle email={currentUser?.email} className='mr-8' />
           </Grid>
         </Grid>

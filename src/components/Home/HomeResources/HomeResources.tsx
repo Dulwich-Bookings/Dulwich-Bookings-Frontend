@@ -14,7 +14,7 @@ type Props = {
   currentUser: UserData;
 };
 
-const HomeRooms = (props: Props) => {
+const HomeResources = (props: Props) => {
   const [bookmarksClicked, setBookmarksClicked] = useState(false);
   const [rvClicked, setRVClicked] = useState(true);
 
@@ -36,6 +36,7 @@ const HomeRooms = (props: Props) => {
           searchedInput={props.searchedInput}
           isBookmarksViewClicked={bookmarksClicked}
           isRvViewClicked={rvClicked}
+          className={'py-20'}
           currentUser={props.currentUser}
         />
       </Stack>
@@ -43,4 +44,4 @@ const HomeRooms = (props: Props) => {
   );
 };
 
-export default HomeRooms;
+export default HomeResources;

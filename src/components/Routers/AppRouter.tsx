@@ -16,6 +16,7 @@ import ConfirmEmail from '@pages/Landing/ConfirmEmail/ConfirmEmail';
 import SignUp from '@pages/Landing/SignUp/SignUp';
 import IsTemporaryUser from '@pages/Landing/IsTemporaryUser/IsTemporaryUser';
 import Home from '@pages/Home/Home';
+import HomeViewAll from '@/pages/Home/HomeViewAll/HomeViewAll';
 import Test from '@pages/Test/Test';
 import AddResource from '@pages/AddResource/AddResource';
 import AddRoom from '@/pages/AddResource/AddRoom/AddRoom';
@@ -69,7 +70,7 @@ const AppRouter = () => {
   return (
     <Switch>
       <Route exact path={Routes.base}>
-        <Redirect to={accessToken ? (isTemp ? Routes.authentication.isTempUser : Routes.home) : Routes.authentication.login} />
+        <Redirect to={accessToken ? (isTemp ? Routes.authentication.isTempUser : Routes.home.main) : Routes.authentication.login} />
       </Route>
       <Route exact path={Routes.authentication.login} component={Login} />
       <Route exact path={Routes.authentication.forgetPassword} component={ForgetPassword} />
@@ -77,7 +78,8 @@ const AppRouter = () => {
       <Route exact path={Routes.authentication.signUp} component={SignUp} />
       <Route exact path={Routes.authentication.confirmEmail} component={ConfirmEmail} />
       {accessToken && <Route exact path={Routes.authentication.isTempUser} component={IsTemporaryUser} />}
-      {accessToken && !isTemp && <Route exact path={Routes.home} component={Home} />}
+      {accessToken && !isTemp && <Route exact path={Routes.home.main} component={Home} />}
+      {accessToken && !isTemp && <Route exact path={Routes.home.viewAll} component={HomeViewAll} />}
       {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.main} component={AddResource} />}
       {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.addRoom} component={AddRoom} />}
       <Route exact path={Routes.test} component={Test} />
