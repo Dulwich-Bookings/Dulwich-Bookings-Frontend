@@ -192,12 +192,12 @@ const AddRoomForm = (props: Props) => {
             multiline={true}
           />
 
-          <Grid container>
-            <TagInput inputClassName='w-3/12' tags={props.tagData} updateTags={updateTagHandler} />
+          <Grid container className='z-10'>
+            <TagInput inputClassName='w-1/2' tags={props.tagData} updateTags={updateTagHandler} />
             <OtherUserInput inputClassName='w-1/2 pl-[70px]' userData={props.userData} updateUsers={updateUserHandler} />
           </Grid>
 
-          <Grid container>
+          <Grid container className='z-0'>
             <InputCheckBox
               inputClassName='w-1/2'
               labelText='Access Rights'
@@ -216,7 +216,7 @@ const AddRoomForm = (props: Props) => {
             />
           </Grid>
 
-          <Stack direction='row' spacing={5}>
+          <Stack direction='row' spacing={5} className='z-0'>
             <FormSubmitButton buttonText='Add Room' handleOnClick={handleCreateResource} loading={isLoading} />
             <TemplateSubmitButton buttonText='Upload Template' helperText={templateFormName} handleOnClick={handleUploadTemplate} />
           </Stack>

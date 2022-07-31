@@ -42,8 +42,8 @@ const TagInput = (props: Props) => {
     setShowTags(false);
   };
   return (
-    <>
-      <Stack className={props.inputClassName}>
+    <div className={props.inputClassName}>
+      <Stack position='absolute'>
         <InputWithoutBorder
           inputHandleOnChange={input => TagChangeHandler(input.target.value)}
           inputHandleOnFocus={input => TagFocusHandler(input.target.value)}
@@ -58,14 +58,14 @@ const TagInput = (props: Props) => {
         {showTags && (
           <ButtonGroup
             orientation='vertical'
-            className='w-full shadow-lg rounded max-h-36 overflow-auto'
+            className='w-full shadow-lg rounded max-h-28 overflow-auto background-bgWhite'
             variant='contained'
             disableElevation
           >
             {filteredTags.map(tag => (
               <Button
                 key={tag.id}
-                className='min-h-11 w-full border-bgWhite bg-bgWhite text-bgBlack hover:bg-dulwichRed hover:bg-opacity-10'
+                className='min-h-11 w-full border-bgWhite bg-bgWhite text-bgBlack hover:bg-dulwichRedHover'
                 onMouseDown={() => {
                   if (selectedTags.filter(tags => tags.id === tag.id).length === 0) {
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -81,12 +81,12 @@ const TagInput = (props: Props) => {
           </ButtonGroup>
         )}
       </Stack>
-      <Grid container className={'pl-6 pt-12 w-3/12 max-h-40 overflow-auto'} spacing={1}>
+      <Grid container className={'pl-52 pt-12 w-full max-h-40 overflow-auto'} spacing={1}>
         {selectedTags.map(tag => (
           <TagChip key={tag.id} tagData={tag} onDelete={tagDelete(tag.id)} />
         ))}
       </Grid>
-    </>
+    </div>
   );
 };
 
