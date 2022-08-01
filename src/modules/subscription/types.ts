@@ -9,6 +9,7 @@ export interface SubscriptionData {
   accessRights: Role[];
   credentials: string;
   expiry?: DateTime;
+  link?: string;
   remindMe: boolean;
   schoolId: number;
   type: SearchState;
@@ -21,6 +22,7 @@ export interface CreateSubscriptionData {
     accessRights: Role[];
     credentials: string;
     expiry?: DateTime;
+    link?: string;
     remindMe: boolean;
   };
   tags: number[];
