@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Stack, Typography } from '@mui/material';
-import AddCalendarButton from '@/components/BookingsModal/AddCalendarButton/AddCalendarButton';
+import AddCalendarButton from '@/components/BookingsModal/BookingsHeader/AddCalendarButton/AddCalendarButton';
 
 export type BookingsHeaderData = {
   title: string;
@@ -19,7 +19,7 @@ const BookingsHeader = ({ id, title, description }: Props) => {
         <Typography variant='h4'>{title}</Typography>
         <AddCalendarButton id={id} />
       </Stack>
-      <Typography className='bookingSafe:block hidden w-1/3 h-14' variant='subtitle2'>
+      <Typography className='laptop:block hidden w-1/3 h-14 font-Inter' variant='subtitle2'>
         {description}
       </Typography>
     </Box>

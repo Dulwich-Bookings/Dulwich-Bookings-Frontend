@@ -3,7 +3,7 @@ import React from 'react';
 import { Grid, Stack, Typography } from '@mui/material';
 import BackButton from '@components/AddResource/BackButton/BackButton';
 import { useHistory } from 'react-router-dom';
-import ResourceCard from './ResourceCard/ResourceCard';
+import ResourceCard from '@components/AddResource/ResourceCard/ResourceCard';
 
 const AddResource = () => {
   const history = useHistory();

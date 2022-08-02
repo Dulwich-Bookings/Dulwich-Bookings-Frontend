@@ -1,5 +1,5 @@
-import { EventData } from '@/components/Calendar/Calendar';
-import { BookingsHeaderData } from '@/components/BookingsModal/BookingsHeader.tsx/BookingsHeader';
+import { EventData } from '@/components/BookingsModal/Calendar/Calendar';
+import { BookingsHeaderData } from '@/components/BookingsModal/BookingsHeader/BookingsHeader';
 
 export const dummyResourceData: BookingsHeaderData = {
   title: 'Technology 4',
