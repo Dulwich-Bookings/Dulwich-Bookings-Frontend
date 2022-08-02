@@ -13,7 +13,7 @@ const BookingButton = ({ buttonText, handleOnClick, loading }: Props) => {
     <LoadingButton
       loading={loading}
       onClick={handleOnClick}
-      className='bg-dulwichRed normal-case w-72 h-8 font-Inter font-light text-lg w-full drop-shadow-none my-3'
+      className='bg-dulwichRed normal-case w-full h-8 font-Inter font-light text-lg w-full drop-shadow-none my-3'
       variant='contained'
       loadingIndicator={<CircularProgress size={16} className='text-bgWhite text-s' />}
     >

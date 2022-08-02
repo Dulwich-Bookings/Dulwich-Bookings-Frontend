@@ -22,9 +22,17 @@ const BookingFormFooter = (props: Props) => {
     );
   }
   if (props.type == 'noneditable') {
-    return <BookingButton buttonText='Contact' handleOnClick={props.handleOnContact} />;
+    return (
+      <div className='w-full'>
+        <BookingButton buttonText='Contact' handleOnClick={props.handleOnContact} />
+      </div>
+    );
   }
-  return <BookingButton buttonText='Book' handleOnClick={props.handleOnBook} />;
+  return (
+    <div className='w-full'>
+      <BookingButton buttonText='Book' handleOnClick={props.handleOnBook} />
+    </div>
+  );
 };
 
 export default BookingFormFooter;
