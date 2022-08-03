@@ -2,7 +2,7 @@ import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import Calendar from '@/components/BookingsModal/Calendar/Calendar';
 import BookingsHeader from '@/components/BookingsModal/BookingsHeader/BookingsHeader';
-import { dummyCalendarData, dummyResourceData } from '@/consts/dummyData';
+import { dummyCalendarData } from '@/consts/dummyData';
 import { Stack, Modal, Box, ThemeProvider, createTheme } from '@mui/material';
 
 const theme = createTheme({
