@@ -38,6 +38,7 @@ export type EventData = {
 type Props = {
   data: EventData[];
   currentUser: UserData;
+  weeklyProfile: 'Weekly' | 'BiWeekly';
 };
 
 const Calendar = (props: Props) => {
@@ -48,8 +49,8 @@ const Calendar = (props: Props) => {
   const [endBook, setEndBook] = useState<string>('');
   const [bookingDescription, setBookingDescription] = useState<string>('');
   const [editable, setEditable] = useState<string>('');
-  const [recurring, setRecurring] = useState<string>('');
-  const [bookingType, setBookingType] = useState<string>('');
+  const [recurring, setRecurring] = useState<'Weekly' | 'BiWeekly'>('BiWeekly');
+  const [bookingType, setBookingType] = useState<'Booked' | 'Lesson'>('Booked');
 
   const theme = useTheme();
   const isMobile = !useMediaQuery(theme.breakpoints.up('sm'));
@@ -61,8 +62,8 @@ const Calendar = (props: Props) => {
     setBookingTitle('');
     setBookingDescription('');
     setEditable('new');
-    setRecurring('none');
-    setBookingType('none');
+    setRecurring('BiWeekly');
+    setBookingType('Booked');
     setBookingTime(time);
     setStartBook(startTime);
     setEndBook(endTime);
@@ -80,7 +81,7 @@ const Calendar = (props: Props) => {
     setBookingDescription(e.event.extendedProps.description);
     e.event.startEditable ? setEditable('editable') : setEditable('noneditable');
     setOpenBookingModal(true);
-    setRecurring('none');
+    setRecurring('BiWeekly');
     setBookingType('Booked');
   };
 
@@ -100,6 +101,7 @@ const Calendar = (props: Props) => {
         recurring={recurring}
         bookingType={bookingType}
         currentUser={props.currentUser}
+        weekProfile={props.weeklyProfile}
       />
       <Box className='h-full'>
         <FullCalendar

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 
 import { useApi } from '@/api/ApiHandler';
 import AuthService from '@/api/auth/AuthService';
@@ -15,7 +15,7 @@ import BookmarkService from '@/api/bookmarks/BookmarkService';
 import RecentlyVisitedService from '@/api/recentlyVisited/RecentlyVisitedService';
 import ResourceMapService from '@/api/resourceMap/ResourceMapService';
 
-import BookingsModal from '@/components/BookingsModal/BookingsModal';
+// import BookingsModal from '@/components/BookingsModal/BookingsModal';
 import { CreateSubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
 import { CreateSchoolData, SchoolPutData } from '@/modules/school/types';
 import { CreateResourceData, ResourcePutData } from '@/modules/resource/types';
@@ -23,7 +23,7 @@ import { CreateTagMapData } from '@/modules/tagMap/types';
 import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
 import { CreateRecentlyVisitedData } from '@/modules/recentlyVisited/Types';
 import { CreateResourceMapData } from '@/modules/resourceMap/types';
-import { getCurrentUser } from '@/modules/user/userSlice';
+// import { getCurrentUser } from '@/modules/user/userSlice';
 
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
@@ -96,11 +96,11 @@ const Test = () => {
   const [getAllUsers] = useApi(() => UserService.getAllUsers(), true, true);
   const [getAllTags] = useApi(() => TagService.getAllTags(), true, true);
 
-  const [openCalendarModal, setOpenCalendarModal] = useState<boolean>(false);
+  // const [openCalendarModal, setOpenCalendarModal] = useState<boolean>(false);
 
-  const handleCloseModal = () => {
-    setOpenCalendarModal(false);
-  };
+  // const handleCloseModal = () => {
+  //   setOpenCalendarModal(false);
+  // };
   const [createSchool] = useApi(() => SchoolService.createSchool(createSchoolData), true, true);
   const [getAllSchools] = useApi(() => SchoolService.getAllSchools(), true, true);
   const [getSchoolById] = useApi(() => SchoolService.getSchoolById(1), true, true);
@@ -179,19 +179,17 @@ const Test = () => {
     bulkSignUp();
   }, [bulkSignUpForm]);
 
-  const currentUser = useSelector(getCurrentUser);
+  // const currentUser = useSelector(getCurrentUser);
 
   return (
     <>
-      {currentUser && (
-        <BookingsModal
-          openState={openCalendarModal}
-          handleCloseModal={handleCloseModal}
-          title='technology'
-          description='tech1'
-          currentUser={currentUser}
-        />
-      )}
+      {/* {currentUser && <BookingsModal
+        openState={openCalendarModal}
+        handleCloseModal={handleCloseModal}
+        title='technology'
+        description='tech1'
+        currentUser={currentUser}
+      />} */}
       <div className='pt-6 pl-6'>
         <Typography className='pb-6' variant='h3'>
           Add your own test components below!
@@ -411,12 +409,12 @@ const Test = () => {
               Delete Recently Visited By Id
             </Button>
           </Stack>
-          <Typography variant='h4'>Calendar Modal</Typography>
+          {/* <Typography variant='h4'>Calendar Modal</Typography>
           <Stack spacing={2} direction='row'>
             <Button variant='contained' onClick={() => setOpenCalendarModal(true)}>
               Open Modal
             </Button>
-          </Stack>
+          </Stack> */}
         </Stack>
       </div>
       <br />

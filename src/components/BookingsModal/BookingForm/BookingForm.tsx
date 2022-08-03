@@ -34,26 +34,25 @@ type Props = {
   recurring: string;
   bookingType: string;
   currentUser: UserData;
+  weekProfile: 'Weekly' | 'BiWeekly';
 };
 
 const BookingForm = (props: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const [title, setTitle] = useState<string>('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
   const [time, setTime] = useState<string>(props.time);
   const [description, setDescription] = useState<string>(props.bookingDescription);
   const [multiline, setMultiline] = useState<boolean>(false);
   const [rows, setRows] = useState<number>(1);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [recurring, setRecurring] = useState<string>(props.recurring);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [bookingType, setBookingType] = useState<string>(props.bookingType);
+  // const [recurring, setRecurring] = useState<'Weekly' | 'BiWeekly'>(props.recurring);
+  // const [bookingType, setBookingType] = useState<'Booked' | 'Lesson'>(props.bookingType);
 
   const Teacher = isTeacher(props.currentUser);
 
   const handleOnBook = async () => {
-    setIsLoading(true);
+    // setIsLoading(true);
+    null;
   };
 
   const handleOnSave = async () => {
@@ -142,7 +141,7 @@ const BookingForm = (props: Props) => {
                     onBlur={() => setMultiline(false)}
                   />
                 </div>
-                <RecurringBookingWrapper />
+                {props.weekProfile === 'Weekly' && <RecurringBookingWrapper />}
                 {Teacher && <BookingTypeWrapper />}
                 <BookingFormFooter
                   type={props.editable}

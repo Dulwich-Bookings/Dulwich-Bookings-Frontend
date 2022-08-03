@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import { Grid, Card, CardContent, Typography, Stack } from '@mui/material';
 
 import { Bookmark, PersonOutlineOutlined, Circle } from '@mui/icons-material';
-import { ResourceData } from '@/modules/resource/types';
-import { SearchState, resourceTypes } from '@/consts/constants';
-import { TagData } from '@/modules/tag/types';
 import ResourceTag from '@/components/Home/HomeResources/HomeResourceContainer/ResourceTag/ResourceTag';
 import ResourceRights from '@/components/Home/HomeResources/HomeResourceContainer/ResourceRights/ResourceRights';
 import BookingsModal from '@/components/BookingsModal/BookingsModal';
 
+import { SearchState, resourceTypes } from '@/consts/constants';
+import { ResourceData } from '@/modules/resource/types';
+import { TagData } from '@/modules/tag/types';
 import { SubscriptionData } from '@/modules/subscription/types';
 import { TagMapData } from '@/modules/tagMap/types';
 import { UserData } from '@/modules/user/types';
@@ -51,13 +51,14 @@ const HomeRoomItem = (props: Props) => {
 
   return (
     <>
-      <BookingsModal
-        openState={openCalendarModal}
-        handleCloseModal={handleCloseModal}
-        title={props.data.name}
-        description={props.data.description}
-        currentUser={props.currentUser}
-      />
+      {props.data.type === resourceTypes.RESOURCE && (
+        <BookingsModal
+          openState={openCalendarModal}
+          handleCloseModal={handleCloseModal}
+          resourceData={props.data as ResourceData}
+          currentUser={props.currentUser}
+        />
+      )}
 
       <Grid item className='w-full homeLaptop:w-auto'>
         <Card className='bg-bgGray rounded-xl w-full homeLaptop:w-80 h-48 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)] cursor-pointer'>
