@@ -1,17 +1,22 @@
 import React from 'react';
 
 import { Card, CardContent, Grid, Stack } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { SubscriptionData } from '@/modules/subscription/types';
 import linkIcon from '@/assets/icons/link.png';
 
 type Props = {
+  handleClose: () => void;
   data: SubscriptionData;
 };
 
-const SubscriptionModal = ({ data }: Props) => {
+const SubscriptionModal = ({ data, handleClose }: Props) => {
   return (
     <Card className='bg-bgGray rounded-xl w-80 homeLaptop:w-[600px] h-96 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)]'>
       <CardContent className='grow'>
+        <div className='w-full z-10'>
+          <CloseIcon className='float-right text-3xl cursor-pointer' onClick={handleClose} sx={{ color: `#404040` }} />
+        </div>
         <Stack spacing={1.5} className='ml-10 m-3' alignItems='start'>
           <Stack>
             {data.link && (
