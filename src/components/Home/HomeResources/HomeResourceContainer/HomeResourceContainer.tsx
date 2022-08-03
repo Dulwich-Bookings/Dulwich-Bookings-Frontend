@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
 import { Grid, Card, CardContent, Typography, Stack } from '@mui/material';
-
+import ModalWrapper from '@/components/Modals/ModalWrapper/ModalWrapper';
+import SubscriptionModal from '@/components/Modals/ModalWrapper/SubscriptionModal/SubscriptionModal';
 import { Bookmark, PersonOutlineOutlined, Circle } from '@mui/icons-material';
 import { ResourceData } from '@/modules/resource/types';
 import { SearchState, resourceTypes, searchStateMap } from '@/consts/constants';
@@ -10,7 +11,6 @@ import ResourceTag from '@/components/Home/HomeResources/HomeResourceContainer/R
 import ResourceRights from '@/components/Home/HomeResources/HomeResourceContainer/ResourceRights/ResourceRights';
 import { SubscriptionData } from '@/modules/subscription/types';
 import { TagMapData } from '@/modules/tagMap/types';
-import SubscriptionModal from '../SubscriptionModal/SubscriptionModal';
 
 type Props = {
   data: ResourceData | SubscriptionData;
@@ -105,7 +105,11 @@ const HomeRoomItem = (props: Props) => {
         </Card>
       </Grid>
       {props.data.type === searchStateMap.SUBSCRIPTIONS && (
-        <SubscriptionModal data={props.data as SubscriptionData} isOpen={openModal} handleClose={handleCloseModal} />
+        <ModalWrapper
+          isOpen={openModal}
+          handleClose={handleCloseModal}
+          bodyComponent={<SubscriptionModal data={props.data as SubscriptionData} />}
+        />
       )}
     </>
   );
