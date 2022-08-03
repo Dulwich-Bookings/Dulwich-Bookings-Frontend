@@ -213,6 +213,7 @@ const HomeResourceList = (props: Props) => {
               <ResourceContainer
                 key={resource.type === resourceTypes.RESOURCE ? `Room:${resource.id}` : `Subscription:${resource.id}`}
                 data={resource}
+                currentUser={props.currentUser}
                 tagData={tags}
                 tagMapData={tagMaps}
                 isBookmark={isBookmark(resource)}

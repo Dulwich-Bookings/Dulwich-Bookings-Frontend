@@ -12,9 +12,11 @@ import BookingsModal from '@/components/BookingsModal/BookingsModal';
 
 import { SubscriptionData } from '@/modules/subscription/types';
 import { TagMapData } from '@/modules/tagMap/types';
+import { UserData } from '@/modules/user/types';
 
 type Props = {
   data: ResourceData | SubscriptionData;
+  currentUser: UserData;
   tagData: TagData[];
   tagMapData: TagMapData[];
   isBookmark: boolean;
@@ -54,16 +56,16 @@ const HomeRoomItem = (props: Props) => {
         handleCloseModal={handleCloseModal}
         title={props.data.name}
         description={props.data.description}
+        currentUser={props.currentUser}
       />
 
       <Grid item className='w-full homeLaptop:w-auto'>
         <Card className='bg-bgGray rounded-xl w-full homeLaptop:w-80 h-48 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)] cursor-pointer'>
           <div
             className='w-full h-full'
-            // onClick={() => {
-            //   props.onRecentlyVisitedHandler(props.data.id, props.data.type, props.isRecentlyVisited);
-            // }}
-            onClick={() => setOpenCalendarModal(true)}
+            onClick={() => {
+              setOpenCalendarModal(true), props.onRecentlyVisitedHandler(props.data.id, props.data.type, props.isRecentlyVisited);
+            }}
           >
             <CardContent className='grow'>
               <Stack spacing={-2}>

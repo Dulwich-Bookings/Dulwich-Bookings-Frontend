@@ -4,6 +4,7 @@ import Calendar from '@/components/BookingsModal/Calendar/Calendar';
 import BookingsHeader from '@/components/BookingsModal/BookingsHeader/BookingsHeader';
 import { dummyCalendarData } from '@/consts/dummyData';
 import { Stack, Modal, Box, ThemeProvider, createTheme } from '@mui/material';
+import { UserData } from '@/modules/user/types';
 
 const theme = createTheme({
   breakpoints: {
@@ -22,6 +23,7 @@ type Props = {
   handleCloseModal: () => void;
   title: string;
   description: string;
+  currentUser: UserData;
 };
 
 const BookingsModal = (props: Props) => {
@@ -32,7 +34,7 @@ const BookingsModal = (props: Props) => {
           <CloseIcon onClick={props.handleCloseModal} className='float-right cursor-pointer hover:text-grayAccent' />
           <Stack className='h-full' spacing={{ xs: 1, md: -6 }}>
             <BookingsHeader id={1} title={props.title} description={props.description} />
-            <Calendar data={dummyCalendarData} />
+            <Calendar data={dummyCalendarData} currentUser={props.currentUser} />
           </Stack>
         </Box>
       </Modal>

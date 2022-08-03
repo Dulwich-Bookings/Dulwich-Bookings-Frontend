@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
 import { useApi } from '@/api/ApiHandler';
 import AuthService from '@/api/auth/AuthService';
 import UserService from '@/api/user/UserService';
@@ -21,6 +23,7 @@ import { CreateTagMapData } from '@/modules/tagMap/types';
 import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
 import { CreateRecentlyVisitedData } from '@/modules/recentlyVisited/Types';
 import { CreateResourceMapData } from '@/modules/resourceMap/types';
+import { getCurrentUser } from '@/modules/user/userSlice';
 
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
@@ -176,9 +179,19 @@ const Test = () => {
     bulkSignUp();
   }, [bulkSignUpForm]);
 
+  const currentUser = useSelector(getCurrentUser);
+
   return (
     <>
-      <BookingsModal openState={openCalendarModal} handleCloseModal={handleCloseModal} title='technology' description='tech1' />
+      {currentUser && (
+        <BookingsModal
+          openState={openCalendarModal}
+          handleCloseModal={handleCloseModal}
+          title='technology'
+          description='tech1'
+          currentUser={currentUser}
+        />
+      )}
       <div className='pt-6 pl-6'>
         <Typography className='pb-6' variant='h3'>
           Add your own test components below!

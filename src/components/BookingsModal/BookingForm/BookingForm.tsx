@@ -5,6 +5,10 @@ import BookingFormFooter from '@components/BookingsModal/BookingForm/BookingForm
 import InputWithIcon from '@/components/BookingsModal/BookingForm/InputWithIcon/InputWithIcon';
 import TimePickerWrapper from '@components/BookingsModal/BookingForm/TimePickerWrapper/TimePickerWrapper';
 import RecurringBookingWrapper from '@components/BookingsModal/BookingForm/RecurringBookingWrapper/RecurringBookingWrapper';
+import BookingTypeWrapper from '@components/BookingsModal/BookingForm/BookingTypeWrapper/BookingTypeWrapper';
+
+import { isTeacher } from '@/utilities/authorisation';
+import { UserData } from '@/modules/user/types';
 
 const theme = createTheme({
   breakpoints: {
@@ -28,6 +32,8 @@ type Props = {
   start: string;
   end: string;
   recurring: string;
+  bookingType: string;
+  currentUser: UserData;
 };
 
 const BookingForm = (props: Props) => {
@@ -41,6 +47,10 @@ const BookingForm = (props: Props) => {
   const [rows, setRows] = useState<number>(1);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [recurring, setRecurring] = useState<string>(props.recurring);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [bookingType, setBookingType] = useState<string>(props.bookingType);
+
+  const Teacher = isTeacher(props.currentUser);
 
   const handleOnBook = async () => {
     setIsLoading(true);
@@ -133,6 +143,7 @@ const BookingForm = (props: Props) => {
                   />
                 </div>
                 <RecurringBookingWrapper />
+                {Teacher && <BookingTypeWrapper />}
                 <BookingFormFooter
                   type={props.editable}
                   handleOnBook={handleOnBook}

@@ -11,6 +11,7 @@ import BookingForm from '@components/BookingsModal/BookingForm/BookingForm';
 import moment from 'moment';
 import styled from '@emotion/styled';
 import './Calendar.css';
+import { UserData } from '@/modules/user/types';
 
 export const StyleWrapper = styled.div`
   .fc .fc-timegrid-slot-minor {
@@ -36,9 +37,10 @@ export type EventData = {
 
 type Props = {
   data: EventData[];
+  currentUser: UserData;
 };
 
-const Calendar = ({ data }: Props) => {
+const Calendar = (props: Props) => {
   const [openBookingModal, setOpenBookingModal] = useState<boolean>(false);
   const [bookingTitle, setBookingTitle] = useState<string>('');
   const [bookingTime, setBookingTime] = useState<string>('');
@@ -47,6 +49,8 @@ const Calendar = ({ data }: Props) => {
   const [bookingDescription, setBookingDescription] = useState<string>('');
   const [editable, setEditable] = useState<string>('');
   const [recurring, setRecurring] = useState<string>('');
+  const [bookingType, setBookingType] = useState<string>('');
+
   const theme = useTheme();
   const isMobile = !useMediaQuery(theme.breakpoints.up('sm'));
 
@@ -58,6 +62,7 @@ const Calendar = ({ data }: Props) => {
     setBookingDescription('');
     setEditable('new');
     setRecurring('none');
+    setBookingType('none');
     setBookingTime(time);
     setStartBook(startTime);
     setEndBook(endTime);
@@ -76,6 +81,7 @@ const Calendar = ({ data }: Props) => {
     e.event.startEditable ? setEditable('editable') : setEditable('noneditable');
     setOpenBookingModal(true);
     setRecurring('none');
+    setBookingType('Booked');
   };
 
   return (
@@ -92,6 +98,8 @@ const Calendar = ({ data }: Props) => {
         start={startBook}
         end={endBook}
         recurring={recurring}
+        bookingType={bookingType}
+        currentUser={props.currentUser}
       />
       <Box className='h-full'>
         <FullCalendar
@@ -117,7 +125,7 @@ const Calendar = ({ data }: Props) => {
           dateClick={handleDateClick}
           eventClick={handleEventClick}
           editable={true}
-          events={data}
+          events={props.data}
         />
       </Box>
     </>
