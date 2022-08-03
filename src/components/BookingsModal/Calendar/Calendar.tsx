@@ -20,6 +20,7 @@ export const StyleWrapper = styled.div`
 `;
 
 export type EventData = {
+  // id: number;
   title: string;
   start: string;
   end: string;
@@ -28,6 +29,9 @@ export type EventData = {
   borderColor?: string;
   textColor?: string;
   editable: boolean;
+  rrule?: string;
+  bookingType: 'Booked' | 'Lesson';
+  bookingState: 'Approved' | 'Pending';
 };
 
 type Props = {
