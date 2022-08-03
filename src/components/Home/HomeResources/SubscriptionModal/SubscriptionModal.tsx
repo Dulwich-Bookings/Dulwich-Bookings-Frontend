@@ -12,7 +12,7 @@ type Props = {
 
 const SubscriptionModal = ({ data, isOpen, handleClose }: Props) => {
   return (
-    <Modal open={isOpen} onClose={handleClose}>
+    <Modal className='backdrop-blur-sm' open={isOpen} onClose={handleClose}>
       <Box className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
         <Card className='bg-bgGray rounded-xl w-80 homeLaptop:w-[600px] h-96 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)]'>
           <CardContent className='grow'>
