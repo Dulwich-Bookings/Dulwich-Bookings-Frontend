@@ -38,8 +38,10 @@ const AddRoomForm = (props: Props) => {
   const [description, setDescription] = useState<string>('');
   const [weekProfile, setWeekProfile] = useState<'Weekly' | 'BiWeekly'>('Weekly');
   const [accessRights, setAccessRights] = useState<Role[]>([]);
+  const [accessOptions, setAccessOptions] = useState({ option1: false, option2: false });
   const [accessError, setAccessError] = useState<InputValidation>(noError);
   const [bookingRights, setBookingRights] = useState<Role[]>([]);
+  const [bookingOptions, setBookingOptions] = useState({ option1: false, option2: false });
   const [bookingError, setBookingError] = useState<InputValidation>(noError);
   const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
   const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>([]);
@@ -70,23 +72,43 @@ const AddRoomForm = (props: Props) => {
 
   const updateARHandler = (option1: boolean, option2: boolean): void => {
     const arr: Role[] = [role.ADMIN];
+    let options = { option1: false, option2: false };
+    setAccessOptions({ option1: false, option2: false });
+
     if (option1) {
-      arr.push(role.STUDENT);
+      arr.push(role.STUDENT, role.TEACHER);
+      options = { option1: true, option2: true };
     }
+
     if (option2) {
-      arr.push(role.TEACHER);
+      if (arr.indexOf(role.TEACHER) < 0) {
+        arr.push(role.TEACHER);
+      }
+      options = { ...options, option2: true };
     }
+
+    setAccessOptions(options);
     setAccessRights(arr);
   };
 
   const updateBRHandler = (option1: boolean, option2: boolean): void => {
     const arr: Role[] = [role.ADMIN];
+    let options = { option1: false, option2: false };
+    setBookingOptions({ option1: false, option2: false });
+
     if (option1) {
-      arr.push(role.STUDENT);
+      arr.push(role.STUDENT, role.TEACHER);
+      options = { option1: true, option2: true };
     }
+
     if (option2) {
-      arr.push(role.TEACHER);
+      if (arr.indexOf(role.TEACHER) < 0) {
+        arr.push(role.TEACHER);
+      }
+      options = { ...options, option2: true };
     }
+
+    setBookingOptions(options);
     setBookingRights(arr);
   };
 
@@ -207,6 +229,7 @@ const AddRoomForm = (props: Props) => {
               inputClassName='w-1/2'
               labelText='Access Rights'
               inputLabelText={['Student', 'Teacher']}
+              inputValue={accessOptions}
               inputHandleOnChange={updateARHandler}
               inputValidation={accessError}
               required
@@ -215,6 +238,7 @@ const AddRoomForm = (props: Props) => {
               inputClassName='w-1/2 px-[70px]'
               labelText='Booking Rights'
               inputLabelText={['Student', 'Teacher']}
+              inputValue={bookingOptions}
               inputHandleOnChange={updateBRHandler}
               inputValidation={bookingError}
               required
