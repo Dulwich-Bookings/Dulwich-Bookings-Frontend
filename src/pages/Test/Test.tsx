@@ -178,7 +178,7 @@ const Test = () => {
 
   return (
     <>
-      <BookingsModal openState={openCalendarModal} handleCloseModal={handleCloseModal} />
+      <BookingsModal openState={openCalendarModal} handleCloseModal={handleCloseModal} title='technology' description='tech1' />
       <div className='pt-6 pl-6'>
         <Typography className='pb-6' variant='h3'>
           Add your own test components below!

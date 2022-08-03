@@ -20,16 +20,18 @@ const theme = createTheme({
 type Props = {
   openState: boolean;
   handleCloseModal: () => void;
+  title: string;
+  description: string;
 };
 
-const BookingsModal = ({ openState, handleCloseModal }: Props) => {
+const BookingsModal = (props: Props) => {
   return (
     <ThemeProvider theme={theme}>
-      <Modal className='flex justify-center items-center' open={openState} onClose={handleCloseModal}>
+      <Modal className='flex justify-center items-center' open={props.openState} onClose={props.handleCloseModal}>
         <Box className='calendarLaptop:w-11/12 calendarLaptop:h-5/6 calendarLaptop:mt-12 calendarLaptop:rounded-lg w-full h-full px-14 pt-10 bg-white'>
-          <CloseIcon onClick={handleCloseModal} className='float-right cursor-pointer hover:text-grayAccent' />
+          <CloseIcon onClick={props.handleCloseModal} className='float-right cursor-pointer hover:text-grayAccent' />
           <Stack className='h-full' spacing={{ xs: 1, md: -6 }}>
-            <BookingsHeader id={1} title={dummyResourceData.title} description={dummyResourceData.description} />
+            <BookingsHeader id={1} title={props.title} description={props.description} />
             <Calendar data={dummyCalendarData} />
           </Stack>
         </Box>
