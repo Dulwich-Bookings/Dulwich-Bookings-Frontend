@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Stack, Input, Typography, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from '@mui/material';
+import { Stack, Input, Typography, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, TextField } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 
 export default function RecurringBooking() {
   const [recurrence, setRecurrence] = React.useState<string>('');
@@ -14,39 +14,29 @@ export default function RecurringBooking() {
     setRecurrence(event.target.defaultValue);
   };
   const endDatePicker: JSX.Element = (
-    <Stack direction='row' spacing={9}>
+    <Stack direction='row' spacing={9} className='h-8 items-center'>
       <Typography className='font-Inter'>On</Typography>
-      {recurrence == 'on' ? (
+      {recurrence == 'on' && (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker
-            disableFuture
-            label='Responsive'
-            openTo='year'
-            views={['year', 'month', 'day']}
+          <DesktopDatePicker
+            label='Enter Date'
+            inputFormat='MM/dd/yyyy'
             value={endDate}
             onChange={newValue => {
               setEndDate(newValue as string);
             }}
-            renderInput={({ inputRef, inputProps }) => (
-              <input
-                ref={inputRef}
-                {...inputProps}
-                className='font-Inter object-right align-center box-content rounded-md w-6/12 bg-bgWhiteDim'
-              />
-            )}
+            renderInput={params => <TextField size='small' color='info' {...params} />}
           />
         </LocalizationProvider>
-      ) : (
-        <></>
       )}
     </Stack>
   );
 
   const ocurrences: JSX.Element = (
-    <Stack direction='row' spacing={6} className='h-6'>
+    <Stack direction='row' spacing={7} className='h-8 items-center'>
       <Typography className='font-Inter align-center'>After</Typography>
-      {recurrence == 'after' ? (
-        <Stack direction='row' spacing={-2}>
+      {recurrence == 'after' && (
+        <Stack direction='row' spacing={-2} className='h-8 items-center'>
           <Input
             type='number'
             className='font-Inter object-right align-center box-content rounded-md w-10 bg-bgWhiteDim h-auto hover:bg-bgGray focus-within:bg-gray'
@@ -59,8 +49,6 @@ export default function RecurringBooking() {
           />
           <Typography className='font-Inter align-center'>occurrences</Typography>
         </Stack>
-      ) : (
-        <></>
       )}
     </Stack>
   );
@@ -72,12 +60,6 @@ export default function RecurringBooking() {
         className='font-Inter font-light px-2 align-center text-grayAccent'
         aria-labelledby='demo-radio-buttons-group-label'
         name='radio-buttons-group'
-        sx={{
-          color: '#202020',
-          '&.Mui-checked': {
-            color: '#E33939',
-          },
-        }}
         onChange={handleRecurringChange}
         defaultValue='never'
       >
