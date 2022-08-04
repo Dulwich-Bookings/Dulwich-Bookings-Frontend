@@ -21,6 +21,10 @@ const AddResource = () => {
     history.push('/addResource/subscription');
   };
 
+  const returnAddTagPage = () => {
+    history.push('/addResource/tag');
+  };
+
   return (
     <Grid container className='mt-10 justify-center px-10'>
       <Stack className='w-screen max-w-3xl lg:max-w-[1115px]'>
@@ -43,7 +47,7 @@ const AddResource = () => {
         >
           <ResourceCard type={1} cardName='Room' onClickHandler={returnAddRoomPage} />
           <ResourceCard type={2} cardName='Subscription' onClickHandler={returnAddSubscriptionPage} />
-          <ResourceCard type={3} cardName='Tag' />
+          <ResourceCard type={3} cardName='Tag' onClickHandler={returnAddTagPage} />
         </Grid>
       </Stack>
     </Grid>
