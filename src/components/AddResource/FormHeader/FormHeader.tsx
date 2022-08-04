@@ -17,7 +17,7 @@ const FormHeader = ({ title }: Props) => {
   return (
     <Stack>
       <Stack direction='row' alignItems='center'>
-        <Stack spacing={2}>
+        <Stack className='w-3/4' spacing={2}>
           <Box onClick={returnResourcePage}>
             <BackButton buttonName='Add Resource' />
           </Box>
@@ -25,7 +25,7 @@ const FormHeader = ({ title }: Props) => {
             {title}
           </Typography>
         </Stack>
-        <div className='w-3/4'>
+        <div className='w-1/4'>
           <Button className='w-52 h-10 bg-[#808080] rounded-md text-bgWhite font-inter float-right'>Download Template</Button>
         </div>
       </Stack>

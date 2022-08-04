@@ -13,6 +13,7 @@ const TailWindTheme = {
       dulwichRed: '#E33939',
       dulwichRedHover: '#FDECEC',
       bgBlur: 'rgba(255, 255, 255, 0.5)',
+      transparent: 'transparent',
     },
     fontSize: {
       sm: 12,

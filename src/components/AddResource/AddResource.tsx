@@ -2,8 +2,9 @@ import React from 'react';
 
 import { Grid, Stack, Typography } from '@mui/material';
 import BackButton from '@components/AddResource/BackButton/BackButton';
+import ResourceCard from '@/components/AddResource/ResourceCard/ResourceCard';
+
 import { useHistory } from 'react-router-dom';
-import ResourceCard from './ResourceCard/ResourceCard';
 
 const AddResource = () => {
   const history = useHistory();
@@ -14,6 +15,10 @@ const AddResource = () => {
 
   const returnAddRoomPage = () => {
     history.push('/addResource/room');
+  };
+
+  const returnAddSubscriptionPage = () => {
+    history.push('/addResource/subscription');
   };
 
   return (
@@ -37,8 +42,8 @@ const AddResource = () => {
           }}
         >
           <ResourceCard type={1} cardName='Room' onClickHandler={returnAddRoomPage} />
-          <ResourceCard type={2} cardName='Tag' />
-          <ResourceCard type={3} cardName='Subscription' />
+          <ResourceCard type={2} cardName='Subscription' onClickHandler={returnAddSubscriptionPage} />
+          <ResourceCard type={3} cardName='Tag' />
         </Grid>
       </Stack>
     </Grid>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
 import { Button, ButtonGroup, Stack } from '@mui/material';
-import UserChip from '@/components/AddResource/AddRoomForm/OtherUserInput/UserChip/UserChip';
+import UserChip from '@/components/AddResource/Forms/OtherUserInput/UserChip/UserChip';
 import { UserData } from '@/modules/user/types';
 import { useSelector } from 'react-redux';
 import { getCurrentUser } from '@/modules/user/userSlice';
@@ -71,7 +71,7 @@ const OtherUserInput = (props: Props) => {
           ))}
         </ButtonGroup>
       </Stack>
-      <Stack className={'h-24 mt-24 z-0 overflow-y-scroll'} spacing={1}>
+      <Stack className={'w-full h-24 mt-24 z-0 overflow-y-scroll'} spacing={1}>
         {selectedOtherUsers.map(user => (
           <UserChip key={user.id} userData={user} onDelete={userDelete(user.id)} />
         ))}

@@ -3,12 +3,12 @@ import { useHistory } from 'react-router-dom';
 
 import { Stack, Grid } from '@mui/material';
 
-import TagInput from '@components/AddResource/AddRoomForm/TagInput/TagInput';
+import TagInput from '@/components/AddResource/Forms/TagInput/TagInput';
 import InputCheckBox from '@/components/Inputs/InputCheckBox/InputCheckBox';
-import OtherUserInput from '@components/AddResource/AddRoomForm/OtherUserInput/OtherUserInput';
+import OtherUserInput from '@/components/AddResource/Forms/OtherUserInput/OtherUserInput';
 import FormHeader from '@components/AddResource/FormHeader/FormHeader';
-import TemplateSubmitButton from '@/components/AddResource/AddRoomForm/TemplateSubmitButton/TemplateSubmitButton';
-import FormSubmitButton from '@/components/AddResource/AddRoomForm/FormSubmitButton/FormSubmitButton';
+import TemplateSubmitButton from '@/components/AddResource/Forms/TemplateSubmitButton/TemplateSubmitButton';
+import FormSubmitButton from '@/components/AddResource/Forms/FormSubmitButton/FormSubmitButton';
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
 import InputWithRadio from '@/components/Inputs/InputWithRadio/InputWithRadio';
 import ResourceSample1 from '@/assets/images/Resource-Sample-1.jpg';
@@ -38,8 +38,10 @@ const AddRoomForm = (props: Props) => {
   const [description, setDescription] = useState<string>('');
   const [weekProfile, setWeekProfile] = useState<'Weekly' | 'BiWeekly'>('Weekly');
   const [accessRights, setAccessRights] = useState<Role[]>([]);
+  const [accessOptions, setAccessOptions] = useState({ option1: false, option2: false });
   const [accessError, setAccessError] = useState<InputValidation>(noError);
   const [bookingRights, setBookingRights] = useState<Role[]>([]);
+  const [bookingOptions, setBookingOptions] = useState({ option1: false, option2: false });
   const [bookingError, setBookingError] = useState<InputValidation>(noError);
   const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
   const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>([]);
@@ -70,23 +72,43 @@ const AddRoomForm = (props: Props) => {
 
   const updateARHandler = (option1: boolean, option2: boolean): void => {
     const arr: Role[] = [role.ADMIN];
+    let options = { option1: false, option2: false };
+    setAccessOptions({ option1: false, option2: false });
+
     if (option1) {
-      arr.push(role.STUDENT);
+      arr.push(role.STUDENT, role.TEACHER);
+      options = { option1: true, option2: true };
     }
+
     if (option2) {
-      arr.push(role.TEACHER);
+      if (arr.indexOf(role.TEACHER) < 0) {
+        arr.push(role.TEACHER);
+      }
+      options = { ...options, option2: true };
     }
+
+    setAccessOptions(options);
     setAccessRights(arr);
   };
 
   const updateBRHandler = (option1: boolean, option2: boolean): void => {
     const arr: Role[] = [role.ADMIN];
+    let options = { option1: false, option2: false };
+    setBookingOptions({ option1: false, option2: false });
+
     if (option1) {
-      arr.push(role.STUDENT);
+      arr.push(role.STUDENT, role.TEACHER);
+      options = { option1: true, option2: true };
     }
+
     if (option2) {
-      arr.push(role.TEACHER);
+      if (arr.indexOf(role.TEACHER) < 0) {
+        arr.push(role.TEACHER);
+      }
+      options = { ...options, option2: true };
     }
+
+    setBookingOptions(options);
     setBookingRights(arr);
   };
 
@@ -142,9 +164,9 @@ const AddRoomForm = (props: Props) => {
         tags: selectedTags.map(tag => tag.id),
         users: selectedOtherUsers.map(user => user.id),
       };
-      const status = await createResource(resourceData);
+      const sendReq = await createResource(resourceData);
       setIsLoading(false);
-      if (status.isSuccess) {
+      if (sendReq.isSuccess) {
         history.push('/home');
       }
     } catch (err) {
@@ -188,7 +210,7 @@ const AddRoomForm = (props: Props) => {
             inputValue={description}
             labelText='Description'
             labelClassName='text-[#404040] text-xl font-inter'
-            inputPlaceholder='Add the room name'
+            inputPlaceholder='Add the room description'
             inputType='text'
             inputValidation={descriptionError}
             inputClassName='bg-bgGray w-full rounded-xl focus-within:bg-bgWhite'
@@ -207,6 +229,7 @@ const AddRoomForm = (props: Props) => {
               inputClassName='w-1/2'
               labelText='Access Rights'
               inputLabelText={['Student', 'Teacher']}
+              inputValue={accessOptions}
               inputHandleOnChange={updateARHandler}
               inputValidation={accessError}
               required
@@ -215,6 +238,7 @@ const AddRoomForm = (props: Props) => {
               inputClassName='w-1/2 px-[70px]'
               labelText='Booking Rights'
               inputLabelText={['Student', 'Teacher']}
+              inputValue={bookingOptions}
               inputHandleOnChange={updateBRHandler}
               inputValidation={bookingError}
               required
@@ -222,8 +246,18 @@ const AddRoomForm = (props: Props) => {
           </Grid>
 
           <Stack direction='row' spacing={5} className='z-0'>
-            <FormSubmitButton buttonText='Add Room' handleOnClick={handleCreateResource} loading={isLoading} />
-            <TemplateSubmitButton buttonText='Upload Template' helperText={templateFormName} handleOnClick={handleUploadTemplate} />
+            <FormSubmitButton
+              buttonClassName='w-56 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter'
+              buttonText='Add Room'
+              handleOnClick={handleCreateResource}
+              loading={isLoading}
+            />
+            <TemplateSubmitButton
+              buttonClassName='w-72 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter'
+              buttonText='Upload Template'
+              helperText={templateFormName}
+              handleOnClick={handleUploadTemplate}
+            />
           </Stack>
         </Stack>
         <img className='hidden w-1/3 h-screen float-right object-cover addRoomLaptop:block' src={ResourceSample1} />
