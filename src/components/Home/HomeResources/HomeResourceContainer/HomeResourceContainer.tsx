@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Grid, Card, CardContent, Typography, Stack } from '@mui/material';
 import ModalWrapper from '@/components/Modals/ModalWrapper/ModalWrapper';
-import SubscriptionModal from '@/components/Modals/ModalWrapper/SubscriptionModal/SubscriptionModal';
+import SubscriptionModal from '@/components/Modals/SubscriptionModal/SubscriptionModal';
 import { Bookmark, PersonOutlineOutlined, Circle } from '@mui/icons-material';
 import { ResourceData } from '@/modules/resource/types';
 import { SearchState, resourceTypes, searchStateMap } from '@/consts/constants';

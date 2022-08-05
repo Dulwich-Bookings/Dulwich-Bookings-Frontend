@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Card, CardContent, Grid, Stack } from '@mui/material';
+import { Card, CardContent, Stack } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { SubscriptionData } from '@/modules/subscription/types';
-import linkIcon from '@/assets/icons/link.png';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 type Props = {
   handleClose: () => void;
@@ -21,10 +21,10 @@ const SubscriptionModal = ({ data, handleClose }: Props) => {
           <Stack>
             {data.link && (
               <a href={data.link} target='_blank' className='font-Inter text-dulwichRed text-[32px]' rel='noreferrer'>
-                <Grid container>
-                  <div>{data.name}</div>
-                  <img className='object-scale-down' src={linkIcon} />
-                </Grid>
+                <Stack direction='row'>
+                  {data.name}
+                  <OpenInNewIcon className='mt-3.5 ml-1.5' />
+                </Stack>
               </a>
             )}
             {!data.link && <div className='font-Inter text-dulwichRed text-3xl'>{data.name}</div>}
