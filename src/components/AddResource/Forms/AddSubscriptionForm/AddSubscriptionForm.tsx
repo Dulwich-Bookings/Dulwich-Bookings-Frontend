@@ -11,7 +11,7 @@ import TemplateSubmitButton from '@/components/AddResource/Forms/TemplateSubmitB
 import FormSubmitButton from '@/components/AddResource/Forms/FormSubmitButton/FormSubmitButton';
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
 import InputDatePicker from '@/components/Inputs/InputDatePicker/InputDatePicker';
-import ResourceSample1 from '@/assets/images/Resource-Sample-1.jpg';
+import ResourceSample1 from '@/assets/images/Resource-Sample-2.png';
 
 import SubscriptionService from '@/api/subscription/SubscriptionService';
 import { useApi } from '@/api/ApiHandler';

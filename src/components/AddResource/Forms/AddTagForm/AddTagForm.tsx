@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { Stack, Grid } from '@mui/material';
 
@@ -6,32 +7,36 @@ import FormHeader from '@components/AddResource/FormHeader/FormHeader';
 import TemplateSubmitButton from '@/components/AddResource/Forms/TemplateSubmitButton/TemplateSubmitButton';
 import FormSubmitButton from '@/components/AddResource/Forms/FormSubmitButton/FormSubmitButton';
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
+import InputColorPicker from '@/components/Inputs/InputColorPicker/InputColorPicker';
+import ResourceSample1 from '@/assets/images/Resource-Sample-3.jpg';
 
-import ResourceSample1 from '@/assets/images/Resource-Sample-1.jpg';
-
-// import TagService from '@/api/tag/TagService';
-// import { useApi } from '@/api/ApiHandler';
+import TagService from '@/api/tag/TagService';
+import { useApi } from '@/api/ApiHandler';
 
 import { InputValidation } from '@/modules/inputValidation/types';
-
-import InputColorPicker from '@/components/Inputs/InputColorPicker/InputColorPicker';
+import { CreateTagData } from '@/modules/tag/types';
 
 const AddTagForm = () => {
   const noError: InputValidation = { isError: false, errorHelperText: '' };
 
   // react hooks
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [roomName, setRoomName] = useState<string>('');
-  const [roomError, setRoomError] = useState<InputValidation>(noError);
+  const [tagName, setTagName] = useState<string>('');
+  const [tagError, setTagError] = useState<InputValidation>(noError);
+  const [colorCode, setColorCode] = useState<string>('#553bd3');
 
   const [templateFormName, setTemplateFormName] = useState<string>('');
 
   // useApi hook
-  //   const [createTag] = useApi((data: CreateTagData) => TagService.createTag(data ?? null), true, true);
+  const [createTag] = useApi((data: CreateTagData) => TagService.createTag(data ?? null), true, true);
 
   // useHistory hook
+  const history = useHistory();
 
   // helper functions
+  const updateColorHandler = (colorCode: string): void => {
+    setColorCode(colorCode);
+  };
 
   const handleUploadTemplate = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
@@ -49,12 +54,12 @@ const AddTagForm = () => {
       errorHelperText: errorText,
     };
 
-    const isValidRoomName = roomName.length !== 0;
+    const isValidTagName = tagName.length !== 0;
     // by default role.ADMIN has access
 
-    setRoomError(isValidRoomName ? noError : errorObj);
+    setTagError(isValidTagName ? noError : errorObj);
 
-    if (!isValidRoomName) {
+    if (!isValidTagName) {
       throw new Error('Form Invalid');
     }
   };
@@ -64,6 +69,18 @@ const AddTagForm = () => {
     try {
       setIsLoading(true);
       formValidation();
+
+      const tagData: CreateTagData = {
+        name: tagName,
+        colour: colorCode,
+      };
+
+      const sendReq = await createTag(tagData);
+
+      if (sendReq.isSuccess) {
+        history.push('/home');
+      }
+      setIsLoading(false);
     } catch (err) {
       setIsLoading(false);
       console.log(err);
@@ -79,11 +96,11 @@ const AddTagForm = () => {
           <Grid container>
             <Grid item className='w-1/2'>
               <InputWithoutBorder
-                inputHandleOnChange={input => setRoomName(input.target.value)}
-                inputValue={roomName}
+                inputHandleOnChange={input => setTagName(input.target.value)}
+                inputValue={tagName}
                 labelText='Tag Name'
                 inputPlaceholder='Add the tag name'
-                inputValidation={roomError}
+                inputValidation={tagError}
                 inputType='text'
                 inputClassName='rounded-xl w-3/4 bg-bgGray focus-within:bg-bgWhite'
                 required={true}
@@ -93,7 +110,13 @@ const AddTagForm = () => {
 
           <Grid container>
             <Grid item className='w-1/2'>
-              <InputColorPicker required />
+              <InputColorPicker
+                inputClassName='rounded-xl w-3/4 bg-bgGray focus-within:bg-bgWhite'
+                inputHandleOnChange={updateColorHandler}
+                inputValue={colorCode}
+                pickerClassName='w-[264px]'
+                required
+              />
             </Grid>
           </Grid>
 
