@@ -12,6 +12,8 @@ import moment from 'moment';
 import styled from '@emotion/styled';
 import './Calendar.css';
 import { UserData } from '@/modules/user/types';
+import { ResourceData } from '@/modules/resource/types';
+// import { isTeacher, isAdmin } from '@/utilities/authorisation';
 
 export const StyleWrapper = styled.div`
   .fc .fc-timegrid-slot-minor {
@@ -38,7 +40,7 @@ export type EventData = {
 type Props = {
   data: EventData[];
   currentUser: UserData;
-  weeklyProfile: 'Weekly' | 'BiWeekly';
+  resourceData: ResourceData;
 };
 
 const Calendar = (props: Props) => {
@@ -85,6 +87,22 @@ const Calendar = (props: Props) => {
     setBookingType('Booked');
   };
 
+  // if (isAdmin(props.currentUser)) {
+  //   const pending = 'Approved';
+  // } else if (isTeacher(props.currentUser)) {
+  //   if (props.resourceData.bookingRights.includes('Teacher')) {
+  //     const pending = 'Approved';
+  //   } else {
+  //     const pending = 'Pending';
+  //   }
+  // } else {
+  //   if (props.resourceData.bookingRights.includes('Student')) {
+  //     const pending = 'Approved';
+  //   } else {
+  //     const pending = 'Pending';
+  //   }
+  // }
+
   return (
     <>
       <BookingForm
@@ -101,7 +119,7 @@ const Calendar = (props: Props) => {
         recurring={recurring}
         bookingType={bookingType}
         currentUser={props.currentUser}
-        weekProfile={props.weeklyProfile}
+        weekProfile={props.resourceData.weekProfile}
       />
       <Box className='h-full'>
         <FullCalendar

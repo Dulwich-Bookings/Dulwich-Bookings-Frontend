@@ -7,7 +7,7 @@ import TimePickerWrapper from '@components/BookingsModal/BookingForm/TimePickerW
 import RecurringBookingWrapper from '@components/BookingsModal/BookingForm/RecurringBookingWrapper/RecurringBookingWrapper';
 import BookingTypeWrapper from '@components/BookingsModal/BookingForm/BookingTypeWrapper/BookingTypeWrapper';
 
-import { isTeacher } from '@/utilities/authorisation';
+import { isAdmin } from '@/utilities/authorisation';
 import { UserData } from '@/modules/user/types';
 
 const theme = createTheme({
@@ -47,8 +47,6 @@ const BookingForm = (props: Props) => {
   const [rows, setRows] = useState<number>(1);
   // const [recurring, setRecurring] = useState<'Weekly' | 'BiWeekly'>(props.recurring);
   // const [bookingType, setBookingType] = useState<'Booked' | 'Lesson'>(props.bookingType);
-
-  const Teacher = isTeacher(props.currentUser);
 
   const handleOnBook = async () => {
     // setIsLoading(true);
@@ -142,7 +140,7 @@ const BookingForm = (props: Props) => {
                   />
                 </div>
                 {props.weekProfile === 'Weekly' && <RecurringBookingWrapper />}
-                {Teacher && <BookingTypeWrapper />}
+                {isAdmin(props.currentUser) && <BookingTypeWrapper />}
                 <BookingFormFooter
                   type={props.editable}
                   handleOnBook={handleOnBook}
