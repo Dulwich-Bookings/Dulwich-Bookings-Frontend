@@ -20,8 +20,8 @@ const SubscriptionModal = ({ data, handleClose }: Props) => {
         <Stack spacing={1.5} className='ml-10 m-3' alignItems='start'>
           <Stack>
             {data.link && (
-              <a href={data.link} className='font-Inter text-dulwichRed text-[32px]'>
-                <Grid container className=''>
+              <a href={data.link} target='_blank' className='font-Inter text-dulwichRed text-[32px]' rel='noreferrer'>
+                <Grid container>
                   <div>{data.name}</div>
                   <img className='object-scale-down' src={linkIcon} />
                 </Grid>
