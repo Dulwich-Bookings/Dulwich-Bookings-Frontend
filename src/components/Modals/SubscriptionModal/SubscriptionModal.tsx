@@ -4,6 +4,7 @@ import { Card, CardContent, Stack } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { SubscriptionData } from '@/modules/subscription/types';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { textAreaToHTML } from '@/utilities/textAreaConversion';
 
 type Props = {
   handleClose: () => void;
@@ -33,16 +34,7 @@ const SubscriptionModal = ({ data, handleClose }: Props) => {
 
           <Stack>
             <div className='font-Inter text-bgBlack text-[24px]'>Credentials</div>
-            <div className='font-Inter text-bgBlack text-[20px]'>
-              {data.credentials.split('\n').map((item, key) => {
-                return (
-                  <span key={key}>
-                    {item}
-                    <br />
-                  </span>
-                );
-              })}
-            </div>
+            <div className='font-Inter text-bgBlack text-[20px]'>{textAreaToHTML(data.credentials)}</div>
           </Stack>
         </Stack>
       </CardContent>
