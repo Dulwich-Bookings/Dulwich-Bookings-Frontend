@@ -66,7 +66,7 @@ const AddTagForm = () => {
       const sendReq = await createTag(tagData);
 
       if (sendReq.isSuccess) {
-        history.push('/home');
+        history.push('/addResource');
       }
       setIsLoading(false);
     } catch (err) {
