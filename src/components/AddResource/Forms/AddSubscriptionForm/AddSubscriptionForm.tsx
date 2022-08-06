@@ -7,7 +7,6 @@ import TagInput from '@/components/AddResource/Forms/TagInput/TagInput';
 import InputCheckBox from '@/components/Inputs/InputCheckBox/InputCheckBox';
 import OtherUserInput from '@/components/AddResource/Forms/OtherUserInput/OtherUserInput';
 import FormHeader from '@components/AddResource/FormHeader/FormHeader';
-import TemplateSubmitButton from '@/components/AddResource/Forms/TemplateSubmitButton/TemplateSubmitButton';
 import FormSubmitButton from '@/components/AddResource/Forms/FormSubmitButton/FormSubmitButton';
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
 import InputDatePicker from '@/components/Inputs/InputDatePicker/InputDatePicker';
@@ -46,7 +45,6 @@ const AddSubscriptionForm = (props: Props) => {
   const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>([]);
   const [expiryDate, setExpiryDate] = useState<Date>(new Date());
   const [linkURL, setLinkURL] = useState<string>('');
-  const [templateFormName, setTemplateFormName] = useState<string>('');
 
   // useApi hook
   const [createSubscription] = useApi((data: CreateSubscriptionData) => SubscriptionService.createSubscription(data ?? null), true, true);
@@ -94,15 +92,6 @@ const AddSubscriptionForm = (props: Props) => {
     }
 
     setExpiryDate(date);
-  };
-
-  const handleUploadTemplate = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files ? event.target.files[0] : null;
-    if (!file) {
-      return;
-    }
-    const message: string = 'Successfully uploaded ' + file.name;
-    setTemplateFormName(message);
   };
 
   const formValidation = () => {
@@ -166,7 +155,7 @@ const AddSubscriptionForm = (props: Props) => {
     <>
       <Stack direction='row' className='w-screen justify-start'>
         <Stack className='addRoomLaptop:w-2/3 w-screen py-10 px-24' spacing={2}>
-          <FormHeader title='Add Subscription' disableUpload={false} />
+          <FormHeader title='Add Subscription' disableUpload={true} />
 
           <Grid item className='w-1/2'>
             <InputWithoutBorder
@@ -257,12 +246,6 @@ const AddSubscriptionForm = (props: Props) => {
               buttonText='Add Subscription'
               handleOnClick={handleCreateResource}
               loading={isLoading}
-            />
-            <TemplateSubmitButton
-              buttonClassName='w-72 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter'
-              buttonText='Upload Template'
-              helperText={templateFormName}
-              handleOnClick={handleUploadTemplate}
             />
           </Stack>
         </Stack>
