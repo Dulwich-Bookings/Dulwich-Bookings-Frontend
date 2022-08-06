@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { SketchPicker, ColorResult, HSLColor } from 'react-color';
+import { ColorResult, HSLColor, ChromePicker } from 'react-color';
 import { InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import SquareIcon from '@mui/icons-material/Square';
 
@@ -67,7 +67,7 @@ const InputColorPicker = (props: Props) => {
           }}
         />
         <Stack className='pt-1'>
-          <SketchPicker className={props.pickerClassName} color={cursor} onChange={handler} />
+          <ChromePicker className={props.pickerClassName} color={cursor} onChange={handler} />
         </Stack>
       </Stack>
     </>

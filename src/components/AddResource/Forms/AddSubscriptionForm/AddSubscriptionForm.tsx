@@ -43,9 +43,8 @@ const AddSubscriptionForm = (props: Props) => {
   const [accessOptions, setAccessOptions] = useState({ option1: false, option2: false });
   const [accessError, setAccessError] = useState<InputValidation>(noError);
   const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
-  const [tagsError, setTagsError] = useState<InputValidation>(noError);
   const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>([]);
-  const [expiryDate, setExpiryDate] = useState<Date>();
+  const [expiryDate, setExpiryDate] = useState<Date>(new Date());
   const [linkURL, setLinkURL] = useState<string>('');
   const [templateFormName, setTemplateFormName] = useState<string>('');
 
@@ -116,17 +115,16 @@ const AddSubscriptionForm = (props: Props) => {
     const isValidName = subscriptionName.length !== 0;
     const isValidDescription = description.length !== 0;
     const isValidCredentials = credentials.length !== 0;
-    const isValidTags = selectedTags.length !== 0;
     // by default role.ADMIN has access
     const isValidAccessRights = accessRights.filter(d => d).length > 1;
 
     setSubscriptionError(isValidName ? noError : errorObj);
     setDescriptionError(isValidDescription ? noError : errorObj);
     setCredentialsError(isValidCredentials ? noError : errorObj);
-    setTagsError(isValidTags ? noError : errorObj);
+
     setAccessError(isValidAccessRights ? noError : errorObj);
 
-    if (!isValidName || !isValidDescription || !isValidCredentials || !isValidTags || !isValidAccessRights) {
+    if (!isValidName || !isValidDescription || !isValidCredentials || !isValidAccessRights) {
       throw new Error('Form Invalid');
     }
   };
@@ -143,7 +141,7 @@ const AddSubscriptionForm = (props: Props) => {
           description: description,
           accessRights: accessRights,
           credentials: credentials,
-          expiry: DateTime.newDateTimeFromDate(expiryDate as Date),
+          expiry: DateTime.newDateTimeFromDate(expiryDate),
           // hard coded values will be changed subsequently in the future
           remindMe: true,
           link: linkURL,
@@ -168,7 +166,7 @@ const AddSubscriptionForm = (props: Props) => {
     <>
       <Stack direction='row' className='w-screen justify-start'>
         <Stack className='addRoomLaptop:w-2/3 w-screen py-10 px-24' spacing={2}>
-          <FormHeader title='Add Subscription' />
+          <FormHeader title='Add Subscription' disableUpload={false} />
 
           <Grid item className='w-1/2'>
             <InputWithoutBorder
@@ -214,7 +212,7 @@ const AddSubscriptionForm = (props: Props) => {
           />
 
           <Grid container>
-            <TagInput inputClassName='w-1/2' inputValidation={tagsError} tags={props.tagData} updateTags={updateTagHandler} required />
+            <TagInput inputClassName='w-1/2' tags={props.tagData} updateTags={updateTagHandler} />
 
             <OtherUserInput inputClassName='w-1/2 pl-[70px] relative' userData={props.userData} updateUsers={updateUserHandler} />
           </Grid>

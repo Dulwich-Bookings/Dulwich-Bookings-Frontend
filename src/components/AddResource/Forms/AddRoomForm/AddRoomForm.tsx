@@ -179,7 +179,7 @@ const AddRoomForm = (props: Props) => {
     <>
       <Stack direction='row' className='w-screen justify-start'>
         <Stack className='addRoomLaptop:w-2/3 w-screen py-10 px-24' spacing={2}>
-          <FormHeader title='Add Room' />
+          <FormHeader title='Add Room' disableUpload={false} />
 
           <Grid container>
             <Grid item className='w-1/2'>

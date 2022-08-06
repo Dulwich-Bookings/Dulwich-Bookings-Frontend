@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 import { Stack, Grid } from '@mui/material';
 
 import FormHeader from '@components/AddResource/FormHeader/FormHeader';
-import TemplateSubmitButton from '@/components/AddResource/Forms/TemplateSubmitButton/TemplateSubmitButton';
 import FormSubmitButton from '@/components/AddResource/Forms/FormSubmitButton/FormSubmitButton';
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
 import InputColorPicker from '@/components/Inputs/InputColorPicker/InputColorPicker';
@@ -25,8 +24,6 @@ const AddTagForm = () => {
   const [tagError, setTagError] = useState<InputValidation>(noError);
   const [colorCode, setColorCode] = useState<string>('#553bd3');
 
-  const [templateFormName, setTemplateFormName] = useState<string>('');
-
   // useApi hook
   const [createTag] = useApi((data: CreateTagData) => TagService.createTag(data ?? null), true, true);
 
@@ -36,15 +33,6 @@ const AddTagForm = () => {
   // helper functions
   const updateColorHandler = (colorCode: string): void => {
     setColorCode(colorCode);
-  };
-
-  const handleUploadTemplate = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files ? event.target.files[0] : null;
-    if (!file) {
-      return;
-    }
-    const message: string = 'Successfully uploaded ' + file.name;
-    setTemplateFormName(message);
   };
 
   const formValidation = () => {
@@ -91,49 +79,42 @@ const AddTagForm = () => {
     <>
       <Stack direction='row' className='w-screen justify-start'>
         <Stack className='addRoomLaptop:w-2/3 w-screen py-10 px-24' spacing={2}>
-          <FormHeader title='Add Tag' />
+          <FormHeader title='Add Tag' disableUpload />
 
-          <Grid container>
+          <Grid className='w-full' container>
             <Grid item className='w-1/2'>
-              <InputWithoutBorder
-                inputHandleOnChange={input => setTagName(input.target.value)}
-                inputValue={tagName}
-                labelText='Tag Name'
-                inputPlaceholder='Add the tag name'
-                inputValidation={tagError}
-                inputType='text'
-                inputClassName='rounded-xl w-3/4 bg-bgGray focus-within:bg-bgWhite'
-                required={true}
-              />
-            </Grid>
-          </Grid>
+              <Stack spacing={2}>
+                <InputWithoutBorder
+                  inputHandleOnChange={input => setTagName(input.target.value)}
+                  inputValue={tagName}
+                  labelText='Tag Name'
+                  inputPlaceholder='Add the tag name'
+                  inputValidation={tagError}
+                  inputType='text'
+                  inputClassName='rounded-xl w-3/4 bg-bgGray focus-within:bg-bgWhite'
+                  required={true}
+                />
 
-          <Grid container>
+                <FormSubmitButton
+                  buttonClassName='w-56 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter'
+                  buttonText='Add Tag'
+                  handleOnClick={handleCreateResource}
+                  loading={isLoading}
+                />
+              </Stack>
+            </Grid>
             <Grid item className='w-1/2'>
               <InputColorPicker
-                inputClassName='rounded-xl w-3/4 bg-bgGray focus-within:bg-bgWhite'
+                inputClassName='rounded-xl w-3/4 bg-bgGray focus-within:bg-bgWhite '
                 inputHandleOnChange={updateColorHandler}
                 inputValue={colorCode}
-                pickerClassName='w-[264px]'
+                pickerClassName='w-3/4'
                 required
               />
             </Grid>
           </Grid>
 
-          <Stack direction='row' spacing={5} className='z-0'>
-            <FormSubmitButton
-              buttonClassName='w-56 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter'
-              buttonText='Add Tag'
-              handleOnClick={handleCreateResource}
-              loading={isLoading}
-            />
-            <TemplateSubmitButton
-              buttonClassName='w-72 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter'
-              buttonText='Upload Template'
-              helperText={templateFormName}
-              handleOnClick={handleUploadTemplate}
-            />
-          </Stack>
+          <Stack direction='row' spacing={5} className='z-0'></Stack>
         </Stack>
         <img className='hidden w-1/3 h-screen float-right object-cover addRoomLaptop:block' src={ResourceSample1} />
       </Stack>
