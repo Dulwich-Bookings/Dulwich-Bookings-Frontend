@@ -33,7 +33,16 @@ const SubscriptionModal = ({ data, handleClose }: Props) => {
 
           <Stack>
             <div className='font-Inter text-bgBlack text-[24px]'>Credentials</div>
-            <div className='font-Inter text-bgBlack text-[20px]'>{data.credentials}</div>
+            <div className='font-Inter text-bgBlack text-[20px]'>
+              {data.credentials.split('\n').map((item, key) => {
+                return (
+                  <span key={key}>
+                    {item}
+                    <br />
+                  </span>
+                );
+              })}
+            </div>
           </Stack>
         </Stack>
       </CardContent>
