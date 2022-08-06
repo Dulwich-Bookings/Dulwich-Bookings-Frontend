@@ -17,7 +17,7 @@ import TagMapService from '@/api/tagMap/TagMapService';
 import { resourceTypes, searchStateMap, SearchState } from '@/consts/constants';
 import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
-import { UserData } from '@/modules/user/types';
+import { Role, UserData } from '@/modules/user/types';
 import { SubscriptionData } from '@/modules/subscription/types';
 import { TagMapData } from '@/modules/tagMap/types';
 import { BookmarkData, CreateBookmarkData } from '@/modules/Bookmarks/Types';
@@ -85,8 +85,8 @@ const HomeResourceList = (props: Props) => {
     const allTagData = await retrieveAllData<TagData[]>(getAllTags);
     const allTagMapData = await retrieveAllData<TagMapData[]>(getAllTagMaps);
 
-    setResources(allResourceData ?? []);
-    setSubscriptions(allSubscriptionData ?? []);
+    setResources(allResourceData?.filter(r => filterResourceByRole(r)) ?? []);
+    setSubscriptions(allSubscriptionData?.filter(r => filterResourceByRole(r)) ?? []);
     setTags(allTagData ?? []);
     setTagMaps(allTagMapData ?? []);
     allResourceData &&
@@ -133,6 +133,18 @@ const HomeResourceList = (props: Props) => {
     await deleteBookmarkById(deletionId);
     await fetchBookmarksData();
     setIsLoading(false);
+  };
+
+  const filterResourceByRole = (data: ResourceData | SubscriptionData): boolean => {
+    const userRole: Role = props.currentUser.role;
+    const roles: Role[] = data.accessRights;
+
+    for (let i = 0; i < roles.length; i++) {
+      if (roles[i] === userRole) {
+        return true;
+      }
+    }
+    return false;
   };
 
   // TODO Add this to the Bookings Modal Component instead
