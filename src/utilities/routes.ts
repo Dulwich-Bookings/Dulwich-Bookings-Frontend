@@ -19,6 +19,7 @@ const Routes = {
     addSubscription: '/addResource/subscription',
     addTag: '/addResource/tag',
   },
+  settings: '/settings',
 };
 
 export default Routes;

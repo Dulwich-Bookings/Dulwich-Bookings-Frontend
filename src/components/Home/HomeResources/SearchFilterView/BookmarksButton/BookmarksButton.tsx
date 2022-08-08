@@ -12,7 +12,7 @@ const BookmarksButton = (props: Props) => {
       <Button className='p-0 hover:bg-[transparent]' disableRipple={true} onClick={props.onClick}>
         <div
           className={`${'font-Inter '} ${props.clicked && 'underline decoration-dulwichRed text-bgBlack'} ${
-            !props.clicked && 'text-[#404040]'
+            !props.clicked && 'text-textGray'
           } 
           text-lg homeLaptop:text-xxl capitalize `}
         >

@@ -175,7 +175,7 @@ const AddSubscriptionForm = (props: Props) => {
             inputHandleOnChange={input => setDescription(input.target.value)}
             inputValue={description}
             labelText='Description'
-            labelClassName='text-[#404040] text-xl font-inter'
+            labelClassName='text-textGray text-xl font-inter'
             inputPlaceholder='Add the subscription description'
             inputType='text'
             inputValidation={descriptionError}
@@ -190,7 +190,7 @@ const AddSubscriptionForm = (props: Props) => {
             inputHandleOnChange={input => updateCredentialsHandler(input.target.value)}
             inputValue={credentials}
             labelText='Credentials'
-            labelClassName='text-[#404040] text-xl font-inter'
+            labelClassName='text-textGray text-xl font-inter'
             inputPlaceholder='Add the credentials'
             inputType='text'
             inputValidation={credentialsError}

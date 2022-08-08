@@ -10,6 +10,7 @@ const TailWindTheme = {
       bgPurple: '#757AEC',
       bgWhite: '#feffff',
       bgGray: '#F3F3F4',
+      textGray: '#404040',
       dulwichRed: '#E33939',
       dulwichRedHover: '#FDECEC',
       bgBlur: 'rgba(255, 255, 255, 0.5)',
