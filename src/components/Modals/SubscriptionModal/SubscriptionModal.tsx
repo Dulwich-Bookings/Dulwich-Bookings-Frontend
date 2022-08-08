@@ -29,7 +29,7 @@ const SubscriptionModal = ({ data, handleClose }: Props) => {
               >
                 <Stack direction='row' className='items-center'>
                   {data.name}
-                  <OpenInNewIcon />
+                  <OpenInNewIcon className='mt-1.5 ml-1.5' />
                 </Stack>
               </a>
             )}
