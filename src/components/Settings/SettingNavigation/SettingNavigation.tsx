@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Grid, Stack } from '@mui/material';
 import BackButton from '@/components/AddResource/BackButton/BackButton';
 import SettingButton from './SettingButton/SettingButton';
 import { SettingState, settingStateMap } from '@/consts/constants';
 
-const SettingNavigation = () => {
+type Props = {
+  stateChangeHandler: (input: SettingState) => void;
+};
+
+const SettingNavigation = ({ stateChangeHandler }: Props) => {
   const [isClicked, setIsClicked] = useState<SettingState>(settingStateMap.ACCOUNT);
 
   const accountClickHandler = () => {
@@ -27,6 +31,10 @@ const SettingNavigation = () => {
   const usersClickHandler = () => {
     setIsClicked(settingStateMap.USERS);
   };
+
+  useEffect(() => {
+    stateChangeHandler(isClicked);
+  }, [isClicked]);
 
   return (
     <>
