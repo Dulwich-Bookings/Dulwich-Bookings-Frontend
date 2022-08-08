@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Button, Grid, Stack } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 import BackButton from '@/components/AddResource/BackButton/BackButton';
 import SettingButton from './SettingButton/SettingButton';
 
