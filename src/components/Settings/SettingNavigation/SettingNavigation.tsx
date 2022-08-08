@@ -3,30 +3,29 @@ import React, { useState } from 'react';
 import { Grid, Stack } from '@mui/material';
 import BackButton from '@/components/AddResource/BackButton/BackButton';
 import SettingButton from './SettingButton/SettingButton';
-
-const blankClickedState = { account: false, resource: false, tag: false, milestone: false, users: false };
+import { SettingState, settingStateMap } from '@/consts/constants';
 
 const SettingNavigation = () => {
-  const [isClicked, setIsClicked] = useState({ account: true, resource: false, tag: false, milestone: false, users: false });
+  const [isClicked, setIsClicked] = useState<SettingState>(settingStateMap.ACCOUNT);
 
   const accountClickHandler = () => {
-    setIsClicked({ ...blankClickedState, account: true });
+    setIsClicked(settingStateMap.ACCOUNT);
   };
 
   const resourceClickHandler = () => {
-    setIsClicked({ ...blankClickedState, resource: true });
+    setIsClicked(settingStateMap.RESOURCE);
   };
 
   const tagClickHandler = () => {
-    setIsClicked({ ...blankClickedState, tag: true });
+    setIsClicked(settingStateMap.TAG);
   };
 
   const milestoneClickHandler = () => {
-    setIsClicked({ ...blankClickedState, milestone: true });
+    setIsClicked(settingStateMap.MILESTONE);
   };
 
   const usersClickHandler = () => {
-    setIsClicked({ ...blankClickedState, users: true });
+    setIsClicked(settingStateMap.USERS);
   };
 
   return (

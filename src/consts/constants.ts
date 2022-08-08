@@ -6,6 +6,7 @@ import DCB from '@/assets/images/Dulwich-College-Beijing.jpg';
 import LandingSample1 from '@/assets/images/Landing-Sample-1.png';
 
 export type SearchState = 'all' | 'resources' | 'subscriptions';
+export type SettingState = { account: boolean; resource: boolean; tag: boolean; milestone: boolean; users: boolean };
 
 export const searchStateMap = {
   ALL: 'all' as SearchState,
@@ -16,6 +17,14 @@ export const searchStateMap = {
 export const resourceTypes = {
   RESOURCE: 'resource' as SearchState,
   SUBSCRIPTION: 'subscription' as SearchState,
+};
+
+export const settingStateMap = {
+  ACCOUNT: { account: true, resource: false, tag: false, milestone: false, users: false } as SettingState,
+  RESOURCE: { account: false, resource: true, tag: false, milestone: false, users: false } as SettingState,
+  TAG: { account: false, resource: false, tag: true, milestone: false, users: false } as SettingState,
+  MILESTONE: { account: false, resource: false, tag: false, milestone: true, users: false } as SettingState,
+  USERS: { account: false, resource: false, tag: false, milestone: false, users: true } as SettingState,
 };
 
 export const locationImages = [
