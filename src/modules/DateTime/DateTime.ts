@@ -50,6 +50,14 @@ class DateTime {
   }
 
   /**
+   * Converts the current date into UTC.
+   * @returns  a moment object converted to UTC.
+   */
+  public toDate(): Date {
+    return new Date(this.utc.toString());
+  }
+
+  /**
    * Converts the current date into UTC String.
    * @returns  a UTC string of the current DateTime Object.
    */

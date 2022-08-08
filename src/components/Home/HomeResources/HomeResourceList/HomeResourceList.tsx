@@ -30,6 +30,8 @@ type Props = {
   isRvViewClicked: boolean;
   className?: string;
   currentUser: UserData;
+  editMode: boolean;
+  editResourceHandler: (data: ResourceData | SubscriptionData, tags: TagData[]) => void;
 };
 
 const sortResourcesByName = (resourceAndSubscriptions: (ResourceData | SubscriptionData)[]) =>
@@ -147,6 +149,10 @@ const HomeResourceList = (props: Props) => {
     return false;
   };
 
+  const editResourceHandler = (data: ResourceData | SubscriptionData, tags: TagData[]) => {
+    props.editResourceHandler(data, tags);
+  };
+
   // TODO Add this to the Bookings Modal Component instead
   // const onRecentlyVisitedHandler = async (id: number, type: SearchState, isRecentlyVisited: boolean): Promise<void> => {
   //   if (isRecentlyVisited) return;
@@ -231,6 +237,8 @@ const HomeResourceList = (props: Props) => {
                 isRecentlyVisited={isRecentlyVisited(resource)}
                 onBookmarkChangeHandler={isBookmark(resource) ? onUnBookmarkHandler : onBookmarkHandler}
                 onRecentlyVisitedHandler={() => ''}
+                editMode={props.editMode}
+                onEditHandler={editResourceHandler}
               />
             ))}
           </Grid>

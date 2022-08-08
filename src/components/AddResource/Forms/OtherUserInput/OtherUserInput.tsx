@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
-import { Button, ButtonGroup, Stack } from '@mui/material';
 import UserChip from '@/components/AddResource/Forms/OtherUserInput/UserChip/UserChip';
+import { Button, ButtonGroup, Stack } from '@mui/material';
+
 import { UserData } from '@/modules/user/types';
-import { useSelector } from 'react-redux';
 import { getCurrentUser } from '@/modules/user/userSlice';
 
 type Props = {
   inputClassName?: string; // Optional ClassNames for Input
   userData: UserData[];
+  oldUsers?: UserData[];
   updateUsers: (data: UserData[]) => void;
 };
 
@@ -17,7 +19,7 @@ const OtherUserInput = (props: Props) => {
   const currentUser = useSelector(getCurrentUser);
   const [addOtherUsersValue, setOtherUsersInputValue] = useState('');
   const [filteredOtherUsers, setFilteredOtherUsers] = useState<UserData[]>([]);
-  const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>([]);
+  const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>(props.oldUsers ?? []);
 
   // Helper Functions
   const isUserAlreadySelected = (user: UserData) =>

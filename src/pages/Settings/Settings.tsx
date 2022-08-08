@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import HomeHeader from '@components/Home/HomeHeader/HomeHeader';
+import SettingNavigation from '@/components/Settings/SettingNavigation/SettingNavigation';
+import SettingBody from '@/components/Settings/SettingBody/SettingBody';
+import { Divider, Grid } from '@mui/material';
 
-import { useSelector } from 'react-redux';
 import { getCurrentUser } from '@/modules/user/userSlice';
 import { getCurrentSchool } from '@/modules/school/schoolSlice';
 import { SettingState, settingStateMap } from '@/consts/constants';
-
-import { Divider, Grid } from '@mui/material';
-import SettingNavigation from '@/components/Settings/SettingNavigation/SettingNavigation';
-import SettingBody from '@/components/Settings/SettingBody/SettingBody';
 
 const Settings = () => {
   const [settingState, setSettingState] = useState<SettingState>(settingStateMap.ACCOUNT);
@@ -18,7 +17,6 @@ const Settings = () => {
   const currentSchool = useSelector(getCurrentSchool);
 
   const stateChangeHandler = (state: SettingState) => {
-    console.log(state);
     setSettingState(state);
   };
 

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
-import { Button, ButtonGroup, Grid, Stack } from '@mui/material';
-import { TagData } from '@/modules/tag/types';
 import TagChip from '@/components/AddResource/Forms/TagInput/TagChip/TagChip';
+import { Button, ButtonGroup, Grid, Stack } from '@mui/material';
+
+import { TagData } from '@/modules/tag/types';
 import { InputValidation } from '@/modules/inputValidation/types';
 
 type Props = {
   inputClassName?: string; // Optional ClassNames for Input
   inputValidation?: InputValidation;
   tags: TagData[];
+  oldTags?: TagData[];
   updateTags: (data: TagData[]) => void;
   required?: boolean;
 };
@@ -17,7 +19,7 @@ type Props = {
 const TagInput = (props: Props) => {
   const [tagInputValue, setTagInputValue] = useState('');
   const [filteredTags, setFilteredTags] = useState<TagData[]>([]);
-  const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
+  const [selectedTags, setSelectedTags] = useState<TagData[]>(props.oldTags ?? []);
   const [showTags, setShowTags] = useState<boolean>(false);
 
   useEffect(() => {

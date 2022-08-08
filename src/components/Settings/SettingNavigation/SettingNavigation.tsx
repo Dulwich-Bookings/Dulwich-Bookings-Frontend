@@ -51,7 +51,7 @@ const SettingNavigation = ({ stateChangeHandler }: Props) => {
           <BackButton buttonText='Home' onClickHandler={homeButtonClickHandler} />
           <Stack>
             <SettingButton buttonText='Account Details' isClicked={isClicked.account} handleOnClick={accountClickHandler} />
-            <SettingButton buttonText='My Resource' isClicked={isClicked.resource} handleOnClick={resourceClickHandler} />
+            <SettingButton buttonText='My Resources' isClicked={isClicked.resource} handleOnClick={resourceClickHandler} />
             <SettingButton buttonText='Tag Management' isClicked={isClicked.tag} handleOnClick={tagClickHandler} />
             <SettingButton buttonText='Milestones' isClicked={isClicked.milestone} handleOnClick={milestoneClickHandler} />
             <SettingButton buttonText='User Management' isClicked={isClicked.users} handleOnClick={usersClickHandler} />
