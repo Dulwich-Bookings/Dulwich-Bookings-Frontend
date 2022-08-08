@@ -1,7 +1,5 @@
 import React from 'react';
-import { Box, Button, Stack, Typography } from '@mui/material';
-import BackButton from '@/components/AddResource/BackButton/BackButton';
-import { useHistory } from 'react-router-dom';
+import { Typography } from '@mui/material';
 
 type Props = {
   title: string;
