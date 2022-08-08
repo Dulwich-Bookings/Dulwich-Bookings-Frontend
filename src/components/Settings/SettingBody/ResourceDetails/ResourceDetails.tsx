@@ -72,7 +72,7 @@ const ResourceDetails = ({ user: userSelf }: Props) => {
     <>
       <Stack className='w-full'>
         <Grid container className='justify-start'>
-          <SettingHeader title='My Resources' />
+          <SettingHeader title={`${(!editMode && 'My Resources') || (editMode && 'Edit Resources')}`} />
         </Grid>
 
         {!editMode && (
