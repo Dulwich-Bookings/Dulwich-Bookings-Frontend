@@ -3,21 +3,22 @@ import { CircularProgress } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 type Props = {
+  buttonClassName?: string; //Optional for Button Styling
   buttonText: string;
   handleOnClick: () => void;
   loading?: boolean;
 };
 
-const FormSubmitButton = ({ buttonText, handleOnClick, loading }: Props) => {
+const FormSubmitButton = ({ buttonClassName, buttonText, handleOnClick, loading }: Props) => {
   return (
     <LoadingButton
       loading={loading}
       onClick={handleOnClick}
-      className='w-56 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter text-xl'
+      className={buttonClassName}
       variant='contained'
       loadingIndicator={<CircularProgress size={16} className='text-bgWhite' />}
     >
-      {buttonText}
+      <p className='font-Inter text-xl capitalize'>{buttonText}</p>
     </LoadingButton>
   );
 };

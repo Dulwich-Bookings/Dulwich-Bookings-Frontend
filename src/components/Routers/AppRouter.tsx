@@ -20,6 +20,8 @@ import HomeViewAll from '@/pages/Home/HomeViewAll/HomeViewAll';
 import Test from '@pages/Test/Test';
 import AddResource from '@pages/AddResource/AddResource';
 import AddRoom from '@/pages/AddResource/AddRoom/AddRoom';
+import AddSubscription from '@/pages/AddResource/AddSubscription/AddSubscription';
+import AddTag from '@/pages/AddResource/AddTag/AddTag';
 import { isTeacher } from '@/utilities/authorisation';
 
 const AppRouter = () => {
@@ -82,6 +84,8 @@ const AppRouter = () => {
       {accessToken && !isTemp && <Route exact path={Routes.home.viewAll} component={HomeViewAll} />}
       {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.main} component={AddResource} />}
       {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.addRoom} component={AddRoom} />}
+      {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.addSubscription} component={AddSubscription} />}
+      {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.addTag} component={AddTag} />}
       <Route exact path={Routes.test} component={Test} />
       <Route exact path='*'>
         <Redirect to={Routes.base} />

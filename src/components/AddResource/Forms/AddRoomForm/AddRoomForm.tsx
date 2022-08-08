@@ -3,12 +3,12 @@ import { useHistory } from 'react-router-dom';
 
 import { Stack, Grid } from '@mui/material';
 
-import TagInput from '@components/AddResource/AddRoomForm/TagInput/TagInput';
+import TagInput from '@/components/AddResource/Forms/TagInput/TagInput';
 import InputCheckBox from '@/components/Inputs/InputCheckBox/InputCheckBox';
-import OtherUserInput from '@components/AddResource/AddRoomForm/OtherUserInput/OtherUserInput';
+import OtherUserInput from '@/components/AddResource/Forms/OtherUserInput/OtherUserInput';
 import FormHeader from '@components/AddResource/FormHeader/FormHeader';
-import TemplateSubmitButton from '@/components/AddResource/AddRoomForm/TemplateSubmitButton/TemplateSubmitButton';
-import FormSubmitButton from '@/components/AddResource/AddRoomForm/FormSubmitButton/FormSubmitButton';
+import TemplateSubmitButton from '@/components/AddResource/Forms/TemplateSubmitButton/TemplateSubmitButton';
+import FormSubmitButton from '@/components/AddResource/Forms/FormSubmitButton/FormSubmitButton';
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
 import InputWithRadio from '@/components/Inputs/InputWithRadio/InputWithRadio';
 import ResourceSample1 from '@/assets/images/Resource-Sample-1.jpg';
@@ -164,9 +164,9 @@ const AddRoomForm = (props: Props) => {
         tags: selectedTags.map(tag => tag.id),
         users: selectedOtherUsers.map(user => user.id),
       };
-      const status = await createResource(resourceData);
+      const sendReq = await createResource(resourceData);
       setIsLoading(false);
-      if (status.isSuccess) {
+      if (sendReq.isSuccess) {
         history.push('/home');
       }
     } catch (err) {
@@ -179,7 +179,7 @@ const AddRoomForm = (props: Props) => {
     <>
       <Stack direction='row' className='w-screen justify-start'>
         <Stack className='addRoomLaptop:w-2/3 w-screen py-10 px-24' spacing={2}>
-          <FormHeader title='Add Room' />
+          <FormHeader title='Add Room' disableUpload={false} />
 
           <Grid container>
             <Grid item className='w-1/2'>
@@ -210,7 +210,7 @@ const AddRoomForm = (props: Props) => {
             inputValue={description}
             labelText='Description'
             labelClassName='text-[#404040] text-xl font-inter'
-            inputPlaceholder='Add the room name'
+            inputPlaceholder='Add the room description'
             inputType='text'
             inputValidation={descriptionError}
             inputClassName='bg-bgGray w-full rounded-xl focus-within:bg-bgWhite'
@@ -246,8 +246,18 @@ const AddRoomForm = (props: Props) => {
           </Grid>
 
           <Stack direction='row' spacing={5} className='z-0'>
-            <FormSubmitButton buttonText='Add Room' handleOnClick={handleCreateResource} loading={isLoading} />
-            <TemplateSubmitButton buttonText='Upload Template' helperText={templateFormName} handleOnClick={handleUploadTemplate} />
+            <FormSubmitButton
+              buttonClassName='w-56 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter'
+              buttonText='Add Room'
+              handleOnClick={handleCreateResource}
+              loading={isLoading}
+            />
+            <TemplateSubmitButton
+              buttonClassName='w-72 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter'
+              buttonText='Upload Template'
+              helperText={templateFormName}
+              handleOnClick={handleUploadTemplate}
+            />
           </Stack>
         </Stack>
         <img className='hidden w-1/3 h-screen float-right object-cover addRoomLaptop:block' src={ResourceSample1} />

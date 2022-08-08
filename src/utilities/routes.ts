@@ -16,6 +16,8 @@ const Routes = {
   addResource: {
     main: '/addResource',
     addRoom: '/addResource/room',
+    addSubscription: '/addResource/subscription',
+    addTag: '/addResource/tag',
   },
 };
 

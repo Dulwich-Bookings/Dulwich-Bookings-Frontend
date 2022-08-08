@@ -6,6 +6,7 @@ export interface TagData {
 
 export interface CreateTagData {
   name: string;
+  colour: string;
 }
 
 export type TagPutData = Partial<TagData>;
