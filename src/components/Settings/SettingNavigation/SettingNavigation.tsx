@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
+import { SettingState, settingStateMap } from '@/consts/constants';
+
 import { Grid, Stack } from '@mui/material';
 import BackButton from '@/components/AddResource/BackButton/BackButton';
-import SettingButton from './SettingButton/SettingButton';
-import { SettingState, settingStateMap } from '@/consts/constants';
+import SettingButton from '@/components/Settings/SettingNavigation/SettingButton/SettingButton';
+import { useHistory } from 'react-router-dom';
 
 type Props = {
   stateChangeHandler: (input: SettingState) => void;
@@ -11,6 +13,12 @@ type Props = {
 
 const SettingNavigation = ({ stateChangeHandler }: Props) => {
   const [isClicked, setIsClicked] = useState<SettingState>(settingStateMap.ACCOUNT);
+
+  const history = useHistory();
+
+  const homeButtonClickHandler = () => {
+    history.push('/home');
+  };
 
   const accountClickHandler = () => {
     setIsClicked(settingStateMap.ACCOUNT);
@@ -39,8 +47,8 @@ const SettingNavigation = ({ stateChangeHandler }: Props) => {
   return (
     <>
       <Grid container className='justify-end'>
-        <Stack className='w-3/4 pt-10' spacing={3}>
-          <BackButton buttonText='Home' />
+        <Stack className='w-3/4' spacing={3}>
+          <BackButton buttonText='Home' onClickHandler={homeButtonClickHandler} />
           <Stack>
             <SettingButton buttonText='Account Details' isClicked={isClicked.account} handleOnClick={accountClickHandler} />
             <SettingButton buttonText='My Resource' isClicked={isClicked.resource} handleOnClick={resourceClickHandler} />

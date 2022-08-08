@@ -20,10 +20,11 @@ type Props<inputType> = {
   inputHandleOnBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   multiline?: boolean;
   required?: boolean;
+  disabled?: boolean;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-const InputWithoutBorder = <T extends Object>(props: Props<T>) => {
+const InputWithBorder = <T extends Object>(props: Props<T>) => {
   const { inputValidation, inputProps } = props;
   const colSpacing = props.spacing ? props.spacing : 0.5;
   const isError = inputValidation ? inputValidation.isError : false;
@@ -54,7 +55,11 @@ const InputWithoutBorder = <T extends Object>(props: Props<T>) => {
         sx={{
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
-              borderWidth: '0px',
+              borderColor: '#E6E6E6',
+              borderRadius: '10px',
+            },
+            '&:hover fieldset': {
+              borderColor: '#E6E6E6',
             },
             '&.Mui-focused fieldset': {
               border: 1,
@@ -66,8 +71,8 @@ const InputWithoutBorder = <T extends Object>(props: Props<T>) => {
               border: 1,
               borderColor: '#E33939',
             },
-            '& input': {
-              backgroundColor: 'white',
+            '&:hover fieldset': {
+              borderColor: '#E33939',
             },
             '&.MuiFormHelperText-root': {
               backgroundColor: 'white',
@@ -77,9 +82,10 @@ const InputWithoutBorder = <T extends Object>(props: Props<T>) => {
             },
           },
         }}
+        disabled={props.disabled}
       />
     </Stack>
   );
 };
 
-export default InputWithoutBorder;
+export default InputWithBorder;

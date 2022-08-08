@@ -5,11 +5,11 @@ import HomeHeader from '@components/Home/HomeHeader/HomeHeader';
 import { useSelector } from 'react-redux';
 import { getCurrentUser } from '@/modules/user/userSlice';
 import { getCurrentSchool } from '@/modules/school/schoolSlice';
+import { SettingState, settingStateMap } from '@/consts/constants';
 
 import { Divider, Grid } from '@mui/material';
 import SettingNavigation from '@/components/Settings/SettingNavigation/SettingNavigation';
 import SettingBody from '@/components/Settings/SettingBody/SettingBody';
-import { SettingState, settingStateMap } from '@/consts/constants';
 
 const Settings = () => {
   const [settingState, setSettingState] = useState<SettingState>(settingStateMap.ACCOUNT);
@@ -28,13 +28,13 @@ const Settings = () => {
         <>
           <HomeHeader currentSchool={currentSchool} currentUser={currentUser} />
           <main>
-            <Grid container className='w-screen h-screen'>
-              <Grid item className='w-72'>
+            <Grid container className='w-screen h-screen pt-10'>
+              <Grid item className='w-2/12'>
                 <SettingNavigation stateChangeHandler={stateChangeHandler} />
               </Grid>
-              <Divider className='mx-4' orientation='vertical' variant='middle' flexItem />
-              <Grid item className='w-auto'>
-                <SettingBody viewState={settingState} />
+              <Divider className='ml-4 mr-16' orientation='vertical' variant='middle' flexItem />
+              <Grid item className='w-9/12'>
+                <SettingBody viewState={settingState} user={currentUser} />
               </Grid>
             </Grid>
           </main>

@@ -13,7 +13,7 @@ type Props = {
 const SettingButton = ({ buttonClassName, textClassName, buttonText, handleOnClick, isClicked }: Props) => {
   return (
     <Button onClick={handleOnClick} className={`justify-start ${isClicked && 'bg-bgGray'} ${buttonClassName}`}>
-      <p className={`font-Inter text-xl capitalize text-textGray ${textClassName}`}>{buttonText}</p>
+      <p className={`font-Inter text-xl capitalize text-textGray text-left ${textClassName}`}>{buttonText}</p>
     </Button>
   );
 };
