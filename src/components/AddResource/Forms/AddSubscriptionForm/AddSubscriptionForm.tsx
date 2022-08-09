@@ -12,6 +12,7 @@ import FormHeader from '@components/AddResource/FormHeader/FormHeader';
 import FormSubmitButton from '@/components/AddResource/Forms/FormSubmitButton/FormSubmitButton';
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
 import InputDatePicker from '@/components/Inputs/InputDatePicker/InputDatePicker';
+import DialogWrapper from '@/components/Dialog/DialogWrapper/DialogWrapper';
 import { Stack, Grid } from '@mui/material';
 
 import { InputValidation } from '@/modules/inputValidation/types';
@@ -60,6 +61,7 @@ const AddSubscriptionForm = (props: Props) => {
   const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>(oldUsers ?? []);
   const [expiryDate, setExpiryDate] = useState<Date>(oldData?.expiry?.toDate() ?? new Date());
   const [linkURL, setLinkURL] = useState<string>(oldData?.link ?? '');
+  const [showDialog, setShowDialog] = useState<boolean>(false);
 
   // useApi hook
   const [createSubscription] = useApi((data: CreateSubscriptionData) => SubscriptionService.createSubscription(data ?? null), true, true);
@@ -68,6 +70,7 @@ const AddSubscriptionForm = (props: Props) => {
     true,
     true,
   );
+  const [deleteSubscription] = useApi((data: number) => SubscriptionService.deleteSubscriptionById(data ?? -1), true, true);
 
   // useHistory hook
   const history = useHistory();
@@ -112,6 +115,14 @@ const AddSubscriptionForm = (props: Props) => {
     }
 
     setExpiryDate(date);
+  };
+
+  const handleShowDialog = () => {
+    setShowDialog(true);
+  };
+
+  const handleHideDialog = () => {
+    setShowDialog(false);
   };
 
   const formValidation = () => {
@@ -179,6 +190,13 @@ const AddSubscriptionForm = (props: Props) => {
     } catch (err) {
       setIsLoading(false);
       console.log(err);
+    }
+  };
+
+  const handleDeleteSubscription = async () => {
+    const sendReq = await deleteSubscription(oldData?.id);
+    if (sendReq.isSuccess) {
+      props.closeEditForm();
     }
   };
 
@@ -282,6 +300,26 @@ const AddSubscriptionForm = (props: Props) => {
             handleOnClick={handleCreateResource}
             loading={isLoading}
           />
+          {props.editMode && (
+            <>
+              <FormSubmitButton
+                buttonClassName='w-64 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter'
+                buttonText={`Delete Subscription`}
+                handleOnClick={handleShowDialog}
+                loading={isLoading}
+              />
+
+              <DialogWrapper
+                isOpen={showDialog}
+                handleClose={handleHideDialog}
+                handleSubmit={handleDeleteSubscription}
+                title='Confirm Delete Subscription?'
+                textBody='Deleting the Subscription will be invertible. Do you wish to continue?'
+                buttonOneText='Close'
+                buttonTwoText='Delete'
+              />
+            </>
+          )}
         </Stack>
       </Stack>
     </>

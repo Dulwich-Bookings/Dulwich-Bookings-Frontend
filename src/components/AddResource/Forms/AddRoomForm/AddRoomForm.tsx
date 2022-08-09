@@ -13,6 +13,7 @@ import TemplateSubmitButton from '@/components/AddResource/Forms/TemplateSubmitB
 import FormSubmitButton from '@/components/AddResource/Forms/FormSubmitButton/FormSubmitButton';
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
 import InputWithRadio from '@/components/Inputs/InputWithRadio/InputWithRadio';
+import DialogWrapper from '@/components/Dialog/DialogWrapper/DialogWrapper';
 import { Stack, Grid } from '@mui/material';
 
 import { role } from '@/consts/constants';
@@ -68,6 +69,7 @@ const AddRoomForm = (props: Props) => {
   const [selectedTags, setSelectedTags] = useState<TagData[]>(oldTags ?? []);
   const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>(oldUsers ?? []);
   const [templateFormName, setTemplateFormName] = useState<string>('');
+  const [showDialog, setShowDialog] = useState<boolean>(false);
 
   // useApi hook
   const [createResource] = useApi((data: CreateResourceData) => ResourceService.createResource(data ?? null), true, true);
@@ -76,6 +78,7 @@ const AddRoomForm = (props: Props) => {
     true,
     true,
   );
+  const [deleteResource] = useApi((data: number) => ResourceService.deleteResourceById(data ?? -1), true, true);
 
   // useHistory hook
   const history = useHistory();
@@ -136,6 +139,14 @@ const AddRoomForm = (props: Props) => {
     }
     const message: string = 'Successfully uploaded ' + file.name;
     setTemplateFormName(message);
+  };
+
+  const handleShowDialog = () => {
+    setShowDialog(true);
+  };
+
+  const handleHideDialog = () => {
+    setShowDialog(false);
   };
 
   const formValidation = () => {
@@ -203,6 +214,13 @@ const AddRoomForm = (props: Props) => {
     } catch (err) {
       setIsLoading(false);
       console.log(err);
+    }
+  };
+
+  const handleDeleteResource = async () => {
+    const sendReq = await deleteResource(oldData?.id);
+    if (sendReq.isSuccess) {
+      props.closeEditForm();
     }
   };
 
@@ -289,6 +307,26 @@ const AddRoomForm = (props: Props) => {
               helperText={templateFormName}
               handleOnClick={handleUploadTemplate}
             />
+          )}
+          {props.editMode && (
+            <>
+              <FormSubmitButton
+                buttonClassName='w-56 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter'
+                buttonText={`Delete Room`}
+                handleOnClick={handleShowDialog}
+                loading={isLoading}
+              />
+
+              <DialogWrapper
+                isOpen={showDialog}
+                handleClose={handleHideDialog}
+                handleSubmit={handleDeleteResource}
+                title='Confirm Delete Resource?'
+                textBody='Deleting the Resource will be invertible. Do you wish to continue?'
+                buttonOneText='Close'
+                buttonTwoText='Delete'
+              />
+            </>
           )}
         </Stack>
       </Stack>
