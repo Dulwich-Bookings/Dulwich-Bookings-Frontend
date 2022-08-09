@@ -44,6 +44,22 @@ export default class ResourceService {
     }
   }
 
+  public static async getResourceSelf(): Promise<ApiData> {
+    try {
+      const response = await ApiService.request(
+        {
+          url: `${this.getResourceUrl()}/self`,
+          method: 'GET',
+        },
+        true,
+      );
+      response.data = ResourceService.processResourceType(response.data);
+      return response;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
   public static async createResource(createResourceData: CreateResourceData): Promise<ApiData> {
     try {
       const response = await ApiService.request(
