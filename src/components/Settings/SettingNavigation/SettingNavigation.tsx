@@ -47,7 +47,7 @@ const SettingNavigation = ({ stateChangeHandler }: Props) => {
   return (
     <>
       <Grid container className='justify-end'>
-        <Stack className='w-3/4' spacing={3}>
+        <Stack className='w-4/5' spacing={3}>
           <BackButton buttonText='Home' onClickHandler={homeButtonClickHandler} />
           <Stack>
             <SettingButton buttonText='Account Details' isClicked={isClicked.account} handleOnClick={accountClickHandler} />

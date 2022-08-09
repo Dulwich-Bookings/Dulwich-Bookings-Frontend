@@ -53,7 +53,7 @@ export default class ResourceService {
         },
         true,
       );
-      response.data = ResourceService.processResourceType(response.data);
+      response.data = response.data.map((r: ResourceData) => ResourceService.processResourceType(r));
       return response;
     } catch (error) {
       return Promise.reject(error);
