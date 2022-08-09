@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useApi } from '@/api/ApiHandler';
-import ApiService from '@/api/ApiService';
 import AuthService from '@/api/auth/AuthService';
 
 import SettingHeader from '@/components/Settings/SettingBody/SettingHeader/SettingHeader';
@@ -11,7 +10,6 @@ import InputWithBorder from '@/components/Inputs/InputWithBorder/InputWithBorder
 import { InputValidation } from '@/modules/inputValidation/types';
 import { UserData } from '@/modules/user/types';
 import { Grid, Stack } from '@mui/material';
-import { getLocalStorageValue } from '@/utilities/localStorage';
 
 type Props = {
   user: UserData;
@@ -22,22 +20,31 @@ const AccountDetails = ({ user }: Props) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [password, setPassword] = useState<string>('');
+  const [passwordNew, setPasswordNew] = useState<string>('');
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
   const [pwError, setPwError] = useState<InputValidation>(noError);
+  const [pwNewError, setPwNewError] = useState<InputValidation>(noError);
   const [pwConfirmError, setPwConfirmError] = useState<InputValidation>(noError);
 
-  const [updatePassword] = useApi(
-    (data: { password: string; passwordConfirmation: string }) =>
-      AuthService.setPassword(data.password, data.passwordConfirmation, getLocalStorageValue(ApiService.authTokenKey) ?? ''),
+  const [resetPassword] = useApi(
+    (data: { originalPassword: string; newPassword: string; newPasswordConfirmation: string }) =>
+      AuthService.resetPassword(data.originalPassword, data.newPassword, data.newPasswordConfirmation),
     true,
     true,
   );
 
   const formValidation = () => {
-    const errorText = 'Passwords do not match';
+    const errorText = 'Field Cannot be Empty';
+    const errorMismatchText = 'Passwords do not match';
+
     const errorObj: InputValidation = {
       isError: true,
       errorHelperText: errorText,
+    };
+
+    const errorMismatchObj: InputValidation = {
+      isError: true,
+      errorHelperText: errorMismatchText,
     };
 
     const emptyErrorObj: InputValidation = {
@@ -45,12 +52,17 @@ const AccountDetails = ({ user }: Props) => {
       errorHelperText: '',
     };
 
-    const isValidPassword = password === passwordConfirmation;
+    const isValidPasswordOld = password.length !== 0;
+    const isValidPasswordNew = passwordNew.length !== 0;
+    const isValidPasswordConfirm = passwordConfirmation.length !== 0;
 
-    setPwError(isValidPassword ? noError : errorObj);
-    setPwConfirmError(isValidPassword ? noError : emptyErrorObj);
+    const isPasswordEqual = passwordNew === passwordConfirmation;
 
-    if (!isValidPassword) {
+    setPwError(isValidPasswordOld ? noError : errorObj);
+    setPwNewError(isValidPasswordNew ? (isPasswordEqual ? noError : errorMismatchObj) : errorObj);
+    setPwConfirmError(isValidPasswordConfirm ? (isPasswordEqual ? noError : emptyErrorObj) : errorObj);
+
+    if (!isValidPasswordOld || !isValidPasswordNew || !isValidPasswordConfirm || !isPasswordEqual) {
       throw new Error('Form Invalid');
     }
   };
@@ -61,11 +73,12 @@ const AccountDetails = ({ user }: Props) => {
       formValidation();
 
       const data = {
-        password: password,
-        passwordConfirmation: passwordConfirmation,
+        originalPassword: password,
+        newPassword: passwordNew,
+        newPasswordConfirmation: passwordConfirmation,
       };
 
-      await updatePassword(data);
+      await resetPassword(data);
 
       setIsLoading(false);
     } catch (err) {
@@ -83,7 +96,7 @@ const AccountDetails = ({ user }: Props) => {
 
         <Grid container>
           <Grid item className='w-1/6'>
-            <UserProfileCircle email={user.email} className='mt-2 w-36 h-36 text-3xl text-bgWhite' />
+            <UserProfileCircle email={user.email} className='mt-2 w-36 h-36 text-3xl text-bgWhite cursor-default' />
           </Grid>
 
           <Stack className='w-5/6' spacing={2}>
@@ -96,6 +109,16 @@ const AccountDetails = ({ user }: Props) => {
               inputValue={user.email}
               disabled
             />
+            <InputWithBorder
+              labelText='Old Password'
+              inputType='password'
+              labelClassName='font-Inter text-textGray'
+              inputSize='small'
+              inputClassName='w-1/3'
+              inputValue={password}
+              inputHandleOnChange={input => setPassword(input.target.value)}
+              inputValidation={pwError}
+            />
             <Grid container className='w-full space-x-12'>
               <Grid item className='w-1/3'>
                 <InputWithBorder
@@ -103,9 +126,9 @@ const AccountDetails = ({ user }: Props) => {
                   inputType='password'
                   labelClassName='font-Inter text-textGray'
                   inputSize='small'
-                  inputValue={password}
-                  inputHandleOnChange={input => setPassword(input.target.value)}
-                  inputValidation={pwError}
+                  inputValue={passwordNew}
+                  inputHandleOnChange={input => setPasswordNew(input.target.value)}
+                  inputValidation={pwNewError}
                 />
               </Grid>
               <Grid item className='w-1/3'>
