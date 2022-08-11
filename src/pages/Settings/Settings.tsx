@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import HomeHeader from '@components/Home/HomeHeader/HomeHeader';
 import SettingNavigation from '@/components/Settings/SettingNavigation/SettingNavigation';
-import SettingBody from '@/components/Settings/SettingBody/SettingBody';
 import { Divider, Grid } from '@mui/material';
 
 import { getCurrentUser } from '@/modules/user/userSlice';
