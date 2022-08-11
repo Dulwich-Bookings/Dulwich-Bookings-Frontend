@@ -37,9 +37,7 @@ export default class ResourceService {
         },
         true,
       );
-      if (response.data !== undefined) {
-        response.data = ResourceService.processResourceType(response.data);
-      }
+      response.data = ResourceService.processResourceType(response.data);
       return response;
     } catch (error) {
       return Promise.reject(error);
