@@ -14,11 +14,8 @@ type Props = {
 const SettingBody = ({ viewState, user }: Props) => {
   return (
     <>
-      {viewState.account && <AccountDetails user={user} />}
+      <AccountDetails user={user} />
       {viewState.resource && <ResourceDetails user={user} />}
-      {viewState.tag && <div>Tag Management</div>}
-      {viewState.milestone && <div>Milestones</div>}
-      {viewState.users && <div>User Management</div>}
     </>
   );
 };

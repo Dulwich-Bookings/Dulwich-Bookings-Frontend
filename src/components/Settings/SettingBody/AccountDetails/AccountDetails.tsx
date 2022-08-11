@@ -6,10 +6,10 @@ import SettingHeader from '@/components/Settings/SettingBody/SettingHeader/Setti
 import FormSubmitButton from '@/components/AddResource/Forms/FormSubmitButton/FormSubmitButton';
 import UserProfileCircle from '@/components/Home/HomeHeader/UserProfileCircle/UserProfileCircle';
 import InputWithBorder from '@/components/Inputs/InputWithBorder/InputWithBorder';
+import { Grid, Stack } from '@mui/material';
 
 import { InputValidation } from '@/modules/inputValidation/types';
 import { UserData } from '@/modules/user/types';
-import { Grid, Stack } from '@mui/material';
 
 type Props = {
   user: UserData;

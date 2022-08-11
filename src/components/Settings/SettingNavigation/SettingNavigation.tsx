@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import { SettingState, settingStateMap } from '@/consts/constants';
+import { SettingState } from '@/consts/constants';
 
 import { Grid, Stack } from '@mui/material';
 import BackButton from '@/components/AddResource/BackButton/BackButton';
@@ -8,12 +8,10 @@ import SettingButton from '@/components/Settings/SettingNavigation/SettingButton
 import { useHistory } from 'react-router-dom';
 
 type Props = {
-  stateChangeHandler: (input: SettingState) => void;
+  isClicked: SettingState;
 };
 
-const SettingNavigation = ({ stateChangeHandler }: Props) => {
-  const [isClicked, setIsClicked] = useState<SettingState>(settingStateMap.ACCOUNT);
-
+const SettingNavigation = ({ isClicked }: Props) => {
   const history = useHistory();
 
   const homeButtonClickHandler = () => {
@@ -21,28 +19,24 @@ const SettingNavigation = ({ stateChangeHandler }: Props) => {
   };
 
   const accountClickHandler = () => {
-    setIsClicked(settingStateMap.ACCOUNT);
+    history.push('/settings');
   };
 
   const resourceClickHandler = () => {
-    setIsClicked(settingStateMap.RESOURCE);
+    history.push('/settings/resources');
   };
 
   const tagClickHandler = () => {
-    setIsClicked(settingStateMap.TAG);
+    history.push('/settings/tags');
   };
 
   const milestoneClickHandler = () => {
-    setIsClicked(settingStateMap.MILESTONE);
+    history.push('/settings/milestones');
   };
 
   const usersClickHandler = () => {
-    setIsClicked(settingStateMap.USERS);
+    history.push('/settings/users');
   };
-
-  useEffect(() => {
-    stateChangeHandler(isClicked);
-  }, [isClicked]);
 
   return (
     <>

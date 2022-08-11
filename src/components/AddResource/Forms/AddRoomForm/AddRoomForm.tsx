@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import ResourceService from '@/api/resource/ResourceService';
 import { isSuccess, useApi } from '@/api/ApiHandler';
 import { ApiData } from '@/api/ApiService';
 
+import BackButton from '@/components/AddResource/BackButton/BackButton';
 import TagInput from '@/components/AddResource/Forms/TagInput/TagInput';
 import InputCheckBox from '@/components/Inputs/InputCheckBox/InputCheckBox';
 import OtherUserInput from '@/components/AddResource/Forms/OtherUserInput/OtherUserInput';
@@ -45,7 +46,9 @@ const AddRoomForm = (props: Props) => {
   const [roomError, setRoomError] = useState<InputValidation>(noError);
   const [description, setDescription] = useState<string>(oldData?.description ?? '');
   const [descriptionError, setDescriptionError] = useState<InputValidation>(noError);
-  const [weekProfile, setWeekProfile] = useState<'Weekly' | 'BiWeekly'>(oldData?.weekProfile ?? 'Weekly');
+  const [weekProfile, setWeekProfile] = useState<'Weekly' | 'Bi-Weekly'>(
+    (oldData?.weekProfile === 'BiWeekly' ? 'Bi-Weekly' : oldData?.weekProfile) ?? 'Weekly',
+  );
   const [accessOptions, setAccessOptions] = useState(
     (oldData?.accessRights && {
       option1: oldData.accessRights.indexOf(role.STUDENT) > -1,
@@ -88,7 +91,7 @@ const AddRoomForm = (props: Props) => {
     if (value === 'Weekly') {
       setWeekProfile('Weekly');
     } else {
-      setWeekProfile('BiWeekly');
+      setWeekProfile('Bi-Weekly');
     }
   };
 
@@ -187,7 +190,7 @@ const AddRoomForm = (props: Props) => {
           description: description,
           accessRights: optionsToArrayHandler(accessOptions.option1, accessOptions.option2, accessRights),
           bookingRights: optionsToArrayHandler(bookingOptions.option1, bookingOptions.option2, bookingRights),
-          weekProfile: weekProfile,
+          weekProfile: weekProfile === 'Weekly' ? 'Weekly' : 'BiWeekly',
           // hard coded values will be changed subsequently in the future
           inAdvance: 0,
           isBookingDescriptionOptional: true,
@@ -224,11 +227,37 @@ const AddRoomForm = (props: Props) => {
     }
   };
 
+  useEffect(() => {
+    setRoomName(oldData?.name ?? '');
+    setDescription(oldData?.description ?? '');
+    setWeekProfile((oldData?.weekProfile === 'BiWeekly' ? 'Bi-Weekly' : oldData?.weekProfile) ?? 'Weekly');
+    setSelectedTags(oldTags ?? []);
+    setSelectedOtherUsers(oldUsers ?? []);
+    setAccessOptions(
+      (oldData?.accessRights && {
+        option1: oldData.accessRights.indexOf(role.STUDENT) > -1,
+        option2: oldData.accessRights.indexOf(role.TEACHER) > -1,
+      }) ?? {
+        option1: false,
+        option2: false,
+      },
+    );
+    setBookingOptions(
+      (oldData?.bookingRights && {
+        option1: oldData.bookingRights.indexOf(role.STUDENT) > -1,
+        option2: oldData.bookingRights.indexOf(role.TEACHER) > -1,
+      }) ?? {
+        option1: false,
+        option2: false,
+      },
+    );
+  }, [oldData, oldTags, oldUsers]);
+
   return (
     <>
       <Stack className={`addRoomLaptop:w-full w-screen py-10 px-24 ${props.formClassName}`} spacing={2}>
         {!props.editMode && <FormHeader title='Add Room' disableUpload={false} />}
-
+        {props.editMode && <BackButton buttonText='Back' onClickHandler={props.closeEditForm} />}
         <Grid container>
           <Grid item className='w-1/2'>
             <InputWithoutBorder
@@ -246,6 +275,7 @@ const AddRoomForm = (props: Props) => {
             <InputWithRadio
               labelText='Week Profile'
               inputLabels={['Weekly', 'Bi-Weekly']}
+              inputValue={weekProfile}
               inputHandleOnChange={input => weekProfileChangeHandler(input.target.value)}
               required
             />

@@ -10,7 +10,7 @@ type Props = {
 
 const BackButton = (props: Props) => {
   return (
-    <Stack direction='row' spacing={0.5} alignItems='center' className='cursor-pointer' onClick={props.onClickHandler}>
+    <Stack direction='row' spacing={0.5} alignItems='center' className='cursor-pointer w-fit' onClick={props.onClickHandler}>
       <ArrowBackIosNewIcon className='text-[16px] text-textGray' />
       <Typography className='font-Inter text-textGray hover:underline'>{props.buttonText}</Typography>
     </Stack>

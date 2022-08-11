@@ -22,10 +22,6 @@ const TagInput = (props: Props) => {
   const [selectedTags, setSelectedTags] = useState<TagData[]>(props.oldTags ?? []);
   const [showTags, setShowTags] = useState<boolean>(false);
 
-  useEffect(() => {
-    props.updateTags(selectedTags);
-  }, [selectedTags]);
-
   // Helper Functions
   const isTagAlreadySelected = (tag: TagData) => selectedTags.filter(t => t.id === tag.id).length !== 0;
   const isTagNameMatch = (tag: TagData, input: string) => tag.name.toUpperCase().indexOf(input.toUpperCase()) > -1;
@@ -48,6 +44,15 @@ const TagInput = (props: Props) => {
   const TagBlurHandler = () => {
     setShowTags(false);
   };
+
+  useEffect(() => {
+    props.updateTags(selectedTags);
+  }, [selectedTags]);
+
+  useEffect(() => {
+    setSelectedTags(props.oldTags ?? []);
+  }, [props.oldTags]);
+
   return (
     <div className={props.inputClassName}>
       <Stack

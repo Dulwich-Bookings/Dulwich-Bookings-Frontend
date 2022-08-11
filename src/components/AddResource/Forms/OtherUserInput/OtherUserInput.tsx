@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
@@ -36,6 +36,14 @@ const OtherUserInput = (props: Props) => {
   const userDelete = (userToDelete: number) => () => {
     setSelectedOtherUsers(selectedOtherUsers.filter(user => user.id !== userToDelete));
   };
+
+  useEffect(() => {
+    props.updateUsers(selectedOtherUsers);
+  }, [selectedOtherUsers]);
+
+  useEffect(() => {
+    setSelectedOtherUsers(props.oldUsers ?? []);
+  }, [props.oldUsers]);
 
   return (
     <div className={props.inputClassName}>

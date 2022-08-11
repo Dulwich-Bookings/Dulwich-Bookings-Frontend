@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import SubscriptionService from '@/api/subscription/SubscriptionService';
 import { isSuccess, useApi } from '@/api/ApiHandler';
 import { ApiData } from '@/api/ApiService';
 
+import BackButton from '@/components/AddResource/BackButton/BackButton';
 import TagInput from '@/components/AddResource/Forms/TagInput/TagInput';
 import InputCheckBox from '@/components/Inputs/InputCheckBox/InputCheckBox';
 import OtherUserInput from '@/components/AddResource/Forms/OtherUserInput/OtherUserInput';
@@ -15,19 +16,17 @@ import InputDatePicker from '@/components/Inputs/InputDatePicker/InputDatePicker
 import DialogWrapper from '@/components/Dialog/DialogWrapper/DialogWrapper';
 import { Stack, Grid } from '@mui/material';
 
+import { role } from '@/consts/constants';
 import { InputValidation } from '@/modules/inputValidation/types';
 import { CreateSubscriptionData, SubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
 import { TagData } from '@/modules/tag/types';
 import { Role, UserData } from '@/modules/user/types';
 import DateTime from '@/modules/DateTime/DateTime';
-import { ResourceMapData } from '@/modules/resourceMap/types';
-import { role } from '@/consts/constants';
 
 type Props = {
   formClassName?: string; //Optional to style the form size
   tagData: TagData[];
   userData: UserData[];
-  resourceMapData?: ResourceMapData[];
   oldFormData?: SubscriptionData;
   oldFormTags?: TagData[];
   oldFormUsers?: UserData[];
@@ -200,10 +199,30 @@ const AddSubscriptionForm = (props: Props) => {
     }
   };
 
+  useEffect(() => {
+    setSubscriptionName(oldData?.name ?? '');
+    setDescription(oldData?.description ?? '');
+    setCredentials(oldData?.credentials ?? '');
+    setSelectedTags(oldTags ?? []);
+    setSelectedOtherUsers(oldUsers ?? []);
+    setExpiryDate(oldData?.expiry?.toDate() ?? new Date());
+    setLinkURL(oldData?.link ?? '');
+    setAccessOptions(
+      (oldData?.accessRights && {
+        option1: oldData.accessRights.indexOf(role.STUDENT) > -1,
+        option2: oldData.accessRights.indexOf(role.TEACHER) > -1,
+      }) ?? {
+        option1: false,
+        option2: false,
+      },
+    );
+  }, [oldData, oldTags, oldUsers]);
+
   return (
     <>
       <Stack className={`addRoomLaptop:w-full w-screen py-10 px-24 ${props.formClassName}`} spacing={2}>
         {!props.editMode && <FormHeader title='Add Subscription' disableUpload={true} />}
+        {props.editMode && <BackButton buttonText='Back' onClickHandler={props.closeEditForm} />}
 
         <Grid item className='w-1/2'>
           <InputWithoutBorder

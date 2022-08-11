@@ -24,6 +24,9 @@ import AddSubscription from '@/pages/AddResource/AddSubscription/AddSubscription
 import AddTag from '@/pages/AddResource/AddTag/AddTag';
 import { isTeacher } from '@/utilities/authorisation';
 import Settings from '@/pages/Settings/Settings';
+import SettingsResource from '@/pages/Settings/SettingsResource/SettingsResource';
+import EditResource from '@/pages/Settings/SettingsResource/EditResource/EditResource';
+import EditSubscription from '@/pages/Settings/SettingsResource/EditSubscription.tsx/EditSubscription';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -81,9 +84,15 @@ const AppRouter = () => {
       <Route exact path={Routes.authentication.signUp} component={SignUp} />
       <Route exact path={Routes.authentication.confirmEmail} component={ConfirmEmail} />
       {accessToken && <Route exact path={Routes.authentication.isTempUser} component={IsTemporaryUser} />}
+
       {accessToken && !isTemp && <Route exact path={Routes.home.main} component={Home} />}
       {accessToken && !isTemp && <Route exact path={Routes.home.viewAll} component={HomeViewAll} />}
-      {accessToken && !isTemp && <Route exact path={Routes.settings} component={Settings} />}
+
+      {accessToken && !isTemp && <Route exact path={Routes.settings.main} component={Settings} />}
+      {accessToken && !isTemp && <Route exact path={Routes.settings.resources.main} component={SettingsResource} />}
+      {accessToken && !isTemp && <Route exact path={Routes.settings.resources.editResource} component={EditResource} />}
+      {accessToken && !isTemp && <Route exact path={Routes.settings.resources.editSubscription} component={EditSubscription} />}
+
       {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.main} component={AddResource} />}
       {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.addRoom} component={AddRoom} />}
       {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.addSubscription} component={AddSubscription} />}
