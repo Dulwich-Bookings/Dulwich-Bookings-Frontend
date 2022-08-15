@@ -33,6 +33,7 @@ const BookingTimePicker = (props: Props) => {
           value={time}
           onChange={handleOnChange}
           renderInput={params => <TextField {...params} />}
+          minutesStep={5}
         />
       </LocalizationProvider>
     </Modal>
