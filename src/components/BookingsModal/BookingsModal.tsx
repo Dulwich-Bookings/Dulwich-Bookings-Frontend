@@ -5,6 +5,7 @@ import BookingsHeader from '@/components/BookingsModal/BookingsHeader/BookingsHe
 import { dummyCalendarData } from '@/consts/dummyData';
 import { Stack, Modal, Box, ThemeProvider, createTheme } from '@mui/material';
 import { UserData } from '@/modules/user/types';
+import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
 
 const theme = createTheme({
@@ -24,6 +25,7 @@ type Props = {
   handleCloseModal: () => void;
   resourceData: ResourceData;
   currentUser: UserData;
+  currentSchool: SchoolData;
 };
 
 const BookingsModal = (props: Props) => {
@@ -34,7 +36,12 @@ const BookingsModal = (props: Props) => {
           <CloseIcon onClick={props.handleCloseModal} className='float-right cursor-pointer hover:text-grayAccent' />
           <Stack className='h-full' spacing={{ xs: 1, md: -6 }}>
             <BookingsHeader id={1} title={props.resourceData.name} description={props.resourceData.description} />
-            <Calendar resourceData={props.resourceData} data={dummyCalendarData} currentUser={props.currentUser} />
+            <Calendar
+              resourceData={props.resourceData}
+              data={dummyCalendarData}
+              currentUser={props.currentUser}
+              currentSchool={props.currentSchool}
+            />
           </Stack>
         </Box>
       </Modal>

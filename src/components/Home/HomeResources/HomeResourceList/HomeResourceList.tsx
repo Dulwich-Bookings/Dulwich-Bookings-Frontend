@@ -18,6 +18,7 @@ import { resourceTypes, searchStateMap, SearchState } from '@/consts/constants';
 import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
+import { SchoolData } from '@/modules/school/types';
 import { SubscriptionData } from '@/modules/subscription/types';
 import { TagMapData } from '@/modules/tagMap/types';
 import { BookmarkData, CreateBookmarkData } from '@/modules/Bookmarks/Types';
@@ -30,6 +31,7 @@ type Props = {
   isRvViewClicked: boolean;
   className?: string;
   currentUser: UserData;
+  currentSchool: SchoolData;
 };
 
 const sortResourcesByName = (resourceAndSubscriptions: (ResourceData | SubscriptionData)[]) =>
@@ -214,6 +216,7 @@ const HomeResourceList = (props: Props) => {
                 key={resource.type === resourceTypes.RESOURCE ? `Room:${resource.id}` : `Subscription:${resource.id}`}
                 data={resource}
                 currentUser={props.currentUser}
+                currentSchool={props.currentSchool}
                 tagData={tags}
                 tagMapData={tagMaps}
                 isBookmark={isBookmark(resource)}

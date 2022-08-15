@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
+
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
+
 import FullCalendar, { EventClickArg } from '@fullcalendar/react';
+import momentTimezonePlugin from '@fullcalendar/moment-timezone';
+import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
+import moment from 'moment';
+
 import DayHeaderContent from '@/components/BookingsModal/Calendar/DayHeaderContent/DayHeaderContent';
 import SlotLabelContent from '@/components/BookingsModal/Calendar/SlotLabelContent/SlotLabelContent';
 import BookingForm from '@components/BookingsModal/BookingForm/BookingForm';
-import moment from 'moment';
+
 import styled from '@emotion/styled';
 import './Calendar.css';
+
 import { UserData } from '@/modules/user/types';
+import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
 // import { isTeacher, isAdmin } from '@/utilities/authorisation';
 
@@ -40,6 +48,7 @@ export type EventData = {
 type Props = {
   data: EventData[];
   currentUser: UserData;
+  currentSchool: SchoolData;
   resourceData: ResourceData;
 };
 
@@ -123,6 +132,8 @@ const Calendar = (props: Props) => {
       />
       <Box className='h-full'>
         <FullCalendar
+          plugins={[timeGridPlugin, interactionPlugin, momentTimezonePlugin, dayGridPlugin]}
+          timeZone={props.currentSchool.timezone}
           headerToolbar={{
             start: '',
             center: '',
@@ -140,7 +151,6 @@ const Calendar = (props: Props) => {
           slotLabelInterval={{ hours: 1 }}
           eventMinHeight={20}
           slotEventOverlap={false}
-          plugins={[timeGridPlugin, interactionPlugin]}
           initialView={isMobile ? 'timeGridDay' : 'timeGridWeek'}
           dateClick={handleDateClick}
           eventClick={handleEventClick}

@@ -13,10 +13,12 @@ import { TagData } from '@/modules/tag/types';
 import { SubscriptionData } from '@/modules/subscription/types';
 import { TagMapData } from '@/modules/tagMap/types';
 import { UserData } from '@/modules/user/types';
+import { SchoolData } from '@/modules/school/types';
 
 type Props = {
   data: ResourceData | SubscriptionData;
   currentUser: UserData;
+  currentSchool: SchoolData;
   tagData: TagData[];
   tagMapData: TagMapData[];
   isBookmark: boolean;
@@ -57,6 +59,7 @@ const HomeRoomItem = (props: Props) => {
           handleCloseModal={handleCloseModal}
           resourceData={props.data as ResourceData}
           currentUser={props.currentUser}
+          currentSchool={props.currentSchool}
         />
       )}
 
