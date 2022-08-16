@@ -6,14 +6,14 @@ import BookingTimePicker from '@components/BookingsModal/BookingForm/TimePickerW
 import moment from 'moment';
 
 type Props = {
-  bookingDate: string;
   startTime: string;
   endTime: string;
+  onChangeTime: (start: string, isStart: boolean) => void;
 };
 
 const TimePickerWrapper = (props: Props) => {
-  const [startTime, setStartTime] = useState<string>(props.startTime);
-  const [endTime, setEndTime] = useState<string>(props.endTime);
+  const [startTime, setStartTime] = useState<string>(moment(props.startTime).format());
+  const [endTime, setEndTime] = useState<string>(moment(props.endTime).format());
   const [openStateStart, setOpenStateStart] = React.useState<boolean>(false);
   const [openStateEnd, setOpenStateEnd] = React.useState<boolean>(false);
 
@@ -26,15 +26,17 @@ const TimePickerWrapper = (props: Props) => {
   };
 
   const handleOnChangeStart = (time: string) => {
-    setStartTime(moment(time).format('HH:mm'));
+    setStartTime(moment(time).format());
+    props.onChangeTime(moment(time).format(), true);
   };
   const handleOnChangeEnd = (time: string) => {
-    setEndTime(moment(time).format('HH:mm'));
+    setEndTime(moment(time).format());
+    props.onChangeTime(time, false);
   };
 
-  useEffect(() => setStartTime(startTime), [startTime]);
-
-  useEffect(() => setEndTime(endTime), [endTime]);
+  useEffect(() => {
+    props.onChangeTime(startTime, true), props.onChangeTime(endTime, false);
+  }, []);
   return (
     <>
       <BookingTimePicker
@@ -51,12 +53,12 @@ const TimePickerWrapper = (props: Props) => {
         spacing={1.5}
         customInput={
           <Stack direction='column' spacing={-0.8}>
-            <Typography className='font-Inter pt-2'>{props.bookingDate}</Typography>
+            <Typography className='font-Inter pt-2'>{moment(props.startTime).format('dddd, MMMM D')}</Typography>
             <Stack direction='row' spacing={0.8}>
               <Input
                 className='font-Inter font-light cursor-pointer text-[14px] w-10 '
                 color='primary'
-                value={startTime}
+                value={moment(startTime).format('HH:mm')}
                 type='string'
                 onClick={() => {
                   setOpenStateStart(true);
@@ -69,7 +71,7 @@ const TimePickerWrapper = (props: Props) => {
               <Input
                 className='font-Inter font-light cursor-pointer text-[14px]'
                 color='primary'
-                value={endTime}
+                value={moment(endTime).format('HH:mm')}
                 type='string'
                 onClick={() => {
                   setOpenStateEnd(true);

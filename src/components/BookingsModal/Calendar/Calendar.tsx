@@ -21,7 +21,11 @@ import './Calendar.css';
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
+import { EventData } from '@/modules/Bookings/Types';
 // import { isTeacher, isAdmin } from '@/utilities/authorisation';
+
+import { dummyCalendarData } from '@/consts/dummyData';
+import { isAdmin, isTeacher } from '@/utilities/authorisation';
 
 export const StyleWrapper = styled.div`
   .fc .fc-timegrid-slot-minor {
@@ -30,23 +34,7 @@ export const StyleWrapper = styled.div`
   }
 `;
 
-export type EventData = {
-  // id: number;
-  title: string;
-  start: string;
-  end: string;
-  description: string;
-  backgroundColor?: string;
-  borderColor?: string;
-  textColor?: string;
-  editable: boolean;
-  rrule?: string;
-  bookingType: 'Booked' | 'Lesson';
-  bookingState: 'Approved' | 'Pending';
-};
-
 type Props = {
-  data: EventData[];
   currentUser: UserData;
   currentSchool: SchoolData;
   resourceData: ResourceData;
@@ -54,46 +42,108 @@ type Props = {
 
 const Calendar = (props: Props) => {
   const [openBookingModal, setOpenBookingModal] = useState<boolean>(false);
+  const [bookings, setBookings] = useState<EventData[]>(dummyCalendarData);
   const [bookingTitle, setBookingTitle] = useState<string>('');
-  const [bookingTime, setBookingTime] = useState<string>('');
   const [startBook, setStartBook] = useState<string>('');
   const [endBook, setEndBook] = useState<string>('');
   const [bookingDescription, setBookingDescription] = useState<string>('');
   const [editable, setEditable] = useState<string>('');
-  const [recurring, setRecurring] = useState<'Weekly' | 'BiWeekly'>('BiWeekly');
-  const [bookingType, setBookingType] = useState<'Booked' | 'Lesson'>('Booked');
+  const [recurring, setRecurring] = useState<'Weekly' | 'BiWeekly' | 'None'>('None');
+  const [bookingType, setBookingType] = useState<'Booking' | 'Lesson'>('Booking');
+  const [bookingId, setBookingId] = useState<string>('');
 
   const theme = useTheme();
   const isMobile = !useMediaQuery(theme.breakpoints.up('sm'));
 
   const handleDateClick = (e: DateClickArg) => {
-    const time = moment(e.dateStr).format('dddd, MMMM D');
-    const startTime = moment(e.dateStr).format('HH:mm');
-    const endTime = moment(e.dateStr).add(15, 'm').format('HH:mm');
+    const startTime = moment(e.dateStr).format();
+    const endTime = moment(e.dateStr).add(15, 'm').format();
     setBookingTitle('');
     setBookingDescription('');
     setEditable('new');
-    setRecurring('BiWeekly');
-    setBookingType('Booked');
-    setBookingTime(time);
+    setRecurring('None');
+    setBookingType('Booking');
     setStartBook(startTime);
     setEndBook(endTime);
     setOpenBookingModal(true);
+    console.log(bookingType);
   };
+
   const handleEventClick = (e: EventClickArg) => {
     console.log(e.event._instance?.range);
-    const start = moment(e.event._instance?.range.start).format('dddd, MMMM D');
-    const startTime = moment(e.event._instance?.range.start).format('HH:mm');
-    const endTime = moment(e.event._instance?.range.end).format('HH:mm');
-    setBookingTime(start);
+    const startTime = moment(e.event._instance?.range.start).format();
+    const endTime = moment(e.event._instance?.range.end).format();
     setStartBook(startTime);
     setEndBook(endTime);
     setBookingTitle(e.event.title);
     setBookingDescription(e.event.extendedProps.description);
     e.event.startEditable ? setEditable('editable') : setEditable('noneditable');
     setOpenBookingModal(true);
-    setRecurring('BiWeekly');
-    setBookingType('Booked');
+    setRecurring(e.event.extendedProps.recurring);
+    setBookingType(e.event.extendedProps.bookingType);
+    setBookingId(e.event.id);
+  };
+
+  const getBookingState = () => {
+    if (isAdmin(props.currentUser)) {
+      return 'Approved';
+    } else if (isTeacher(props.currentUser) && props.resourceData.accessRights.includes('Teacher')) {
+      return 'Approved';
+    } else if (props.resourceData.accessRights.includes('Student')) {
+      return 'Approved';
+    } else {
+      return 'Pending';
+    }
+  };
+
+  const getBlurredBackground = (BackgroundColor: string) => {
+    if (getBookingState() === 'Pending') {
+      if (BackgroundColor === '#FFF') {
+        return '#A9A9A9';
+      } else {
+        return '#E6AEAE';
+      }
+    } else {
+      return BackgroundColor;
+    }
+  };
+
+  const onAddBooking = async (data: EventData): Promise<void> => {
+    console.log('add booking');
+
+    const newBooking: EventData = {
+      id: data.id,
+      title: data.title,
+      start: data.start,
+      end: data.end,
+      description: data.description,
+      backgroundColor: getBlurredBackground(data.backgroundColor ?? ''),
+      borderColor: getBlurredBackground(data.backgroundColor ?? ''),
+      textColor: data.textColor,
+      editable: data.editable,
+      bookingType: data.bookingType,
+      bookingState: getBookingState(),
+    };
+    const newBookingsList: EventData[] = [...bookings, newBooking];
+    setBookings(newBookingsList);
+    setOpenBookingModal(false);
+    console.log(newBookingsList);
+  };
+
+  const onDeleteBooking = async (id: string): Promise<void> => {
+    console.log('delete booking');
+    console.log(id);
+    const newBookingsList = bookings.filter(booking => booking.id != id);
+    setBookings(newBookingsList);
+    setOpenBookingModal(false);
+  };
+
+  const onSaveBooking = async (): Promise<void> => {
+    console.log('save booking');
+  };
+
+  const onContact = async (): Promise<void> => {
+    console.log('contact');
   };
 
   // if (isAdmin(props.currentUser)) {
@@ -114,22 +164,27 @@ const Calendar = (props: Props) => {
 
   return (
     <>
-      <BookingForm
-        bookingTitle={bookingTitle}
-        bookingDescription={bookingDescription}
-        openState={openBookingModal}
-        handleCloseModal={() => {
-          setOpenBookingModal(false);
-        }}
-        time={bookingTime}
-        editable={editable}
-        start={startBook}
-        end={endBook}
-        recurring={recurring}
-        bookingType={bookingType}
-        currentUser={props.currentUser}
-        weekProfile={props.resourceData.weekProfile}
-      />
+      {openBookingModal && (
+        <BookingForm
+          bookingTitle={bookingTitle}
+          bookingDescription={bookingDescription}
+          handleCloseModal={() => {
+            setOpenBookingModal(false);
+          }}
+          onAddBooking={onAddBooking}
+          onDeleteBooking={onDeleteBooking}
+          onSaveBooking={onSaveBooking}
+          onContact={onContact}
+          editable={editable}
+          start={startBook}
+          end={endBook}
+          recurring={recurring}
+          bookingType={bookingType}
+          currentUser={props.currentUser}
+          weekProfile={props.resourceData.weekProfile}
+          id={bookingId}
+        />
+      )}
       <Box className='h-full'>
         <FullCalendar
           plugins={[timeGridPlugin, interactionPlugin, momentTimezonePlugin, dayGridPlugin]}
@@ -155,7 +210,7 @@ const Calendar = (props: Props) => {
           dateClick={handleDateClick}
           eventClick={handleEventClick}
           editable={true}
-          events={props.data}
+          events={bookings}
         />
       </Box>
     </>

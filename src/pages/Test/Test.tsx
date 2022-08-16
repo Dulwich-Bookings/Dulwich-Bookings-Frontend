@@ -89,7 +89,7 @@ let isFirstLoaded = true;
 const Test = () => {
   const [loginStudent] = useApi(() => AuthService.login('student23@stu.dulwich.org', 'asdasd', 1), true, true);
   const [loginTeacher] = useApi(() => AuthService.login('teacher@dulwich.org', 'asdasd', 1), true, true);
-  const [loginAdmin] = useApi(() => AuthService.login('admin@dulwich.org', 'asdasd', 1), true, true);
+  const [loginAdmin] = useApi(() => AuthService.login('admin@dulwich.org', 'asdasd?', 1), true, true);
   const [bulkSignUp] = useApi(() => AuthService.bulkRegister(bulkSignUpForm), true, true);
   const [bulkSignUpForm, setBulkSignUpForm] = useState<FormData>(new FormData());
 

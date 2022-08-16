@@ -1,13 +1,22 @@
-import * as React from 'react';
+import React from 'react';
 import { Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
 
-export default function BookingTypeWrapper() {
+type Props = {
+  bookingType: 'Booking' | 'Lesson';
+  onChangeBookingType: (value: string) => void;
+};
+
+export default function BookingTypeWrapper(props: Props) {
   return (
     <FormControl>
       <RadioGroup
         className='font-Inter font-light px-2 align-center text-grayAccent mb-1'
         aria-labelledby='demo-radio-buttons-group-label'
         name='radio-buttons-group'
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          props.onChangeBookingType(event.target.defaultValue);
+        }}
+        value={props.bookingType}
         sx={{
           color: '#202020',
           '&.Mui-checked': {
@@ -17,7 +26,7 @@ export default function BookingTypeWrapper() {
         row
       >
         <FormControlLabel
-          value='Booked'
+          value='Booking'
           className='pr-4'
           control={
             <Radio
@@ -29,7 +38,7 @@ export default function BookingTypeWrapper() {
               }}
             />
           }
-          label='Booked'
+          label='Booking'
         />
         <FormControlLabel
           value='Lesson'

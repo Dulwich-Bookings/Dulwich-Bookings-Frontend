@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TextField, Modal } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -12,10 +12,8 @@ type Props = {
 };
 
 const BookingTimePicker = (props: Props) => {
-  const [time, setTime] = useState<string>('');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOnChange = (time: any) => {
-    setTime(time);
     props.handleOnChange(time);
   };
   return (
@@ -30,7 +28,7 @@ const BookingTimePicker = (props: Props) => {
           showToolbar={true}
           closeOnSelect={true}
           onAccept={props.handleOnClose}
-          value={time}
+          value={props.time}
           onChange={handleOnChange}
           renderInput={params => <TextField {...params} />}
           minutesStep={5}

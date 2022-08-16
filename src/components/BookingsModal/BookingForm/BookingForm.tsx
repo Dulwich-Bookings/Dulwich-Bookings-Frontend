@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Modal, createTheme, Stack, ThemeProvider, Box, Input } from '@mui/material';
 import { FormatAlignLeft, Close } from '@mui/icons-material';
 import BookingFormFooter from '@components/BookingsModal/BookingForm/BookingFormFooter/BookingFormFooter';
@@ -9,6 +9,7 @@ import BookingTypeWrapper from '@components/BookingsModal/BookingForm/BookingTyp
 
 import { isAdmin } from '@/utilities/authorisation';
 import { UserData } from '@/modules/user/types';
+import { EventData } from '@/modules/Bookings/Types';
 
 const theme = createTheme({
   breakpoints: {
@@ -23,16 +24,19 @@ const theme = createTheme({
 });
 
 type Props = {
-  openState: boolean;
   handleCloseModal: () => void;
+  onAddBooking: (data: EventData) => void;
+  onDeleteBooking: (id: string) => void;
+  onSaveBooking: () => void;
+  onContact: () => void;
+  id: string;
   bookingTitle: string;
   bookingDescription: string;
-  time: string;
   editable: string;
   start: string;
   end: string;
-  recurring: string;
-  bookingType: string;
+  recurring: 'Weekly' | 'BiWeekly' | 'None';
+  bookingType: 'Booking' | 'Lesson';
   currentUser: UserData;
   weekProfile: 'Weekly' | 'BiWeekly';
 };
@@ -41,29 +45,13 @@ const BookingForm = (props: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const [title, setTitle] = useState<string>('');
   // const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [time, setTime] = useState<string>(props.time);
   const [description, setDescription] = useState<string>(props.bookingDescription);
+  const [startTime, setStartTime] = useState<string>(props.start);
+  const [endTime, setEndTime] = useState<string>(props.end);
   const [multiline, setMultiline] = useState<boolean>(false);
   const [rows, setRows] = useState<number>(1);
-  // const [recurring, setRecurring] = useState<'Weekly' | 'BiWeekly'>(props.recurring);
-  // const [bookingType, setBookingType] = useState<'Booked' | 'Lesson'>(props.bookingType);
-
-  const handleOnBook = async () => {
-    // setIsLoading(true);
-    null;
-  };
-
-  const handleOnSave = async () => {
-    null;
-  };
-
-  const handleOnDelete = async () => {
-    null;
-  };
-
-  const handleOnContact = async () => {
-    null;
-  };
+  const [recurring, setRecurring] = useState<'Weekly' | 'BiWeekly' | 'None'>(props.recurring);
+  const [bookingType, setBookingType] = useState<'Booking' | 'Lesson'>(props.bookingType);
 
   const handleTitleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (props.editable == 'editable' || props.editable == 'new') {
@@ -84,24 +72,46 @@ const BookingForm = (props: Props) => {
     setRows(4);
   };
 
-  useEffect(() => {
-    setTime(props.time);
-  }, [props.time]);
+  const onChangeTime = (time: string, isStart: boolean) => {
+    isStart ? setStartTime(time) : setEndTime(time);
+  };
 
-  useEffect(() => {
-    setTitle(props.bookingTitle);
-  }, [props.bookingTitle]);
+  const onChangeRecurring = (value: string) => {
+    if (value === 'weekly') {
+      setRecurring('Weekly');
+    } else {
+      setRecurring('BiWeekly');
+    }
+  };
 
-  useEffect(() => {
-    setDescription(props.bookingDescription);
-  }, [props.bookingDescription]);
+  const onChangeBookingType = (value: string) => {
+    if (value == 'Booking') {
+      setBookingType('Booking');
+    } else {
+      setBookingType('Lesson');
+    }
+  };
 
+  // useEffect(() => {
+  //   setTitle(props.bookingTitle);
+  //   setDescription(props.bookingDescription);
+  //   setStartTime(props.start);
+  //   setEndTime(props.end);
+  //   setTime(props.time);
+  //   setRecurring(props.recurring);
+  //   setBookingType(props.bookingType);
+  // }, [props]);
+
+  // useEffect(() => {
+  //   console.log(props.start);
+  //   console.log(props.end);
+  // }, []);
   return (
     <>
       <ThemeProvider theme={theme}>
         <Modal
           className='flex justify-center items-center'
-          open={props.openState}
+          open={true}
           onClose={props.handleCloseModal}
           BackdropProps={{ style: { backgroundColor: 'transparent' } }}
           disableAutoFocus
@@ -121,7 +131,7 @@ const BookingForm = (props: Props) => {
                 onChange={handleTitleChange}
               ></Input>
               <Stack direction='column' spacing={{ xs: 0, md: 0 }} alignItems='justified'>
-                <TimePickerWrapper bookingDate={time} startTime={props.start} endTime={props.end} />
+                <TimePickerWrapper startTime={startTime} endTime={endTime} onChangeTime={onChangeTime} />
                 <div ref={ref} className='w-full'>
                   <InputWithIcon
                     inputType='string'
@@ -139,14 +149,29 @@ const BookingForm = (props: Props) => {
                     onBlur={() => setMultiline(false)}
                   />
                 </div>
-                {props.weekProfile === 'Weekly' && <RecurringBookingWrapper />}
-                {isAdmin(props.currentUser) && <BookingTypeWrapper />}
+                {props.weekProfile === 'Weekly' && <RecurringBookingWrapper onChangeRecurring={onChangeRecurring} recurring={recurring} />}
+                {isAdmin(props.currentUser) && <BookingTypeWrapper bookingType={bookingType} onChangeBookingType={onChangeBookingType} />}
                 <BookingFormFooter
                   type={props.editable}
-                  handleOnBook={handleOnBook}
-                  handleOnSave={handleOnSave}
-                  handleOnDelete={handleOnDelete}
-                  handleOnContact={handleOnContact}
+                  handleOnBook={() => {
+                    props.onAddBooking({
+                      id: Math.random().toString(),
+                      title: title,
+                      start: startTime,
+                      end: endTime,
+                      description: description,
+                      textColor: bookingType === 'Booking' ? '#fff' : '#000',
+                      backgroundColor: bookingType === 'Lesson' ? '#E6E6E6' : '#2E2E2E',
+                      editable: true,
+                      bookingType: bookingType,
+                      bookingState: 'Pending',
+                    });
+                  }}
+                  handleOnSave={props.onSaveBooking}
+                  handleOnDelete={() => {
+                    props.onDeleteBooking(props.id);
+                  }}
+                  handleOnContact={props.onContact}
                 />
               </Stack>
             </Stack>
