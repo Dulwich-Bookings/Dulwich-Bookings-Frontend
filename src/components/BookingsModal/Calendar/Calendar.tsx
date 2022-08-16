@@ -127,19 +127,36 @@ const Calendar = (props: Props) => {
     const newBookingsList: EventData[] = [...bookings, newBooking];
     setBookings(newBookingsList);
     setOpenBookingModal(false);
-    console.log(newBookingsList);
   };
 
   const onDeleteBooking = async (id: string): Promise<void> => {
     console.log('delete booking');
-    console.log(id);
     const newBookingsList = bookings.filter(booking => booking.id != id);
     setBookings(newBookingsList);
     setOpenBookingModal(false);
   };
 
-  const onSaveBooking = async (): Promise<void> => {
+  const onSaveBooking = async (data: EventData): Promise<void> => {
     console.log('save booking');
+    const newBooking: EventData = {
+      id: data.id,
+      title: data.title,
+      start: data.start,
+      end: data.end,
+      description: data.description,
+      backgroundColor: getBlurredBackground(data.backgroundColor ?? ''),
+      borderColor: getBlurredBackground(data.backgroundColor ?? ''),
+      textColor: data.textColor,
+      editable: data.editable,
+      bookingType: data.bookingType,
+      bookingState: getBookingState(),
+    };
+    console.log(newBooking);
+    const newBookingsList = bookings.map(booking => {
+      return booking.id === data.id ? newBooking : booking;
+    });
+    setBookings(newBookingsList);
+    setOpenBookingModal(false);
   };
 
   const onContact = async (): Promise<void> => {

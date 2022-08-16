@@ -27,7 +27,7 @@ type Props = {
   handleCloseModal: () => void;
   onAddBooking: (data: EventData) => void;
   onDeleteBooking: (id: string) => void;
-  onSaveBooking: () => void;
+  onSaveBooking: (data: EventData) => void;
   onContact: () => void;
   id: string;
   bookingTitle: string;
@@ -43,7 +43,7 @@ type Props = {
 
 const BookingForm = (props: Props) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [title, setTitle] = useState<string>('');
+  const [title, setTitle] = useState<string>(props.bookingTitle);
   // const [isLoading, setIsLoading] = useState<boolean>(false);
   const [description, setDescription] = useState<string>(props.bookingDescription);
   const [startTime, setStartTime] = useState<string>(props.start);
@@ -167,7 +167,20 @@ const BookingForm = (props: Props) => {
                       bookingState: 'Pending',
                     });
                   }}
-                  handleOnSave={props.onSaveBooking}
+                  handleOnSave={() => {
+                    props.onSaveBooking({
+                      id: props.id,
+                      title: title,
+                      start: startTime,
+                      end: endTime,
+                      description: description,
+                      textColor: bookingType === 'Booking' ? '#fff' : '#000',
+                      backgroundColor: bookingType === 'Lesson' ? '#E6E6E6' : '#2E2E2E',
+                      editable: true,
+                      bookingType: bookingType,
+                      bookingState: 'Pending',
+                    });
+                  }}
                   handleOnDelete={() => {
                     props.onDeleteBooking(props.id);
                   }}
