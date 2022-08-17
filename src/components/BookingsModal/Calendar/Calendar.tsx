@@ -226,7 +226,7 @@ const Calendar = (props: Props) => {
           eventDrop={e => {
             onSaveBooking({
               id: e.event.id,
-              userId: props.currentUser.id,
+              userId: e.event.extendedProps.userId,
               title: e.event.title,
               start: moment(e.event.start).format(),
               end: moment(e.event.end).format(),
@@ -239,7 +239,7 @@ const Calendar = (props: Props) => {
           eventResize={e => {
             onSaveBooking({
               id: e.event.id,
-              userId: props.currentUser.id,
+              userId: e.event.extendedProps.userId,
               title: e.event.title,
               start: moment(e.event.start).format(),
               end: moment(e.event.end).format(),

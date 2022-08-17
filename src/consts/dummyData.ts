@@ -1,4 +1,3 @@
-import { EventData } from '@/modules/Bookings/Types';
 import { BookingsHeaderData } from '@/components/BookingsModal/BookingsHeader/BookingsHeader';
 
 export const dummyResourceData: BookingsHeaderData = {
