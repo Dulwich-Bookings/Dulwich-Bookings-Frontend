@@ -213,7 +213,7 @@ const Calendar = (props: Props) => {
           nowIndicator={true}
           slotMinTime='07:00:00'
           slotMaxTime='22:00:00'
-          scrollTime='08:00:00'
+          scrollTime='07:00:00'
           slotDuration='00:15:00'
           slotLabelInterval={{ hours: 1 }}
           eventMinHeight={20}
