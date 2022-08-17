@@ -222,7 +222,7 @@ const Calendar = (props: Props) => {
           slotDuration='00:15:00'
           slotLabelInterval={{ hours: 1 }}
           eventMinHeight={20}
-          slotEventOverlap={false}
+          eventOverlap={false}
           initialView={isMobile ? 'timeGridDay' : 'timeGridWeek'}
           dateClick={handleDateClick}
           eventClick={handleEventClick}
