@@ -11,13 +11,12 @@ type Props = {
 };
 
 export default function RecurringBookingWraooer(props: Props) {
-  const [recurring, setRecurring] = React.useState<'Weekly' | 'BiWeekly' | 'None'>(props.recurring);
-
   return (
     <>
       <FormControl>
         <RadioGroup
-          className='font-Inter font-light px-2 align-center text-grayAccent mb-1'
+          value={props.recurring}
+          className='font-Inter font-light pl-2 align-center text-grayAccent mb-1'
           aria-labelledby='demo-radio-buttons-group-label'
           name='radio-buttons-group'
           sx={{
@@ -29,12 +28,11 @@ export default function RecurringBookingWraooer(props: Props) {
           row
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             props.onChangeRecurring(event.target.defaultValue);
-            setRecurring(props.recurring);
           }}
         >
           <FormControlLabel
-            value='weekly'
-            className='pr-4'
+            value='Weekly'
+            className='pr-5'
             control={
               <Radio
                 sx={{
@@ -48,7 +46,7 @@ export default function RecurringBookingWraooer(props: Props) {
             label='Weekly'
           />
           <FormControlLabel
-            value='biweekly'
+            value='BiWeekly'
             control={
               <Radio
                 sx={{
@@ -63,7 +61,7 @@ export default function RecurringBookingWraooer(props: Props) {
           />
         </RadioGroup>
       </FormControl>
-      {recurring == 'None' ? <></> : <RecurringBooking />}
+      {props.recurring === 'None' ? <></> : <RecurringBooking />}
     </>
   );
 }

@@ -228,6 +228,36 @@ const Calendar = (props: Props) => {
           eventClick={handleEventClick}
           editable={true}
           events={bookings}
+          eventDrop={e => {
+            onSaveBooking({
+              id: e.event.id,
+              title: e.event.title,
+              start: moment(e.event.start).format(),
+              end: moment(e.event.end).format(),
+              description: e.event.extendedProps.description,
+              backgroundColor: e.event.backgroundColor,
+              borderColor: e.event.backgroundColor,
+              textColor: e.event.textColor,
+              editable: e.event.startEditable,
+              bookingType: e.event.extendedProps.bookingType,
+              bookingState: e.event.extendedProps.bookingState,
+            });
+          }}
+          eventResize={e => {
+            onSaveBooking({
+              id: e.event.id,
+              title: e.event.title,
+              start: moment(e.event.start).format(),
+              end: moment(e.event.end).format(),
+              description: e.event.extendedProps.description,
+              backgroundColor: e.event.backgroundColor,
+              borderColor: e.event.backgroundColor,
+              textColor: e.event.textColor,
+              editable: e.event.startEditable,
+              bookingType: e.event.extendedProps.bookingType,
+              bookingState: e.event.extendedProps.bookingState,
+            });
+          }}
         />
       </Box>
     </>

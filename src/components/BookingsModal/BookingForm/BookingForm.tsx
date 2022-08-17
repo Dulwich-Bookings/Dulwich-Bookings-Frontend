@@ -77,11 +77,11 @@ const BookingForm = (props: Props) => {
   };
 
   const onChangeRecurring = (value: string) => {
-    if (value === 'weekly') {
+    if (value === 'Weekly') {
       setRecurring('Weekly');
-    } else {
+    } else if (value === 'BiWeekly') {
       setRecurring('BiWeekly');
-    }
+    } else setRecurring('None');
   };
 
   const onChangeBookingType = (value: string) => {
@@ -149,8 +149,8 @@ const BookingForm = (props: Props) => {
                     onBlur={() => setMultiline(false)}
                   />
                 </div>
-                {props.weekProfile === 'Weekly' && <RecurringBookingWrapper onChangeRecurring={onChangeRecurring} recurring={recurring} />}
                 {isAdmin(props.currentUser) && <BookingTypeWrapper bookingType={bookingType} onChangeBookingType={onChangeBookingType} />}
+                {props.weekProfile === 'Weekly' && <RecurringBookingWrapper onChangeRecurring={onChangeRecurring} recurring={recurring} />}
                 <BookingFormFooter
                   type={props.editable}
                   handleOnBook={() => {
