@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
 import Calendar from '@/components/BookingsModal/Calendar/Calendar';
@@ -8,6 +8,11 @@ import { Stack, Modal, Box, ThemeProvider, createTheme } from '@mui/material';
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
+import { ResourceMapData } from '@/modules/resourceMap/types';
+
+import { useApi } from '@/api/ApiHandler';
+import { retrieveAllData } from '@/utilities/api';
+import ResourceMapService from '@/api/resourceMap/ResourceMapService';
 
 const theme = createTheme({
   breakpoints: {
@@ -30,6 +35,20 @@ type Props = {
 };
 
 const BookingsModal = (props: Props) => {
+  const [getAllResourceMaps] = useApi(() => ResourceMapService.getAllResourceMaps(), false, true, false);
+
+  const [resourceMaps, setResourceMaps] = useState<ResourceMapData[]>([]);
+
+  const fetchData = async () => {
+    const AllResourceMapData = await retrieveAllData<ResourceMapData[]>(getAllResourceMaps);
+
+    setResourceMaps(AllResourceMapData ?? []);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <Modal className='flex justify-center items-center' open={props.openState} onClose={props.handleCloseModal}>
@@ -37,7 +56,12 @@ const BookingsModal = (props: Props) => {
           <CloseIcon onClick={props.handleCloseModal} className='float-right cursor-pointer hover:text-grayAccent' />
           <Stack className='h-full' spacing={{ xs: 1, md: -6 }}>
             <BookingsHeader id={1} title={props.resourceData.name} description={props.resourceData.description} />
-            <Calendar resourceData={props.resourceData} currentUser={props.currentUser} currentSchool={props.currentSchool} />
+            <Calendar
+              resourceData={props.resourceData}
+              currentUser={props.currentUser}
+              currentSchool={props.currentSchool}
+              resourceMaps={resourceMaps}
+            />
           </Stack>
         </Box>
       </Modal>

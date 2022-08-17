@@ -3,7 +3,8 @@ import React from 'react';
 import BookingButton from '@components/BookingsModal/BookingForm/BookingFormFooter/BookingButton/BookingButton';
 
 type Props = {
-  type: string;
+  editable: boolean;
+  newBooking: boolean;
   handleOnBook: () => void;
   handleOnSave: () => void;
   handleOnDelete: () => void;
@@ -11,27 +12,27 @@ type Props = {
 };
 
 const BookingFormFooter = (props: Props) => {
-  if (props.type == 'editable') {
-    return (
-      <Stack direction='row' className='w-full' spacing={2}>
-        <>
-          <BookingButton buttonText='Save' handleOnClick={props.handleOnSave} />
-          <BookingButton buttonText='Delete' handleOnClick={props.handleOnDelete} />
-        </>
-      </Stack>
-    );
-  }
-  if (props.type == 'noneditable') {
-    return (
-      <div className='w-full'>
-        <BookingButton buttonText='Contact' handleOnClick={props.handleOnContact} />
-      </div>
-    );
-  }
   return (
-    <div className='w-full'>
-      <BookingButton buttonText='Book' handleOnClick={props.handleOnBook} />
-    </div>
+    <>
+      {!props.newBooking && props.editable && (
+        <Stack direction='row' className='w-full' spacing={2}>
+          <>
+            <BookingButton buttonText='Save' handleOnClick={props.handleOnSave} />
+            <BookingButton buttonText='Delete' handleOnClick={props.handleOnDelete} />
+          </>
+        </Stack>
+      )}
+      {!props.newBooking && !props.editable && (
+        <div className='w-full'>
+          <BookingButton buttonText='Contact' handleOnClick={props.handleOnContact} />
+        </div>
+      )}
+      {props.newBooking && (
+        <div className='w-full'>
+          <BookingButton buttonText='Book' handleOnClick={props.handleOnBook} />
+        </div>
+      )}
+    </>
   );
 };
 

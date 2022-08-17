@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Modal, createTheme, Stack, ThemeProvider, Box, Input } from '@mui/material';
 import { FormatAlignLeft, Close } from '@mui/icons-material';
 import BookingFormFooter from '@components/BookingsModal/BookingForm/BookingFormFooter/BookingFormFooter';
@@ -32,7 +32,8 @@ type Props = {
   id: string;
   bookingTitle: string;
   bookingDescription: string;
-  editable: string;
+  editable: boolean;
+  newBooking: boolean;
   start: string;
   end: string;
   recurring: 'Weekly' | 'BiWeekly' | 'None';
@@ -55,17 +56,11 @@ const BookingForm = (props: Props) => {
   const [bookingType, setBookingType] = useState<'Booking' | 'Lesson'>(props.bookingType);
 
   const handleTitleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (props.editable == 'editable' || props.editable == 'new') {
-      console.log(event.target.value);
-      setTitle(event.target.value);
-    }
+    setTitle(event.target.value);
   };
 
   const handleDescriptionChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (props.editable == 'editable' || props.editable == 'new') {
-      console.log(event.target.value);
-      setDescription(event.target.value);
-    }
+    setDescription(event.target.value);
   };
 
   const handleOnFocus = async () => {
@@ -78,35 +73,22 @@ const BookingForm = (props: Props) => {
   };
 
   const onChangeRecurring = (value: string) => {
-    if (value === 'Weekly') {
-      setRecurring('Weekly');
-    } else if (value === 'BiWeekly') {
-      setRecurring('BiWeekly');
-    } else setRecurring('None');
+    props.editable
+      ? value === 'Weekly'
+        ? setRecurring('Weekly')
+        : value === 'BiWeekly'
+        ? setRecurring('BiWeekly')
+        : setRecurring('None')
+      : setRecurring(recurring);
   };
 
   const onChangeBookingType = (value: string) => {
-    if (value == 'Booking') {
-      setBookingType('Booking');
-    } else {
-      setBookingType('Lesson');
-    }
+    props.editable ? (value === 'Booking' ? setBookingType('Booking') : setBookingType('Lesson')) : setBookingType(bookingType);
   };
 
-  // useEffect(() => {
-  //   setTitle(props.bookingTitle);
-  //   setDescription(props.bookingDescription);
-  //   setStartTime(props.start);
-  //   setEndTime(props.end);
-  //   setTime(props.time);
-  //   setRecurring(props.recurring);
-  //   setBookingType(props.bookingType);
-  // }, [props]);
-
-  // useEffect(() => {
-  //   console.log(props.start);
-  //   console.log(props.end);
-  // }, []);
+  useEffect(() => {
+    console.log(props.editable);
+  }, []);
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -125,6 +107,7 @@ const BookingForm = (props: Props) => {
             />
             <Stack direction='column' className='h-full w-11/12' spacing={{ xs: 1, md: 1 }} alignItems='justified'>
               <Input
+                disabled={!props.editable}
                 color='error'
                 placeholder='Add title'
                 value={title}
@@ -132,11 +115,11 @@ const BookingForm = (props: Props) => {
                 onChange={handleTitleChange}
               ></Input>
               <Stack direction='column' spacing={{ xs: 0, md: 0 }} alignItems='justified'>
-                <TimePickerWrapper startTime={startTime} endTime={endTime} onChangeTime={onChangeTime} />
+                <TimePickerWrapper startTime={startTime} endTime={endTime} onChangeTime={onChangeTime} editable={props.editable} />
                 <div ref={ref} className='w-full'>
                   <InputWithIcon
                     inputType='string'
-                    inputPlaceholder='Add description'
+                    inputPlaceholder={props.editable ? 'Add description' : ''}
                     inputValue={description}
                     inputClassname='w-full color-bgWhite font-Inter font-light px-0'
                     inputVariant='outlined'
@@ -145,7 +128,7 @@ const BookingForm = (props: Props) => {
                     icon={<FormatAlignLeft className='ml-2 text-lg' />}
                     spacing={0.5}
                     inputHandleOnChange={handleDescriptionChange}
-                    acceptInput={true}
+                    acceptInput={props.editable}
                     onFocus={handleOnFocus}
                     onBlur={() => setMultiline(false)}
                   />
@@ -153,7 +136,8 @@ const BookingForm = (props: Props) => {
                 {isAdmin(props.currentUser) && <BookingTypeWrapper bookingType={bookingType} onChangeBookingType={onChangeBookingType} />}
                 {props.weekProfile === 'Weekly' && <RecurringBookingWrapper onChangeRecurring={onChangeRecurring} recurring={recurring} />}
                 <BookingFormFooter
-                  type={props.editable}
+                  editable={props.editable}
+                  newBooking={props.newBooking}
                   handleOnBook={() => {
                     props.onAddBooking({
                       id: Math.random().toString(),

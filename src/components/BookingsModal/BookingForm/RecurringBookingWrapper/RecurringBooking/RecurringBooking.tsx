@@ -16,7 +16,7 @@ export default function RecurringBooking() {
   const endDatePicker: JSX.Element = (
     <Stack direction='row' spacing={9} className='h-8 items-center'>
       <Typography className='font-Inter'>On</Typography>
-      {recurrence == 'on' && (
+      {recurrence == 'On' && (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DesktopDatePicker
             label='Enter Date'
@@ -35,7 +35,7 @@ export default function RecurringBooking() {
   const ocurrences: JSX.Element = (
     <Stack direction='row' spacing={7} className='h-8 items-center'>
       <Typography className='font-Inter align-center'>After</Typography>
-      {recurrence == 'after' && (
+      {recurrence == 'After' && (
         <Stack direction='row' spacing={-2} className='h-8 items-center'>
           <Input
             type='number'
@@ -62,9 +62,10 @@ export default function RecurringBooking() {
         name='radio-buttons-group'
         onChange={handleRecurringChange}
         defaultValue='never'
+        value={recurrence}
       >
         <FormControlLabel
-          value='on'
+          value='On'
           control={
             <Radio
               sx={{
@@ -78,7 +79,7 @@ export default function RecurringBooking() {
           label={endDatePicker}
         />
         <FormControlLabel
-          value='after'
+          value='After'
           control={
             <Radio
               sx={{
