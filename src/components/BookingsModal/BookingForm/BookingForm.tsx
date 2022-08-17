@@ -38,6 +38,7 @@ type Props = {
   recurring: 'Weekly' | 'BiWeekly' | 'None';
   bookingType: 'Booking' | 'Lesson';
   currentUser: UserData;
+  bookingUser: number;
   weekProfile: 'Weekly' | 'BiWeekly';
 };
 
@@ -156,12 +157,11 @@ const BookingForm = (props: Props) => {
                   handleOnBook={() => {
                     props.onAddBooking({
                       id: Math.random().toString(),
+                      userId: props.bookingUser,
                       title: title,
                       start: startTime,
                       end: endTime,
                       description: description,
-                      textColor: bookingType === 'Booking' ? '#fff' : '#000',
-                      backgroundColor: bookingType === 'Lesson' ? '#E6E6E6' : '#2E2E2E',
                       editable: true,
                       bookingType: bookingType,
                       bookingState: 'Pending',
@@ -170,12 +170,11 @@ const BookingForm = (props: Props) => {
                   handleOnSave={() => {
                     props.onSaveBooking({
                       id: props.id,
+                      userId: props.bookingUser,
                       title: title,
                       start: startTime,
                       end: endTime,
                       description: description,
-                      textColor: bookingType === 'Booking' ? '#fff' : '#000',
-                      backgroundColor: bookingType === 'Lesson' ? '#E6E6E6' : '#2E2E2E',
                       editable: true,
                       bookingType: bookingType,
                       bookingState: 'Pending',

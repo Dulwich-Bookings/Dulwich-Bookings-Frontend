@@ -24,7 +24,6 @@ import { ResourceData } from '@/modules/resource/types';
 import { EventData } from '@/modules/Bookings/Types';
 // import { isTeacher, isAdmin } from '@/utilities/authorisation';
 
-import { dummyCalendarData } from '@/consts/dummyData';
 import { isAdmin, isTeacher } from '@/utilities/authorisation';
 
 export const StyleWrapper = styled.div`
@@ -42,7 +41,7 @@ type Props = {
 
 const Calendar = (props: Props) => {
   const [openBookingModal, setOpenBookingModal] = useState<boolean>(false);
-  const [bookings, setBookings] = useState<EventData[]>(dummyCalendarData);
+  const [bookings, setBookings] = useState<EventData[]>([]);
   const [bookingTitle, setBookingTitle] = useState<string>('');
   const [startBook, setStartBook] = useState<string>('');
   const [endBook, setEndBook] = useState<string>('');
@@ -51,6 +50,7 @@ const Calendar = (props: Props) => {
   const [recurring, setRecurring] = useState<'Weekly' | 'BiWeekly' | 'None'>('None');
   const [bookingType, setBookingType] = useState<'Booking' | 'Lesson'>('Booking');
   const [bookingId, setBookingId] = useState<string>('');
+  const [bookingUserId, setBookingUserId] = useState<number>(0);
 
   const theme = useTheme();
   const isMobile = !useMediaQuery(theme.breakpoints.up('sm'));
@@ -66,6 +66,7 @@ const Calendar = (props: Props) => {
     setStartBook(startTime);
     setEndBook(endTime);
     setOpenBookingModal(true);
+    setBookingUserId(props.currentUser.id);
     console.log(bookingType);
   };
 
@@ -82,6 +83,7 @@ const Calendar = (props: Props) => {
     setRecurring(e.event.extendedProps.recurring);
     setBookingType(e.event.extendedProps.bookingType);
     setBookingId(e.event.id);
+    setBookingUserId(e.event.extendedProps.userId);
   };
 
   const getBookingState = () => {
@@ -96,30 +98,19 @@ const Calendar = (props: Props) => {
     }
   };
 
-  const getBlurredBackground = (BackgroundColor: string) => {
-    if (getBookingState() === 'Pending') {
-      if (BackgroundColor === '#FFF') {
-        return '#A9A9A9';
-      } else {
-        return '#E6AEAE';
-      }
-    } else {
-      return BackgroundColor;
-    }
-  };
-
   const onAddBooking = async (data: EventData): Promise<void> => {
     console.log('add booking');
 
     const newBooking: EventData = {
       id: data.id,
+      userId: data.userId,
       title: data.title,
       start: data.start,
       end: data.end,
       description: data.description,
-      backgroundColor: getBlurredBackground(data.backgroundColor ?? ''),
-      borderColor: getBlurredBackground(data.backgroundColor ?? ''),
-      textColor: data.textColor,
+      backgroundColor: data.bookingType === 'Lesson' ? '#E6E6E6' : getBookingState() === 'Pending' ? '#E6AEAE' : '#E33939',
+      borderColor: data.bookingType === 'Lesson' ? '#E6E6E6' : getBookingState() === 'Pending' ? '#E6AEAE' : '#E33939',
+      textColor: data.bookingType === 'Lesson' ? '#000' : '#FFF',
       editable: data.editable,
       bookingType: data.bookingType,
       bookingState: getBookingState(),
@@ -140,13 +131,32 @@ const Calendar = (props: Props) => {
     console.log('save booking');
     const newBooking: EventData = {
       id: data.id,
+      userId: data.userId,
       title: data.title,
       start: data.start,
       end: data.end,
       description: data.description,
-      backgroundColor: getBlurredBackground(data.backgroundColor ?? ''),
-      borderColor: getBlurredBackground(data.backgroundColor ?? ''),
-      textColor: data.textColor,
+      backgroundColor:
+        data.bookingType === 'Lesson'
+          ? '#E6E6E6'
+          : data.userId === props.currentUser.id
+          ? getBookingState() === 'Pending'
+            ? '#E6AEAE'
+            : '#E33939'
+          : getBookingState() === 'Pending'
+          ? '#2E2E2E'
+          : '#797979',
+      borderColor:
+        data.bookingType === 'Lesson'
+          ? '#E6E6E6'
+          : data.userId === props.currentUser.id
+          ? getBookingState() === 'Pending'
+            ? '#E6AEAE'
+            : '#E33939'
+          : getBookingState() === 'Pending'
+          ? '#2E2E2E'
+          : '#797979',
+      textColor: data.bookingType === 'Lesson' ? '#000' : '#FFF',
       editable: data.editable,
       bookingType: data.bookingType,
       bookingState: getBookingState(),
@@ -162,22 +172,6 @@ const Calendar = (props: Props) => {
   const onContact = async (): Promise<void> => {
     console.log('contact');
   };
-
-  // if (isAdmin(props.currentUser)) {
-  //   const pending = 'Approved';
-  // } else if (isTeacher(props.currentUser)) {
-  //   if (props.resourceData.bookingRights.includes('Teacher')) {
-  //     const pending = 'Approved';
-  //   } else {
-  //     const pending = 'Pending';
-  //   }
-  // } else {
-  //   if (props.resourceData.bookingRights.includes('Student')) {
-  //     const pending = 'Approved';
-  //   } else {
-  //     const pending = 'Pending';
-  //   }
-  // }
 
   return (
     <>
@@ -198,6 +192,7 @@ const Calendar = (props: Props) => {
           recurring={recurring}
           bookingType={bookingType}
           currentUser={props.currentUser}
+          bookingUser={bookingUserId}
           weekProfile={props.resourceData.weekProfile}
           id={bookingId}
         />
@@ -231,13 +226,11 @@ const Calendar = (props: Props) => {
           eventDrop={e => {
             onSaveBooking({
               id: e.event.id,
+              userId: props.currentUser.id,
               title: e.event.title,
               start: moment(e.event.start).format(),
               end: moment(e.event.end).format(),
               description: e.event.extendedProps.description,
-              backgroundColor: e.event.backgroundColor,
-              borderColor: e.event.backgroundColor,
-              textColor: e.event.textColor,
               editable: e.event.startEditable,
               bookingType: e.event.extendedProps.bookingType,
               bookingState: e.event.extendedProps.bookingState,
@@ -246,13 +239,11 @@ const Calendar = (props: Props) => {
           eventResize={e => {
             onSaveBooking({
               id: e.event.id,
+              userId: props.currentUser.id,
               title: e.event.title,
               start: moment(e.event.start).format(),
               end: moment(e.event.end).format(),
               description: e.event.extendedProps.description,
-              backgroundColor: e.event.backgroundColor,
-              borderColor: e.event.backgroundColor,
-              textColor: e.event.textColor,
               editable: e.event.startEditable,
               bookingType: e.event.extendedProps.bookingType,
               bookingState: e.event.extendedProps.bookingState,
