@@ -22,6 +22,7 @@ import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
 import { EventData } from '@/modules/Bookings/Types';
+import { ResourceMapData } from '@/modules/resourceMap/types';
 // import { isTeacher, isAdmin } from '@/utilities/authorisation';
 
 import { isAdmin, isTeacher } from '@/utilities/authorisation';
@@ -37,6 +38,7 @@ type Props = {
   currentUser: UserData;
   currentSchool: SchoolData;
   resourceData: ResourceData;
+  resourceMaps: ResourceMapData[];
 };
 
 const Calendar = (props: Props) => {
@@ -46,7 +48,8 @@ const Calendar = (props: Props) => {
   const [startBook, setStartBook] = useState<string>('');
   const [endBook, setEndBook] = useState<string>('');
   const [bookingDescription, setBookingDescription] = useState<string>('');
-  const [editable, setEditable] = useState<string>('');
+  const [editable, setEditable] = useState<boolean>(true);
+  const [newBooking, setNewBooking] = useState<boolean>(true);
   const [recurring, setRecurring] = useState<'Weekly' | 'BiWeekly' | 'None'>('None');
   const [bookingType, setBookingType] = useState<'Booking' | 'Lesson'>('Booking');
   const [bookingId, setBookingId] = useState<string>('');
@@ -60,7 +63,8 @@ const Calendar = (props: Props) => {
     const endTime = moment(e.dateStr).add(15, 'm').format();
     setBookingTitle('');
     setBookingDescription('');
-    setEditable('new');
+    setEditable(true);
+    setNewBooking(true);
     setRecurring('None');
     setBookingType('Booking');
     setStartBook(startTime);
@@ -78,7 +82,8 @@ const Calendar = (props: Props) => {
     setEndBook(endTime);
     setBookingTitle(e.event.title);
     setBookingDescription(e.event.extendedProps.description);
-    e.event.startEditable ? setEditable('editable') : setEditable('noneditable');
+    setEditable(e.event.startEditable);
+    setNewBooking(false);
     setOpenBookingModal(true);
     setRecurring(e.event.extendedProps.recurring);
     setBookingType(e.event.extendedProps.bookingType);
@@ -98,6 +103,20 @@ const Calendar = (props: Props) => {
     }
   };
 
+  const getEditable = (data: EventData) => {
+    if (isAdmin(props.currentUser)) {
+      return true;
+    } else if (
+      props.resourceMaps.filter(r => r.resourceId === props.resourceData.id).filter(r => r.userId === props.currentUser.id).length !== 0
+    ) {
+      return true;
+    } else if (data.userId === props.currentUser.id) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const onAddBooking = async (data: EventData): Promise<void> => {
     console.log('add booking');
 
@@ -111,7 +130,7 @@ const Calendar = (props: Props) => {
       backgroundColor: data.bookingType === 'Lesson' ? '#E6E6E6' : getBookingState() === 'Pending' ? '#E6AEAE' : '#E33939',
       borderColor: data.bookingType === 'Lesson' ? '#E6E6E6' : getBookingState() === 'Pending' ? '#E6AEAE' : '#E33939',
       textColor: data.bookingType === 'Lesson' ? '#000' : '#FFF',
-      editable: data.editable,
+      editable: getEditable(data),
       bookingType: data.bookingType,
       bookingState: getBookingState(),
     };
@@ -157,7 +176,7 @@ const Calendar = (props: Props) => {
           ? '#2E2E2E'
           : '#797979',
       textColor: data.bookingType === 'Lesson' ? '#000' : '#FFF',
-      editable: data.editable,
+      editable: getEditable(data),
       bookingType: data.bookingType,
       bookingState: getBookingState(),
     };
@@ -187,6 +206,7 @@ const Calendar = (props: Props) => {
           onSaveBooking={onSaveBooking}
           onContact={onContact}
           editable={editable}
+          newBooking={newBooking}
           start={startBook}
           end={endBook}
           recurring={recurring}

@@ -8,6 +8,7 @@ import moment from 'moment';
 type Props = {
   startTime: string;
   endTime: string;
+  editable: boolean;
   onChangeTime: (start: string, isStart: boolean) => void;
 };
 
@@ -61,7 +62,7 @@ const TimePickerWrapper = (props: Props) => {
                 value={moment(startTime).format('HH:mm')}
                 type='string'
                 onClick={() => {
-                  setOpenStateStart(true);
+                  props.editable ? setOpenStateStart(true) : setOpenStateStart(false);
                 }}
                 id='standard-basic'
                 disableUnderline
@@ -74,7 +75,7 @@ const TimePickerWrapper = (props: Props) => {
                 value={moment(endTime).format('HH:mm')}
                 type='string'
                 onClick={() => {
-                  setOpenStateEnd(true);
+                  props.editable ? setOpenStateStart(true) : setOpenStateStart(false);
                 }}
                 id='standard-basic'
                 disableUnderline

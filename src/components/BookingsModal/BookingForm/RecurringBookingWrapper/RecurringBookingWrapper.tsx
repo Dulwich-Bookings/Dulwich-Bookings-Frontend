@@ -10,7 +10,7 @@ type Props = {
   recurring: 'Weekly' | 'BiWeekly' | 'None';
 };
 
-export default function RecurringBookingWraooer(props: Props) {
+export default function RecurringBookingWrapper(props: Props) {
   return (
     <>
       <FormControl>
@@ -57,7 +57,7 @@ export default function RecurringBookingWraooer(props: Props) {
                 }}
               />
             }
-            label='Biweekly'
+            label='BiWeekly'
           />
         </RadioGroup>
       </FormControl>
