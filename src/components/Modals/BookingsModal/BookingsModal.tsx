@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Calendar from '@/components/Modals/BookingsModal/Calendar/Calendar';
 import BookingsHeader from '@/components/Modals/BookingsModal/BookingsHeader/BookingsHeader';
 import ModalWrapper from '@/components/Modals/ModalWrapper/ModalWrapper';
-import { Stack, Modal, Box, ThemeProvider, createTheme } from '@mui/material';
+import { Stack, Box, ThemeProvider, createTheme } from '@mui/material';
 
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';

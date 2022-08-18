@@ -3,7 +3,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import RecurringBooking from '@components/BookingsModal/BookingForm/RecurringBookingWrapper/RecurringBooking/RecurringBooking';
+import RecurringBooking from '@/components/Modals/BookingsModal/BookingForm/RecurringBookingWrapper/RecurringBooking/RecurringBooking';
 
 type Props = {
   onChangeRecurring: (value: string) => void;

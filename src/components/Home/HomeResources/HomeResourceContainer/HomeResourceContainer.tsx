@@ -5,7 +5,7 @@ import { Grid, Card, CardContent, Typography, Stack } from '@mui/material';
 import { Bookmark, PersonOutlineOutlined, Circle } from '@mui/icons-material';
 import ResourceTag from '@/components/Home/HomeResources/HomeResourceContainer/ResourceTag/ResourceTag';
 import ResourceRights from '@/components/Home/HomeResources/HomeResourceContainer/ResourceRights/ResourceRights';
-import BookingsModal from '@/components/BookingsModal/BookingsModal';
+import BookingsModal from '@/components/Modals/BookingsModal/BookingsModal';
 
 import { SearchState, resourceTypes } from '@/consts/constants';
 import { ResourceData } from '@/modules/resource/types';

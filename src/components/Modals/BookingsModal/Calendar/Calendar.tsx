@@ -11,9 +11,9 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import moment from 'moment-timezone';
 
-import DayHeaderContent from '@/components/BookingsModal/Calendar/DayHeaderContent/DayHeaderContent';
-import SlotLabelContent from '@/components/BookingsModal/Calendar/SlotLabelContent/SlotLabelContent';
-import BookingForm from '@components/BookingsModal/BookingForm/BookingForm';
+import DayHeaderContent from '@/components/Modals/BookingsModal/Calendar/DayHeaderContent/DayHeaderContent';
+import SlotLabelContent from '@/components/Modals/BookingsModal/Calendar/SlotLabelContent/SlotLabelContent';
+import BookingForm from '@/components/Modals/BookingsModal/BookingForm/BookingForm';
 
 import styled from '@emotion/styled';
 import './Calendar.css';
@@ -55,6 +55,7 @@ const Calendar = (props: Props) => {
   const [bookingId, setBookingId] = useState<string>('');
   const [bookingUserId, setBookingUserId] = useState<number>(0);
 
+  // for mobile responsiveness
   const theme = useTheme();
   const isMobile = !useMediaQuery(theme.breakpoints.up('sm'));
 
@@ -75,8 +76,6 @@ const Calendar = (props: Props) => {
   };
 
   const handleEventClick = (e: EventClickArg) => {
-    console.log(e.event._instance?.range);
-
     const startTime = moment(e.event.start).format();
     const endTime = moment(e.event.end).format();
     setStartBook(startTime);

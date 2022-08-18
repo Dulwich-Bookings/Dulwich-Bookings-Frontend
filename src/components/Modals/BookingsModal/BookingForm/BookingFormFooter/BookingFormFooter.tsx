@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material';
 import React from 'react';
-import BookingButton from '@components/BookingsModal/BookingForm/BookingFormFooter/BookingButton/BookingButton';
+import BookingButton from '@/components/Modals/BookingsModal/BookingForm/BookingFormFooter/BookingButton/BookingButton';
 
 type Props = {
   editable: boolean;

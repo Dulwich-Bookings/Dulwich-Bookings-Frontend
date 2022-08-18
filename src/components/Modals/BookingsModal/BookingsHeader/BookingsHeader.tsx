@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Stack, Typography } from '@mui/material';
-import AddCalendarButton from '@/components/BookingsModal/BookingsHeader/AddCalendarButton/AddCalendarButton';
-import WeekButton from '@/components/BookingsModal/BookingsHeader/WeekButton/WeekButton';
+import AddCalendarButton from '@/components/Modals/BookingsModal/BookingsHeader/AddCalendarButton/AddCalendarButton';
+import WeekButton from '@/components/Modals/BookingsModal/BookingsHeader/WeekButton/WeekButton';
 import { ResourceData } from '@/modules/resource/types';
 
 type Props = {

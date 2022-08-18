@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-import InputWithIcon from '@/components/BookingsModal/BookingForm/InputWithIcon/InputWithIcon';
-import BookingTimePicker from '@components/BookingsModal/BookingForm/TimePickerWrapper/BookingTimePicker/BookingTimePicker';
+import InputWithIcon from '@/components/Modals/BookingsModal/BookingForm/InputWithIcon/InputWithIcon';
+import BookingTimePicker from '@/components/Modals/BookingsModal/BookingForm/TimePickerWrapper/BookingTimePicker/BookingTimePicker';
 import { Typography, Stack, Input } from '@mui/material';
 import { AccessTime } from '@mui/icons-material';
 

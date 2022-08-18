@@ -1,5 +1,5 @@
 import React from 'react';
-import InputWithIcon from '@components/BookingsModal/BookingForm/InputWithIcon/InputWithIcon';
+import InputWithIcon from '@/components/Modals/BookingsModal/BookingForm/InputWithIcon/InputWithIcon';
 import { CircleOutlined, RadioButtonCheckedOutlined } from '@mui/icons-material';
 import Checkbox from '@mui/material/Checkbox';
 

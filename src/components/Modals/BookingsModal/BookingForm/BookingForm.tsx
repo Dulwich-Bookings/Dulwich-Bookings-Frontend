@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Modal, createTheme, Stack, ThemeProvider, Box, Input } from '@mui/material';
 import { FormatAlignLeft, Close } from '@mui/icons-material';
-import BookingFormFooter from '@components/BookingsModal/BookingForm/BookingFormFooter/BookingFormFooter';
-import InputWithIcon from '@/components/BookingsModal/BookingForm/InputWithIcon/InputWithIcon';
-import TimePickerWrapper from '@components/BookingsModal/BookingForm/TimePickerWrapper/TimePickerWrapper';
-import RecurringBookingWrapper from '@components/BookingsModal/BookingForm/RecurringBookingWrapper/RecurringBookingWrapper';
-import BookingTypeWrapper from '@components/BookingsModal/BookingForm/BookingTypeWrapper/BookingTypeWrapper';
+import BookingFormFooter from '@/components/Modals/BookingsModal/BookingForm/BookingFormFooter/BookingFormFooter';
+import InputWithIcon from '@/components/Modals/BookingsModal/BookingForm/InputWithIcon/InputWithIcon';
+import TimePickerWrapper from '@/components/Modals/BookingsModal/BookingForm/TimePickerWrapper/TimePickerWrapper';
+import RecurringBookingWrapper from '@/components/Modals/BookingsModal/BookingForm/RecurringBookingWrapper/RecurringBookingWrapper';
+import BookingTypeWrapper from '@/components/Modals/BookingsModal/BookingForm/BookingTypeWrapper/BookingTypeWrapper';
 
 import { isAdmin } from '@/utilities/authorisation';
 import { UserData } from '@/modules/user/types';
