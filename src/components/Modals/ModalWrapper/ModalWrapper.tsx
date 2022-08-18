@@ -9,8 +9,8 @@ type Props = {
 
 const ModalWrapper = ({ isOpen, handleClose, bodyComponent }: Props) => {
   return (
-    <Modal className='backdrop-blur-sm' open={isOpen} onClose={handleClose}>
-      <Box className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>{bodyComponent}</Box>
+    <Modal className='backdrop-blur-sm flex justify-center items-center' open={isOpen} onClose={handleClose}>
+      {bodyComponent}
     </Modal>
   );
 };
