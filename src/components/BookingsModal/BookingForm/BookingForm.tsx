@@ -10,6 +10,7 @@ import BookingTypeWrapper from '@components/BookingsModal/BookingForm/BookingTyp
 import { isAdmin } from '@/utilities/authorisation';
 import { UserData } from '@/modules/user/types';
 import { EventData } from '@/modules/Bookings/Types';
+import { SchoolData } from '@/modules/school/types';
 
 const theme = createTheme({
   breakpoints: {
@@ -41,6 +42,7 @@ type Props = {
   currentUser: UserData;
   bookingUser: number;
   weekProfile: 'Weekly' | 'BiWeekly';
+  school: SchoolData;
 };
 
 const BookingForm = (props: Props) => {
@@ -115,7 +117,13 @@ const BookingForm = (props: Props) => {
                 onChange={handleTitleChange}
               ></Input>
               <Stack direction='column' spacing={{ xs: 0, md: 0 }} alignItems='justified'>
-                <TimePickerWrapper startTime={startTime} endTime={endTime} onChangeTime={onChangeTime} editable={props.editable} />
+                <TimePickerWrapper
+                  startTime={startTime}
+                  endTime={endTime}
+                  onChangeTime={onChangeTime}
+                  editable={props.editable}
+                  school={props.school}
+                />
                 <div ref={ref} className='w-full'>
                   <InputWithIcon
                     inputType='string'

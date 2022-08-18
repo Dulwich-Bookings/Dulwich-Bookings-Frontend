@@ -77,8 +77,8 @@ const Calendar = (props: Props) => {
   const handleEventClick = (e: EventClickArg) => {
     console.log(e.event._instance?.range);
 
-    const startTime = moment(e.event.start).tz(props.currentSchool.timezone).format();
-    const endTime = moment(e.event.end).tz(props.currentSchool.timezone).format();
+    const startTime = moment(e.event.start).format();
+    const endTime = moment(e.event.end).format();
     setStartBook(startTime);
     setEndBook(endTime);
     setBookingTitle(e.event.title);
@@ -216,6 +216,7 @@ const Calendar = (props: Props) => {
           bookingUser={bookingUserId}
           weekProfile={props.resourceData.weekProfile}
           id={bookingId}
+          school={props.currentSchool}
         />
       )}
       <Box className='h-full'>

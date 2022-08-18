@@ -1,20 +1,24 @@
-import InputWithIcon from '@/components/BookingsModal/BookingForm/InputWithIcon/InputWithIcon';
 import React, { useState, useEffect } from 'react';
+
+import InputWithIcon from '@/components/BookingsModal/BookingForm/InputWithIcon/InputWithIcon';
+import BookingTimePicker from '@components/BookingsModal/BookingForm/TimePickerWrapper/BookingTimePicker/BookingTimePicker';
 import { Typography, Stack, Input } from '@mui/material';
 import { AccessTime } from '@mui/icons-material';
-import BookingTimePicker from '@components/BookingsModal/BookingForm/TimePickerWrapper/BookingTimePicker/BookingTimePicker';
-import moment from 'moment';
+
+import moment from 'moment-timezone';
+import { SchoolData } from '@/modules/school/types';
 
 type Props = {
   startTime: string;
   endTime: string;
   editable: boolean;
   onChangeTime: (start: string, isStart: boolean) => void;
+  school: SchoolData;
 };
 
 const TimePickerWrapper = (props: Props) => {
-  const [startTime, setStartTime] = useState<string>(moment(props.startTime).format());
-  const [endTime, setEndTime] = useState<string>(moment(props.endTime).format());
+  const [startTime, setStartTime] = useState<string>(moment(props.startTime).tz(props.school.timezone).format());
+  const [endTime, setEndTime] = useState<string>(moment(props.endTime).tz(props.school.timezone).format());
   const [openStateStart, setOpenStateStart] = React.useState<boolean>(false);
   const [openStateEnd, setOpenStateEnd] = React.useState<boolean>(false);
 
@@ -54,12 +58,12 @@ const TimePickerWrapper = (props: Props) => {
         spacing={1.5}
         customInput={
           <Stack direction='column' spacing={-0.8}>
-            <Typography className='font-Inter pt-2'>{moment(props.startTime).format('dddd, MMMM D')}</Typography>
+            <Typography className='font-Inter pt-2'>{moment(props.startTime).tz(props.school.timezone).format('dddd, MMMM D')}</Typography>
             <Stack direction='row' spacing={0.8}>
               <Input
                 className='font-Inter font-light cursor-pointer text-[14px] w-10 '
                 color='primary'
-                value={moment(startTime).format('HH:mm')}
+                value={moment(startTime).tz(props.school.timezone).format('HH:mm')}
                 type='string'
                 onClick={() => {
                   props.editable ? setOpenStateStart(true) : setOpenStateStart(false);
@@ -72,7 +76,7 @@ const TimePickerWrapper = (props: Props) => {
               <Input
                 className='font-Inter font-light cursor-pointer text-[14px]'
                 color='primary'
-                value={moment(endTime).format('HH:mm')}
+                value={moment(endTime).tz(props.school.timezone).format('HH:mm')}
                 type='string'
                 onClick={() => {
                   props.editable ? setOpenStateStart(true) : setOpenStateStart(false);
