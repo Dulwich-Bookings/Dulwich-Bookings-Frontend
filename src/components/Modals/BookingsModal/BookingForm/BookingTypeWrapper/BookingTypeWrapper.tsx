@@ -1,7 +1,10 @@
 import React from 'react';
 import { Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
+import TailWindTheme from '@/tailwind.config';
 
 import { BookingTypes, BookingType } from '@/modules/Bookings/Types';
+
+const { colors } = TailWindTheme.theme;
 
 type Props = {
   bookingType: BookingTypes;
@@ -20,9 +23,9 @@ export default function BookingTypeWrapper(props: Props) {
         }}
         value={props.bookingType}
         sx={{
-          color: '#202020',
+          color: colors.bgBlack,
           '&.Mui-checked': {
-            color: '#E33939',
+            color: colors.dulwichRed,
           },
         }}
         row
@@ -33,9 +36,9 @@ export default function BookingTypeWrapper(props: Props) {
           control={
             <Radio
               sx={{
-                color: '#202020',
+                color: colors.bgBlack,
                 '&.Mui-checked': {
-                  color: '#E33939',
+                  color: colors.dulwichRed,
                 },
               }}
             />
@@ -47,9 +50,9 @@ export default function BookingTypeWrapper(props: Props) {
           control={
             <Radio
               sx={{
-                color: '#202020',
+                color: colors.bgBlack,
                 '&.Mui-checked': {
-                  color: '#E33939',
+                  color: colors.dulwichRed,
                 },
               }}
             />

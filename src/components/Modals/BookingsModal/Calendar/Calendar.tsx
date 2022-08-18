@@ -17,15 +17,16 @@ import BookingForm from '@/components/Modals/BookingsModal/BookingForm/BookingFo
 
 import styled from '@emotion/styled';
 import './Calendar.css';
+import TailWindTheme from '@/tailwind.config';
 
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
 import { EventData, BookingTypes, RecurringTypes, BookingType, BookingState, RecurringType } from '@/modules/Bookings/Types';
 import { ResourceMapData } from '@/modules/resourceMap/types';
-// import { isTeacher, isAdmin } from '@/utilities/authorisation';
-
 import { isAdmin, isTeacher } from '@/utilities/authorisation';
+
+const { colors } = TailWindTheme.theme;
 
 export const StyleWrapper = styled.div`
   .fc .fc-timegrid-slot-minor {
@@ -128,9 +129,18 @@ const Calendar = (props: Props) => {
       end: data.end,
       description: data.description,
       backgroundColor:
-        data.bookingType === BookingType.LESSON ? '#E6E6E6' : getBookingState() === BookingState.PENDING ? '#E6AEAE' : '#E33939',
-      borderColor: data.bookingType === BookingType.LESSON ? '#E6E6E6' : getBookingState() === BookingState.PENDING ? '#E6AEAE' : '#E33939',
-      textColor: data.bookingType === BookingType.LESSON ? '#000' : '#FFF',
+        data.bookingType === BookingType.LESSON
+          ? colors.bgLesson
+          : getBookingState() === BookingState.PENDING
+          ? colors.bgLightRed
+          : colors.dulwichRed,
+      borderColor:
+        data.bookingType === BookingType.LESSON
+          ? colors.bgLesson
+          : getBookingState() === BookingState.PENDING
+          ? colors.bgLightRed
+          : colors.dulwichRed,
+      textColor: data.bookingType === BookingType.LESSON ? colors.bgBlack : colors.white,
       editable: getEditable(data),
       bookingType: data.bookingType,
       bookingState: getBookingState(),
@@ -158,25 +168,25 @@ const Calendar = (props: Props) => {
       description: data.description,
       backgroundColor:
         data.bookingType === BookingType.LESSON
-          ? '#E6E6E6'
+          ? colors.bgLesson
           : data.userId === props.currentUser.id
           ? getBookingState() === BookingState.PENDING
-            ? '#E6AEAE'
-            : '#E33939'
+            ? colors.bgLightRed
+            : colors.dulwichRed
           : getBookingState() === BookingState.PENDING
-          ? '#2E2E2E'
-          : '#797979',
+          ? colors.bgBookingBlackPending
+          : colors.bgBookingBlack,
       borderColor:
         data.bookingType === BookingType.LESSON
-          ? '#E6E6E6'
+          ? colors.bgLesson
           : data.userId === props.currentUser.id
           ? getBookingState() === BookingState.PENDING
-            ? '#E6AEAE'
-            : '#E33939'
+            ? colors.bgLightRed
+            : colors.dulwichRed
           : getBookingState() === BookingState.PENDING
-          ? '#2E2E2E'
-          : '#797979',
-      textColor: data.bookingType === BookingType.LESSON ? '#000' : '#FFF',
+          ? colors.bgBookingBlackPending
+          : colors.bgBookingBlack,
+      textColor: data.bookingType === BookingType.LESSON ? colors.bgBlack : colors.white,
       editable: getEditable(data),
       bookingType: data.bookingType,
       bookingState: getBookingState(),

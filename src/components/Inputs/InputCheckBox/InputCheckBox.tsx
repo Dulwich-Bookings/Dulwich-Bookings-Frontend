@@ -3,6 +3,10 @@ import { Typography, Stack, FormControlLabel, FormControl, FormGroup, Checkbox, 
 import { InputValidation } from '@/modules/inputValidation/types';
 import { useState } from 'react';
 
+import TailWindTheme from '@/tailwind.config';
+
+const { colors } = TailWindTheme.theme;
+
 type Props<inputType> = {
   spacing?: number; // Optional definition for the space between Label and Input
   labelText: string;
@@ -49,7 +53,7 @@ const InputCheckBox = <T extends Object>(props: Props<T>) => {
                 sx={{
                   color: '#BFBFBF',
                   '&.Mui-checked': {
-                    color: '#E33939',
+                    color: colors.dulwichRed,
                   },
                 }}
               />
@@ -68,7 +72,7 @@ const InputCheckBox = <T extends Object>(props: Props<T>) => {
                 sx={{
                   color: '#BFBFBF',
                   '&.Mui-checked': {
-                    color: '#E33939',
+                    color: colors.dulwichRed,
                   },
                 }}
               />

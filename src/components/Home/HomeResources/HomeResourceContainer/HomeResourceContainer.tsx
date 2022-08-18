@@ -15,6 +15,10 @@ import { TagMapData } from '@/modules/tagMap/types';
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 
+import TailWindTheme from '@/tailwind.config';
+
+const { colors } = TailWindTheme.theme;
+
 type Props = {
   data: ResourceData | SubscriptionData;
   currentUser: UserData;
@@ -80,7 +84,7 @@ const HomeRoomItem = (props: Props) => {
                       await props.onBookmarkChangeHandler(props.data.id, props.data.type);
                     }}
                     className='float-right text-3xl'
-                    sx={{ color: `${isBookmark ? '#000000' : '#D9D9D9'}` }}
+                    sx={{ color: `${isBookmark ? colors.bgBlack : colors.grayLight}` }}
                   />
                 </div>
                 <Stack spacing={0.5} className='z-0'>

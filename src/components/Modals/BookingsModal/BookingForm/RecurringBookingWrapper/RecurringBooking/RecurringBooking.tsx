@@ -3,6 +3,9 @@ import { Stack, Input, Typography, Radio, RadioGroup, FormControlLabel, FormCont
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import TailWindTheme from '@/tailwind.config';
+
+const { colors } = TailWindTheme.theme;
 
 export default function RecurringBooking() {
   const [recurrence, setRecurrence] = React.useState<string>('');
@@ -69,9 +72,9 @@ export default function RecurringBooking() {
           control={
             <Radio
               sx={{
-                color: '#202020',
+                color: colors.bgBlack,
                 '&.Mui-checked': {
-                  color: '#E33939',
+                  color: colors.dulwichRed,
                 },
               }}
             />
@@ -83,9 +86,9 @@ export default function RecurringBooking() {
           control={
             <Radio
               sx={{
-                color: '#202020',
+                color: colors.bgBlack,
                 '&.Mui-checked': {
-                  color: '#E33939',
+                  color: colors.dulwichRed,
                 },
               }}
             />

@@ -2,6 +2,10 @@ import React from 'react';
 import { Typography, Stack, RadioGroup, FormControlLabel, Radio, FormControl } from '@mui/material';
 import { InputValidation } from '@/modules/inputValidation/types';
 
+import TailWindTheme from '@/tailwind.config';
+
+const { colors } = TailWindTheme.theme;
+
 type Props<inputType> = {
   spacing?: number; // Optional definition for the space between Label and Input
   labelText: string;
@@ -35,9 +39,9 @@ const InputWithRadio = <T extends Object>(props: Props<T>) => {
               <Radio
                 disableRipple={true}
                 sx={{
-                  color: '#202020',
+                  color: colors.bgDarkGray,
                   '&.Mui-checked': {
-                    color: '#E33939',
+                    color: colors.dulwichRed,
                   },
                 }}
               />
@@ -51,9 +55,9 @@ const InputWithRadio = <T extends Object>(props: Props<T>) => {
               <Radio
                 disableRipple={true}
                 sx={{
-                  color: '#202020',
+                  color: colors.bgDarkGray,
                   '&.Mui-checked': {
-                    color: '#E33939',
+                    color: colors.dulwichRed,
                   },
                 }}
               />

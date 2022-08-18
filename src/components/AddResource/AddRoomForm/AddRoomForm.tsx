@@ -187,7 +187,7 @@ const AddRoomForm = (props: Props) => {
             inputHandleOnChange={input => setDescription(input.target.value)}
             inputValue={description}
             labelText='Description'
-            labelClassName='text-[#404040] text-xl font-inter'
+            labelClassName='text-bgDarkGray text-xl font-inter'
             inputPlaceholder='Add the room name'
             inputType='text'
             inputValidation={descriptionError}

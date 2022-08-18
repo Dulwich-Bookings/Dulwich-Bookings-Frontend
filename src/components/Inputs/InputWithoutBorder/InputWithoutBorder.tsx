@@ -2,6 +2,10 @@ import React from 'react';
 import { Typography, TextField, Stack } from '@mui/material';
 import { InputValidation } from '@/modules/inputValidation/types';
 
+import TailWindTheme from '@/tailwind.config';
+
+const { colors } = TailWindTheme.theme;
+
 type Props<inputType> = {
   spacing?: number; // Optional definition for the space between Label and Input
   labelText: string;
@@ -56,19 +60,19 @@ const InputWithoutBorder = <T extends Object>(props: Props<T>) => {
             },
             '&.Mui-focused fieldset': {
               border: 1,
-              borderColor: '#E33939',
+              borderColor: colors.dulwichRed,
             },
           },
           '& .Mui-error': {
             '& fieldset': {
               border: 1,
-              borderColor: '#E33939',
+              borderColor: colors.dulwichRed,
             },
             '& input': {
-              backgroundColor: 'white',
+              backgroundColor: colors.white,
             },
             '&.MuiFormHelperText-root': {
-              backgroundColor: 'white',
+              backgroundColor: colors.white,
               marginX: '0',
               paddingX: '14px',
             },

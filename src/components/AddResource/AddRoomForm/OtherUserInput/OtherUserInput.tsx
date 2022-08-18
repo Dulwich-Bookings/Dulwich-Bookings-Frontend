@@ -42,7 +42,7 @@ const OtherUserInput = (props: Props) => {
           inputHandleOnChange={input => otherUsersChangeHandler(input.target.value)}
           inputValue={addOtherUsersValue}
           labelText='Add Others'
-          labelClassName='text-[#404040] text-xl font-inter'
+          labelClassName='text-bgDarkGray text-xl font-inter'
           inputPlaceholder='name@dulwich.com'
           inputType='text'
           inputClassName='bg-bgGray rounded-xl w-full focus-within:bg-bgWhite'

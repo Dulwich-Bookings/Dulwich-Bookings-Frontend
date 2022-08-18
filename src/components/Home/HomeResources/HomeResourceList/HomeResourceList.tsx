@@ -227,7 +227,7 @@ const HomeResourceList = (props: Props) => {
             ))}
           </Grid>
         ) : (
-          <Typography className='font-Inter text-[#404040]' variant='h5' textTransform='capitalize'>
+          <Typography className='font-Inter text-bgDarkGray' variant='h5' textTransform='capitalize'>
             No Resources Found.
           </Typography>
         )}

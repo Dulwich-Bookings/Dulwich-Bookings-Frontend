@@ -3,8 +3,12 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
+import TailWindTheme from '@/tailwind.config';
+
 import RecurringBooking from '@/components/Modals/BookingsModal/BookingForm/RecurringBookingWrapper/RecurringBooking/RecurringBooking';
 import { RecurringTypes, RecurringType } from '@/modules/Bookings/Types';
+
+const { colors } = TailWindTheme.theme;
 
 type Props = {
   onChangeRecurring: (value: string) => void;
@@ -21,9 +25,9 @@ export default function RecurringBookingWrapper(props: Props) {
           aria-labelledby='demo-radio-buttons-group-label'
           name='radio-buttons-group'
           sx={{
-            color: '#202020',
+            color: colors.bgBlack,
             '&.Mui-checked': {
-              color: '#E33939',
+              color: colors.dulwichRed,
             },
           }}
           row
@@ -37,9 +41,9 @@ export default function RecurringBookingWrapper(props: Props) {
             control={
               <Radio
                 sx={{
-                  color: '#202020',
+                  color: colors.bgBlack,
                   '&.Mui-checked': {
-                    color: '#E33939',
+                    color: colors.dulwichRed,
                   },
                 }}
               />
@@ -51,9 +55,9 @@ export default function RecurringBookingWrapper(props: Props) {
             control={
               <Radio
                 sx={{
-                  color: '#202020',
+                  color: colors.bgBlack,
                   '&.Mui-checked': {
-                    color: '#E33939',
+                    color: colors.dulwichRed,
                   },
                 }}
               />

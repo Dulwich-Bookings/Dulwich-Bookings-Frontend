@@ -52,7 +52,7 @@ const TagInput = (props: Props) => {
           inputHandleOnBlur={event => event && TagBlurHandler()}
           inputValue={tagInputValue}
           labelText='Choose Tags'
-          labelClassName='text-[#404040] text-xl font-inter'
+          labelClassName='text-bgDarkGray text-xl font-inter'
           inputPlaceholder='Type to add tag'
           inputType='text'
           inputClassName='bg-bgGray rounded-xl w-full focus-within:bg-bgWhite'

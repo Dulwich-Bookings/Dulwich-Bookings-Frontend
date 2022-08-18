@@ -17,7 +17,7 @@ const LandingFormFooter = ({ buttonText, footerLink, handleOnClick, loading }: P
       <LandingButton buttonText={buttonText} handleOnClick={handleOnClick} loading={loading} />
       {footerLink && (
         <Typography variant='h6'>
-          <NavLink to={footerLink.route} className='underline underline-offset-4 text-[#3D3D3D]'>
+          <NavLink to={footerLink.route} className='underline underline-offset-4 text-bgDarkGray'>
             {footerLink.routeText}
           </NavLink>
         </Typography>
