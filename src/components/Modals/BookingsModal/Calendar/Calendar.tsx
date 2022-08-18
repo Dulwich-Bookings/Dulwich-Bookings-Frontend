@@ -21,7 +21,7 @@ import './Calendar.css';
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
-import { EventData } from '@/modules/Bookings/Types';
+import { EventData, BookingType, Recurring } from '@/modules/Bookings/Types';
 import { ResourceMapData } from '@/modules/resourceMap/types';
 // import { isTeacher, isAdmin } from '@/utilities/authorisation';
 
@@ -50,8 +50,8 @@ const Calendar = (props: Props) => {
   const [bookingDescription, setBookingDescription] = useState<string>('');
   const [editable, setEditable] = useState<boolean>(true);
   const [newBooking, setNewBooking] = useState<boolean>(true);
-  const [recurring, setRecurring] = useState<'Weekly' | 'BiWeekly' | 'None'>('None');
-  const [bookingType, setBookingType] = useState<'Booking' | 'Lesson'>('Booking');
+  const [recurring, setRecurring] = useState<Recurring>('None');
+  const [bookingType, setBookingType] = useState<BookingType>('Booking');
   const [bookingId, setBookingId] = useState<string>('');
   const [bookingUserId, setBookingUserId] = useState<number>(0);
 

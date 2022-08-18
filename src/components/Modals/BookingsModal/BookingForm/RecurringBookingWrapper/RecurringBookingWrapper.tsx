@@ -4,10 +4,11 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import RecurringBooking from '@/components/Modals/BookingsModal/BookingForm/RecurringBookingWrapper/RecurringBooking/RecurringBooking';
+import { Recurring } from '@/modules/Bookings/Types';
 
 type Props = {
   onChangeRecurring: (value: string) => void;
-  recurring: 'Weekly' | 'BiWeekly' | 'None';
+  recurring: Recurring;
 };
 
 export default function RecurringBookingWrapper(props: Props) {

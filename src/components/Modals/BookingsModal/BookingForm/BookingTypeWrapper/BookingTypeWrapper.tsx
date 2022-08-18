@@ -1,8 +1,10 @@
 import React from 'react';
 import { Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
 
+import { BookingType } from '@/modules/Bookings/Types';
+
 type Props = {
-  bookingType: 'Booking' | 'Lesson';
+  bookingType: BookingType;
   onChangeBookingType: (value: string) => void;
 };
 

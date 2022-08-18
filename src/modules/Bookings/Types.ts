@@ -1,3 +1,9 @@
+export type BookingType = 'Booking' | 'Lesson';
+
+export type BookingState = 'Approved' | 'Pending';
+
+export type Recurring = 'Weekly' | 'BiWeekly' | 'None';
+
 export interface EventData {
   id: string;
   userId: number;
@@ -10,6 +16,6 @@ export interface EventData {
   textColor?: string;
   editable: boolean;
   rrule?: string;
-  bookingType: 'Booking' | 'Lesson';
-  bookingState: 'Approved' | 'Pending';
+  bookingType: BookingType;
+  bookingState: BookingState;
 }

@@ -9,7 +9,7 @@ import BookingTypeWrapper from '@/components/Modals/BookingsModal/BookingForm/Bo
 
 import { isAdmin } from '@/utilities/authorisation';
 import { UserData } from '@/modules/user/types';
-import { EventData } from '@/modules/Bookings/Types';
+import { EventData, BookingType, Recurring } from '@/modules/Bookings/Types';
 import { SchoolData } from '@/modules/school/types';
 
 const theme = createTheme({
@@ -37,8 +37,8 @@ type Props = {
   newBooking: boolean;
   start: string;
   end: string;
-  recurring: 'Weekly' | 'BiWeekly' | 'None';
-  bookingType: 'Booking' | 'Lesson';
+  recurring: Recurring;
+  bookingType: BookingType;
   currentUser: UserData;
   bookingUser: number;
   weekProfile: 'Weekly' | 'BiWeekly';
@@ -54,8 +54,8 @@ const BookingForm = (props: Props) => {
   const [endTime, setEndTime] = useState<string>(props.end);
   const [multiline, setMultiline] = useState<boolean>(false);
   const [rows, setRows] = useState<number>(1);
-  const [recurring, setRecurring] = useState<'Weekly' | 'BiWeekly' | 'None'>(props.recurring);
-  const [bookingType, setBookingType] = useState<'Booking' | 'Lesson'>(props.bookingType);
+  const [recurring, setRecurring] = useState<Recurring>(props.recurring);
+  const [bookingType, setBookingType] = useState<BookingType>(props.bookingType);
 
   const handleTitleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
