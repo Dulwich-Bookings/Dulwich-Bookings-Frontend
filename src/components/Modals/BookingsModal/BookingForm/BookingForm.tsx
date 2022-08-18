@@ -9,7 +9,7 @@ import BookingTypeWrapper from '@/components/Modals/BookingsModal/BookingForm/Bo
 
 import { isAdmin } from '@/utilities/authorisation';
 import { UserData } from '@/modules/user/types';
-import { EventData, BookingType, Recurring } from '@/modules/Bookings/Types';
+import { EventData, BookingTypes, RecurringTypes, BookingType, BookingState, RecurringType } from '@/modules/Bookings/Types';
 import { SchoolData } from '@/modules/school/types';
 
 const theme = createTheme({
@@ -37,11 +37,11 @@ type Props = {
   newBooking: boolean;
   start: string;
   end: string;
-  recurring: Recurring;
-  bookingType: BookingType;
+  recurring: RecurringTypes;
+  bookingType: BookingTypes;
   currentUser: UserData;
   bookingUser: number;
-  weekProfile: 'Weekly' | 'BiWeekly';
+  weekProfile: RecurringTypes;
   school: SchoolData;
 };
 
@@ -54,8 +54,8 @@ const BookingForm = (props: Props) => {
   const [endTime, setEndTime] = useState<string>(props.end);
   const [multiline, setMultiline] = useState<boolean>(false);
   const [rows, setRows] = useState<number>(1);
-  const [recurring, setRecurring] = useState<Recurring>(props.recurring);
-  const [bookingType, setBookingType] = useState<BookingType>(props.bookingType);
+  const [recurring, setRecurring] = useState<RecurringTypes>(props.recurring);
+  const [bookingType, setBookingType] = useState<BookingTypes>(props.bookingType);
 
   const handleTitleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -76,16 +76,20 @@ const BookingForm = (props: Props) => {
 
   const onChangeRecurring = (value: string) => {
     props.editable
-      ? value === 'Weekly'
-        ? setRecurring('Weekly')
-        : value === 'BiWeekly'
-        ? setRecurring('BiWeekly')
-        : setRecurring('None')
+      ? value === RecurringType.WEEKLY
+        ? setRecurring(RecurringType.WEEKLY)
+        : value === RecurringType.BIWEEKLY
+        ? setRecurring(RecurringType.BIWEEKLY)
+        : setRecurring(RecurringType.NONE)
       : setRecurring(recurring);
   };
 
   const onChangeBookingType = (value: string) => {
-    props.editable ? (value === 'Booking' ? setBookingType('Booking') : setBookingType('Lesson')) : setBookingType(bookingType);
+    props.editable
+      ? value === BookingType.BOOKING
+        ? setBookingType(BookingType.BOOKING)
+        : setBookingType(BookingType.LESSON)
+      : setBookingType(bookingType);
   };
 
   useEffect(() => {
@@ -142,7 +146,9 @@ const BookingForm = (props: Props) => {
                   />
                 </div>
                 {isAdmin(props.currentUser) && <BookingTypeWrapper bookingType={bookingType} onChangeBookingType={onChangeBookingType} />}
-                {props.weekProfile === 'Weekly' && <RecurringBookingWrapper onChangeRecurring={onChangeRecurring} recurring={recurring} />}
+                {props.weekProfile === RecurringType.WEEKLY && (
+                  <RecurringBookingWrapper onChangeRecurring={onChangeRecurring} recurring={recurring} />
+                )}
                 <BookingFormFooter
                   editable={props.editable}
                   newBooking={props.newBooking}
@@ -156,7 +162,7 @@ const BookingForm = (props: Props) => {
                       description: description,
                       editable: true,
                       bookingType: bookingType,
-                      bookingState: 'Pending',
+                      bookingState: BookingState.PENDING,
                     });
                   }}
                   handleOnSave={() => {
@@ -169,7 +175,7 @@ const BookingForm = (props: Props) => {
                       description: description,
                       editable: true,
                       bookingType: bookingType,
-                      bookingState: 'Pending',
+                      bookingState: BookingState.PENDING,
                     });
                   }}
                   handleOnDelete={() => {

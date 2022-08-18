@@ -1,8 +1,21 @@
-export type BookingType = 'Booking' | 'Lesson';
+export type BookingTypes = 'Booking' | 'Lesson';
+export const BookingType = {
+  BOOKING: 'Booking' as BookingTypes,
+  LESSON: 'Lesson' as BookingTypes,
+};
 
-export type BookingState = 'Approved' | 'Pending';
+export type BookingStates = 'Approved' | 'Pending';
+export const BookingState = {
+  APPROVED: 'Approved' as BookingStates,
+  PENDING: 'Pending' as BookingStates,
+};
 
-export type Recurring = 'Weekly' | 'BiWeekly' | 'None';
+export type RecurringTypes = 'Weekly' | 'BiWeekly' | 'None';
+export const RecurringType = {
+  NONE: 'None' as RecurringTypes,
+  WEEKLY: 'Weekly' as RecurringTypes,
+  BIWEEKLY: 'BiWeekly' as RecurringTypes,
+};
 
 export interface EventData {
   id: string;
@@ -16,6 +29,6 @@ export interface EventData {
   textColor?: string;
   editable: boolean;
   rrule?: string;
-  bookingType: BookingType;
-  bookingState: BookingState;
+  bookingType: BookingTypes;
+  bookingState: BookingStates;
 }

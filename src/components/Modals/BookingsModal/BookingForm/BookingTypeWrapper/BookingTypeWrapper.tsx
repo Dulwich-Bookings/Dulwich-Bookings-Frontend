@@ -1,10 +1,10 @@
 import React from 'react';
 import { Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
 
-import { BookingType } from '@/modules/Bookings/Types';
+import { BookingTypes, BookingType } from '@/modules/Bookings/Types';
 
 type Props = {
-  bookingType: BookingType;
+  bookingType: BookingTypes;
   onChangeBookingType: (value: string) => void;
 };
 
@@ -28,7 +28,7 @@ export default function BookingTypeWrapper(props: Props) {
         row
       >
         <FormControlLabel
-          value='Booking'
+          value={BookingType.BOOKING}
           className='pr-4'
           control={
             <Radio
@@ -40,10 +40,10 @@ export default function BookingTypeWrapper(props: Props) {
               }}
             />
           }
-          label='Booking'
+          label={BookingType.BOOKING}
         />
         <FormControlLabel
-          value='Lesson'
+          value={BookingType.LESSON}
           control={
             <Radio
               sx={{
@@ -54,7 +54,7 @@ export default function BookingTypeWrapper(props: Props) {
               }}
             />
           }
-          label='Lesson'
+          label={BookingType.LESSON}
         />
       </RadioGroup>
     </FormControl>

@@ -21,7 +21,7 @@ import './Calendar.css';
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
-import { EventData, BookingType, Recurring } from '@/modules/Bookings/Types';
+import { EventData, BookingTypes, RecurringTypes, BookingType, BookingState, RecurringType } from '@/modules/Bookings/Types';
 import { ResourceMapData } from '@/modules/resourceMap/types';
 // import { isTeacher, isAdmin } from '@/utilities/authorisation';
 
@@ -50,8 +50,8 @@ const Calendar = (props: Props) => {
   const [bookingDescription, setBookingDescription] = useState<string>('');
   const [editable, setEditable] = useState<boolean>(true);
   const [newBooking, setNewBooking] = useState<boolean>(true);
-  const [recurring, setRecurring] = useState<Recurring>('None');
-  const [bookingType, setBookingType] = useState<BookingType>('Booking');
+  const [recurring, setRecurring] = useState<RecurringTypes>(RecurringType.NONE);
+  const [bookingType, setBookingType] = useState<BookingTypes>(BookingType.BOOKING);
   const [bookingId, setBookingId] = useState<string>('');
   const [bookingUserId, setBookingUserId] = useState<number>(0);
 
@@ -66,8 +66,8 @@ const Calendar = (props: Props) => {
     setBookingDescription('');
     setEditable(true);
     setNewBooking(true);
-    setRecurring('None');
-    setBookingType('Booking');
+    setRecurring(RecurringType.NONE);
+    setBookingType(BookingType.BOOKING);
     setStartBook(startTime);
     setEndBook(endTime);
     setOpenBookingModal(true);
@@ -93,13 +93,13 @@ const Calendar = (props: Props) => {
 
   const getBookingState = () => {
     if (isAdmin(props.currentUser)) {
-      return 'Approved';
+      return BookingState.APPROVED;
     } else if (isTeacher(props.currentUser) && props.resourceData.accessRights.includes('Teacher')) {
-      return 'Approved';
+      return BookingState.APPROVED;
     } else if (props.resourceData.accessRights.includes('Student')) {
-      return 'Approved';
+      return BookingState.APPROVED;
     } else {
-      return 'Pending';
+      return BookingState.PENDING;
     }
   };
 
@@ -127,9 +127,10 @@ const Calendar = (props: Props) => {
       start: data.start,
       end: data.end,
       description: data.description,
-      backgroundColor: data.bookingType === 'Lesson' ? '#E6E6E6' : getBookingState() === 'Pending' ? '#E6AEAE' : '#E33939',
-      borderColor: data.bookingType === 'Lesson' ? '#E6E6E6' : getBookingState() === 'Pending' ? '#E6AEAE' : '#E33939',
-      textColor: data.bookingType === 'Lesson' ? '#000' : '#FFF',
+      backgroundColor:
+        data.bookingType === BookingType.LESSON ? '#E6E6E6' : getBookingState() === BookingState.PENDING ? '#E6AEAE' : '#E33939',
+      borderColor: data.bookingType === BookingType.LESSON ? '#E6E6E6' : getBookingState() === BookingState.PENDING ? '#E6AEAE' : '#E33939',
+      textColor: data.bookingType === BookingType.LESSON ? '#000' : '#FFF',
       editable: getEditable(data),
       bookingType: data.bookingType,
       bookingState: getBookingState(),
@@ -156,26 +157,26 @@ const Calendar = (props: Props) => {
       end: data.end,
       description: data.description,
       backgroundColor:
-        data.bookingType === 'Lesson'
+        data.bookingType === BookingType.LESSON
           ? '#E6E6E6'
           : data.userId === props.currentUser.id
-          ? getBookingState() === 'Pending'
+          ? getBookingState() === BookingState.PENDING
             ? '#E6AEAE'
             : '#E33939'
-          : getBookingState() === 'Pending'
+          : getBookingState() === BookingState.PENDING
           ? '#2E2E2E'
           : '#797979',
       borderColor:
-        data.bookingType === 'Lesson'
+        data.bookingType === BookingType.LESSON
           ? '#E6E6E6'
           : data.userId === props.currentUser.id
-          ? getBookingState() === 'Pending'
+          ? getBookingState() === BookingState.PENDING
             ? '#E6AEAE'
             : '#E33939'
-          : getBookingState() === 'Pending'
+          : getBookingState() === BookingState.PENDING
           ? '#2E2E2E'
           : '#797979',
-      textColor: data.bookingType === 'Lesson' ? '#000' : '#FFF',
+      textColor: data.bookingType === BookingType.LESSON ? '#000' : '#FFF',
       editable: getEditable(data),
       bookingType: data.bookingType,
       bookingState: getBookingState(),

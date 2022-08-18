@@ -4,11 +4,11 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import RecurringBooking from '@/components/Modals/BookingsModal/BookingForm/RecurringBookingWrapper/RecurringBooking/RecurringBooking';
-import { Recurring } from '@/modules/Bookings/Types';
+import { RecurringTypes, RecurringType } from '@/modules/Bookings/Types';
 
 type Props = {
   onChangeRecurring: (value: string) => void;
-  recurring: Recurring;
+  recurring: RecurringTypes;
 };
 
 export default function RecurringBookingWrapper(props: Props) {
@@ -32,7 +32,7 @@ export default function RecurringBookingWrapper(props: Props) {
           }}
         >
           <FormControlLabel
-            value='Weekly'
+            value={RecurringType.WEEKLY}
             className='pr-5'
             control={
               <Radio
@@ -44,10 +44,10 @@ export default function RecurringBookingWrapper(props: Props) {
                 }}
               />
             }
-            label='Weekly'
+            label={RecurringType.WEEKLY}
           />
           <FormControlLabel
-            value='BiWeekly'
+            value={RecurringType.BIWEEKLY}
             control={
               <Radio
                 sx={{
@@ -58,11 +58,11 @@ export default function RecurringBookingWrapper(props: Props) {
                 }}
               />
             }
-            label='BiWeekly'
+            label={RecurringType.BIWEEKLY}
           />
         </RadioGroup>
       </FormControl>
-      {props.recurring === 'None' ? <></> : <RecurringBooking />}
+      {props.recurring === RecurringType.NONE ? <></> : <RecurringBooking />}
     </>
   );
 }
