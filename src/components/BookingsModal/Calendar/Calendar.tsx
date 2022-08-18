@@ -9,7 +9,7 @@ import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import DayHeaderContent from '@/components/BookingsModal/Calendar/DayHeaderContent/DayHeaderContent';
 import SlotLabelContent from '@/components/BookingsModal/Calendar/SlotLabelContent/SlotLabelContent';
@@ -76,8 +76,9 @@ const Calendar = (props: Props) => {
 
   const handleEventClick = (e: EventClickArg) => {
     console.log(e.event._instance?.range);
-    const startTime = moment(e.event._instance?.range.start).format();
-    const endTime = moment(e.event._instance?.range.end).format();
+
+    const startTime = moment(e.event.start).tz(props.currentSchool.timezone).format();
+    const endTime = moment(e.event.end).tz(props.currentSchool.timezone).format();
     setStartBook(startTime);
     setEndBook(endTime);
     setBookingTitle(e.event.title);
