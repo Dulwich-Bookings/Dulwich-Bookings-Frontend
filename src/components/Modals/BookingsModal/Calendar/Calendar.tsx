@@ -81,7 +81,7 @@ const Calendar = (props: Props) => {
     const endTime = moment(e.event.end).format();
     setStartBook(startTime);
     setEndBook(endTime);
-    setBookingTitle(e.event.title);
+    setBookingTitle(e.event.extendedProps.formLabel);
     setBookingDescription(e.event.extendedProps.description);
     setEditable(e.event.startEditable);
     setNewBooking(false);
@@ -125,6 +125,7 @@ const Calendar = (props: Props) => {
       id: data.id,
       userId: data.userId,
       title: data.title,
+      formLabel: data.formLabel,
       start: data.start,
       end: data.end,
       description: data.description,
@@ -163,6 +164,7 @@ const Calendar = (props: Props) => {
       id: data.id,
       userId: data.userId,
       title: data.title,
+      formLabel: data.formLabel,
       start: data.start,
       end: data.end,
       description: data.description,
@@ -260,6 +262,7 @@ const Calendar = (props: Props) => {
               id: e.event.id,
               userId: e.event.extendedProps.userId,
               title: e.event.title,
+              formLabel: e.event.extendedProps.formLabel,
               start: moment(e.event.start).format(),
               end: moment(e.event.end).format(),
               description: e.event.extendedProps.description,
@@ -273,6 +276,7 @@ const Calendar = (props: Props) => {
               id: e.event.id,
               userId: e.event.extendedProps.userId,
               title: e.event.title,
+              formLabel: e.event.extendedProps.formLabel,
               start: moment(e.event.start).format(),
               end: moment(e.event.end).format(),
               description: e.event.extendedProps.description,

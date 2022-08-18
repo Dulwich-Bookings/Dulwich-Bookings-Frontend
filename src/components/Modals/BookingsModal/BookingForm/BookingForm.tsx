@@ -47,7 +47,7 @@ type Props = {
 
 const BookingForm = (props: Props) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [title, setTitle] = useState<string>(props.bookingTitle);
+  const [formLabel, setFormLabel] = useState<string>(props.bookingTitle);
   // const [isLoading, setIsLoading] = useState<boolean>(false);
   const [description, setDescription] = useState<string>(props.bookingDescription);
   const [startTime, setStartTime] = useState<string>(props.start);
@@ -58,7 +58,7 @@ const BookingForm = (props: Props) => {
   const [bookingType, setBookingType] = useState<BookingTypes>(props.bookingType);
 
   const handleTitleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
+    setFormLabel(event.target.value);
   };
 
   const handleDescriptionChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,7 +116,7 @@ const BookingForm = (props: Props) => {
                 disabled={!props.editable}
                 color='error'
                 placeholder='Add title'
-                value={title}
+                value={formLabel}
                 className='w-full h-1/6 text-xxl ml-2 font-Inter mb-1'
                 onChange={handleTitleChange}
               ></Input>
@@ -156,7 +156,8 @@ const BookingForm = (props: Props) => {
                     props.onAddBooking({
                       id: Math.random().toString(),
                       userId: props.bookingUser,
-                      title: title,
+                      title: bookingType === BookingType.BOOKING ? 'Booked' : BookingType.LESSON,
+                      formLabel: formLabel,
                       start: startTime,
                       end: endTime,
                       description: description,
@@ -169,7 +170,8 @@ const BookingForm = (props: Props) => {
                     props.onSaveBooking({
                       id: props.id,
                       userId: props.bookingUser,
-                      title: title,
+                      title: bookingType === BookingType.BOOKING ? 'Booked' : BookingType.LESSON,
+                      formLabel: formLabel,
                       start: startTime,
                       end: endTime,
                       description: description,
