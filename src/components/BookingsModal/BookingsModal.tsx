@@ -55,7 +55,7 @@ const BookingsModal = (props: Props) => {
         <Box className='calendarLaptop:w-11/12 calendarLaptop:h-5/6 calendarLaptop:mt-12 calendarLaptop:rounded-lg w-full h-full px-14 pt-10 bg-white'>
           <CloseIcon onClick={props.handleCloseModal} className='float-right cursor-pointer hover:text-grayAccent' />
           <Stack className='h-full' spacing={{ xs: 1, md: -6 }}>
-            <BookingsHeader id={1} title={props.resourceData.name} description={props.resourceData.description} />
+            <BookingsHeader id={1} resourceData={props.resourceData} />
             <Calendar
               resourceData={props.resourceData}
               currentUser={props.currentUser}

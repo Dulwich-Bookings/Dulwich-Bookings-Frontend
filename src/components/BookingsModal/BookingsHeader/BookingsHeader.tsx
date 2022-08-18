@@ -1,26 +1,23 @@
 import React from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import AddCalendarButton from '@/components/BookingsModal/BookingsHeader/AddCalendarButton/AddCalendarButton';
-
-export type BookingsHeaderData = {
-  title: string;
-  description: string;
-};
+import WeekButton from '@/components/BookingsModal/BookingsHeader/WeekButton/WeekButton';
+import { ResourceData } from '@/modules/resource/types';
 
 type Props = {
   id: number;
-  title: string;
-  description: string;
+  resourceData: ResourceData;
 };
-const BookingsHeader = ({ id, title, description }: Props) => {
+const BookingsHeader = ({ id, resourceData }: Props) => {
   return (
     <Box>
       <Stack direction='row' spacing={2} alignItems='center'>
-        <Typography variant='h4'>{title}</Typography>
+        <Typography variant='h4'>{resourceData.name}</Typography>
         <AddCalendarButton id={id} />
+        <WeekButton weekProfile={resourceData.weekProfile} />
       </Stack>
       <Typography className='laptop:block hidden w-1/3 h-14 font-Inter pt-3' variant='subtitle2'>
-        {description}
+        {resourceData.description}
       </Typography>
     </Box>
   );
