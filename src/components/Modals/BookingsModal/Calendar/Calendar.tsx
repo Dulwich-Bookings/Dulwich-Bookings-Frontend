@@ -70,13 +70,11 @@ const Calendar = (props: Props) => {
     setEditable(true);
     setNewBooking(true);
     setRrule(null);
-    console.log(rrule);
     setBookingType(BookingType.BOOKING);
     setStartBook(startTime);
     setEndBook(endTime);
     setOpenBookingModal(true);
     setBookingUserId(props.currentUser.id);
-    console.log(bookingType);
   };
 
   const handleEventClick = (e: EventClickArg) => {
@@ -89,7 +87,7 @@ const Calendar = (props: Props) => {
     setEditable(e.event.startEditable);
     setNewBooking(false);
     setOpenBookingModal(true);
-    setRrule(e.event._def.recurringDef !== null ? e.event._def.recurringDef?.typeData.rruleSet._rrule[0] : undefined);
+    setRrule(e.event._def.recurringDef !== null ? e.event._def.recurringDef?.typeData.rruleSet._rrule[0] : null);
     setBookingType(e.event.extendedProps.bookingType);
     setBookingId(e.event.id);
     setBookingUserId(e.event.extendedProps.userId);
@@ -149,7 +147,6 @@ const Calendar = (props: Props) => {
       bookingType: data.bookingType,
       bookingState: getBookingState(),
     };
-    console.log(newBooking);
     const newBookingsList: EventData[] = [...bookings, newBooking];
     setBookings(newBookingsList);
     setOpenBookingModal(false);
@@ -198,7 +195,6 @@ const Calendar = (props: Props) => {
       bookingType: data.bookingType,
       bookingState: getBookingState(),
     };
-    console.log(newBooking);
     const newBookingsList = bookings.map(booking => {
       return booking.id === data.id ? newBooking : booking;
     });
@@ -263,7 +259,6 @@ const Calendar = (props: Props) => {
           editable={true}
           events={bookings}
           eventDrop={e => {
-            console.log(e);
             onSaveBooking({
               id: e.event.id,
               userId: e.event.extendedProps.userId,
@@ -279,7 +274,6 @@ const Calendar = (props: Props) => {
             });
           }}
           eventResize={e => {
-            console.log(e);
             onSaveBooking({
               id: e.event.id,
               userId: e.event.extendedProps.userId,

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Modal, createTheme, Stack, ThemeProvider, Box, Input } from '@mui/material';
 import { FormatAlignLeft, Close } from '@mui/icons-material';
 import BookingFormFooter from '@/components/Modals/BookingsModal/BookingForm/BookingFormFooter/BookingFormFooter';
@@ -85,12 +85,8 @@ const BookingForm = (props: Props) => {
 
   const handleChangeRRule = (rrule: RRule) => {
     setRrule(rrule);
-    console.log(rrule);
   };
 
-  useEffect(() => {
-    console.log(props.editable);
-  }, []);
   return (
     <>
       <ThemeProvider theme={theme}>

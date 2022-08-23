@@ -27,7 +27,6 @@ export default function RecurringBooking(props: Props) {
   const [frequency, setFrequency] = useState<number>(props.rrule?.options.count ?? 1);
 
   const handleRecurringChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.defaultValue);
     setRecurrence(event.target.defaultValue === 'On' ? RecurrenceType.ON : RecurrenceType.AFTER);
   };
 
@@ -73,7 +72,6 @@ export default function RecurringBooking(props: Props) {
             disableUnderline
             onChange={event => {
               setFrequency(parseInt(event.target.value));
-              console.log(event);
             }}
           />
           <Typography className='font-Inter align-center'>occurrences</Typography>
