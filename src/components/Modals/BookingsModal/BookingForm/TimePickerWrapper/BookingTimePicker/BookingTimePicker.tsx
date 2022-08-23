@@ -3,22 +3,25 @@ import { TextField, Modal } from '@mui/material';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StaticTimePicker } from '@mui/x-date-pickers/StaticTimePicker';
-import moment from 'moment-timezone';
+import moment, { Moment } from 'moment-timezone';
 
 type Props = {
   openState: boolean;
   handleOnClose: () => void;
-  handleOnChange: (time: string) => void;
-  time: string;
+  handleOnChange: (time: Date) => void;
+  time: Date;
   timezone: string;
 };
 
 const BookingTimePicker = (props: Props) => {
-  const newTime = moment(props.time).tz(props.timezone);
+  const momentTime = moment(props.time).tz(props.timezone);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleOnChange = (time: any) => {
-    props.handleOnChange(time);
+  const handleOnChange = (time: Moment | null) => {
+    if (time === null) {
+      return;
+    }
+    props.handleOnChange(time.toDate());
   };
 
   return (
@@ -33,7 +36,7 @@ const BookingTimePicker = (props: Props) => {
           showToolbar={true}
           closeOnSelect={true}
           onAccept={props.handleOnClose}
-          value={newTime}
+          value={momentTime}
           onChange={handleOnChange}
           renderInput={params => <TextField {...params} />}
           minutesStep={5}

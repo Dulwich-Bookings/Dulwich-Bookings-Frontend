@@ -35,8 +35,8 @@ type Props = {
   bookingDescription: string;
   editable: boolean;
   newBooking: boolean;
-  start: string;
-  end: string;
+  start: Date;
+  end: Date;
   recurring: RecurringTypes;
   bookingType: BookingTypes;
   currentUser: UserData;
@@ -50,8 +50,8 @@ const BookingForm = (props: Props) => {
   const [formLabel, setFormLabel] = useState<string>(props.bookingTitle);
   // const [isLoading, setIsLoading] = useState<boolean>(false);
   const [description, setDescription] = useState<string>(props.bookingDescription);
-  const [startTime, setStartTime] = useState<string>(props.start);
-  const [endTime, setEndTime] = useState<string>(props.end);
+  const [startTime, setStartTime] = useState<Date>(props.start);
+  const [endTime, setEndTime] = useState<Date>(props.end);
   const [multiline, setMultiline] = useState<boolean>(false);
   const [rows, setRows] = useState<number>(1);
   const [recurring, setRecurring] = useState<RecurringTypes>(props.recurring);
@@ -70,7 +70,7 @@ const BookingForm = (props: Props) => {
     setRows(4);
   };
 
-  const onChangeTime = (time: string, isStart: boolean) => {
+  const onChangeTime = (time: Date, isStart: boolean) => {
     isStart ? setStartTime(time) : setEndTime(time);
   };
 

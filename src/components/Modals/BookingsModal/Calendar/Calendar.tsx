@@ -47,8 +47,8 @@ const Calendar = (props: Props) => {
   const [openBookingModal, setOpenBookingModal] = useState<boolean>(false);
   const [bookings, setBookings] = useState<EventData[]>([]);
   const [bookingTitle, setBookingTitle] = useState<string>('');
-  const [startBook, setStartBook] = useState<string>('');
-  const [endBook, setEndBook] = useState<string>('');
+  const [startBook, setStartBook] = useState<Date>(new Date());
+  const [endBook, setEndBook] = useState<Date>(new Date());
   const [bookingDescription, setBookingDescription] = useState<string>('');
   const [editable, setEditable] = useState<boolean>(true);
   const [newBooking, setNewBooking] = useState<boolean>(true);
@@ -62,8 +62,8 @@ const Calendar = (props: Props) => {
   const isMobile = !useMediaQuery(theme.breakpoints.up('sm'));
 
   const handleDateClick = (e: DateClickArg) => {
-    const startTime = moment(e.dateStr).format();
-    const endTime = moment(e.dateStr).add(15, 'm').format();
+    const startTime = moment(e.dateStr).toDate();
+    const endTime = moment(e.dateStr).add(15, 'm').toDate();
     setBookingTitle('');
     setBookingDescription('');
     setEditable(true);
@@ -78,8 +78,8 @@ const Calendar = (props: Props) => {
   };
 
   const handleEventClick = (e: EventClickArg) => {
-    const startTime = moment(e.event.start).format();
-    const endTime = moment(e.event.end).format();
+    const startTime = moment(e.event.start).toDate();
+    const endTime = moment(e.event.end).toDate();
     setStartBook(startTime);
     setEndBook(endTime);
     setBookingTitle(e.event.extendedProps.formLabel);
@@ -264,8 +264,8 @@ const Calendar = (props: Props) => {
               userId: e.event.extendedProps.userId,
               title: e.event.title,
               formLabel: e.event.extendedProps.formLabel,
-              start: moment(e.event.start).format(),
-              end: moment(e.event.end).format(),
+              start: moment(e.event.start).toDate(),
+              end: moment(e.event.end).toDate(),
               description: e.event.extendedProps.description,
               editable: e.event.startEditable,
               bookingType: e.event.extendedProps.bookingType,
@@ -278,8 +278,8 @@ const Calendar = (props: Props) => {
               userId: e.event.extendedProps.userId,
               title: e.event.title,
               formLabel: e.event.extendedProps.formLabel,
-              start: moment(e.event.start).format(),
-              end: moment(e.event.end).format(),
+              start: moment(e.event.start).toDate(),
+              end: moment(e.event.end).toDate(),
               description: e.event.extendedProps.description,
               editable: e.event.startEditable,
               bookingType: e.event.extendedProps.bookingType,

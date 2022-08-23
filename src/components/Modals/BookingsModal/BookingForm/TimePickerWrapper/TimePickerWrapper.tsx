@@ -9,16 +9,16 @@ import moment from 'moment-timezone';
 import { SchoolData } from '@/modules/school/types';
 
 type Props = {
-  startTime: string;
-  endTime: string;
+  startTime: Date;
+  endTime: Date;
   editable: boolean;
-  onChangeTime: (start: string, isStart: boolean) => void;
+  onChangeTime: (start: Date, isStart: boolean) => void;
   school: SchoolData;
 };
 
 const TimePickerWrapper = (props: Props) => {
-  const [startTime, setStartTime] = useState<string>(moment(props.startTime).tz(props.school.timezone).format());
-  const [endTime, setEndTime] = useState<string>(moment(props.endTime).tz(props.school.timezone).format());
+  const [startTime, setStartTime] = useState<Date>(props.startTime);
+  const [endTime, setEndTime] = useState<Date>(props.endTime);
   const [openStateStart, setOpenStateStart] = React.useState<boolean>(false);
   const [openStateEnd, setOpenStateEnd] = React.useState<boolean>(false);
 
@@ -30,18 +30,19 @@ const TimePickerWrapper = (props: Props) => {
     setOpenStateEnd(false);
   };
 
-  const handleOnChangeStart = (time: string) => {
-    setStartTime(moment(time).format());
-    props.onChangeTime(moment(time).format(), true);
+  const handleOnChangeStart = (time: Date) => {
+    setStartTime(time);
+    props.onChangeTime(time, true);
   };
-  const handleOnChangeEnd = (time: string) => {
-    setEndTime(moment(time).format());
+  const handleOnChangeEnd = (time: Date) => {
+    setEndTime(time);
     props.onChangeTime(time, false);
   };
 
   useEffect(() => {
     props.onChangeTime(startTime, true), props.onChangeTime(endTime, false);
   }, []);
+
   return (
     <>
       <BookingTimePicker
@@ -86,7 +87,7 @@ const TimePickerWrapper = (props: Props) => {
                 value={moment(endTime).tz(props.school.timezone).format('HH:mm')}
                 type='string'
                 onClick={() => {
-                  props.editable ? setOpenStateStart(true) : setOpenStateStart(false);
+                  props.editable ? setOpenStateEnd(true) : setOpenStateEnd(false);
                 }}
                 id='standard-basic'
                 disableUnderline

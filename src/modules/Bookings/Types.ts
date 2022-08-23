@@ -22,8 +22,8 @@ export interface EventData {
   userId: number;
   title: string;
   formLabel: string;
-  start: string;
-  end: string;
+  start: Date;
+  end: Date;
   description: string;
   backgroundColor?: string;
   borderColor?: string;
