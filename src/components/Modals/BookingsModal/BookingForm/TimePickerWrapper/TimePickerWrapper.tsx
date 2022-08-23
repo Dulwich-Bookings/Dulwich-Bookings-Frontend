@@ -46,11 +46,18 @@ const TimePickerWrapper = (props: Props) => {
     <>
       <BookingTimePicker
         time={startTime}
+        timezone={props.school.timezone}
         openState={openStateStart}
         handleOnClose={handleOnCloseStart}
         handleOnChange={handleOnChangeStart}
       />
-      <BookingTimePicker time={endTime} openState={openStateEnd} handleOnClose={handleOnCloseEnd} handleOnChange={handleOnChangeEnd} />
+      <BookingTimePicker
+        time={endTime}
+        timezone={props.school.timezone}
+        openState={openStateEnd}
+        handleOnClose={handleOnCloseEnd}
+        handleOnChange={handleOnChangeEnd}
+      />
       <InputWithIcon
         inputType='string'
         inputClassname='w-10/12 font-Inter'
