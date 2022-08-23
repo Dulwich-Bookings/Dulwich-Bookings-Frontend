@@ -11,6 +11,7 @@ import { isAdmin } from '@/utilities/authorisation';
 import { UserData } from '@/modules/user/types';
 import { EventData, BookingTypes, RecurringTypes, BookingType, BookingState, RecurringType } from '@/modules/Bookings/Types';
 import { SchoolData } from '@/modules/school/types';
+import { RRule } from 'rrule';
 
 const theme = createTheme({
   breakpoints: {
@@ -37,7 +38,7 @@ type Props = {
   newBooking: boolean;
   start: Date;
   end: Date;
-  recurring: RecurringTypes;
+  rrule: RRule | null;
   bookingType: BookingTypes;
   currentUser: UserData;
   bookingUser: number;
@@ -50,11 +51,11 @@ const BookingForm = (props: Props) => {
   const [formLabel, setFormLabel] = useState<string>(props.bookingTitle);
   // const [isLoading, setIsLoading] = useState<boolean>(false);
   const [description, setDescription] = useState<string>(props.bookingDescription);
+  const [rrule, setRrule] = useState<RRule | null>(props.rrule);
   const [startTime, setStartTime] = useState<Date>(props.start);
   const [endTime, setEndTime] = useState<Date>(props.end);
   const [multiline, setMultiline] = useState<boolean>(false);
   const [rows, setRows] = useState<number>(1);
-  const [recurring, setRecurring] = useState<RecurringTypes>(props.recurring);
   const [bookingType, setBookingType] = useState<BookingTypes>(props.bookingType);
 
   const handleTitleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,22 +75,17 @@ const BookingForm = (props: Props) => {
     isStart ? setStartTime(time) : setEndTime(time);
   };
 
-  const onChangeRecurring = (value: string) => {
-    props.editable
-      ? value === RecurringType.WEEKLY
-        ? setRecurring(RecurringType.WEEKLY)
-        : value === RecurringType.BIWEEKLY
-        ? setRecurring(RecurringType.BIWEEKLY)
-        : setRecurring(RecurringType.NONE)
-      : setRecurring(recurring);
-  };
-
   const onChangeBookingType = (value: string) => {
     props.editable
       ? value === BookingType.BOOKING
         ? setBookingType(BookingType.BOOKING)
         : setBookingType(BookingType.LESSON)
       : setBookingType(bookingType);
+  };
+
+  const handleChangeRRule = (rrule: RRule) => {
+    setRrule(rrule);
+    console.log(rrule);
   };
 
   useEffect(() => {
@@ -150,7 +146,7 @@ const BookingForm = (props: Props) => {
                   </div>
                   {isAdmin(props.currentUser) && <BookingTypeWrapper bookingType={bookingType} onChangeBookingType={onChangeBookingType} />}
                   {props.weekProfile === RecurringType.WEEKLY && (
-                    <RecurringBookingWrapper onChangeRecurring={onChangeRecurring} recurring={recurring} />
+                    <RecurringBookingWrapper handleChangeRRule={handleChangeRRule} rrule={rrule} />
                   )}
                   <BookingFormFooter
                     editable={props.editable}
@@ -164,6 +160,7 @@ const BookingForm = (props: Props) => {
                         start: startTime,
                         end: endTime,
                         description: description,
+                        rrule: rrule?.toString() ?? undefined,
                         editable: true,
                         bookingType: bookingType,
                         bookingState: BookingState.PENDING,
@@ -178,6 +175,7 @@ const BookingForm = (props: Props) => {
                         start: startTime,
                         end: endTime,
                         description: description,
+                        rrule: rrule?.toString() ?? undefined,
                         editable: true,
                         bookingType: bookingType,
                         bookingState: BookingState.PENDING,

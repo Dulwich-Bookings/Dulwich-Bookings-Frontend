@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -7,20 +7,33 @@ import TailWindTheme from '@/tailwind.config';
 
 import RecurringBooking from '@/components/Modals/BookingsModal/BookingForm/RecurringBookingWrapper/RecurringBooking/RecurringBooking';
 import { RecurringTypes, RecurringType } from '@/modules/Bookings/Types';
+import { RRule } from 'rrule';
 
 const { colors } = TailWindTheme.theme;
 
 type Props = {
-  onChangeRecurring: (value: string) => void;
-  recurring: RecurringTypes;
+  handleChangeRRule: (rrule: RRule) => void;
+  rrule: RRule | null;
 };
 
 export default function RecurringBookingWrapper(props: Props) {
+  const [recurring, setRecurring] = useState<RecurringTypes>(
+    props.rrule === null ? RecurringType.NONE : props.rrule.options.interval === 1 ? RecurringType.WEEKLY : RecurringType.BIWEEKLY,
+  );
+
+  const onChangeRecurring = (value: string) => {
+    value === RecurringType.WEEKLY
+      ? setRecurring(RecurringType.WEEKLY)
+      : value === RecurringType.BIWEEKLY
+      ? setRecurring(RecurringType.BIWEEKLY)
+      : setRecurring(RecurringType.NONE);
+  };
+
   return (
     <>
       <FormControl>
         <RadioGroup
-          value={props.recurring}
+          value={recurring}
           className='font-Inter font-light pl-2 align-center text-grayAccent mb-1'
           aria-labelledby='demo-radio-buttons-group-label'
           name='radio-buttons-group'
@@ -32,7 +45,7 @@ export default function RecurringBookingWrapper(props: Props) {
           }}
           row
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            props.onChangeRecurring(event.target.defaultValue);
+            onChangeRecurring(event.target.defaultValue);
           }}
         >
           <FormControlLabel
@@ -66,7 +79,11 @@ export default function RecurringBookingWrapper(props: Props) {
           />
         </RadioGroup>
       </FormControl>
-      {props.recurring === RecurringType.NONE ? <></> : <RecurringBooking />}
+      {recurring === RecurringType.NONE ? (
+        <></>
+      ) : (
+        <RecurringBooking handleChangeRRule={props.handleChangeRRule} rrule={props.rrule} recurring={recurring} />
+      )}
     </>
   );
 }

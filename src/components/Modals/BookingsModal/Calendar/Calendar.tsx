@@ -23,9 +23,10 @@ import TailWindTheme from '@/tailwind.config';
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
-import { EventData, BookingTypes, RecurringTypes, BookingType, BookingState, RecurringType } from '@/modules/Bookings/Types';
+import { EventData, BookingTypes, BookingType, BookingState } from '@/modules/Bookings/Types';
 import { ResourceMapData } from '@/modules/resourceMap/types';
 import { isAdmin, isTeacher } from '@/utilities/authorisation';
+import { RRule } from 'rrule';
 
 const { colors } = TailWindTheme.theme;
 
@@ -52,7 +53,7 @@ const Calendar = (props: Props) => {
   const [bookingDescription, setBookingDescription] = useState<string>('');
   const [editable, setEditable] = useState<boolean>(true);
   const [newBooking, setNewBooking] = useState<boolean>(true);
-  const [recurring, setRecurring] = useState<RecurringTypes>(RecurringType.NONE);
+  const [rrule, setRrule] = useState<RRule | null>(null);
   const [bookingType, setBookingType] = useState<BookingTypes>(BookingType.BOOKING);
   const [bookingId, setBookingId] = useState<string>('');
   const [bookingUserId, setBookingUserId] = useState<number>(0);
@@ -68,7 +69,8 @@ const Calendar = (props: Props) => {
     setBookingDescription('');
     setEditable(true);
     setNewBooking(true);
-    setRecurring(RecurringType.NONE);
+    setRrule(null);
+    console.log(rrule);
     setBookingType(BookingType.BOOKING);
     setStartBook(startTime);
     setEndBook(endTime);
@@ -87,7 +89,7 @@ const Calendar = (props: Props) => {
     setEditable(e.event.startEditable);
     setNewBooking(false);
     setOpenBookingModal(true);
-    setRecurring(e.event.extendedProps.recurring);
+    setRrule(e.event._def.recurringDef !== null ? e.event._def.recurringDef?.typeData.rruleSet._rrule[0] : undefined);
     setBookingType(e.event.extendedProps.bookingType);
     setBookingId(e.event.id);
     setBookingUserId(e.event.extendedProps.userId);
@@ -121,7 +123,7 @@ const Calendar = (props: Props) => {
 
   const onAddBooking = async (data: EventData): Promise<void> => {
     console.log('add booking');
-
+    console.log(data);
     const newBooking: EventData = {
       id: data.id,
       userId: data.userId,
@@ -130,6 +132,7 @@ const Calendar = (props: Props) => {
       start: data.start,
       end: data.end,
       description: data.description,
+      rrule: data.rrule ?? undefined,
       backgroundColor:
         data.bookingType === BookingType.LESSON
           ? colors.bgLesson
@@ -169,6 +172,7 @@ const Calendar = (props: Props) => {
       start: data.start,
       end: data.end,
       description: data.description,
+      rrule: data.rrule ?? undefined,
       backgroundColor:
         data.bookingType === BookingType.LESSON
           ? colors.bgLesson
@@ -223,7 +227,7 @@ const Calendar = (props: Props) => {
           newBooking={newBooking}
           start={startBook}
           end={endBook}
-          recurring={recurring}
+          rrule={rrule}
           bookingType={bookingType}
           currentUser={props.currentUser}
           bookingUser={bookingUserId}
@@ -259,6 +263,7 @@ const Calendar = (props: Props) => {
           editable={true}
           events={bookings}
           eventDrop={e => {
+            console.log(e);
             onSaveBooking({
               id: e.event.id,
               userId: e.event.extendedProps.userId,
@@ -267,12 +272,14 @@ const Calendar = (props: Props) => {
               start: moment(e.event.start).toDate(),
               end: moment(e.event.end).toDate(),
               description: e.event.extendedProps.description,
+              rrule: e.event._def.recurringDef?.typeData.rruleSet._rrule[0] ?? undefined,
               editable: e.event.startEditable,
               bookingType: e.event.extendedProps.bookingType,
               bookingState: e.event.extendedProps.bookingState,
             });
           }}
           eventResize={e => {
+            console.log(e);
             onSaveBooking({
               id: e.event.id,
               userId: e.event.extendedProps.userId,
@@ -281,6 +288,7 @@ const Calendar = (props: Props) => {
               start: moment(e.event.start).toDate(),
               end: moment(e.event.end).toDate(),
               description: e.event.extendedProps.description,
+              rrule: e.event._def.recurringDef?.typeData.rruleSet._rrule[0] ?? undefined,
               editable: e.event.startEditable,
               bookingType: e.event.extendedProps.bookingType,
               bookingState: e.event.extendedProps.bookingState,
