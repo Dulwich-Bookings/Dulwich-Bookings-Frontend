@@ -8,6 +8,7 @@ import FullCalendar, { EventClickArg } from '@fullcalendar/react';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import rrulePlugin from '@fullcalendar/rrule';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import moment from 'moment-timezone';
 
@@ -233,7 +234,7 @@ const Calendar = (props: Props) => {
       )}
       <Box className='h-full'>
         <FullCalendar
-          plugins={[timeGridPlugin, interactionPlugin, momentTimezonePlugin, dayGridPlugin]}
+          plugins={[timeGridPlugin, interactionPlugin, momentTimezonePlugin, dayGridPlugin, rrulePlugin]}
           timeZone={props.currentSchool.timezone}
           headerToolbar={{
             start: '',
