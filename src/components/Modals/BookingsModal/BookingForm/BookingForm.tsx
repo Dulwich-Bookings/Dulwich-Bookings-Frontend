@@ -105,86 +105,90 @@ const BookingForm = (props: Props) => {
           BackdropProps={{ style: { backgroundColor: 'transparent' } }}
           disableAutoFocus
         >
-          <Box className='rounded-2xl w-96 h-fit pr-1 pl-6 pt-4 pb-6 bg-bgWhite shadow-[0_4px_15px_0px_rgba(0,0,0,0.25)] ring-0'>
-            <Close
-              onClick={props.handleCloseModal}
-              fontSize='small'
-              className='float-right cursor-pointer hover:text-grayAccent text-lg pr-2 w-10'
-            />
-            <Stack direction='column' className='h-full w-11/12' spacing={{ xs: 1, md: 1 }} alignItems='justified'>
-              <Input
-                disabled={!props.editable}
-                color='error'
-                placeholder='Add title'
-                value={formLabel}
-                className='w-full h-1/6 text-xxl ml-2 font-Inter mb-1'
-                onChange={handleTitleChange}
-              ></Input>
-              <Stack direction='column' spacing={{ xs: 0, md: 0 }} alignItems='justified'>
-                <TimePickerWrapper
-                  startTime={startTime}
-                  endTime={endTime}
-                  onChangeTime={onChangeTime}
-                  editable={props.editable}
-                  school={props.school}
+          <Box className='rounded-2xl w-96 h-fit  bg-bgWhite shadow-[0_4px_15px_0px_rgba(0,0,0,0.25)] ring-0'>
+            <Stack className='w-full pl-7 pt-4 pb-6' spacing={-0.5}>
+              <div className='w-full'>
+                <Close
+                  onClick={props.handleCloseModal}
+                  fontSize='small'
+                  className='float-right cursor-pointer hover:text-grayAccent text-lg pr-4 w-10'
                 />
-                <div ref={ref} className='w-full'>
-                  <InputWithIcon
-                    inputType='string'
-                    inputPlaceholder={props.editable ? 'Add description' : ''}
-                    inputValue={description}
-                    inputClassname='w-full color-bgWhite font-Inter font-light px-0'
-                    inputVariant='outlined'
-                    multiline={multiline}
-                    rows={rows}
-                    icon={<FormatAlignLeft className='ml-2 text-lg' />}
-                    spacing={0.5}
-                    inputHandleOnChange={handleDescriptionChange}
-                    acceptInput={props.editable}
-                    onFocus={handleOnFocus}
-                    onBlur={() => setMultiline(false)}
+              </div>
+              <Stack direction='column' className='h-full w-11/12 ' spacing={{ xs: 1, md: 1 }} alignItems='justified'>
+                <Input
+                  disabled={!props.editable}
+                  color='error'
+                  placeholder='Add title'
+                  value={formLabel}
+                  className='w-full h-1/6 text-xxl font-Inter mb-1'
+                  onChange={handleTitleChange}
+                ></Input>
+                <Stack direction='column' spacing={{ xs: 0, md: 0 }} alignItems='justified'>
+                  <TimePickerWrapper
+                    startTime={startTime}
+                    endTime={endTime}
+                    onChangeTime={onChangeTime}
+                    editable={props.editable}
+                    school={props.school}
                   />
-                </div>
-                {isAdmin(props.currentUser) && <BookingTypeWrapper bookingType={bookingType} onChangeBookingType={onChangeBookingType} />}
-                {props.weekProfile === RecurringType.WEEKLY && (
-                  <RecurringBookingWrapper onChangeRecurring={onChangeRecurring} recurring={recurring} />
-                )}
-                <BookingFormFooter
-                  editable={props.editable}
-                  newBooking={props.newBooking}
-                  handleOnBook={() => {
-                    props.onAddBooking({
-                      id: Math.random().toString(),
-                      userId: props.bookingUser,
-                      title: bookingType === BookingType.BOOKING ? 'Booked' : BookingType.LESSON,
-                      formLabel: formLabel,
-                      start: startTime,
-                      end: endTime,
-                      description: description,
-                      editable: true,
-                      bookingType: bookingType,
-                      bookingState: BookingState.PENDING,
-                    });
-                  }}
-                  handleOnSave={() => {
-                    props.onSaveBooking({
-                      id: props.id,
-                      userId: props.bookingUser,
-                      title: bookingType === BookingType.BOOKING ? 'Booked' : BookingType.LESSON,
-                      formLabel: formLabel,
-                      start: startTime,
-                      end: endTime,
-                      description: description,
-                      editable: true,
-                      bookingType: bookingType,
-                      bookingState: BookingState.PENDING,
-                    });
-                  }}
-                  handleOnDelete={() => {
-                    props.onDeleteBooking(props.id);
-                  }}
-                  handleOnContact={props.onContact}
-                />
+                  <div ref={ref} className='w-full'>
+                    <InputWithIcon
+                      inputType='string'
+                      inputPlaceholder={props.editable ? 'Add description' : ''}
+                      inputValue={description}
+                      inputClassname='w-full color-bgWhite font-Inter font-light px-0'
+                      inputVariant='outlined'
+                      multiline={multiline}
+                      rows={rows}
+                      icon={<FormatAlignLeft className='ml-2 text-lg' />}
+                      spacing={0.5}
+                      inputHandleOnChange={handleDescriptionChange}
+                      acceptInput={props.editable}
+                      onFocus={handleOnFocus}
+                      onBlur={() => setMultiline(false)}
+                    />
+                  </div>
+                  {isAdmin(props.currentUser) && <BookingTypeWrapper bookingType={bookingType} onChangeBookingType={onChangeBookingType} />}
+                  {props.weekProfile === RecurringType.WEEKLY && (
+                    <RecurringBookingWrapper onChangeRecurring={onChangeRecurring} recurring={recurring} />
+                  )}
+                  <BookingFormFooter
+                    editable={props.editable}
+                    newBooking={props.newBooking}
+                    handleOnBook={() => {
+                      props.onAddBooking({
+                        id: Math.random().toString(),
+                        userId: props.bookingUser,
+                        title: bookingType === BookingType.BOOKING ? 'Booked' : BookingType.LESSON,
+                        formLabel: formLabel,
+                        start: startTime,
+                        end: endTime,
+                        description: description,
+                        editable: true,
+                        bookingType: bookingType,
+                        bookingState: BookingState.PENDING,
+                      });
+                    }}
+                    handleOnSave={() => {
+                      props.onSaveBooking({
+                        id: props.id,
+                        userId: props.bookingUser,
+                        title: bookingType === BookingType.BOOKING ? 'Booked' : BookingType.LESSON,
+                        formLabel: formLabel,
+                        start: startTime,
+                        end: endTime,
+                        description: description,
+                        editable: true,
+                        bookingType: bookingType,
+                        bookingState: BookingState.PENDING,
+                      });
+                    }}
+                    handleOnDelete={() => {
+                      props.onDeleteBooking(props.id);
+                    }}
+                    handleOnContact={props.onContact}
+                  />
+                </Stack>
               </Stack>
             </Stack>
           </Box>
