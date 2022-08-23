@@ -61,7 +61,7 @@ export default function RecurringBooking(props: Props) {
     <Stack direction='row' spacing={7} className='h-8 items-center'>
       <Typography className='font-Inter align-center'>After</Typography>
       {recurrence === RecurrenceType.AFTER && (
-        <Stack direction='row' spacing={-2} className='h-8 items-center'>
+        <Stack direction='row' spacing={0} className='h-8 items-center'>
           <Input
             type='number'
             className='font-Inter object-right align-center box-content rounded-md w-10 bg-bgWhiteDim h-auto hover:bg-bgGray focus-within:bg-gray'
