@@ -15,6 +15,7 @@ type Props = {
   handleChangeRRule: (rrule: RRule) => void;
   rrule: RRule | null;
   date: Date;
+  weekProfile: RecurringTypes;
 };
 
 export default function RecurringBookingWrapper(props: Props) {
@@ -49,21 +50,23 @@ export default function RecurringBookingWrapper(props: Props) {
             onChangeRecurring(event.target.defaultValue);
           }}
         >
-          <FormControlLabel
-            value={RecurringType.WEEKLY}
-            className='pr-5'
-            control={
-              <Radio
-                sx={{
-                  color: colors.bgBlack,
-                  '&.Mui-checked': {
-                    color: colors.dulwichRed,
-                  },
-                }}
-              />
-            }
-            label={RecurringType.WEEKLY}
-          />
+          {props.weekProfile === RecurringType.WEEKLY && (
+            <FormControlLabel
+              value={RecurringType.WEEKLY}
+              className='pr-5'
+              control={
+                <Radio
+                  sx={{
+                    color: colors.bgBlack,
+                    '&.Mui-checked': {
+                      color: colors.dulwichRed,
+                    },
+                  }}
+                />
+              }
+              label={RecurringType.WEEKLY}
+            />
+          )}
           <FormControlLabel
             value={RecurringType.BIWEEKLY}
             control={

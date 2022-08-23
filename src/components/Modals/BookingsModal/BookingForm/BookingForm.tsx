@@ -145,9 +145,14 @@ const BookingForm = (props: Props) => {
                     />
                   </div>
                   {isAdmin(props.currentUser) && <BookingTypeWrapper bookingType={bookingType} onChangeBookingType={onChangeBookingType} />}
-                  {props.weekProfile === RecurringType.WEEKLY && (
-                    <RecurringBookingWrapper handleChangeRRule={handleChangeRRule} rrule={rrule} date={props.start} />
-                  )}
+
+                  <RecurringBookingWrapper
+                    handleChangeRRule={handleChangeRRule}
+                    rrule={rrule}
+                    date={props.start}
+                    weekProfile={props.weekProfile}
+                  />
+
                   <BookingFormFooter
                     editable={props.editable}
                     newBooking={props.newBooking}
