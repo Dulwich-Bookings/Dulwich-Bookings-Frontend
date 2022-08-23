@@ -13,6 +13,7 @@ type Props = {
   recurring: RecurringTypes;
   rrule: RRule | null;
   handleChangeRRule: (rrule: RRule) => void;
+  date: Date;
 };
 
 export type RecurrenceTypes = 'On' | 'After';
@@ -34,6 +35,7 @@ export default function RecurringBooking(props: Props) {
       interval: props.recurring === RecurringType.WEEKLY ? 1 : 2,
       until: recurrence === RecurrenceType.ON ? endDate : null,
       count: recurrence === RecurrenceType.AFTER ? frequency : null,
+      dtstart: props.date,
     });
     props.handleChangeRRule(newRrule);
   }, [recurrence, endDate, frequency, props.recurring]);

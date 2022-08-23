@@ -14,6 +14,7 @@ const { colors } = TailWindTheme.theme;
 type Props = {
   handleChangeRRule: (rrule: RRule) => void;
   rrule: RRule | null;
+  date: Date;
 };
 
 export default function RecurringBookingWrapper(props: Props) {
@@ -82,7 +83,7 @@ export default function RecurringBookingWrapper(props: Props) {
       {recurring === RecurringType.NONE ? (
         <></>
       ) : (
-        <RecurringBooking handleChangeRRule={props.handleChangeRRule} rrule={props.rrule} recurring={recurring} />
+        <RecurringBooking handleChangeRRule={props.handleChangeRRule} rrule={props.rrule} recurring={recurring} date={props.date} />
       )}
     </>
   );

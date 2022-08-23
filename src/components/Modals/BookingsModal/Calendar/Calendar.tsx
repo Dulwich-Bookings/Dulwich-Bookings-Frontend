@@ -123,7 +123,6 @@ const Calendar = (props: Props) => {
 
   const onAddBooking = async (data: EventData): Promise<void> => {
     console.log('add booking');
-    console.log(data);
     const newBooking: EventData = {
       id: data.id,
       userId: data.userId,
@@ -150,6 +149,7 @@ const Calendar = (props: Props) => {
       bookingType: data.bookingType,
       bookingState: getBookingState(),
     };
+    console.log(newBooking);
     const newBookingsList: EventData[] = [...bookings, newBooking];
     setBookings(newBookingsList);
     setOpenBookingModal(false);
