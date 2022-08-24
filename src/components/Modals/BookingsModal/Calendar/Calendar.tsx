@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 
+import { useDispatch } from 'react-redux';
+import { severity } from '@/consts/constants';
+
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
@@ -11,6 +14,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import rrulePlugin from '@fullcalendar/rrule';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import moment from 'moment-timezone';
+import { RRule } from 'rrule';
 
 import DayHeaderContent from '@/components/Modals/BookingsModal/Calendar/DayHeaderContent/DayHeaderContent';
 import SlotLabelContent from '@/components/Modals/BookingsModal/Calendar/SlotLabelContent/SlotLabelContent';
@@ -26,8 +30,8 @@ import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
 import { EventData, BookingTypes, BookingType, BookingState } from '@/modules/Bookings/Types';
 import { ResourceMapData } from '@/modules/resourceMap/types';
+import { toggleShowNotification } from '@/modules/ui/uiSlice';
 import { isAdmin, isTeacher } from '@/utilities/authorisation';
-import { RRule } from 'rrule';
 
 const { colors } = TailWindTheme.theme;
 
@@ -59,6 +63,8 @@ const Calendar = (props: Props) => {
   const [bookingId, setBookingId] = useState<string>('');
   const [bookingUserId, setBookingUserId] = useState<number>(0);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
 
   // for mobile responsiveness
   const theme = useTheme();
@@ -123,48 +129,7 @@ const Calendar = (props: Props) => {
 
   const onAddBooking = async (data: EventData): Promise<void> => {
     console.log('add booking');
-    const newBooking: EventData = {
-      id: data.id,
-      userId: data.userId,
-      title: data.title,
-      formLabel: data.formLabel,
-      start: data.start,
-      end: data.end,
-      description: data.description,
-      rrule: data.rrule ?? undefined,
-      backgroundColor:
-        data.bookingType === BookingType.LESSON
-          ? colors.bgLesson
-          : getBookingState() === BookingState.PENDING
-          ? colors.bgLightRed
-          : colors.dulwichRed,
-      borderColor:
-        data.bookingType === BookingType.LESSON
-          ? colors.bgLesson
-          : getBookingState() === BookingState.PENDING
-          ? colors.bgLightRed
-          : colors.dulwichRed,
-      textColor: data.bookingType === BookingType.LESSON ? colors.bgBlack : colors.white,
-      editable: getEditable(data),
-      bookingType: data.bookingType,
-      bookingState: getBookingState(),
-    };
-    const newBookingsList: EventData[] = [...bookings, newBooking];
-    setBookings(newBookingsList);
-    setOpenBookingModal(false);
-  };
-
-  const onDeleteBooking = async (id: string): Promise<void> => {
-    console.log('delete booking');
-    const newBookingsList = bookings.filter(booking => booking.id != id);
-    setBookings(newBookingsList);
-    setOpenBookingModal(false);
-  };
-
-  const onSaveBooking = async (data: EventData): Promise<void> => {
-    console.log('save booking');
-
-    if (data.rrule === undefined) {
+    if (data.formLabel.trim().length !== 0) {
       const newBooking: EventData = {
         id: data.id,
         userId: data.userId,
@@ -177,35 +142,83 @@ const Calendar = (props: Props) => {
         backgroundColor:
           data.bookingType === BookingType.LESSON
             ? colors.bgLesson
-            : data.userId === props.currentUser.id
-            ? getBookingState() === BookingState.PENDING
-              ? colors.bgLightRed
-              : colors.dulwichRed
             : getBookingState() === BookingState.PENDING
-            ? colors.bgBookingBlackPending
-            : colors.bgBookingBlack,
+            ? colors.bgLightRed
+            : colors.dulwichRed,
         borderColor:
           data.bookingType === BookingType.LESSON
             ? colors.bgLesson
-            : data.userId === props.currentUser.id
-            ? getBookingState() === BookingState.PENDING
-              ? colors.bgLightRed
-              : colors.dulwichRed
             : getBookingState() === BookingState.PENDING
-            ? colors.bgBookingBlackPending
-            : colors.bgBookingBlack,
+            ? colors.bgLightRed
+            : colors.dulwichRed,
         textColor: data.bookingType === BookingType.LESSON ? colors.bgBlack : colors.white,
         editable: getEditable(data),
         bookingType: data.bookingType,
         bookingState: getBookingState(),
       };
-      const newBookingsList = bookings.map(booking => {
-        return booking.id === data.id ? newBooking : booking;
-      });
+      const newBookingsList: EventData[] = [...bookings, newBooking];
       setBookings(newBookingsList);
       setOpenBookingModal(false);
     } else {
-      setOpenDialog(true);
+      dispatch(toggleShowNotification({ message: 'Title cannot be empty', severity: severity.ERROR }));
+    }
+  };
+
+  const onDeleteBooking = async (id: string): Promise<void> => {
+    console.log('delete booking');
+    const newBookingsList = bookings.filter(booking => booking.id != id);
+    setBookings(newBookingsList);
+    setOpenBookingModal(false);
+  };
+
+  const onSaveBooking = async (data: EventData): Promise<void> => {
+    console.log('save booking');
+    if (data.formLabel.trim().length !== 0) {
+      if (data.rrule === undefined) {
+        const newBooking: EventData = {
+          id: data.id,
+          userId: data.userId,
+          title: data.title,
+          formLabel: data.formLabel,
+          start: data.start,
+          end: data.end,
+          description: data.description,
+          rrule: data.rrule ?? undefined,
+          backgroundColor:
+            data.bookingType === BookingType.LESSON
+              ? colors.bgLesson
+              : data.userId === props.currentUser.id
+              ? getBookingState() === BookingState.PENDING
+                ? colors.bgLightRed
+                : colors.dulwichRed
+              : getBookingState() === BookingState.PENDING
+              ? colors.bgBookingBlackPending
+              : colors.bgBookingBlack,
+          borderColor:
+            data.bookingType === BookingType.LESSON
+              ? colors.bgLesson
+              : data.userId === props.currentUser.id
+              ? getBookingState() === BookingState.PENDING
+                ? colors.bgLightRed
+                : colors.dulwichRed
+              : getBookingState() === BookingState.PENDING
+              ? colors.bgBookingBlackPending
+              : colors.bgBookingBlack,
+          textColor: data.bookingType === BookingType.LESSON ? colors.bgBlack : colors.white,
+          editable: getEditable(data),
+          bookingType: data.bookingType,
+          bookingState: getBookingState(),
+        };
+        const newBookingsList = bookings.map(booking => {
+          return booking.id === data.id ? newBooking : booking;
+        });
+        setBookings(newBookingsList);
+        setOpenBookingModal(false);
+      } else {
+        setOpenDialog(true);
+      }
+    } else {
+      dispatch(toggleShowNotification({ message: 'Title cannot be empty', severity: severity.ERROR }));
     }
   };
 
