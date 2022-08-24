@@ -7,6 +7,7 @@ const TailWindTheme = {
     fontFamily: { Inter: ['Inter', 'sans-serif'] },
     colors: {
       white: '#ffffff',
+      green: '#76D674',
       grayAccent: '#4D4D4D',
       grayLight: '#D9D9D9',
       bgBlack: '#000000',

@@ -15,6 +15,7 @@ import moment from 'moment-timezone';
 import DayHeaderContent from '@/components/Modals/BookingsModal/Calendar/DayHeaderContent/DayHeaderContent';
 import SlotLabelContent from '@/components/Modals/BookingsModal/Calendar/SlotLabelContent/SlotLabelContent';
 import BookingForm from '@/components/Modals/BookingsModal/BookingForm/BookingForm';
+import Dialog, { RecurringModificationTypes } from '@/components/Modals/BookingsModal/Calendar/Dialog/Dialog';
 
 import styled from '@emotion/styled';
 import './Calendar.css';
@@ -57,6 +58,7 @@ const Calendar = (props: Props) => {
   const [bookingType, setBookingType] = useState<BookingTypes>(BookingType.BOOKING);
   const [bookingId, setBookingId] = useState<string>('');
   const [bookingUserId, setBookingUserId] = useState<number>(0);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   // for mobile responsiveness
   const theme = useTheme();
@@ -161,45 +163,54 @@ const Calendar = (props: Props) => {
 
   const onSaveBooking = async (data: EventData): Promise<void> => {
     console.log('save booking');
-    const newBooking: EventData = {
-      id: data.id,
-      userId: data.userId,
-      title: data.title,
-      formLabel: data.formLabel,
-      start: data.start,
-      end: data.end,
-      description: data.description,
-      rrule: data.rrule ?? undefined,
-      backgroundColor:
-        data.bookingType === BookingType.LESSON
-          ? colors.bgLesson
-          : data.userId === props.currentUser.id
-          ? getBookingState() === BookingState.PENDING
-            ? colors.bgLightRed
-            : colors.dulwichRed
-          : getBookingState() === BookingState.PENDING
-          ? colors.bgBookingBlackPending
-          : colors.bgBookingBlack,
-      borderColor:
-        data.bookingType === BookingType.LESSON
-          ? colors.bgLesson
-          : data.userId === props.currentUser.id
-          ? getBookingState() === BookingState.PENDING
-            ? colors.bgLightRed
-            : colors.dulwichRed
-          : getBookingState() === BookingState.PENDING
-          ? colors.bgBookingBlackPending
-          : colors.bgBookingBlack,
-      textColor: data.bookingType === BookingType.LESSON ? colors.bgBlack : colors.white,
-      editable: getEditable(data),
-      bookingType: data.bookingType,
-      bookingState: getBookingState(),
-    };
-    const newBookingsList = bookings.map(booking => {
-      return booking.id === data.id ? newBooking : booking;
-    });
-    setBookings(newBookingsList);
-    setOpenBookingModal(false);
+
+    if (data.rrule === undefined) {
+      const newBooking: EventData = {
+        id: data.id,
+        userId: data.userId,
+        title: data.title,
+        formLabel: data.formLabel,
+        start: data.start,
+        end: data.end,
+        description: data.description,
+        rrule: data.rrule ?? undefined,
+        backgroundColor:
+          data.bookingType === BookingType.LESSON
+            ? colors.bgLesson
+            : data.userId === props.currentUser.id
+            ? getBookingState() === BookingState.PENDING
+              ? colors.bgLightRed
+              : colors.dulwichRed
+            : getBookingState() === BookingState.PENDING
+            ? colors.bgBookingBlackPending
+            : colors.bgBookingBlack,
+        borderColor:
+          data.bookingType === BookingType.LESSON
+            ? colors.bgLesson
+            : data.userId === props.currentUser.id
+            ? getBookingState() === BookingState.PENDING
+              ? colors.bgLightRed
+              : colors.dulwichRed
+            : getBookingState() === BookingState.PENDING
+            ? colors.bgBookingBlackPending
+            : colors.bgBookingBlack,
+        textColor: data.bookingType === BookingType.LESSON ? colors.bgBlack : colors.white,
+        editable: getEditable(data),
+        bookingType: data.bookingType,
+        bookingState: getBookingState(),
+      };
+      const newBookingsList = bookings.map(booking => {
+        return booking.id === data.id ? newBooking : booking;
+      });
+      setBookings(newBookingsList);
+      setOpenBookingModal(false);
+    } else {
+      setOpenDialog(true);
+    }
+  };
+
+  const onSaveRecurringBooking = (modificationType: RecurringModificationTypes) => {
+    console.log(modificationType);
   };
 
   const onContact = async (): Promise<void> => {
@@ -290,6 +301,16 @@ const Calendar = (props: Props) => {
           }}
         />
       </Box>
+      <Dialog
+        openDialog={openDialog}
+        handleDialogClose={() => {
+          setOpenDialog(false);
+        }}
+        onSaveRecurringBooking={onSaveRecurringBooking}
+        handleCloseBookingModal={() => {
+          setOpenBookingModal(false);
+        }}
+      />
     </>
   );
 };

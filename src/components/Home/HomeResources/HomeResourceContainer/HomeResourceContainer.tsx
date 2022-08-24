@@ -89,7 +89,7 @@ const HomeRoomItem = (props: Props) => {
                 </div>
                 <Stack spacing={0.5} className='z-0'>
                   <Stack direction='row' spacing={1.5} alignItems='center'>
-                    <Circle className={`text-sm`} sx={{ color: `${vacancy ? '#76D674' : '#E25454'}` }} />
+                    <Circle className={`text-sm`} sx={{ color: `${vacancy ? colors.green : colors.dulwichRed}` }} />
                     <Typography gutterBottom variant='h5' component='h2' className='font-Inter'>
                       {props.data.name}
                     </Typography>
