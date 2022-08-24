@@ -117,17 +117,13 @@ const Calendar = (props: Props) => {
     setBookingUserId(e.event.extendedProps.userId);
   };
 
-  const getBookingState = () => {
-    if (isAdmin(props.currentUser)) {
-      return BookingState.APPROVED;
-    } else if (isTeacher(props.currentUser) && props.resourceData.accessRights.includes('Teacher')) {
-      return BookingState.APPROVED;
-    } else if (props.resourceData.accessRights.includes('Student')) {
-      return BookingState.APPROVED;
-    } else {
-      return BookingState.PENDING;
-    }
-  };
+  const bookingState = isAdmin(props.currentUser)
+    ? BookingState.APPROVED
+    : isTeacher(props.currentUser) && props.resourceData.accessRights.includes('Teacher')
+    ? BookingState.APPROVED
+    : props.resourceData.accessRights.includes('Student')
+    ? BookingState.APPROVED
+    : BookingState.PENDING;
 
   const getEditable = (data: EventData) => {
     if (isAdmin(props.currentUser)) {
@@ -159,20 +155,19 @@ const Calendar = (props: Props) => {
         backgroundColor:
           data.bookingType === BookingType.LESSON
             ? colors.bgLesson
-            : getBookingState() === BookingState.PENDING
+            : bookingState === BookingState.PENDING
             ? colors.bgLightRed
             : colors.dulwichRed,
         borderColor:
           data.bookingType === BookingType.LESSON
             ? colors.bgLesson
-            : getBookingState() === BookingState.PENDING
+            : bookingState === BookingState.PENDING
             ? colors.bgLightRed
             : colors.dulwichRed,
         textColor: data.bookingType === BookingType.LESSON ? colors.bgBlack : colors.white,
         editable: getEditable(data),
         bookingType: data.bookingType,
-        bookingState: getBookingState(),
-        duration: dateDuration(data.start, data.end),
+        bookingState: bookingState,
       };
       const newBookingsList: EventData[] = [...bookings, newBooking];
       setBookings(newBookingsList);
@@ -206,26 +201,26 @@ const Calendar = (props: Props) => {
             data.bookingType === BookingType.LESSON
               ? colors.bgLesson
               : data.userId === props.currentUser.id
-              ? getBookingState() === BookingState.PENDING
+              ? bookingState === BookingState.PENDING
                 ? colors.bgLightRed
                 : colors.dulwichRed
-              : getBookingState() === BookingState.PENDING
+              : bookingState === BookingState.PENDING
               ? colors.bgBookingBlackPending
               : colors.bgBookingBlack,
           borderColor:
             data.bookingType === BookingType.LESSON
               ? colors.bgLesson
               : data.userId === props.currentUser.id
-              ? getBookingState() === BookingState.PENDING
+              ? bookingState === BookingState.PENDING
                 ? colors.bgLightRed
                 : colors.dulwichRed
-              : getBookingState() === BookingState.PENDING
+              : bookingState === BookingState.PENDING
               ? colors.bgBookingBlackPending
               : colors.bgBookingBlack,
           textColor: data.bookingType === BookingType.LESSON ? colors.bgBlack : colors.white,
           editable: getEditable(data),
           bookingType: data.bookingType,
-          bookingState: getBookingState(),
+          bookingState: bookingState,
         };
         const newBookingsList = bookings.map(booking => {
           return booking.id === data.id ? newBooking : booking;
