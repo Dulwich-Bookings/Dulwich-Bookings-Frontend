@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
+
+import { Radio, RadioGroup, FormControlLabel, FormControl, Grid, Typography } from '@mui/material';
 import TailWindTheme from '@/tailwind.config';
 
 import RecurringBooking from '@/components/Modals/BookingsModal/BookingForm/RecurringBookingWrapper/RecurringBooking/RecurringBooking';
@@ -33,56 +31,72 @@ export default function RecurringBookingWrapper(props: Props) {
 
   return (
     <>
-      <FormControl>
-        <RadioGroup
-          value={recurring}
-          className='font-Inter font-light pl-2 align-center text-grayAccent mb-1'
-          aria-labelledby='demo-radio-buttons-group-label'
-          name='radio-buttons-group'
-          sx={{
-            color: colors.bgBlack,
-            '&.Mui-checked': {
-              color: colors.dulwichRed,
-            },
-          }}
-          row
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            onChangeRecurring(event.target.defaultValue);
-          }}
-        >
-          {props.weekProfile === RecurringType.WEEKLY && (
-            <FormControlLabel
-              value={RecurringType.WEEKLY}
-              className='pr-5'
-              control={
-                <Radio
-                  sx={{
-                    color: colors.bgBlack,
-                    '&.Mui-checked': {
-                      color: colors.dulwichRed,
-                    },
-                  }}
+      <Grid container className='w-full items-center'>
+        <Grid item>
+          <FormControl>
+            <RadioGroup
+              value={recurring}
+              className='font-Inter font-light pl-2 align-center text-grayAccent mb-1'
+              aria-labelledby='demo-radio-buttons-group-label'
+              name='radio-buttons-group'
+              sx={{
+                color: colors.bgBlack,
+                '&.Mui-checked': {
+                  color: colors.dulwichRed,
+                },
+              }}
+              row
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                onChangeRecurring(event.target.defaultValue);
+              }}
+            >
+              {props.weekProfile === RecurringType.WEEKLY && (
+                <FormControlLabel
+                  value={RecurringType.WEEKLY}
+                  className='pr-5'
+                  control={
+                    <Radio
+                      sx={{
+                        color: colors.bgBlack,
+                        '&.Mui-checked': {
+                          color: colors.dulwichRed,
+                        },
+                      }}
+                    />
+                  }
+                  label={RecurringType.WEEKLY}
                 />
-              }
-              label={RecurringType.WEEKLY}
-            />
-          )}
-          <FormControlLabel
-            value={RecurringType.BIWEEKLY}
-            control={
-              <Radio
-                sx={{
-                  color: colors.bgBlack,
-                  '&.Mui-checked': {
-                    color: colors.dulwichRed,
-                  },
-                }}
+              )}
+              <FormControlLabel
+                value={RecurringType.BIWEEKLY}
+                control={
+                  <Radio
+                    sx={{
+                      color: colors.bgBlack,
+                      '&.Mui-checked': {
+                        color: colors.dulwichRed,
+                      },
+                    }}
+                  />
+                }
+                label={RecurringType.BIWEEKLY}
               />
-            }
-            label={RecurringType.BIWEEKLY}
-          />
-        </RadioGroup>
-      </FormControl>
+            </RadioGroup>
+          </FormControl>
+        </Grid>
+        {recurring !== RecurringType.NONE && (
+          <Grid item className='h-full'>
+            <Typography
+              className='text-dulwichRed hover:underline pl-2 mb-1'
+              onClick={() => {
+                setRecurring(RecurringType.NONE);
+              }}
+            >
+              Undo
+            </Typography>
+          </Grid>
+        )}
+      </Grid>
       {recurring === RecurringType.NONE ? (
         <></>
       ) : (
