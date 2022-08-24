@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Modal, createTheme, Stack, ThemeProvider, Box, Input } from '@mui/material';
 import { FormatAlignLeft, Close } from '@mui/icons-material';
 import BookingFormFooter from '@/components/Modals/BookingsModal/BookingForm/BookingFormFooter/BookingFormFooter';
@@ -47,7 +47,6 @@ type Props = {
 };
 
 const BookingForm = (props: Props) => {
-  const ref = useRef<HTMLDivElement>(null);
   const [formLabel, setFormLabel] = useState<string>(props.bookingTitle);
   // const [isLoading, setIsLoading] = useState<boolean>(false);
   const [description, setDescription] = useState<string>(props.bookingDescription);
@@ -123,7 +122,7 @@ const BookingForm = (props: Props) => {
                     editable={props.editable}
                     school={props.school}
                   />
-                  <div ref={ref} className='w-full'>
+                  <div className='w-full'>
                     <InputWithIcon
                       inputType='string'
                       inputPlaceholder={props.editable ? 'Add description' : ''}

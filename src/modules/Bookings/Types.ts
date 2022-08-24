@@ -24,6 +24,7 @@ export interface EventData {
   formLabel: string;
   start: Date;
   end: Date;
+  duration?: Duration;
   description: string;
   backgroundColor?: string;
   borderColor?: string;

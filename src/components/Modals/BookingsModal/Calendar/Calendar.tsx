@@ -7,7 +7,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
 
-import FullCalendar, { EventClickArg } from '@fullcalendar/react';
+import FullCalendar, { createDuration, EventClickArg } from '@fullcalendar/react';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -49,6 +49,21 @@ type Props = {
   resourceMaps: ResourceMapData[];
 };
 
+const dateDuration = (start: Date, end: Date): Duration => {
+  const duration = createDuration(end.getTime() - start.getTime());
+  if (duration === null) {
+    const emptyDuration: Duration = {
+      years: 0,
+      months: 0,
+      days: 0,
+      minutes: 0,
+    };
+    return emptyDuration;
+  }
+
+  return duration;
+};
+
 const Calendar = (props: Props) => {
   const [openBookingModal, setOpenBookingModal] = useState<boolean>(false);
   const [bookings, setBookings] = useState<EventData[]>([]);
@@ -88,6 +103,7 @@ const Calendar = (props: Props) => {
   const handleEventClick = (e: EventClickArg) => {
     const startTime = moment(e.event.start).toDate();
     const endTime = moment(e.event.end).toDate();
+    console.log(e);
     setStartBook(startTime);
     setEndBook(endTime);
     setBookingTitle(e.event.extendedProps.formLabel);
@@ -129,6 +145,7 @@ const Calendar = (props: Props) => {
 
   const onAddBooking = async (data: EventData): Promise<void> => {
     console.log('add booking');
+    console.log(dateDuration(data.start, data.end));
     if (data.formLabel.trim().length !== 0) {
       const newBooking: EventData = {
         id: data.id,
@@ -155,6 +172,7 @@ const Calendar = (props: Props) => {
         editable: getEditable(data),
         bookingType: data.bookingType,
         bookingState: getBookingState(),
+        duration: dateDuration(data.start, data.end),
       };
       const newBookingsList: EventData[] = [...bookings, newBooking];
       setBookings(newBookingsList);
