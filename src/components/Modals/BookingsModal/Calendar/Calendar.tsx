@@ -28,7 +28,7 @@ import TailWindTheme from '@/tailwind.config';
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
-import { EventData, BookingTypes, BookingType, BookingState } from '@/modules/Bookings/Types';
+import { EventData, BookingTypes, BookingType, BookingState, EventType } from '@/modules/Bookings/Types';
 import { ResourceMapData } from '@/modules/resourceMap/types';
 import { toggleShowNotification } from '@/modules/ui/uiSlice';
 import { isAdmin, isTeacher } from '@/utilities/authorisation';
@@ -74,6 +74,7 @@ const Calendar = (props: Props) => {
   const [editable, setEditable] = useState<boolean>(true);
   const [newBooking, setNewBooking] = useState<boolean>(true);
   const [rrule, setRrule] = useState<RRule | null>(null);
+  const [eventType, setEventType] = useState<EventType>(EventType.NONE);
   const [bookingType, setBookingType] = useState<BookingTypes>(BookingType.BOOKING);
   const [bookingId, setBookingId] = useState<string>('');
   const [bookingUserId, setBookingUserId] = useState<number>(0);
@@ -103,7 +104,7 @@ const Calendar = (props: Props) => {
   const handleEventClick = (e: EventClickArg) => {
     const startTime = moment(e.event.start).toDate();
     const endTime = moment(e.event.end).toDate();
-    console.log(e);
+    console.log(e.event);
     setStartBook(startTime);
     setEndBook(endTime);
     setBookingTitle(e.event.extendedProps.formLabel);
@@ -115,6 +116,7 @@ const Calendar = (props: Props) => {
     setBookingType(e.event.extendedProps.bookingType);
     setBookingId(e.event.id);
     setBookingUserId(e.event.extendedProps.userId);
+    setEventType(e.event.extendedProps.eventType);
   };
 
   const bookingState = isAdmin(props.currentUser)
@@ -141,7 +143,6 @@ const Calendar = (props: Props) => {
 
   const onAddBooking = async (data: EventData): Promise<void> => {
     console.log('add booking');
-    console.log(dateDuration(data.start, data.end));
     if (data.formLabel.trim().length !== 0) {
       const newBooking: EventData = {
         id: data.id,
@@ -168,6 +169,8 @@ const Calendar = (props: Props) => {
         editable: getEditable(data),
         bookingType: data.bookingType,
         bookingState: bookingState,
+        duration: dateDuration(data.start, data.end),
+        eventType: data.rrule ? EventType.RECURRING : EventType.SINGLE,
       };
       const newBookingsList: EventData[] = [...bookings, newBooking];
       setBookings(newBookingsList);
@@ -187,7 +190,7 @@ const Calendar = (props: Props) => {
   const onSaveBooking = async (data: EventData): Promise<void> => {
     console.log('save booking');
     if (data.formLabel.trim().length !== 0) {
-      if (data.rrule === undefined) {
+      if (data.eventType === EventType.SINGLE) {
         const newBooking: EventData = {
           id: data.id,
           userId: data.userId,
@@ -221,6 +224,8 @@ const Calendar = (props: Props) => {
           editable: getEditable(data),
           bookingType: data.bookingType,
           bookingState: bookingState,
+          duration: dateDuration(data.start, data.end),
+          eventType: data.rrule ? EventType.RECURRING : EventType.SINGLE,
         };
         const newBookingsList = bookings.map(booking => {
           return booking.id === data.id ? newBooking : booking;
@@ -267,6 +272,7 @@ const Calendar = (props: Props) => {
           weekProfile={props.resourceData.weekProfile}
           id={bookingId}
           school={props.currentSchool}
+          eventType={eventType}
         />
       )}
       <Box className='h-full'>
@@ -308,6 +314,7 @@ const Calendar = (props: Props) => {
               editable: e.event.startEditable,
               bookingType: e.event.extendedProps.bookingType,
               bookingState: e.event.extendedProps.bookingState,
+              eventType: e.event.extendedProps.eventType,
             });
           }}
           eventResize={e => {
@@ -323,6 +330,7 @@ const Calendar = (props: Props) => {
               editable: e.event.startEditable,
               bookingType: e.event.extendedProps.bookingType,
               bookingState: e.event.extendedProps.bookingState,
+              eventType: e.event.extendedProps.eventType,
             });
           }}
         />

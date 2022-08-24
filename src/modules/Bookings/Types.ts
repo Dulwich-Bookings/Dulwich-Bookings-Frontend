@@ -17,6 +17,13 @@ export const RecurringType = {
   BIWEEKLY: 'BiWeekly' as RecurringTypes,
 };
 
+export type EventType = 'Single' | 'Recurring' | 'None';
+export const EventType = {
+  SINGLE: 'Single' as EventType,
+  RECURRING: 'Recurring' as EventType,
+  NONE: 'None' as EventType,
+};
+
 export interface EventData {
   id: string;
   userId: number;
@@ -33,4 +40,5 @@ export interface EventData {
   rrule?: string;
   bookingType: BookingTypes;
   bookingState: BookingStates;
+  eventType?: EventType;
 }

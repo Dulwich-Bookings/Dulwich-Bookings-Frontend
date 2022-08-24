@@ -9,7 +9,7 @@ import BookingTypeWrapper from '@/components/Modals/BookingsModal/BookingForm/Bo
 
 import { isAdmin } from '@/utilities/authorisation';
 import { UserData } from '@/modules/user/types';
-import { EventData, BookingTypes, RecurringTypes, BookingType, BookingState } from '@/modules/Bookings/Types';
+import { EventData, BookingTypes, RecurringTypes, BookingType, BookingState, EventType } from '@/modules/Bookings/Types';
 import { SchoolData } from '@/modules/school/types';
 import { RRule } from 'rrule';
 
@@ -39,6 +39,7 @@ type Props = {
   start: Date;
   end: Date;
   rrule: RRule | null;
+  eventType: EventType;
   bookingType: BookingTypes;
   currentUser: UserData;
   bookingUser: number;
@@ -164,6 +165,7 @@ const BookingForm = (props: Props) => {
                         editable: true,
                         bookingType: bookingType,
                         bookingState: BookingState.PENDING,
+                        eventType: props.eventType,
                       });
                     }}
                     handleOnSave={() => {
@@ -179,6 +181,7 @@ const BookingForm = (props: Props) => {
                         editable: true,
                         bookingType: bookingType,
                         bookingState: BookingState.PENDING,
+                        eventType: props.eventType,
                       });
                     }}
                     handleOnDelete={() => {
