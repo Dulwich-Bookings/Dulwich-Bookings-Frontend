@@ -31,39 +31,26 @@ type Props = {
   onDeleteBooking: (id: string) => void;
   onSaveBooking: (data: EventData) => void;
   onContact: () => void;
-  id: string;
-  bookingTitle: string;
-  bookingDescription: string;
-  editable: boolean;
   newBooking: boolean;
-  start: Date;
-  end: Date;
-  rrule: RRule | null;
-  eventType: EventType;
-  bookingType: BookingTypes;
+  rrule?: RRule;
   currentUser: UserData;
-  bookingUser: number;
   weekProfile: RecurringTypes;
   school: SchoolData;
+  bookingData: EventData;
 };
 
 const BookingForm = (props: Props) => {
-  const [formLabel, setFormLabel] = useState<string>(props.bookingTitle);
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [description, setDescription] = useState<string>(props.bookingDescription);
-  const [rrule, setRrule] = useState<RRule | null>(props.rrule);
-  const [startTime, setStartTime] = useState<Date>(props.start);
-  const [endTime, setEndTime] = useState<Date>(props.end);
+  const [rrule, setRrule] = useState<RRule | undefined>(props.rrule ?? undefined);
   const [multiline, setMultiline] = useState<boolean>(false);
   const [rows, setRows] = useState<number>(1);
-  const [bookingType, setBookingType] = useState<BookingTypes>(props.bookingType);
+  const [bookingData, setBookingData] = useState<EventData>(props.bookingData);
 
   const handleTitleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormLabel(event.target.value);
+    setBookingData({ ...bookingData, formLabel: event.target.value });
   };
 
   const handleDescriptionChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDescription(event.target.value);
+    setBookingData({ ...bookingData, description: event.target.value });
   };
 
   const handleOnFocus = async () => {
@@ -72,15 +59,15 @@ const BookingForm = (props: Props) => {
   };
 
   const onChangeTime = (time: Date, isStart: boolean) => {
-    isStart ? setStartTime(time) : setEndTime(time);
+    isStart ? setBookingData({ ...bookingData, start: time }) : setBookingData({ ...bookingData, end: time });
   };
 
   const onChangeBookingType = (value: string) => {
-    props.editable
+    bookingData.editable
       ? value === BookingType.BOOKING
-        ? setBookingType(BookingType.BOOKING)
-        : setBookingType(BookingType.LESSON)
-      : setBookingType(bookingType);
+        ? setBookingData({ ...bookingData, bookingType: BookingType.BOOKING })
+        : setBookingData({ ...bookingData, bookingType: BookingType.LESSON })
+      : null;
   };
 
   const handleChangeRRule = (rrule: RRule) => {
@@ -108,26 +95,26 @@ const BookingForm = (props: Props) => {
               </div>
               <Stack direction='column' className='h-full w-11/12 ' spacing={{ xs: 1, md: 1 }} alignItems='justified'>
                 <Input
-                  disabled={!props.editable}
+                  disabled={!bookingData.editable}
                   color='error'
                   placeholder='Add title'
-                  value={formLabel}
+                  value={bookingData.formLabel}
                   className='w-full h-1/6 text-xxl font-Inter mb-1'
                   onChange={handleTitleChange}
                 ></Input>
                 <Stack direction='column' spacing={{ xs: 0, md: 0 }} alignItems='justified'>
                   <TimePickerWrapper
-                    startTime={startTime}
-                    endTime={endTime}
+                    startTime={bookingData.start}
+                    endTime={bookingData.end}
                     onChangeTime={onChangeTime}
-                    editable={props.editable}
+                    editable={bookingData.editable}
                     school={props.school}
                   />
                   <div className='w-full'>
                     <InputWithIcon
                       inputType='string'
-                      inputPlaceholder={props.editable ? 'Add description' : ''}
-                      inputValue={description}
+                      inputPlaceholder={bookingData.editable ? 'Add description' : ''}
+                      inputValue={bookingData.description}
                       inputClassname='w-full color-bgWhite font-Inter font-light px-0'
                       inputVariant='outlined'
                       multiline={multiline}
@@ -135,57 +122,42 @@ const BookingForm = (props: Props) => {
                       icon={<FormatAlignLeft className='ml-2 text-lg' />}
                       spacing={0.5}
                       inputHandleOnChange={handleDescriptionChange}
-                      acceptInput={props.editable}
+                      acceptInput={bookingData.editable}
                       onFocus={handleOnFocus}
                       onBlur={() => setMultiline(false)}
                     />
                   </div>
-                  {isAdmin(props.currentUser) && <BookingTypeWrapper bookingType={bookingType} onChangeBookingType={onChangeBookingType} />}
+                  {isAdmin(props.currentUser) && (
+                    <BookingTypeWrapper bookingType={bookingData.bookingType} onChangeBookingType={onChangeBookingType} />
+                  )}
 
                   <RecurringBookingWrapper
                     handleChangeRRule={handleChangeRRule}
                     rrule={rrule}
-                    date={props.start}
+                    date={bookingData.start}
                     weekProfile={props.weekProfile}
                   />
 
                   <BookingFormFooter
-                    editable={props.editable}
+                    editable={bookingData.editable}
                     newBooking={props.newBooking}
                     handleOnBook={() => {
                       props.onAddBooking({
+                        ...bookingData,
                         id: Math.random().toString(),
-                        userId: props.bookingUser,
-                        title: bookingType === BookingType.BOOKING ? 'Booked' : BookingType.LESSON,
-                        formLabel: formLabel,
-                        start: startTime,
-                        end: endTime,
-                        description: description,
-                        rrule: rrule?.toString() ?? undefined,
-                        editable: true,
-                        bookingType: bookingType,
-                        bookingState: BookingState.PENDING,
-                        eventType: props.eventType,
+                        title: bookingData.bookingType === BookingType.BOOKING ? 'Booked' : BookingType.LESSON,
+                        rrule: rrule?.toString(),
                       });
                     }}
                     handleOnSave={() => {
                       props.onSaveBooking({
-                        id: props.id,
-                        userId: props.bookingUser,
-                        title: bookingType === BookingType.BOOKING ? 'Booked' : BookingType.LESSON,
-                        formLabel: formLabel,
-                        start: startTime,
-                        end: endTime,
-                        description: description,
-                        rrule: rrule?.toString() ?? undefined,
-                        editable: true,
-                        bookingType: bookingType,
-                        bookingState: BookingState.PENDING,
-                        eventType: props.eventType,
+                        ...bookingData,
+                        title: bookingData.bookingType === BookingType.BOOKING ? 'Booked' : BookingType.LESSON,
+                        rrule: rrule?.toString(),
                       });
                     }}
                     handleOnDelete={() => {
-                      props.onDeleteBooking(props.id);
+                      props.onDeleteBooking(bookingData.id);
                     }}
                     handleOnContact={props.onContact}
                   />

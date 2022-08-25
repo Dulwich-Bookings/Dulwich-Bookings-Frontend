@@ -11,7 +11,7 @@ const { colors } = TailWindTheme.theme;
 
 type Props = {
   recurring: RecurringTypes;
-  rrule: RRule | null;
+  rrule?: RRule;
   handleChangeRRule: (rrule: RRule) => void;
   date: Date;
 };
@@ -20,9 +20,7 @@ export type RecurrenceTypes = 'On' | 'After';
 export const RecurrenceType = { ON: 'On' as RecurrenceTypes, AFTER: 'After' as RecurrenceTypes };
 
 export default function RecurringBooking(props: Props) {
-  const [recurrence, setRecurrence] = useState<RecurrenceTypes>(
-    props.rrule?.options.until === null ? RecurrenceType.AFTER : RecurrenceType.ON,
-  );
+  const [recurrence, setRecurrence] = useState<RecurrenceTypes>(props.rrule?.options.until ? RecurrenceType.AFTER : RecurrenceType.ON);
   const [endDate, setEndDate] = useState<Date>(props.rrule?.options.until ?? new Date());
   const [frequency, setFrequency] = useState<number>(props.rrule?.options.count ?? 1);
 

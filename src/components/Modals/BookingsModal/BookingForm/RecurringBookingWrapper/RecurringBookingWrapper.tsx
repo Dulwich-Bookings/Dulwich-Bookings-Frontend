@@ -11,14 +11,14 @@ const { colors } = TailWindTheme.theme;
 
 type Props = {
   handleChangeRRule: (rrule: RRule) => void;
-  rrule: RRule | null;
+  rrule?: RRule;
   date: Date;
   weekProfile: RecurringTypes;
 };
 
 export default function RecurringBookingWrapper(props: Props) {
   const [recurring, setRecurring] = useState<RecurringTypes>(
-    props.rrule === null ? RecurringType.NONE : props.rrule.options.interval === 1 ? RecurringType.WEEKLY : RecurringType.BIWEEKLY,
+    props.rrule ? (props.rrule?.options.interval === 1 ? RecurringType.WEEKLY : RecurringType.BIWEEKLY) : RecurringType.NONE,
   );
 
   const onChangeRecurring = (value: string) => {

@@ -28,7 +28,7 @@ import TailWindTheme from '@/tailwind.config';
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
-import { EventData, BookingTypes, BookingType, BookingState, EventType } from '@/modules/Bookings/Types';
+import { EventData, BookingType, BookingState, EventType } from '@/modules/Bookings/Types';
 import { ResourceMapData } from '@/modules/resourceMap/types';
 import { toggleShowNotification } from '@/modules/ui/uiSlice';
 import { isAdmin, isTeacher } from '@/utilities/authorisation';
@@ -66,18 +66,29 @@ const dateDuration = (start: Date, end: Date): Duration => {
 
 const Calendar = (props: Props) => {
   const [openBookingModal, setOpenBookingModal] = useState<boolean>(false);
+
+  const [bookingData, setBookingData] = useState<EventData>({
+    id: '',
+    userId: props.currentUser.id,
+    title: '',
+    formLabel: '',
+    start: new Date(),
+    end: new Date(),
+    description: '',
+    editable: true,
+    bookingType: BookingType.BOOKING,
+    bookingState: isAdmin(props.currentUser)
+      ? BookingState.APPROVED
+      : isTeacher(props.currentUser) && props.resourceData.accessRights.includes('Teacher')
+      ? BookingState.APPROVED
+      : props.resourceData.accessRights.includes('Student')
+      ? BookingState.APPROVED
+      : BookingState.PENDING,
+  });
+
   const [bookings, setBookings] = useState<EventData[]>([]);
-  const [bookingTitle, setBookingTitle] = useState<string>('');
-  const [startBook, setStartBook] = useState<Date>(new Date());
-  const [endBook, setEndBook] = useState<Date>(new Date());
-  const [bookingDescription, setBookingDescription] = useState<string>('');
-  const [editable, setEditable] = useState<boolean>(true);
   const [newBooking, setNewBooking] = useState<boolean>(true);
-  const [rrule, setRrule] = useState<RRule | null>(null);
-  const [eventType, setEventType] = useState<EventType>(EventType.NONE);
-  const [bookingType, setBookingType] = useState<BookingTypes>(BookingType.BOOKING);
-  const [bookingId, setBookingId] = useState<string>('');
-  const [bookingUserId, setBookingUserId] = useState<number>(0);
+  const [rrule, setRrule] = useState<RRule>();
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const dispatch = useDispatch();
@@ -89,34 +100,42 @@ const Calendar = (props: Props) => {
   const handleDateClick = (e: DateClickArg) => {
     const startTime = moment(e.dateStr).toDate();
     const endTime = moment(e.dateStr).add(15, 'm').toDate();
-    setBookingTitle('');
-    setBookingDescription('');
-    setEditable(true);
+    setBookingData({
+      ...bookingData,
+      id: Math.random().toString(),
+      formLabel: '',
+      userId: props.currentUser.id,
+      description: '',
+      editable: true,
+      rrule: undefined,
+      bookingType: BookingType.BOOKING,
+      start: startTime,
+      end: endTime,
+      eventType: EventType.NONE,
+    });
     setNewBooking(true);
-    setRrule(null);
-    setBookingType(BookingType.BOOKING);
-    setStartBook(startTime);
-    setEndBook(endTime);
     setOpenBookingModal(true);
-    setBookingUserId(props.currentUser.id);
+    setRrule(undefined);
   };
 
   const handleEventClick = (e: EventClickArg) => {
     const startTime = moment(e.event.start).toDate();
     const endTime = moment(e.event.end).toDate();
-    console.log(e.event);
-    setStartBook(startTime);
-    setEndBook(endTime);
-    setBookingTitle(e.event.extendedProps.formLabel);
-    setBookingDescription(e.event.extendedProps.description);
-    setEditable(e.event.startEditable);
+    setBookingData({
+      ...bookingData,
+      id: e.event.id,
+      formLabel: e.event.extendedProps.formLabel,
+      userId: e.event.extendedProps.userId,
+      description: e.event.extendedProps.description,
+      editable: e.event.startEditable,
+      bookingType: e.event.extendedProps.bookingType,
+      start: startTime,
+      end: endTime,
+      eventType: e.event.extendedProps.eventType,
+    });
     setNewBooking(false);
     setOpenBookingModal(true);
-    setRrule(e.event._def.recurringDef !== null ? e.event._def.recurringDef?.typeData.rruleSet._rrule[0] : null);
-    setBookingType(e.event.extendedProps.bookingType);
-    setBookingId(e.event.id);
-    setBookingUserId(e.event.extendedProps.userId);
-    setEventType(e.event.extendedProps.eventType);
+    setRrule(e.event._def.recurringDef ? e.event._def.recurringDef?.typeData.rruleSet._rrule[0] : undefined);
   };
 
   const bookingState = isAdmin(props.currentUser)
@@ -127,32 +146,11 @@ const Calendar = (props: Props) => {
     ? BookingState.APPROVED
     : BookingState.PENDING;
 
-  const getEditable = (data: EventData) => {
-    if (isAdmin(props.currentUser)) {
-      return true;
-    } else if (
-      props.resourceMaps.filter(r => r.resourceId === props.resourceData.id).filter(r => r.userId === props.currentUser.id).length !== 0
-    ) {
-      return true;
-    } else if (data.userId === props.currentUser.id) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   const onAddBooking = async (data: EventData): Promise<void> => {
     console.log('add booking');
     if (data.formLabel.trim().length !== 0) {
       const newBooking: EventData = {
-        id: data.id,
-        userId: data.userId,
-        title: data.title,
-        formLabel: data.formLabel,
-        start: data.start,
-        end: data.end,
-        description: data.description,
-        rrule: data.rrule ?? undefined,
+        ...data,
         backgroundColor:
           data.bookingType === BookingType.LESSON
             ? colors.bgLesson
@@ -166,9 +164,14 @@ const Calendar = (props: Props) => {
             ? colors.bgLightRed
             : colors.dulwichRed,
         textColor: data.bookingType === BookingType.LESSON ? colors.bgBlack : colors.white,
-        editable: getEditable(data),
-        bookingType: data.bookingType,
-        bookingState: bookingState,
+        editable: isAdmin(props.currentUser)
+          ? true
+          : props.resourceMaps.filter(r => r.resourceId === props.resourceData.id).filter(r => r.userId === props.currentUser.id).length !==
+            0
+          ? true
+          : data.userId === props.currentUser.id
+          ? true
+          : false,
         duration: dateDuration(data.start, data.end),
         eventType: data.rrule ? EventType.RECURRING : EventType.SINGLE,
       };
@@ -192,14 +195,7 @@ const Calendar = (props: Props) => {
     if (data.formLabel.trim().length !== 0) {
       if (data.eventType === EventType.SINGLE) {
         const newBooking: EventData = {
-          id: data.id,
-          userId: data.userId,
-          title: data.title,
-          formLabel: data.formLabel,
-          start: data.start,
-          end: data.end,
-          description: data.description,
-          rrule: data.rrule ?? undefined,
+          ...data,
           backgroundColor:
             data.bookingType === BookingType.LESSON
               ? colors.bgLesson
@@ -221,9 +217,14 @@ const Calendar = (props: Props) => {
               ? colors.bgBookingBlackPending
               : colors.bgBookingBlack,
           textColor: data.bookingType === BookingType.LESSON ? colors.bgBlack : colors.white,
-          editable: getEditable(data),
-          bookingType: data.bookingType,
-          bookingState: bookingState,
+          editable: isAdmin(props.currentUser)
+            ? true
+            : props.resourceMaps.filter(r => r.resourceId === props.resourceData.id).filter(r => r.userId === props.currentUser.id)
+                .length !== 0
+            ? true
+            : data.userId === props.currentUser.id
+            ? true
+            : false,
           duration: dateDuration(data.start, data.end),
           eventType: data.rrule ? EventType.RECURRING : EventType.SINGLE,
         };
@@ -252,8 +253,6 @@ const Calendar = (props: Props) => {
     <>
       {openBookingModal && (
         <BookingForm
-          bookingTitle={bookingTitle}
-          bookingDescription={bookingDescription}
           handleCloseModal={() => {
             setOpenBookingModal(false);
           }}
@@ -261,18 +260,12 @@ const Calendar = (props: Props) => {
           onDeleteBooking={onDeleteBooking}
           onSaveBooking={onSaveBooking}
           onContact={onContact}
-          editable={editable}
           newBooking={newBooking}
-          start={startBook}
-          end={endBook}
           rrule={rrule}
-          bookingType={bookingType}
           currentUser={props.currentUser}
-          bookingUser={bookingUserId}
           weekProfile={props.resourceData.weekProfile}
-          id={bookingId}
           school={props.currentSchool}
-          eventType={eventType}
+          bookingData={bookingData}
         />
       )}
       <Box className='h-full'>
