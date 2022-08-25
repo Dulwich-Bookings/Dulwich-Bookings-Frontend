@@ -9,7 +9,7 @@ import BookingTypeWrapper from '@/components/Modals/BookingsModal/BookingForm/Bo
 
 import { isAdmin } from '@/utilities/authorisation';
 import { UserData } from '@/modules/user/types';
-import { EventData, BookingTypes, RecurringTypes, BookingType, BookingState, EventType } from '@/modules/Bookings/Types';
+import { EventData, RecurringTypes, BookingType } from '@/modules/Bookings/Types';
 import { SchoolData } from '@/modules/school/types';
 import { RRule } from 'rrule';
 

@@ -147,7 +147,6 @@ const Calendar = (props: Props) => {
     : BookingState.PENDING;
 
   const onAddBooking = async (data: EventData): Promise<void> => {
-    console.log('add booking');
     if (data.formLabel.trim().length !== 0) {
       const newBooking: EventData = {
         ...data,
@@ -184,14 +183,12 @@ const Calendar = (props: Props) => {
   };
 
   const onDeleteBooking = async (id: string): Promise<void> => {
-    console.log('delete booking');
     const newBookingsList = bookings.filter(booking => booking.id != id);
     setBookings(newBookingsList);
     setOpenBookingModal(false);
   };
 
   const onSaveBooking = async (data: EventData): Promise<void> => {
-    console.log('save booking');
     if (data.formLabel.trim().length !== 0) {
       if (data.eventType === EventType.SINGLE) {
         const newBooking: EventData = {

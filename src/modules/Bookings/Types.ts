@@ -1,5 +1,3 @@
-import { RRule } from 'rrule';
-
 export type BookingTypes = 'Booking' | 'Lesson';
 export const BookingType = {
   BOOKING: 'Booking' as BookingTypes,
