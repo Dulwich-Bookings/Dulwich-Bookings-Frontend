@@ -25,6 +25,7 @@ import { TagData } from '@/modules/tag/types';
 type Props = {
   tags: TagData[];
   editTagHandler: (tag: TagData) => void;
+  deleteTagHandler: (tag: TagData) => void;
 };
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -225,6 +226,11 @@ const TagTable = (props: Props) => {
     props.editTagHandler(tagData);
   };
 
+  const handleDeleteTag = (id: number) => {
+    const tagData = props.tags.filter(tag => tag.id === id)[0];
+    props.deleteTagHandler(tagData);
+  };
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -278,7 +284,7 @@ const TagTable = (props: Props) => {
                         <TableCell align='right'>{row.colour}</TableCell>
                         <TableCell align='right'>
                           <EditIcon className='cursor-pointer' onClick={() => handleEditTag(row.id)} />
-                          <DeleteIcon className='cursor-pointer' onClick={() => console.log('delete')} />
+                          <DeleteIcon className='cursor-pointer' onClick={() => handleDeleteTag(row.id)} />
                         </TableCell>
                       </TableRow>
                     );

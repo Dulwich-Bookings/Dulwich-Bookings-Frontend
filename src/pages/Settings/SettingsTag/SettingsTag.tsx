@@ -47,7 +47,7 @@ const SettingsTag = () => {
               </Grid>
               <Divider className='ml-4 mr-16' orientation='vertical' variant='middle' flexItem />
               <Grid item className='w-9/12'>
-                {isLoading ? <Loading /> : <TagDetails user={currentUser} tags={allTags} handleSuccessEdit={fetchData} />}
+                {isLoading ? <Loading /> : <TagDetails user={currentUser} tags={allTags} handleRefresh={fetchData} />}
               </Grid>
             </Grid>
           </main>

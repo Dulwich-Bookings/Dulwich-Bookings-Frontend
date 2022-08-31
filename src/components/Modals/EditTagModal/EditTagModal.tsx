@@ -103,7 +103,7 @@ const EditTagModal = ({ tagData, handleSuccess, handleClose }: Props) => {
           <Grid item>
             <FormSubmitButton
               buttonText='Close'
-              handleOnClick={handleSuccess}
+              handleOnClick={handleClose}
               buttonClassName='w-32 bg-textGray rounded-xl text-bgWhite font-inter'
             />
           </Grid>
