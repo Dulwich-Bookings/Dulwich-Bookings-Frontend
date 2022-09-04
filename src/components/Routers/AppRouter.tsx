@@ -22,12 +22,13 @@ import AddResource from '@pages/AddResource/AddResource';
 import AddRoom from '@/pages/AddResource/AddRoom/AddRoom';
 import AddSubscription from '@/pages/AddResource/AddSubscription/AddSubscription';
 import AddTag from '@/pages/AddResource/AddTag/AddTag';
-import { isTeacher } from '@/utilities/authorisation';
+import { isAdmin, isTeacher } from '@/utilities/authorisation';
 import Settings from '@/pages/Settings/Settings';
 import SettingsResource from '@/pages/Settings/SettingsResource/SettingsResource';
 import EditResource from '@/pages/Settings/SettingsResource/EditResource/EditResource';
 import EditSubscription from '@/pages/Settings/SettingsResource/EditSubscription.tsx/EditSubscription';
 import SettingsTag from '@/pages/Settings/SettingsTag/SettingsTag';
+import SettingsUser from '@/pages/Settings/SettingsUser/SettingsUser';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -37,6 +38,7 @@ const AppRouter = () => {
   const currentUser = useSelector(getCurrentUser);
   const allSchools = useSelector(getAllSchools);
   const Teacher = isTeacher(currentUser);
+  const Admin = isAdmin(currentUser);
   const isTemp = !currentUser?.isConfirmed && currentUser?.isTemporary;
 
   const fetchSelf = async () => {
@@ -93,7 +95,8 @@ const AppRouter = () => {
       {accessToken && !isTemp && <Route exact path={Routes.settings.resources.main} component={SettingsResource} />}
       {accessToken && !isTemp && <Route exact path={Routes.settings.resources.editResource} component={EditResource} />}
       {accessToken && !isTemp && <Route exact path={Routes.settings.resources.editSubscription} component={EditSubscription} />}
-      {accessToken && !isTemp && <Route exact path={Routes.settings.tags} component={SettingsTag} />}
+      {Teacher && accessToken && !isTemp && <Route exact path={Routes.settings.tags} component={SettingsTag} />}
+      {Admin && accessToken && !isTemp && <Route exact path={Routes.settings.users} component={SettingsUser} />}
 
       {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.main} component={AddResource} />}
       {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.addRoom} component={AddRoom} />}
