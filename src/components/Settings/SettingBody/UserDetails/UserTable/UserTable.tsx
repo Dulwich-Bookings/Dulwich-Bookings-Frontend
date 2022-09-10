@@ -215,7 +215,7 @@ const UserTable = (props: Props) => {
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof UserData) => {
@@ -331,8 +331,7 @@ const UserTable = (props: Props) => {
             </Table>
           </TableContainer>
           <TablePagination
-            className='bg-[#808080] '
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[25, 50, 100]}
             component='div'
             count={rows.length}
             rowsPerPage={rowsPerPage}
