@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import HomeHeader from '@components/Home/HomeHeader/HomeHeader';
 import SettingNavigation from '@/components/Settings/SettingNavigation/SettingNavigation';
-import { Divider, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import { getCurrentUser } from '@/modules/user/userSlice';
 import { getCurrentSchool } from '@/modules/school/schoolSlice';
@@ -20,12 +20,10 @@ const SettingsResource = () => {
         <>
           <HomeHeader currentSchool={currentSchool} currentUser={currentUser} />
           <main>
-            <Grid container className='w-screen h-screen pt-10'>
-              <Grid item className='w-2/12'>
-                <SettingNavigation isClicked={settingStateMap.RESOURCE} />
-              </Grid>
-              <Divider className='ml-4 mr-16' orientation='vertical' variant='middle' flexItem />
-              <Grid item className='w-9/12'>
+            <Grid container className='w-screen h-screen'>
+              <SettingNavigation isClicked={settingStateMap.RESOURCE} customClassName='w-2/12 justify-end' />
+
+              <Grid item className='w-9/12 pt-10'>
                 <ResourceDetails user={currentUser} />
               </Grid>
             </Grid>

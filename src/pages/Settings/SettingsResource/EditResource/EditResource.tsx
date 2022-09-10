@@ -13,7 +13,7 @@ import HomeHeader from '@components/Home/HomeHeader/HomeHeader';
 import SettingNavigation from '@/components/Settings/SettingNavigation/SettingNavigation';
 import EditResourceBody from '@/components/Settings/SettingBody/ResourceDetails/EditResourceBody/EditResourceBody';
 import Loading from '@/components/Loading/Loading';
-import { Divider, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import { settingStateMap } from '@/consts/constants';
 import { getCurrentUser } from '@/modules/user/userSlice';
@@ -71,12 +71,10 @@ const EditResource = () => {
         <>
           <HomeHeader currentSchool={currentSchool} currentUser={currentUser} />
           <main>
-            <Grid container className='w-screen h-screen pt-10'>
-              <Grid item className='w-2/12'>
-                <SettingNavigation isClicked={settingStateMap.RESOURCE} />
-              </Grid>
-              <Divider className='ml-4 mr-16' orientation='vertical' variant='middle' flexItem />
-              <Grid item className='w-9/12'>
+            <Grid container className='w-screen h-screen'>
+              <SettingNavigation isClicked={settingStateMap.RESOURCE} customClassName='w-2/12 justify-end' />
+
+              <Grid item className='w-9/12 pt-10'>
                 {isLoading ? (
                   <Loading />
                 ) : (
