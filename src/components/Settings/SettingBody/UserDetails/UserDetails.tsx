@@ -43,11 +43,8 @@ const UserDetails = ({ user: userSelf, usersData, handleRefresh }: Props) => {
             helperText={placeholderMsg}
             handleOnClick={uploadUserHandler}
           />
-          <Button
-            className='w-48 h-10 bg-[#808080] rounded-lg text-bgWhite font-inter capitalize ml-4 text-md'
-            onClick={downloadTemplateHandler}
-          >
-            Download Template
+          <Button className='w-48 h-10 bg-[#808080] rounded-lg text-bgWhite capitalize ml-4 text-md' onClick={downloadTemplateHandler}>
+            <div className='font-Inter'>Download Template</div>
           </Button>
         </Grid>
 
