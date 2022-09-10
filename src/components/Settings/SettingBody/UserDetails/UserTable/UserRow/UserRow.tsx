@@ -136,7 +136,8 @@ const UserRow = ({ rowData, selected, index, checkBoxHandler, handleSuccess }: P
 
       {openDialog && (
         <DeleteUserDialog
-          user={rowData}
+          isBulk={false}
+          userId={rowData.id}
           dialogState={openDialog}
           successDialog={() => {
             setOpenDialog(false);

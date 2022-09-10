@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { alpha } from '@mui/material/styles';
+
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,19 +10,19 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
+
 import { visuallyHidden } from '@mui/utils';
 import { UserData } from '@/modules/user/types';
 import UserRow from './UserRow/UserRow';
-import { useApi } from '@/api/ApiHandler';
-import UserService from '@/api/user/UserService';
+import { Grid, Input } from '@mui/material';
+import DeleteUserDialog from '@/components/Dialog/DeleteUserDialog/DeleteUserDialog';
 
 type Props = {
   users: UserData[];
@@ -118,7 +118,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   };
 
   return (
-    <TableHead>
+    <TableHead className='bg-[#4D4D4D]'>
       <TableRow>
         <TableCell padding='checkbox'>
           <Checkbox
@@ -130,6 +130,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         </TableCell>
         {headCells.map(headCell => (
           <TableCell
+            className='text-bgWhite'
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
@@ -139,6 +140,20 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
+              sx={{
+                '&.MuiTableSortLabel-root': {
+                  color: 'white',
+                },
+                '&.MuiTableSortLabel-root:hover': {
+                  color: '#E33939',
+                },
+                '&.Mui-active': {
+                  color: 'white',
+                },
+                '& .MuiTableSortLabel-icon': {
+                  color: '#E33939 !important',
+                },
+              }}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -149,6 +164,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell></TableCell>
       </TableRow>
     </TableHead>
   );
@@ -157,37 +173,34 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 interface EnhancedTableToolbarProps {
   numSelected: number;
   onBulkDelete: () => void;
+  onInputChange: (input: string) => void;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { numSelected, onBulkDelete } = props;
+  const { numSelected, onBulkDelete, onInputChange } = props;
+  const updateSearchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onInputChange(event.target.value);
+  };
 
   return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: theme => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div'>
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography sx={{ flex: '1 1 100%' }} variant='h6' id='tableTitle' component='div'>
-          Select Users
-        </Typography>
-      )}
-      {numSelected > 0 ? (
+    <Toolbar className='sm:pl-2 sm:pr-1 rounded-t-md'>
+      <Grid className='flex-1 '>
+        <Input
+          placeholder='Search User...'
+          className='font-Inter'
+          onChange={updateSearchHandler}
+          sx={{
+            ':before': { borderBottomColor: 'black' },
+            // underline when selected
+            ':after': { borderBottomColor: 'red' },
+            '.hover': { borderBottomColor: 'red' },
+          }}
+        />
+      </Grid>
+
+      {numSelected > 0 && (
         <Tooltip title='Delete'>
-          <DeleteIcon className='cursor-pointer' onClick={onBulkDelete} />
-        </Tooltip>
-      ) : (
-        <Tooltip title='Filter list'>
-          <FilterListIcon className='cursor-pointer' />
+          <DeleteIcon className='cursor-pointer text-right text-dulwichRed mr-3' onClick={onBulkDelete} />
         </Tooltip>
       )}
     </Toolbar>
@@ -195,16 +208,15 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 };
 
 const UserTable = (props: Props) => {
+  const userData = props.users;
+  const [rows, setRows] = useState<UserData[]>(userData);
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof UserData>('email');
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  const [bulkUserDelete] = useApi((ids: number[]) => UserService.bulkDeleteUserByid(ids ?? []), true, true);
-
-  const rows = [...props.users];
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof UserData) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -256,16 +268,17 @@ const UserTable = (props: Props) => {
     setDense(event.target.checked);
   };
 
-  const handleBulkDelete = async () => {
-    try {
-      const selectedIds = selected;
-      const sendReq = await bulkUserDelete(selectedIds);
-      if (sendReq.isSuccess) {
-        props.handleSuccess();
-      }
-    } catch (err) {
-      console.log(err);
+  const handleInputChange = (input: string) => {
+    if (input.trim() === '') {
+      setRows(userData);
     }
+    const isSearchInputInString = (str: string): boolean => str.toUpperCase().indexOf(input.trim().toUpperCase()) > -1;
+    const filteredUsers = userData.filter(user => isSearchInputInString(user.email));
+    setRows(filteredUsers);
+  };
+
+  const handleBulkDelete = async () => {
+    setOpenDialog(true);
   };
 
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
@@ -276,8 +289,8 @@ const UserTable = (props: Props) => {
   return (
     <>
       <Box sx={{ width: '100%' }}>
-        <Paper sx={{ width: '100%', mb: 2 }}>
-          <EnhancedTableToolbar numSelected={selected.length} onBulkDelete={handleBulkDelete} />
+        <Paper className='drop-shadow-2xl' sx={{ width: '100%', mb: 2 }}>
+          <EnhancedTableToolbar numSelected={selected.length} onBulkDelete={handleBulkDelete} onInputChange={handleInputChange} />
           <TableContainer>
             <Table sx={{ minWidth: 750 }} size={dense ? 'small' : 'medium'}>
               <EnhancedTableHead
@@ -318,6 +331,7 @@ const UserTable = (props: Props) => {
             </Table>
           </TableContainer>
           <TablePagination
+            className='bg-[#808080] '
             rowsPerPageOptions={[5, 10, 25]}
             component='div'
             count={rows.length}
@@ -329,6 +343,19 @@ const UserTable = (props: Props) => {
         </Paper>
         <FormControlLabel control={<Switch checked={dense} onChange={handleChangeDense} />} label='Dense padding' />
       </Box>
+
+      {openDialog && (
+        <DeleteUserDialog
+          isBulk={true}
+          bulkUserId={selected as number[]}
+          dialogState={openDialog}
+          successDialog={() => {
+            setOpenDialog(false);
+            props.handleSuccess();
+          }}
+          closeDialog={() => setOpenDialog(false)}
+        />
+      )}
     </>
   );
 };

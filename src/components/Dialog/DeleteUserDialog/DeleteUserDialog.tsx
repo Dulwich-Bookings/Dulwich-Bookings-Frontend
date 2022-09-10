@@ -1,22 +1,36 @@
 import React from 'react';
 import { useApi } from '@/api/ApiHandler';
 import DialogWrapper from '../DialogWrapper/DialogWrapper';
-import { UserData } from '@/modules/user/types';
 import UserService from '@/api/user/UserService';
 
 type Props = {
-  user: UserData;
+  isBulk: boolean;
+  userId?: number;
+  bulkUserId?: number[];
   dialogState: boolean;
   successDialog: () => void;
   closeDialog: () => void;
 };
 
-const DeleteUserDialog = ({ user, dialogState, successDialog, closeDialog }: Props) => {
-  const [deleteUser] = useApi((data: UserData) => UserService.deleteUserById(data.id ?? 0), true, true);
+const DeleteUserDialog = ({ isBulk, userId, bulkUserId, dialogState, successDialog, closeDialog }: Props) => {
+  const [deleteUser] = useApi(() => UserService.deleteUserById(userId ?? 0), true, true);
+  const [bulkUserDelete] = useApi((ids: number[]) => UserService.bulkDeleteUserByid(ids ?? []), true, true);
+
+  const handleBulkDelete = async () => {
+    try {
+      const selectedIds = bulkUserId;
+      const sendReq = await bulkUserDelete(selectedIds);
+      if (sendReq.isSuccess) {
+        successDialog();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleDeleteUser = async () => {
     try {
-      const sendReq = await deleteUser(user.id);
+      const sendReq = await deleteUser();
 
       if (sendReq.isSuccess) {
         successDialog();
@@ -31,7 +45,7 @@ const DeleteUserDialog = ({ user, dialogState, successDialog, closeDialog }: Pro
       <DialogWrapper
         isOpen={dialogState}
         handleClose={closeDialog}
-        handleSubmit={handleDeleteUser}
+        handleSubmit={isBulk ? handleBulkDelete : handleDeleteUser}
         title='Confirm Delete User?'
         textBody='Deleting the User will be invertible. Do you wish to continue?'
         buttonOneText='Close'
