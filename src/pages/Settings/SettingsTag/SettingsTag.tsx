@@ -14,6 +14,7 @@ import TagService from '@/api/tag/TagService';
 import { TagData } from '@/modules/tag/types';
 import { retrieveAllData } from '@/utilities/api';
 import Loading from '@/components/Loading/Loading';
+import UnsupportedSettings from '@/pages/UnsupportedPages/UnsupportedSetting';
 
 const SettingsTag = () => {
   const currentUser = useSelector(getCurrentUser);
@@ -47,6 +48,7 @@ const SettingsTag = () => {
               <Grid container className='settingLaptop:w-9/12 settingPhone:w-11/12 settingPhone:block hidden pt-10'>
                 {isLoading ? <Loading /> : <TagDetails user={currentUser} tags={allTags} handleRefresh={fetchData} />}
               </Grid>
+              <UnsupportedSettings />
             </Grid>
           </main>
         </>

@@ -9,6 +9,7 @@ import { getCurrentUser } from '@/modules/user/userSlice';
 import { getCurrentSchool } from '@/modules/school/schoolSlice';
 import { settingStateMap } from '@/consts/constants';
 import ResourceDetails from '@/components/Settings/SettingBody/ResourceDetails/ResourceDetails';
+import UnsupportedSettings from '@/pages/UnsupportedPages/UnsupportedSetting';
 
 const SettingsResource = () => {
   const currentUser = useSelector(getCurrentUser);
@@ -26,6 +27,7 @@ const SettingsResource = () => {
               <Grid container className='settingLaptop:w-9/12 settingPhone:w-11/12 settingPhone:block hidden pt-10'>
                 <ResourceDetails user={currentUser} />
               </Grid>
+              <UnsupportedSettings />
             </Grid>
           </main>
         </>

@@ -24,6 +24,7 @@ import { UserData } from '@/modules/user/types';
 import { TagMapData } from '@/modules/tagMap/types';
 import { ResourceMapData } from '@/modules/resourceMap/types';
 import { retrieveAllData } from '@/utilities/api';
+import UnsupportedSettings from '@/pages/UnsupportedPages/UnsupportedSetting';
 
 const EditResource = () => {
   const currentUser = useSelector(getCurrentUser);
@@ -87,6 +88,7 @@ const EditResource = () => {
                   />
                 )}
               </Grid>
+              <UnsupportedSettings />
             </Grid>
           </main>
         </>

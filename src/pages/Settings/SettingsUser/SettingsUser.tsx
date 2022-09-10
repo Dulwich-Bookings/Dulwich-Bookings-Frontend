@@ -14,6 +14,7 @@ import Loading from '@/components/Loading/Loading';
 import UserDetails from '@/components/Settings/SettingBody/UserDetails/UserDetails';
 import UserService from '@/api/user/UserService';
 import { UserData } from '@/modules/user/types';
+import UnsupportedSettings from '@/pages/UnsupportedPages/UnsupportedSetting';
 
 const SettingsUser = () => {
   const currentUser = useSelector(getCurrentUser);
@@ -47,6 +48,7 @@ const SettingsUser = () => {
               <Grid container className='settingLaptop:w-9/12 settingPhone:w-11/12 settingPhone:block hidden pt-10'>
                 {isLoading ? <Loading /> : <UserDetails user={currentUser} usersData={allUsers} handleRefresh={fetchData} />}
               </Grid>
+              <UnsupportedSettings />
             </Grid>
           </main>
         </>
