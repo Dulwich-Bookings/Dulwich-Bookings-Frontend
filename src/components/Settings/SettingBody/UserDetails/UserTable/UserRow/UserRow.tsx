@@ -73,15 +73,14 @@ const UserRow = ({ rowData, selected, index, checkBoxHandler, handleSuccess }: P
             checked={selected}
             onClick={() => {
               checkBoxHandler(rowData.id);
-              console.log(index);
             }}
           />
         </TableCell>
         <TableCell component='th' scope='row' padding='none'>
           {rowData.email}
         </TableCell>
-        <TableCell align='right'>{rowData.class}</TableCell>
-        <TableCell align='right' className='pr-0'>
+        <TableCell className='text-right'>{rowData.class}</TableCell>
+        <TableCell className='pr-0 text-right'>
           <InputWithRadio
             labelClassName='hidden'
             inputLabels={[role.STUDENT, role.TEACHER]}
@@ -91,7 +90,7 @@ const UserRow = ({ rowData, selected, index, checkBoxHandler, handleSuccess }: P
             disabled={!editMode}
           />
         </TableCell>
-        <TableCell align='right'>
+        <TableCell className='text-right'>
           <Checkbox
             color='primary'
             checked={isConfirmed}

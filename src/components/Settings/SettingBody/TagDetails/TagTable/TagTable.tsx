@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,17 +9,13 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { TagData } from '@/modules/tag/types';
+import { Grid, Input } from '@mui/material';
+import TagRow from './TagRow/TagRow';
 
 type Props = {
   tags: TagData[];
@@ -93,33 +88,40 @@ interface EnhancedTableProps {
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property: keyof TagData) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
 
   return (
-    <TableHead>
+    <TableHead className='bg-[#4D4D4D]'>
       <TableRow>
-        <TableCell padding='checkbox'>
-          <Checkbox
-            color='primary'
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-          />
-        </TableCell>
         {headCells.map(headCell => (
           <TableCell
+            className='text-bgWhite'
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
+            padding={'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
+              sx={{
+                '&.MuiTableSortLabel-root': {
+                  color: 'white',
+                },
+                '&.MuiTableSortLabel-root:hover': {
+                  color: '#E33939',
+                },
+                '&.Mui-active': {
+                  color: 'white',
+                },
+                '& .MuiTableSortLabel-icon': {
+                  color: '#E33939 !important',
+                },
+              }}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -130,59 +132,50 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell></TableCell>
       </TableRow>
     </TableHead>
   );
 }
 
 interface EnhancedTableToolbarProps {
-  numSelected: number;
+  onInputChange: (input: string) => void;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { numSelected } = props;
+  const { onInputChange } = props;
+  const updateSearchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onInputChange(event.target.value);
+  };
 
   return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: theme => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div'>
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography sx={{ flex: '1 1 100%' }} variant='h6' id='tableTitle' component='div'>
-          Select Tags
-        </Typography>
-      )}
-      {numSelected > 0 ? (
-        <Tooltip title='Delete'>
-          <DeleteIcon className='cursor-pointer' />
-        </Tooltip>
-      ) : (
-        <Tooltip title='Filter list'>
-          <FilterListIcon className='cursor-pointer' />
-        </Tooltip>
-      )}
+    <Toolbar className='sm:pl-2 sm:pr-1 rounded-t-md'>
+      <Grid className='flex-1 '>
+        <Input
+          placeholder='Search Tag...'
+          className='font-Inter'
+          onChange={updateSearchHandler}
+          sx={{
+            ':before': { borderBottomColor: 'black' },
+            // underline when selected
+            ':after': { borderBottomColor: 'red' },
+            '.hover': { borderBottomColor: 'red' },
+          }}
+        />
+      </Grid>
     </Toolbar>
   );
 };
 
 const TagTable = (props: Props) => {
+  const tagData = props.tags;
+  const [rows, setRows] = useState<TagData[]>(tagData);
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof TagData>('name');
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  const rows = [...props.tags];
+  const [rowsPerPage, setRowsPerPage] = useState(25);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof TagData) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -197,28 +190,6 @@ const TagTable = (props: Props) => {
       return;
     }
     setSelected([]);
-  };
-
-  const handleCheckboxClick = (id: number) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: readonly number[] = [];
-    console.log(selectedIndex);
-
-    if (selectedIndex === -1) {
-      //Add element into selected array
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      //Removes element on the first index
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      //Removes element on the last index
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      //Removes element in the middle of the index
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-    }
-
-    setSelected(newSelected);
   };
 
   const handleEditTag = (id: number) => {
@@ -244,16 +215,20 @@ const TagTable = (props: Props) => {
     setDense(event.target.checked);
   };
 
-  const isSelected = (id: number) => selected.indexOf(id) !== -1;
+  const handleInputChange = (input: string) => {
+    const isSearchInputInString = (str: string): boolean => str.toUpperCase().indexOf(input.trim().toUpperCase()) > -1;
+    const filteredTags = tagData.filter(tag => isSearchInputInString(tag.name));
+    setRows(filteredTags);
+  };
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
     <>
-      <Box sx={{ width: '100%' }}>
-        <Paper sx={{ width: '100%', mb: 2 }}>
-          <EnhancedTableToolbar numSelected={selected.length} />
+      <Grid sx={{ width: '100%' }}>
+        <Paper className='drop-shadow-2xl' sx={{ width: '100%', mb: 2 }}>
+          <EnhancedTableToolbar onInputChange={handleInputChange} />
           <TableContainer>
             <Table sx={{ minWidth: 750 }} size={dense ? 'small' : 'medium'}>
               <EnhancedTableHead
@@ -270,24 +245,7 @@ const TagTable = (props: Props) => {
                 {stableSort(rows, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.id);
-                    const labelId = `enhanced-table-checkbox-${index}`;
-
-                    return (
-                      <TableRow hover role='checkbox' aria-checked={isItemSelected} tabIndex={-1} key={row.name} selected={isItemSelected}>
-                        <TableCell padding='checkbox'>
-                          <Checkbox color='primary' checked={isItemSelected} onClick={() => handleCheckboxClick(row.id)} />
-                        </TableCell>
-                        <TableCell component='th' id={labelId} scope='row' padding='none'>
-                          {row.name}
-                        </TableCell>
-                        <TableCell align='right'>{row.colour}</TableCell>
-                        <TableCell align='right'>
-                          <EditIcon className='cursor-pointer' onClick={() => handleEditTag(row.id)} />
-                          <DeleteIcon className='cursor-pointer' onClick={() => handleDeleteTag(row.id)} />
-                        </TableCell>
-                      </TableRow>
-                    );
+                    return <TagRow key={row.id} rowData={row} index={index} handleEdit={handleEditTag} handleDelete={handleDeleteTag} />;
                   })}
                 {emptyRows > 0 && (
                   <TableRow
@@ -302,7 +260,7 @@ const TagTable = (props: Props) => {
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[25, 50, 100]}
             component='div'
             count={rows.length}
             rowsPerPage={rowsPerPage}
@@ -312,7 +270,7 @@ const TagTable = (props: Props) => {
           />
         </Paper>
         <FormControlLabel control={<Switch checked={dense} onChange={handleChangeDense} />} label='Dense padding' />
-      </Box>
+      </Grid>
     </>
   );
 };

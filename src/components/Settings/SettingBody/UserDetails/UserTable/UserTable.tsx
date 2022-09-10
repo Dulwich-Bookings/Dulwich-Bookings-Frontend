@@ -269,9 +269,6 @@ const UserTable = (props: Props) => {
   };
 
   const handleInputChange = (input: string) => {
-    if (input.trim() === '') {
-      setRows(userData);
-    }
     const isSearchInputInString = (str: string): boolean => str.toUpperCase().indexOf(input.trim().toUpperCase()) > -1;
     const filteredUsers = userData.filter(user => isSearchInputInString(user.email));
     setRows(filteredUsers);
