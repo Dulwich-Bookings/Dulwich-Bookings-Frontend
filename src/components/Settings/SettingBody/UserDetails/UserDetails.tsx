@@ -48,7 +48,7 @@ const UserDetails = ({ user: userSelf, usersData, handleRefresh }: Props) => {
           </Button>
         </Grid>
 
-        <Grid container className='justify-center pt-6'>
+        <Grid container className='pt-6'>
           <UserTable users={usersData.filter(u => u.id !== userSelf.id)} handleSuccess={handleRefresh} />
         </Grid>
       </Stack>

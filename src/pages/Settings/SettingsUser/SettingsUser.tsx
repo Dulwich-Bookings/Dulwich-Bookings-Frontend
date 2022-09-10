@@ -42,9 +42,9 @@ const SettingsUser = () => {
           <HomeHeader currentSchool={currentSchool} currentUser={currentUser} />
           <main>
             <Grid container className='w-screen h-screen'>
-              <SettingNavigation isClicked={settingStateMap.USERS} customClassName='w-2/12 justify-end' />
+              <SettingNavigation isClicked={settingStateMap.USERS} customClassName='w-max justify-end' />
 
-              <Grid item className='w-9/12 pt-10'>
+              <Grid container className='settingLaptop:w-9/12 settingPhone:w-11/12 settingPhone:block hidden pt-10'>
                 {isLoading ? <Loading /> : <UserDetails user={currentUser} usersData={allUsers} handleRefresh={fetchData} />}
               </Grid>
             </Grid>

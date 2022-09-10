@@ -288,7 +288,7 @@ const UserTable = (props: Props) => {
 
   return (
     <>
-      <Box sx={{ width: '100%' }}>
+      <Grid sx={{ width: '100%' }}>
         <Paper className='drop-shadow-2xl' sx={{ width: '100%', mb: 2 }}>
           <EnhancedTableToolbar numSelected={selected.length} onBulkDelete={handleBulkDelete} onInputChange={handleInputChange} />
           <TableContainer>
@@ -341,7 +341,7 @@ const UserTable = (props: Props) => {
           />
         </Paper>
         <FormControlLabel control={<Switch checked={dense} onChange={handleChangeDense} />} label='Dense padding' />
-      </Box>
+      </Grid>
 
       {openDialog && (
         <DeleteUserDialog

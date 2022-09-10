@@ -95,17 +95,17 @@ const AccountDetails = ({ user }: Props) => {
         </Grid>
 
         <Grid container>
-          <Grid item className='w-1/6'>
+          <Grid item className='w-1/6 settingLaptop:block hidden'>
             <UserProfileCircle email={user.email} className='mt-2 w-36 h-36 text-3xl text-bgWhite cursor-default' />
           </Grid>
 
-          <Stack className='w-5/6' spacing={2}>
+          <Stack className='settingLaptop:w-5/6 w-full' spacing={2}>
             <InputWithBorder
               labelText='Email'
               inputType='text'
               labelClassName='font-Inter text-textGray'
               inputSize='small'
-              inputClassName='w-1/3'
+              inputClassName='settingLaptop:w-1/3 w-full'
               inputValue={user.email}
               disabled
             />
@@ -114,13 +114,13 @@ const AccountDetails = ({ user }: Props) => {
               inputType='password'
               labelClassName='font-Inter text-textGray'
               inputSize='small'
-              inputClassName='w-1/3'
+              inputClassName='settingLaptop:w-1/3 w-full'
               inputValue={password}
               inputHandleOnChange={input => setPassword(input.target.value)}
               inputValidation={pwError}
             />
-            <Grid container className='w-full space-x-12'>
-              <Grid item className='w-1/3'>
+            <Grid container className='w-full settingLaptop:flex-row flex-col'>
+              <Grid item className='settingLaptop:w-1/3 w-full'>
                 <InputWithBorder
                   labelText='Password'
                   inputType='password'
@@ -131,7 +131,7 @@ const AccountDetails = ({ user }: Props) => {
                   inputValidation={pwNewError}
                 />
               </Grid>
-              <Grid item className='w-1/3'>
+              <Grid item className='settingLaptop:w-1/3 settingLaptop:pl-4 w-full '>
                 <InputWithBorder
                   labelText='Confirm Password'
                   inputType='password'

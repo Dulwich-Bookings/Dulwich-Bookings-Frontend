@@ -14,7 +14,7 @@ type Props = {
 };
 
 const SettingNavigation = ({ isClicked, customClassName }: Props) => {
-  const [openDrawer, setOpenDrawer] = useState<boolean>(true);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
   const history = useHistory();
 
@@ -52,7 +52,7 @@ const SettingNavigation = ({ isClicked, customClassName }: Props) => {
 
   return (
     <>
-      <Grid container className={`${customClassName} hidden homeLaptop:flex`}>
+      <Grid container className={`${customClassName} hidden settingLaptop:flex`}>
         <Stack className='w-4/5' spacing={3}>
           <BackButton buttonText='Home' onClickHandler={homeButtonClickHandler} />
           <Stack>
@@ -64,10 +64,10 @@ const SettingNavigation = ({ isClicked, customClassName }: Props) => {
           </Stack>
         </Stack>
       </Grid>
-      <Divider className='ml-4 mr-16 hidden homeLaptop:flex' orientation='vertical' variant='middle' flexItem />
+      <Divider className='ml-4 mr-16 hidden settingLaptop:flex' orientation='vertical' variant='middle' flexItem />
 
       <Drawer
-        className={`${customClassName} flex homeLaptop:hidden`}
+        className={`${customClassName} flex settingLaptop:hidden`}
         variant='temporary'
         open={openDrawer}
         onClose={closeDrawerHandler}
@@ -91,7 +91,7 @@ const SettingNavigation = ({ isClicked, customClassName }: Props) => {
           </Stack>
         </Grid>
       </Drawer>
-      <Grid className='drop-shadow-2xl h-full flex homeLaptop:hidden'>
+      <Grid className='drop-shadow-2xl h-full flex settingLaptop:hidden'>
         <KeyboardArrowRightIcon
           className='cursor-pointer text-right text-[#808080] h-full mr-5 bg-[#404040] '
           onClick={openDrawerHandler}

@@ -38,6 +38,8 @@ const TailWindTheme = {
       phone: '640px',
       laptop: '900px',
       homePhone: '450px',
+      settingPhone: '985px',
+      settingLaptop: '1250px',
       homeLaptop: '1100px',
       addRoomLaptop: '1369px',
       addRoomSmallerLaptop: '913px',
