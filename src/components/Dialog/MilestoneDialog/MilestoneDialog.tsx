@@ -132,7 +132,7 @@ const MilestoneDialog = ({ actionState, milestones, dialogState, successDialog, 
             handleOnClick={closeDialog}
           />
           <FormSubmitButton
-            buttonClassName={`${actionState ? 'w-20' : 'w-32'} h-10 bg-dulwichRed rounded-xl text-bgWhite font-inter `}
+            buttonClassName={`${actionState ? 'w-20' : 'w-36'} h-10 bg-dulwichRed rounded-xl text-bgWhite font-inter `}
             textClassName={'text-[15px] '}
             buttonText={dialogText.submitButton}
             handleOnClick={actionState ? handleBulkCreate : handleBulkDelete}
