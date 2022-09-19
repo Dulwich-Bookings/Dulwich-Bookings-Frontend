@@ -43,7 +43,7 @@ const SettingsTag = () => {
           <HomeHeader currentSchool={currentSchool} currentUser={currentUser} />
           <main>
             <Grid container className='w-screen h-screen'>
-              <SettingNavigation isClicked={settingStateMap.TAG} customClassName='w-max justify-end' />
+              <SettingNavigation isClicked={settingStateMap.TAG} customClassName='w-2/12 justify-end' />
 
               <Grid container className='settingLaptop:w-9/12 settingPhone:w-11/12 settingPhone:block hidden pt-10'>
                 {isLoading ? <Loading /> : <TagDetails user={currentUser} tags={allTags} handleRefresh={fetchData} />}
