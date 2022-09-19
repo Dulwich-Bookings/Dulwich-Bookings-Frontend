@@ -59,8 +59,8 @@ const SettingNavigation = ({ isClicked, customClassName }: Props) => {
             <SettingButton buttonText='Account Details' isClicked={isClicked.account} handleOnClick={accountClickHandler} />
             <SettingButton buttonText='My Resources' isClicked={isClicked.resource} handleOnClick={resourceClickHandler} />
             <SettingButton buttonText='Tag Management' isClicked={isClicked.tag} handleOnClick={tagClickHandler} />
-            <SettingButton buttonText='Milestones' isClicked={isClicked.milestone} handleOnClick={milestoneClickHandler} />
             <SettingButton buttonText='User Management' isClicked={isClicked.users} handleOnClick={usersClickHandler} />
+            <SettingButton buttonText='Milestones' isClicked={isClicked.milestone} handleOnClick={milestoneClickHandler} />
           </Stack>
         </Stack>
       </Grid>
@@ -85,8 +85,8 @@ const SettingNavigation = ({ isClicked, customClassName }: Props) => {
               <SettingButton buttonText='Account Details' isClicked={isClicked.account} handleOnClick={accountClickHandler} />
               <SettingButton buttonText='My Resources' isClicked={isClicked.resource} handleOnClick={resourceClickHandler} />
               <SettingButton buttonText='Tag Management' isClicked={isClicked.tag} handleOnClick={tagClickHandler} />
-              <SettingButton buttonText='Milestones' isClicked={isClicked.milestone} handleOnClick={milestoneClickHandler} />
               <SettingButton buttonText='User Management' isClicked={isClicked.users} handleOnClick={usersClickHandler} />
+              <SettingButton buttonText='Milestones' isClicked={isClicked.milestone} handleOnClick={milestoneClickHandler} />
             </Stack>
           </Stack>
         </Grid>
