@@ -37,7 +37,7 @@ const vacancy = true;
 const HomeRoomItem = (props: Props) => {
   const [isBookmark, setIsBookmark] = useState(props.isBookmark);
   const [openCalendarModal, setOpenCalendarModal] = useState<boolean>(false);
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openSubscriptionModal, setOpenSubscriptionModal] = useState<boolean>(false);
 
   const filterTagMaps = (): TagMapData[] => {
     if (props.data.type === resourceTypes.RESOURCE) {
@@ -54,15 +54,22 @@ const HomeRoomItem = (props: Props) => {
   );
 
   const handleOpenModal = () => {
-    setOpenModal(true);
+    props.data.type === resourceTypes.RESOURCE ? setOpenCalendarModal(true) : setOpenSubscriptionModal(true);
   };
 
   const handleCloseModal = () => {
-    setOpenModal(false);
+    props.data.type === resourceTypes.RESOURCE ? setOpenCalendarModal(false) : setOpenSubscriptionModal(false);
   };
 
   return (
     <>
+      {props.data.type === searchStateMap.SUBSCRIPTIONS && (
+        <ModalWrapper
+          isOpen={openSubscriptionModal}
+          handleClose={handleCloseModal}
+          bodyComponent={<SubscriptionModal data={props.data as SubscriptionData} handleClose={() => setOpenSubscriptionModal(false)} />}
+        />
+      )}
       {props.data.type === resourceTypes.RESOURCE && (
         <BookingsModal
           openState={openCalendarModal}
@@ -73,14 +80,11 @@ const HomeRoomItem = (props: Props) => {
         />
       )}
       <Grid item className='w-full homeLaptop:w-auto'>
-        <Card
-          className='bg-bgGray rounded-xl w-full homeLaptop:w-80 h-48 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)] cursor-pointer'
-          onClick={handleOpenModal}
-        >
+        <Card className='bg-bgGray rounded-xl w-full homeLaptop:w-80 h-48 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)] cursor-pointer'>
           <div
             className='w-full h-full'
             onClick={() => {
-              setOpenCalendarModal(true);
+              handleOpenModal();
               props.onRecentlyVisitedHandler(props.data.id, props.data.type, props.isRecentlyVisited);
             }}
           >
@@ -125,13 +129,6 @@ const HomeRoomItem = (props: Props) => {
           </div>
         </Card>
       </Grid>
-      {props.data.type === searchStateMap.SUBSCRIPTIONS && (
-        <ModalWrapper
-          isOpen={openModal}
-          handleClose={handleCloseModal}
-          bodyComponent={<SubscriptionModal data={props.data as SubscriptionData} handleClose={handleCloseModal} />}
-        />
-      )}
     </>
   );
 };
