@@ -7,7 +7,7 @@ import RecurringBooking from '@/components/Modals/BookingsModal/BookingForm/Recu
 import { RecurringTypes, RecurringType } from '@/modules/Bookings/Types';
 import { RRule } from 'rrule';
 
-const { colors } = TailWindTheme.theme;
+const { colors } = TailWindTheme.theme.extend;
 
 type Props = {
   handleChangeRRule: (rrule: RRule) => void;

@@ -33,7 +33,7 @@ import { ResourceMapData } from '@/modules/resourceMap/types';
 import { toggleShowNotification } from '@/modules/ui/uiSlice';
 import { isAdmin, isTeacher } from '@/utilities/authorisation';
 
-const { colors } = TailWindTheme.theme;
+const { colors } = TailWindTheme.theme.extend;
 
 export const StyleWrapper = styled.div`
   .fc .fc-timegrid-slot-minor {

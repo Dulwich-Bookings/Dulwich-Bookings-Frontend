@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const { colors } = TailWindTheme.theme;
+const { colors } = TailWindTheme.theme.extend;
 import TailWindTheme from '@/tailwind.config';
 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, RadioGroup, Radio } from '@mui/material';

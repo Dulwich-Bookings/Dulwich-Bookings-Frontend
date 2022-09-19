@@ -7,7 +7,7 @@ import TailWindTheme from '@/tailwind.config';
 import { RecurringTypes, RecurringType } from '@/modules/Bookings/Types';
 import { RRule } from 'rrule';
 
-const { colors } = TailWindTheme.theme;
+const { colors } = TailWindTheme.theme.extend;
 
 type Props = {
   recurring: RecurringTypes;

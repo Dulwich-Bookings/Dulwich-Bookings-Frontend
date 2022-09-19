@@ -4,7 +4,7 @@ import TailWindTheme from '@/tailwind.config';
 
 import { BookingTypes, BookingType } from '@/modules/Bookings/Types';
 
-const { colors } = TailWindTheme.theme;
+const { colors } = TailWindTheme.theme.extend;
 
 type Props = {
   bookingType: BookingTypes;
