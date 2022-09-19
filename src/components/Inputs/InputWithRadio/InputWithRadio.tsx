@@ -4,7 +4,7 @@ import { InputValidation } from '@/modules/inputValidation/types';
 
 import TailWindTheme from '@/tailwind.config';
 
-const { colors } = TailWindTheme.theme;
+const { colors } = TailWindTheme.theme.extend;
 
 type Props<inputType> = {
   spacing?: number; // Optional definition for the space between Label and Input
