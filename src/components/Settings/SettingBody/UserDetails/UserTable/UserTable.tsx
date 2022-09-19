@@ -183,7 +183,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   };
 
   return (
-    <Toolbar className='sm:pl-2 sm:pr-1 rounded-t-md'>
+    <Toolbar className='sm:pl-2 sm:pr-1'>
       <Grid className='flex-1 '>
         <Input
           placeholder='Search User...'

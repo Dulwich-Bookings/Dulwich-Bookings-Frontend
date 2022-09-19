@@ -54,6 +54,7 @@ class DateTime {
    * @returns  a moment object converted to UTC.
    */
   public toDate(): Date {
+    console.log('HI' + this.utc);
     return new Date(this.utc.toString());
   }
 

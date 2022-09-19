@@ -29,6 +29,7 @@ import EditResource from '@/pages/Settings/SettingsResource/EditResource/EditRes
 import EditSubscription from '@/pages/Settings/SettingsResource/EditSubscription.tsx/EditSubscription';
 import SettingsTag from '@/pages/Settings/SettingsTag/SettingsTag';
 import SettingsUser from '@/pages/Settings/SettingsUser/SettingsUser';
+import SettingMilestone from '@/pages/Settings/SettingMilestone/SettingMilestone';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -96,6 +97,7 @@ const AppRouter = () => {
       {accessToken && !isTemp && <Route exact path={Routes.settings.resources.editResource} component={EditResource} />}
       {accessToken && !isTemp && <Route exact path={Routes.settings.resources.editSubscription} component={EditSubscription} />}
       {Teacher && accessToken && !isTemp && <Route exact path={Routes.settings.tags} component={SettingsTag} />}
+      {Admin && accessToken && !isTemp && <Route exact path={Routes.settings.milestone} component={SettingMilestone} />}
       {Admin && accessToken && !isTemp && <Route exact path={Routes.settings.users} component={SettingsUser} />}
 
       {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.main} component={AddResource} />}
