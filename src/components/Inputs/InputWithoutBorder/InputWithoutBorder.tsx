@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, TextField, Stack } from '@mui/material';
+import { Typography, TextField, Stack, TextFieldProps } from '@mui/material';
 import { InputValidation } from '@/modules/inputValidation/types';
 
 import TailWindTheme from '@/tailwind.config';
@@ -10,9 +10,10 @@ type Props<inputType> = {
   spacing?: number; // Optional definition for the space between Label and Input
   labelText: string;
   labelClassName?: string; // Optional ClassNames for Label
-  inputPlaceholder: string;
+  inputPlaceholder?: string;
   inputType: string;
   inputClassName?: string; // Optional ClassNames for Input
+  inputProps?: TextFieldProps;
   inputValidation?: InputValidation;
   inputVariant?: 'outlined' | 'standard' | 'filled';
   inputValue?: inputType;
@@ -27,10 +28,12 @@ type Props<inputType> = {
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const InputWithoutBorder = <T extends Object>(props: Props<T>) => {
-  const { inputValidation } = props;
+  const { inputValidation, inputProps } = props;
   const colSpacing = props.spacing ? props.spacing : 0.5;
   const isError = inputValidation ? inputValidation.isError : false;
   const errorHelperText = isError ? inputValidation?.errorHelperText : '';
+
+  console.log(inputProps);
 
   return (
     <Stack direction='column' spacing={colSpacing}>
@@ -39,6 +42,7 @@ const InputWithoutBorder = <T extends Object>(props: Props<T>) => {
         {props.required && <label className='text-dulwichRed'> *</label>}
       </Typography>
       <TextField
+        {...inputProps}
         error={isError}
         helperText={errorHelperText}
         value={props.inputValue}
@@ -75,6 +79,7 @@ const InputWithoutBorder = <T extends Object>(props: Props<T>) => {
               backgroundColor: colors.white,
               marginX: '0',
               paddingX: '14px',
+              zIndex: 0,
             },
           },
         }}

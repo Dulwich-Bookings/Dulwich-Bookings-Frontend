@@ -22,6 +22,7 @@ const TailWindTheme = {
       bgLesson: '#E6E6E6',
       bgBookingBlack: '#797979',
       bgBookingBlackPending: '#2E2E2E',
+      transparent: 'transparent',
     },
     fontSize: {
       sm: 12,

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 
 import { Grid, Card, CardContent, Typography, Stack } from '@mui/material';
-
+import ModalWrapper from '@/components/Modals/ModalWrapper/ModalWrapper';
+import SubscriptionModal from '@/components/Modals/SubscriptionModal/SubscriptionModal';
 import { Bookmark, PersonOutlineOutlined, Circle } from '@mui/icons-material';
 import ResourceTag from '@/components/Home/HomeResources/HomeResourceContainer/ResourceTag/ResourceTag';
 import ResourceRights from '@/components/Home/HomeResources/HomeResourceContainer/ResourceRights/ResourceRights';
 import BookingsModal from '@/components/Modals/BookingsModal/BookingsModal';
 
-import { SearchState, resourceTypes } from '@/consts/constants';
+import { SearchState, resourceTypes, searchStateMap } from '@/consts/constants';
 import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
 import { SubscriptionData } from '@/modules/subscription/types';
@@ -36,6 +37,7 @@ const vacancy = true;
 const HomeRoomItem = (props: Props) => {
   const [isBookmark, setIsBookmark] = useState(props.isBookmark);
   const [openCalendarModal, setOpenCalendarModal] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const filterTagMaps = (): TagMapData[] => {
     if (props.data.type === resourceTypes.RESOURCE) {
@@ -51,8 +53,12 @@ const HomeRoomItem = (props: Props) => {
       .includes(tag.id),
   );
 
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
   const handleCloseModal = () => {
-    setOpenCalendarModal(false);
+    setOpenModal(false);
   };
 
   return (
@@ -66,13 +72,16 @@ const HomeRoomItem = (props: Props) => {
           currentSchool={props.currentSchool}
         />
       )}
-
       <Grid item className='w-full homeLaptop:w-auto'>
-        <Card className='bg-bgGray rounded-xl w-full homeLaptop:w-80 h-48 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)] cursor-pointer'>
+        <Card
+          className='bg-bgGray rounded-xl w-full homeLaptop:w-80 h-48 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)] cursor-pointer'
+          onClick={handleOpenModal}
+        >
           <div
             className='w-full h-full'
             onClick={() => {
-              setOpenCalendarModal(true), props.onRecentlyVisitedHandler(props.data.id, props.data.type, props.isRecentlyVisited);
+              setOpenCalendarModal(true)
+              props.onRecentlyVisitedHandler(props.data.id, props.data.type, props.isRecentlyVisited);
             }}
           >
             <CardContent className='grow'>
@@ -116,6 +125,13 @@ const HomeRoomItem = (props: Props) => {
           </div>
         </Card>
       </Grid>
+      {props.data.type === searchStateMap.SUBSCRIPTIONS && (
+        <ModalWrapper
+          isOpen={openModal}
+          handleClose={handleCloseModal}
+          bodyComponent={<SubscriptionModal data={props.data as SubscriptionData} handleClose={handleCloseModal} />}
+        />
+      )}
     </>
   );
 };

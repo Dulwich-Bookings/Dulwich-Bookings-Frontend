@@ -12,10 +12,10 @@ import UserService from '@/api/user/UserService';
 import { TagData } from '@/modules/tag/types';
 import { UserData } from '@/modules/user/types';
 
-import AddRoomForm from '@/components/AddResource/Forms/AddRoomForm/AddRoomForm';
 import { retrieveAllData } from '@/utilities/api';
+import AddSubscriptionForm from '@/components/AddResource/Forms/AddSubscriptionForm/AddSubscriptionForm';
 
-const AddRoom = () => {
+const AddSubscription = () => {
   const [getAllTags] = useApi(() => TagService.getAllTags(), false, true, false);
   const [getAllUsers] = useApi(() => UserService.getAllUsers(), false, true, false);
 
@@ -44,7 +44,7 @@ const AddRoom = () => {
           <HomeHeader currentSchool={currentSchool} currentUser={currentUser} />
           <main>
             <div className='hidden addRoomSmallerLaptop:block'>
-              <AddRoomForm tagData={tags} userData={users} />
+              <AddSubscriptionForm tagData={tags} userData={users} />
             </div>
             <div className='flex w-screen justify-center h-screen items-center addRoomSmallerLaptop:hidden'>
               <div className='font-Inter text-[24px] text-center pb-20 px-5'>This page is not supported for small screens</div>
@@ -56,4 +56,4 @@ const AddRoom = () => {
   );
 };
 
-export default AddRoom;
+export default AddSubscription;
