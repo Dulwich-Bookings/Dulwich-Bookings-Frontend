@@ -80,7 +80,7 @@ const HomeRoomItem = (props: Props) => {
           <div
             className='w-full h-full'
             onClick={() => {
-              setOpenCalendarModal(true)
+              setOpenCalendarModal(true);
               props.onRecentlyVisitedHandler(props.data.id, props.data.type, props.isRecentlyVisited);
             }}
           >
