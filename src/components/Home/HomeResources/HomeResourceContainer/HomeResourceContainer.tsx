@@ -67,7 +67,7 @@ const HomeRoomItem = (props: Props) => {
         <ModalWrapper
           isOpen={openSubscriptionModal}
           handleClose={handleCloseModal}
-          bodyComponent={<SubscriptionModal data={props.data as SubscriptionData} handleClose={() => setOpenSubscriptionModal(false)} />}
+          bodyComponent={<SubscriptionModal data={props.data as SubscriptionData} handleClose={handleCloseModal} />}
         />
       )}
       {props.data.type === resourceTypes.RESOURCE && (
