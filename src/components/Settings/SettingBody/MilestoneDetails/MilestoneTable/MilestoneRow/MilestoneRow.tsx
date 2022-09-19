@@ -1,18 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import InputWithRadio from '@/components/Inputs/InputWithRadio/InputWithRadio';
-import { Checkbox, TableCell, TableRow } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import SaveIcon from '@mui/icons-material/Save';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { Role, UserData, UserPutData } from '@/modules/user/types';
-import { role } from '@/consts/constants';
-import { useApi } from '@/api/ApiHandler';
-import UserService from '@/api/user/UserService';
-import DeleteUserDialog from '@/components/Dialog/DeleteUserDialog/DeleteUserDialog';
+import { TableCell, TableRow } from '@mui/material';
 import { MilestoneData } from '@/modules/Milestones/Types';
-import moment, { Moment } from 'moment-timezone';
-import DateTime from '@/modules/DateTime/DateTime';
+import moment from 'moment-timezone';
 
 type Props = {
   rowData: MilestoneData;
