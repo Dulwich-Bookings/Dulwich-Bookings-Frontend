@@ -1,13 +1,13 @@
+import React, { useState } from 'react';
+
+import { Box, Grid, Stack } from '@mui/material';
+import SettingHeader from '@/components/Settings/SettingBody/SettingHeader/SettingHeader';
+import MilestoneForm from '@/components/Settings/SettingBody/MilestoneDetails/MilestoneForm/MilestoneForm';
+import MilestoneTable from '@/components/Settings/SettingBody/MilestoneDetails/MilestoneTable/MilestoneTable';
 import FormSubmitButton from '@/components/AddResource/Forms/FormSubmitButton/FormSubmitButton';
 import MilestoneDialog from '@/components/Dialog/MilestoneDialog/MilestoneDialog';
 
 import { MilestoneData, MilestoneFormData } from '@/modules/Milestones/Types';
-import { Box, Grid, Stack } from '@mui/material';
-
-import React, { useState } from 'react';
-import SettingHeader from '../SettingHeader/SettingHeader';
-import MilestoneForm from './MilestoneForm/MilestoneForm';
-import MilestoneTable from './MilestoneTable/MilestoneTable';
 
 type Props = {
   milestones: MilestoneData[];
@@ -27,6 +27,8 @@ const MilestoneDetails = ({ milestones: oldMilestones, handleRefresh }: Props) =
   const [duplicateError, setDuplicateError] = useState<boolean>();
 
   const addMilestoneHandler = () => {
+    if (hasMilestones) return;
+
     const date = new Date();
     date.setDate(date.getDate() + ((1 + 7 - date.getDay()) % 7 || 7));
 
@@ -82,6 +84,7 @@ const MilestoneDetails = ({ milestones: oldMilestones, handleRefresh }: Props) =
   };
 
   const startNewYearHandler = () => {
+    if (!hasMilestones) return;
     setActionState(false);
     setOpenDialog(true);
   };
@@ -101,7 +104,7 @@ const MilestoneDetails = ({ milestones: oldMilestones, handleRefresh }: Props) =
               buttonClassName={`rounded-xl ${!hasMilestones ? 'bg-dulwichRed' : 'bg-textGray cursor-not-allowed'}`}
             />
             <FormSubmitButton
-              buttonText='Delete Milestone'
+              buttonText='Start New Year'
               handleOnClick={startNewYearHandler}
               buttonClassName={`rounded-xl ${hasMilestones ? 'bg-dulwichRed' : 'bg-textGray cursor-not-allowed'}`}
             />

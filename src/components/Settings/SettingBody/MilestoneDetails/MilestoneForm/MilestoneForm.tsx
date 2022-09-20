@@ -1,8 +1,10 @@
-import InputDatePicker from '@/components/Inputs/InputDatePicker/InputDatePicker';
-import { Grid } from '@mui/material';
 import React from 'react';
-import MilestoneDropDown from './MilestoneDropDown/MilestoneDropDown';
+
+import { Grid } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import MilestoneDropDown from '@components/Settings/SettingBody/MilestoneDetails/MilestoneForm/MilestoneDropDown/MilestoneDropDown';
+import InputDatePicker from '@/components/Inputs/InputDatePicker/InputDatePicker';
+
 import { MilestoneFormData } from '@/modules/Milestones/Types';
 
 const isMonday = (date: Date) => {

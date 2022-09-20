@@ -63,3 +63,5 @@ export const role = {
   STUDENT: 'Student' as Role,
   TEACHER: 'Teacher' as Role,
 };
+
+export type Order = 'asc' | 'desc';

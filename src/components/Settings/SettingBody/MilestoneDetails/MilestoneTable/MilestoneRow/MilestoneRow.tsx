@@ -1,8 +1,8 @@
 import React from 'react';
+import moment from 'moment-timezone';
 
 import { TableCell, TableRow } from '@mui/material';
 import { MilestoneData } from '@/modules/Milestones/Types';
-import moment from 'moment-timezone';
 
 type Props = {
   rowData: MilestoneData;
@@ -10,7 +10,7 @@ type Props = {
 };
 
 const MilestoneRow = ({ rowData, index }: Props) => {
-  const date = moment.utc(rowData.weekBeginning.toString()).format('YYYY-MM-DD');
+  const date = moment.utc(rowData.weekBeginning.toString()).format('DD-MM-YYYY');
   return (
     <>
       <TableRow hover tabIndex={-1} key={rowData.id} className={`${index % 2 === 0 ? 'bg-[#FFFFFF]' : 'bg-[#F2F2F2]'}`}>

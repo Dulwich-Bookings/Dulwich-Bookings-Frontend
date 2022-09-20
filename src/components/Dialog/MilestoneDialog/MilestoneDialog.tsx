@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useApi } from '@/api/ApiHandler';
-import DialogWrapper from '../DialogWrapper/DialogWrapper';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import MilestoneService from '@/api/milestone/MilestoneService';
+
 import FormSubmitButton from '@/components/AddResource/Forms/FormSubmitButton/FormSubmitButton';
 import { CreateMilestoneData, MilestoneFormData } from '@/modules/Milestones/Types';
 import InputWithBorder from '@/components/Inputs/InputWithBorder/InputWithBorder';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+
 import { InputValidation } from '@/modules/inputValidation/types';
 import DateTime from '@/modules/DateTime/DateTime';
 
@@ -34,12 +35,12 @@ const MilestoneDialog = ({ actionState, milestones, dialogState, successDialog, 
   const dialogText = actionState
     ? {
         title: 'Confirm Create Milestones?',
-        body: 'Milestones will be not be editable after confirmation. If you wish to continue, key in your password:',
+        body: 'Milestones will be not be editable after confirmation. Please enter your password to continue:',
         submitButton: 'Create',
       }
     : {
         title: 'Confirm Start New Year?',
-        body: 'Starting a new year will REMOVED all current milestones. If you wish to continue, key in your password:',
+        body: 'Starting a new year will REMOVED all existing milestones. Please enter your password to continue:',
         submitButton: 'Start Year',
       };
 
@@ -96,19 +97,9 @@ const MilestoneDialog = ({ actionState, milestones, dialogState, successDialog, 
 
   return (
     <>
-      <DialogWrapper
-        isOpen={dialogState}
-        handleClose={closeDialog}
-        handleSubmit={actionState ? handleBulkCreate : handleBulkDelete}
-        title={dialogText.title}
-        textBody='Deleting the User will be invertible. Do you wish to continue?'
-        buttonOneText='Close'
-        buttonTwoText='Delete'
-      />
-
       <Dialog open={dialogState} onClose={closeDialog} aria-labelledby='alert-dialog-title' aria-describedby='alert-dialog-description'>
         <DialogTitle id='alert-dialog-title' className={`font-Inter `}>
-          {'Confirm Starting New Year?'}
+          {dialogText.title}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description' className={`font-Inter `}>
