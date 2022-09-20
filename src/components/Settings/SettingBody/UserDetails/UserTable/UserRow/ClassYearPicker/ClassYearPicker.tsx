@@ -13,7 +13,7 @@ const ClassYearPicker = (props: Props) => {
   const yearDate = props.year ? new Date(props.year, 0) : null;
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Grid container className='justify-end caret-transparent'>
+      <Grid container className=' caret-transparent'>
         <DatePicker
           disabled={props.disabled}
           showToolbar={false}

@@ -10,19 +10,16 @@ interface HeadCell {
   disablePadding: boolean;
   id: keyof TagData;
   label: string;
-  numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
     id: 'name',
-    numeric: false,
     disablePadding: true,
     label: 'Tag Name',
   },
   {
     id: 'colour',
-    numeric: true,
     disablePadding: false,
     label: 'Colour',
   },
@@ -42,43 +39,76 @@ const TagTableHeader = ({ order, orderBy, onRequestSort }: Props) => {
   return (
     <TableHead className='bg-[#4D4D4D]'>
       <TableRow>
-        {headCells.map(headCell => (
-          <TableCell
-            className='text-bgWhite'
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
+        <TableCell
+          className='text-bgWhite'
+          key={headCells[0].id}
+          align={'left'}
+          padding={'normal'}
+          sortDirection={orderBy === headCells[0].id ? order : false}
+        >
+          <TableSortLabel
+            active={orderBy === headCells[0].id}
+            direction={orderBy === headCells[0].id ? order : 'asc'}
+            onClick={createSortHandler(headCells[0].id)}
+            sx={{
+              '&.MuiTableSortLabel-root': {
+                color: 'white',
+              },
+              '&.MuiTableSortLabel-root:hover': {
+                color: '#E33939',
+              },
+              '&.Mui-active': {
+                color: 'white',
+              },
+              '& .MuiTableSortLabel-icon': {
+                color: '#E33939 !important',
+              },
+            }}
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-              sx={{
-                '&.MuiTableSortLabel-root': {
-                  color: 'white',
-                },
-                '&.MuiTableSortLabel-root:hover': {
-                  color: '#E33939',
-                },
-                '&.Mui-active': {
-                  color: 'white',
-                },
-                '& .MuiTableSortLabel-icon': {
-                  color: '#E33939 !important',
-                },
-              }}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component='span' sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-        <TableCell></TableCell>
+            {headCells[0].label}
+            {orderBy === headCells[0].id ? (
+              <Box component='span' sx={visuallyHidden}>
+                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+              </Box>
+            ) : null}
+          </TableSortLabel>
+        </TableCell>
+
+        <TableCell
+          className='text-bgWhite'
+          key={headCells[1].id}
+          align={'left'}
+          padding={'normal'}
+          sortDirection={orderBy === headCells[1].id ? order : false}
+        >
+          <TableSortLabel
+            active={orderBy === headCells[1].id}
+            direction={orderBy === headCells[1].id ? order : 'asc'}
+            onClick={createSortHandler(headCells[1].id)}
+            sx={{
+              '&.MuiTableSortLabel-root': {
+                color: 'white',
+              },
+              '&.MuiTableSortLabel-root:hover': {
+                color: '#E33939',
+              },
+              '&.Mui-active': {
+                color: 'white',
+              },
+              '& .MuiTableSortLabel-icon': {
+                color: '#E33939 !important',
+              },
+            }}
+          >
+            {headCells[1].label}
+            {orderBy === headCells[1].id ? (
+              <Box component='span' sx={visuallyHidden}>
+                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+              </Box>
+            ) : null}
+          </TableSortLabel>
+        </TableCell>
+        <TableCell />
       </TableRow>
     </TableHead>
   );

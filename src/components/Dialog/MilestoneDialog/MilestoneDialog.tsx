@@ -40,7 +40,7 @@ const MilestoneDialog = ({ actionState, milestones, dialogState, successDialog, 
       }
     : {
         title: 'Confirm Start New Year?',
-        body: 'Starting a new year will REMOVED all existing milestones. Please enter your password to continue:',
+        body: 'Starting a new year will remove all existing milestones and bookings. Please enter your password to continue:',
         submitButton: 'Start Year',
       };
 

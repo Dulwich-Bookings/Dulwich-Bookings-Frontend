@@ -79,7 +79,7 @@ const SettingNavigation = ({ isClicked, customClassName }: Props) => {
         }}
       >
         <Grid container>
-          <Stack className='w-full pt-8' spacing={3}>
+          <Stack className='w-full pt-8 pl-8' spacing={3}>
             <BackButton buttonText='Home' onClickHandler={homeButtonClickHandler} />
             <Stack>
               <SettingButton buttonText='Account Details' isClicked={isClicked.account} handleOnClick={accountClickHandler} />

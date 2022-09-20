@@ -1,22 +1,12 @@
 import React, { useState } from 'react';
 
-import {
-  Grid,
-  FormControlLabel,
-  Paper,
-  Switch,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TablePagination,
-  TableRow,
-} from '@mui/material';
+import { Grid, FormControlLabel, Paper, Switch, Table, TableBody, TableContainer, TablePagination } from '@mui/material';
 import TagTableHeader from '@components/Settings/SettingBody/TagDetails/TagTable//TagTableHeader/TagTableHeader';
 import TagRow from '@components/Settings/SettingBody/TagDetails/TagTable/TagRow/TagRow';
 import TagTableToolbar from '@components/Settings/SettingBody/TagDetails/TagTable//TagTableToolbar/TagTableToolbar';
 
 import { TagData } from '@/modules/tag/types';
+import EmptyRow from '../../EmptyRow/EmptyRow';
 
 type Props = {
   tags: TagData[];
@@ -102,7 +92,8 @@ const TagTable = (props: Props) => {
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const emptyRows = Math.max(0, (1 + page) * rowsPerPage - rows.length);
+  const emptyArr = new Array(emptyRows).fill(null);
 
   return (
     <>
@@ -120,15 +111,9 @@ const TagTable = (props: Props) => {
                   .map((row, index) => {
                     return <TagRow key={row.id} rowData={row} index={index} handleEdit={handleEditTag} handleDelete={handleDeleteTag} />;
                   })}
-                {emptyRows > 0 && (
-                  <TableRow
-                    style={{
-                      height: (dense ? 33 : 53) * emptyRows,
-                    }}
-                  >
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
+                {emptyArr.map((input, index) => {
+                  return <EmptyRow key={index} index={index + (tagData.length % 2)} dense={dense} />;
+                })}
               </TableBody>
             </Table>
           </TableContainer>

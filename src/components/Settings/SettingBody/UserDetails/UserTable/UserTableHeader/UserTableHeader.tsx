@@ -10,37 +10,31 @@ interface HeadCell {
   disablePadding: boolean;
   id: keyof UserData;
   label: string;
-  numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
     id: 'email',
-    numeric: false,
     disablePadding: true,
     label: 'Email',
   },
   {
     id: 'id',
-    numeric: true,
     disablePadding: false,
-    label: 'Class',
+    label: 'Graduating Year',
   },
   {
     id: 'role',
-    numeric: true,
     disablePadding: false,
     label: 'Role',
   },
   {
     id: 'isConfirmed',
-    numeric: true,
     disablePadding: false,
     label: 'Confirmed Email',
   },
   {
     id: 'isTemporary',
-    numeric: true,
     disablePadding: false,
     label: 'Temporary',
   },
@@ -82,7 +76,7 @@ const UserTableHeader = ({ onSelectAllClick, order, orderBy, numSelected, rowCou
           <TableCell
             className='text-bgWhite'
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
+            align={'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >

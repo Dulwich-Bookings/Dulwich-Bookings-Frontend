@@ -1,23 +1,13 @@
 import React, { useState } from 'react';
 
-import {
-  Grid,
-  FormControlLabel,
-  Paper,
-  Switch,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TablePagination,
-  TableRow,
-} from '@mui/material';
+import { Grid, FormControlLabel, Paper, Switch, Table, TableBody, TableContainer, TablePagination } from '@mui/material';
 import MilestoneRow from '@components/Settings/SettingBody/MilestoneDetails/MilestoneTable/MilestoneRow/MilestoneRow';
 import MilestoneTableHeader from '@components/Settings/SettingBody/MilestoneDetails/MilestoneTable/MilestoneTableHeader/MilestoneTableHeader';
 
 import { MilestoneData } from '@/modules/Milestones/Types';
 import DateTime from '@/modules/DateTime/DateTime';
 import { Order } from '@/consts/constants';
+import EmptyRow from '../../EmptyRow/EmptyRow';
 
 type Props = {
   milestones: MilestoneData[];
@@ -61,7 +51,7 @@ const MilestoneTable = (props: Props) => {
   const [orderBy, setOrderBy] = useState<keyof MilestoneData>('weekBeginning');
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof MilestoneData) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -83,7 +73,8 @@ const MilestoneTable = (props: Props) => {
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - milestoneData.length) : 0;
+  const emptyRows = Math.max(0, (1 + page) * rowsPerPage - milestoneData.length);
+  const emptyArr = new Array(emptyRows).fill(null);
 
   return (
     <>
@@ -100,20 +91,15 @@ const MilestoneTable = (props: Props) => {
                   .map((row, index) => {
                     return <MilestoneRow key={index} rowData={row} index={index} />;
                   })}
-                {emptyRows > 0 && (
-                  <TableRow
-                    style={{
-                      height: (dense ? 33 : 53) * emptyRows,
-                    }}
-                  >
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
+
+                {emptyArr.map((input, index) => {
+                  return <EmptyRow key={index} index={index + (milestoneData.length % 2)} dense={dense} />;
+                })}
               </TableBody>
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[25, 50, 100]}
+            rowsPerPageOptions={[10, 25, 50, 100]}
             component='div'
             count={milestoneData.length}
             rowsPerPage={rowsPerPage}

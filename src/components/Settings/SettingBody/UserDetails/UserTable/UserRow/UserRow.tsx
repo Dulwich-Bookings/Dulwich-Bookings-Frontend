@@ -95,17 +95,17 @@ const UserRow = ({ rowData, selected, index, checkBoxHandler, handleSuccess }: P
         <TableCell>
           <ClassYearPicker year={year} dateChangeHandler={handleYearChange} disabled={!editMode} />
         </TableCell>
-        <TableCell className='pr-0 text-right'>
+        <TableCell className='pr-0'>
           <InputWithRadio
             labelClassName='hidden'
             inputLabels={[role.STUDENT, role.TEACHER]}
             inputValue={roles}
             inputHandleOnChange={input => handleRoleChange(input.target.value)}
-            inputClassName='justify-end'
+            inputClassName='justify-start'
             disabled={!editMode}
           />
         </TableCell>
-        <TableCell className='text-right'>
+        <TableCell className='text-left'>
           <Checkbox
             color='primary'
             checked={isConfirmed}
@@ -123,7 +123,7 @@ const UserRow = ({ rowData, selected, index, checkBoxHandler, handleSuccess }: P
             disabled={!editMode}
           />
         </TableCell>
-        <TableCell align='right'>
+        <TableCell className='text-left'>
           <Checkbox
             color='primary'
             checked={isTemporary}

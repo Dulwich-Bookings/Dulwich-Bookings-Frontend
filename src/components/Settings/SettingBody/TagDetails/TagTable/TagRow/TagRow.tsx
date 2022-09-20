@@ -20,8 +20,9 @@ const TagRow = ({ rowData, index, handleEdit, handleDelete }: Props) => {
         <TableCell component='th' scope='row'>
           {rowData.name}
         </TableCell>
+
         <TableCell>
-          <Grid container className='justify-end'>
+          <Grid container className='justify-start'>
             <div className='uppercase'>{rowData.colour}</div>
             <SquareIcon className='pb-1' sx={{ color: rowData.colour }} />
           </Grid>

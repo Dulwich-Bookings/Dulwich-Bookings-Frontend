@@ -1,23 +1,13 @@
 import React, { useState } from 'react';
 
-import {
-  Grid,
-  FormControlLabel,
-  Paper,
-  Switch,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TablePagination,
-  TableRow,
-} from '@mui/material';
+import { Grid, FormControlLabel, Paper, Switch, Table, TableBody, TableContainer, TablePagination } from '@mui/material';
 import UserRow from '@components/Settings/SettingBody/UserDetails/UserTable/UserRow/UserRow';
 import UserTableHeader from '@components/Settings/SettingBody/UserDetails/UserTable/UserTableHeader/UserTableHeader';
 import UserTableToolbar from '@components/Settings/SettingBody/UserDetails/UserTable/UserTableToolbar/UserTableToolbar';
 import DeleteUserDialog from '@/components/Dialog/DeleteUserDialog/DeleteUserDialog';
 
 import { UserData } from '@/modules/user/types';
+import EmptyRow from '../../EmptyRow/EmptyRow';
 
 type Props = {
   users: UserData[];
@@ -131,7 +121,8 @@ const UserTable = (props: Props) => {
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const emptyRows = Math.max(0, (1 + page) * rowsPerPage - rows.length);
+  const emptyArr = new Array(emptyRows).fill(null);
 
   return (
     <>
@@ -166,15 +157,9 @@ const UserTable = (props: Props) => {
                       />
                     );
                   })}
-                {emptyRows > 0 && (
-                  <TableRow
-                    style={{
-                      height: (dense ? 33 : 53) * emptyRows,
-                    }}
-                  >
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
+                {emptyArr.map((input, index) => {
+                  return <EmptyRow key={index} index={index + (userData.length % 2)} dense={dense} />;
+                })}
               </TableBody>
             </Table>
           </TableContainer>

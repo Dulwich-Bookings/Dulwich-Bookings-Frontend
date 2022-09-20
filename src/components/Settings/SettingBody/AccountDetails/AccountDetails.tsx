@@ -114,7 +114,7 @@ const AccountDetails = ({ user }: Props) => {
               inputType='password'
               labelClassName='font-Inter text-textGray'
               inputSize='small'
-              inputClassName='settingLaptop:w-1/3 w-full'
+              inputClassName='w-full'
               inputValue={password}
               inputHandleOnChange={input => setPassword(input.target.value)}
               inputValidation={pwError}

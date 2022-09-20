@@ -7,7 +7,7 @@ import { MilestoneData } from '@/modules/Milestones/Types';
 import { Order } from '@/consts/constants';
 
 interface HeadCell {
-  disablePadding: boolean;
+  padding: boolean;
   id: keyof MilestoneData;
   label: string;
   numeric: boolean;
@@ -17,13 +17,13 @@ const headCells: readonly HeadCell[] = [
   {
     id: 'weekBeginning',
     numeric: false,
-    disablePadding: false,
+    padding: true,
     label: 'Date',
   },
   {
     id: 'week',
     numeric: true,
-    disablePadding: false,
+    padding: false,
     label: 'Week',
   },
 ];
@@ -43,10 +43,9 @@ const MilestoneTableHeader = ({ order, orderBy, onRequestSort }: Props) => {
       <TableRow>
         {headCells.map(headCell => (
           <TableCell
-            className='text-bgWhite'
+            className={`text-bgWhite ${headCell.padding ? '' : ''}`}
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
