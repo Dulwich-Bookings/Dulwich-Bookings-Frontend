@@ -52,7 +52,7 @@ const SettingNavigation = ({ isClicked, customClassName }: Props) => {
 
   return (
     <>
-      <Grid container className={`${customClassName} hidden settingLaptop:flex`}>
+      <Grid container className={`${customClassName} w-2/12 justify-end hidden settingLaptop:flex`}>
         <Stack className='w-4/5 pt-8' spacing={3}>
           <BackButton buttonText='Home' onClickHandler={homeButtonClickHandler} />
           <Stack>

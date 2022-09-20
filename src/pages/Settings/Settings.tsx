@@ -21,7 +21,7 @@ const Settings = () => {
           <HomeHeader currentSchool={currentSchool} currentUser={currentUser} />
           <main>
             <Grid container className='w-screen h-screen'>
-              <SettingNavigation isClicked={settingStateMap.ACCOUNT} customClassName='w-2/12 justify-end' />
+              <SettingNavigation isClicked={settingStateMap.ACCOUNT} />
 
               <Grid item className='w-9/12 pt-10'>
                 <AccountDetails user={currentUser} />
