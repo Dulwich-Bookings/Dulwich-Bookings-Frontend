@@ -10,6 +10,7 @@ import { role } from '@/consts/constants';
 import { useApi } from '@/api/ApiHandler';
 import UserService from '@/api/user/UserService';
 import DeleteUserDialog from '@/components/Dialog/DeleteUserDialog/DeleteUserDialog';
+import ClassYearPicker from './ClassYearPicker/ClassYearPicker';
 
 type Props = {
   rowData: UserData;
@@ -22,6 +23,7 @@ type Props = {
 const UserRow = ({ rowData, selected, index, checkBoxHandler, handleSuccess }: Props) => {
   //   const isItemSelected = isSelected(rowData.id);
   const [editMode, setEditMode] = useState<boolean>(false);
+  const [year, setYear] = useState<number>(rowData.class);
   const [roles, setRole] = useState<Role>(rowData.role);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(rowData.isConfirmed);
   const [isTemporary, setIsTemporary] = useState<boolean>(rowData.isTemporary);
@@ -37,13 +39,20 @@ const UserRow = ({ rowData, selected, index, checkBoxHandler, handleSuccess }: P
     }
   };
 
+  const handleYearChange = (date: Date | null) => {
+    if (!date) return;
+    setYear(date?.getFullYear());
+  };
+
   const handleOnSave = async () => {
     try {
       setEditMode(false);
 
-      if (roles === rowData.role && isConfirmed === rowData.isConfirmed && isTemporary === rowData.isTemporary) return;
+      if (year === rowData.class && roles === rowData.role && isConfirmed === rowData.isConfirmed && isTemporary === rowData.isTemporary)
+        return;
 
       const data: UserPutData = {
+        class: year,
         role: roles,
         isConfirmed: isConfirmed,
         isTemporary: isTemporary,
@@ -69,17 +78,23 @@ const UserRow = ({ rowData, selected, index, checkBoxHandler, handleSuccess }: P
       >
         <TableCell padding='checkbox'>
           <Checkbox
-            color='primary'
             checked={selected}
             onClick={() => {
               checkBoxHandler(rowData.id);
+            }}
+            sx={{
+              '&.Mui-checked': {
+                color: '#E33939',
+              },
             }}
           />
         </TableCell>
         <TableCell component='th' scope='row' padding='none'>
           {rowData.email}
         </TableCell>
-        <TableCell className='text-right'>{rowData.class}</TableCell>
+        <TableCell>
+          <ClassYearPicker year={year} dateChangeHandler={handleYearChange} disabled={!editMode} />
+        </TableCell>
         <TableCell className='pr-0 text-right'>
           <InputWithRadio
             labelClassName='hidden'

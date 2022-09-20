@@ -13,6 +13,7 @@ type Props = {
   inputFormat?: string;
   inputValidation?: InputValidation;
   inputValue?: Date;
+  views?: ['day' | 'month' | 'year'];
   inputHandleOnChange: (date: Date | null) => void; // Use with InputValue (Double Binding)
   required?: boolean;
   restriction?: (date: Date) => boolean;
@@ -25,6 +26,7 @@ const InputDatePicker = (props: Props) => {
       <DesktopDatePicker
         inputFormat={props.inputFormat}
         value={props.inputValue}
+        views={props.views}
         onChange={props.inputHandleOnChange}
         shouldDisableDate={props.restriction}
         renderInput={params => (

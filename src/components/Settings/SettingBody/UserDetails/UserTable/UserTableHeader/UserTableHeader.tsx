@@ -65,10 +65,17 @@ const UserTableHeader = ({ onSelectAllClick, order, orderBy, numSelected, rowCou
       <TableRow>
         <TableCell padding='checkbox'>
           <Checkbox
-            color='primary'
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
+            sx={{
+              '&.Mui-checked': {
+                color: '#E33939',
+              },
+              '&.MuiCheckbox-indeterminate': {
+                color: '#E33939',
+              },
+            }}
           />
         </TableCell>
         {headCells.map(headCell => (
