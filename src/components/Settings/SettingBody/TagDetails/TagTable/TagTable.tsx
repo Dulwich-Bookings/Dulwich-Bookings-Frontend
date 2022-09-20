@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Paper from '@mui/material/Paper';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import { visuallyHidden } from '@mui/utils';
+
+import {
+  Grid,
+  FormControlLabel,
+  Paper,
+  Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TablePagination,
+  TableRow,
+} from '@mui/material';
+import TagTableHeader from '@components/Settings/SettingBody/TagDetails/TagTable//TagTableHeader/TagTableHeader';
+import TagRow from '@components/Settings/SettingBody/TagDetails/TagTable/TagRow/TagRow';
+import TagTableToolbar from '@components/Settings/SettingBody/TagDetails/TagTable//TagTableToolbar/TagTableToolbar';
+
 import { TagData } from '@/modules/tag/types';
-import { Grid, Input } from '@mui/material';
-import TagRow from './TagRow/TagRow';
 
 type Props = {
   tags: TagData[];
@@ -56,123 +57,11 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
   return stabilizedThis.map(el => el[0]);
 }
 
-interface HeadCell {
-  disablePadding: boolean;
-  id: keyof TagData;
-  label: string;
-  numeric: boolean;
-}
-
-const headCells: readonly HeadCell[] = [
-  {
-    id: 'name',
-    numeric: false,
-    disablePadding: true,
-    label: 'Tag Name',
-  },
-  {
-    id: 'colour',
-    numeric: true,
-    disablePadding: false,
-    label: 'Colour',
-  },
-];
-
-interface EnhancedTableProps {
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof TagData) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-}
-
-function EnhancedTableHead(props: EnhancedTableProps) {
-  const { order, orderBy, onRequestSort } = props;
-  const createSortHandler = (property: keyof TagData) => (event: React.MouseEvent<unknown>) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead className='bg-[#4D4D4D]'>
-      <TableRow>
-        {headCells.map(headCell => (
-          <TableCell
-            className='text-bgWhite'
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-              sx={{
-                '&.MuiTableSortLabel-root': {
-                  color: 'white',
-                },
-                '&.MuiTableSortLabel-root:hover': {
-                  color: '#E33939',
-                },
-                '&.Mui-active': {
-                  color: 'white',
-                },
-                '& .MuiTableSortLabel-icon': {
-                  color: '#E33939 !important',
-                },
-              }}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component='span' sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-        <TableCell></TableCell>
-      </TableRow>
-    </TableHead>
-  );
-}
-
-interface EnhancedTableToolbarProps {
-  onInputChange: (input: string) => void;
-}
-
-const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { onInputChange } = props;
-  const updateSearchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onInputChange(event.target.value);
-  };
-
-  return (
-    <Toolbar className='sm:pl-2 sm:pr-1 rounded-t-md'>
-      <Grid className='flex-1 '>
-        <Input
-          placeholder='Search Tag...'
-          className='font-Inter'
-          onChange={updateSearchHandler}
-          sx={{
-            ':before': { borderBottomColor: 'black' },
-            // underline when selected
-            ':after': { borderBottomColor: 'red' },
-            '.hover': { borderBottomColor: 'red' },
-          }}
-        />
-      </Grid>
-    </Toolbar>
-  );
-};
-
 const TagTable = (props: Props) => {
   const tagData = props.tags;
   const [rows, setRows] = useState<TagData[]>(tagData);
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof TagData>('name');
-  const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(25);
@@ -181,15 +70,6 @@ const TagTable = (props: Props) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelected = rows.map(n => n.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
   };
 
   const handleEditTag = (id: number) => {
@@ -228,17 +108,10 @@ const TagTable = (props: Props) => {
     <>
       <Grid sx={{ width: '100%' }}>
         <Paper className='drop-shadow-2xl' sx={{ width: '100%', mb: 2 }}>
-          <EnhancedTableToolbar onInputChange={handleInputChange} />
+          <TagTableToolbar onInputChange={handleInputChange} />
           <TableContainer>
             <Table sx={{ minWidth: 750 }} size={dense ? 'small' : 'medium'}>
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={rows.length}
-              />
+              <TagTableHeader order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
               <TableBody>
                 {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}

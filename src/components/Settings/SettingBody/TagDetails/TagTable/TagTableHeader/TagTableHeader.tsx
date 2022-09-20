@@ -1,42 +1,44 @@
 import React from 'react';
 
-import { MilestoneData } from '@/modules/Milestones/Types';
 import { Box, TableHead, TableCell, TableRow, TableSortLabel } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
+
+import { TagData } from '@/modules/tag/types';
 import { Order } from '@/consts/constants';
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof MilestoneData;
+  id: keyof TagData;
   label: string;
   numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'weekBeginning',
+    id: 'name',
     numeric: false,
-    disablePadding: false,
-    label: 'Date',
+    disablePadding: true,
+    label: 'Tag Name',
   },
   {
-    id: 'week',
+    id: 'colour',
     numeric: true,
     disablePadding: false,
-    label: 'Week',
+    label: 'Colour',
   },
 ];
 
 type Props = {
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof MilestoneData) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof TagData) => void;
   order: Order;
   orderBy: string;
 };
 
-const TableHeader = ({ order, orderBy, onRequestSort }: Props) => {
-  const createSortHandler = (property: keyof MilestoneData) => (event: React.MouseEvent<unknown>) => {
+const TagTableHeader = ({ order, orderBy, onRequestSort }: Props) => {
+  const createSortHandler = (property: keyof TagData) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
+
   return (
     <TableHead className='bg-[#4D4D4D]'>
       <TableRow>
@@ -45,7 +47,7 @@ const TableHeader = ({ order, orderBy, onRequestSort }: Props) => {
             className='text-bgWhite'
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
+            padding={'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
@@ -76,9 +78,10 @@ const TableHeader = ({ order, orderBy, onRequestSort }: Props) => {
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell></TableCell>
       </TableRow>
     </TableHead>
   );
 };
 
-export default TableHeader;
+export default TagTableHeader;
