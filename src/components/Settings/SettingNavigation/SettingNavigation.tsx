@@ -91,7 +91,7 @@ const SettingNavigation = ({ isClicked, customClassName }: Props) => {
           </Stack>
         </Grid>
       </Drawer>
-      <Grid className='drop-shadow-2xl h-full flex settingLaptop:hidden'>
+      <Grid className='drop-shadow-2xl h-screen fixed settingLaptop:hidden '>
         <KeyboardArrowRightIcon
           className='cursor-pointer text-right text-[#808080] h-full mr-5 bg-[#404040] '
           onClick={openDrawerHandler}

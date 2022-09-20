@@ -22,9 +22,12 @@ const SettingsResource = () => {
           <HomeHeader currentSchool={currentSchool} currentUser={currentUser} />
           <main>
             <Grid container className='w-screen h-screen'>
-              <SettingNavigation isClicked={settingStateMap.RESOURCE} customClassName='w-2/12 justify-end' />
+              <SettingNavigation isClicked={settingStateMap.RESOURCE} />
 
-              <Grid container className='settingLaptop:w-9/12 settingPhone:w-11/12 settingPhone:block hidden pt-10'>
+              <Grid
+                container
+                className='settingLaptop:w-9/12 settingLaptop:pl-0 settingPhone:w-11/12 settingPhone:pl-12 settingPhone:block hidden pt-10 '
+              >
                 <ResourceDetails user={currentUser} />
               </Grid>
               <UnsupportedSettings />

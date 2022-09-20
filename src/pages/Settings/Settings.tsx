@@ -23,7 +23,7 @@ const Settings = () => {
             <Grid container className='w-screen h-screen'>
               <SettingNavigation isClicked={settingStateMap.ACCOUNT} />
 
-              <Grid item className='w-9/12 pt-10'>
+              <Grid className='settingLaptop:w-9/12 settingLaptop:pl-0 settingPhone:w-11/12 settingPhone:pl-12 settingPhone:block hidden pt-10 '>
                 <AccountDetails user={currentUser} />
               </Grid>
             </Grid>

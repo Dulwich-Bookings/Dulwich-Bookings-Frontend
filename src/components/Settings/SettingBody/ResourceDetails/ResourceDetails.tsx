@@ -29,7 +29,7 @@ const ResourceDetails = ({ user: userSelf }: Props) => {
           <SettingHeader title={`My Resources`} />
         </Grid>
 
-        <Grid container className='justify-center pt-10'>
+        <Grid container className='justify-center pt-10 '>
           <HomeResourceList
             searchedInput=''
             searchState={searchStateMap.ALL}
