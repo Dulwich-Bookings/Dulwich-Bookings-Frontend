@@ -1,28 +1,23 @@
 import React, { useState } from 'react';
 
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
-
-import { visuallyHidden } from '@mui/utils';
-import { UserData } from '@/modules/user/types';
-import UserRow from './UserRow/UserRow';
-import { Grid, Input } from '@mui/material';
+import {
+  Grid,
+  FormControlLabel,
+  Paper,
+  Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TablePagination,
+  TableRow,
+} from '@mui/material';
+import UserRow from '@components/Settings/SettingBody/UserDetails/UserTable/UserRow/UserRow';
+import UserTableHeader from '@components/Settings/SettingBody/UserDetails/UserTable/UserTableHeader/UserTableHeader';
+import UserTableToolbar from '@components/Settings/SettingBody/UserDetails/UserTable/UserTableToolbar/UserTableToolbar';
 import DeleteUserDialog from '@/components/Dialog/DeleteUserDialog/DeleteUserDialog';
+
+import { UserData } from '@/modules/user/types';
 
 type Props = {
   users: UserData[];
@@ -61,151 +56,6 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
   });
   return stabilizedThis.map(el => el[0]);
 }
-
-interface HeadCell {
-  disablePadding: boolean;
-  id: keyof UserData;
-  label: string;
-  numeric: boolean;
-}
-
-const headCells: readonly HeadCell[] = [
-  {
-    id: 'email',
-    numeric: false,
-    disablePadding: true,
-    label: 'Email',
-  },
-  {
-    id: 'id',
-    numeric: true,
-    disablePadding: false,
-    label: 'Class',
-  },
-  {
-    id: 'role',
-    numeric: true,
-    disablePadding: false,
-    label: 'Role',
-  },
-  {
-    id: 'isConfirmed',
-    numeric: true,
-    disablePadding: false,
-    label: 'Confirmed Email',
-  },
-  {
-    id: 'isTemporary',
-    numeric: true,
-    disablePadding: false,
-    label: 'Temporary',
-  },
-];
-
-interface EnhancedTableProps {
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof UserData) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-}
-
-function EnhancedTableHead(props: EnhancedTableProps) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-  const createSortHandler = (property: keyof UserData) => (event: React.MouseEvent<unknown>) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead className='bg-[#4D4D4D]'>
-      <TableRow>
-        <TableCell padding='checkbox'>
-          <Checkbox
-            color='primary'
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-          />
-        </TableCell>
-        {headCells.map(headCell => (
-          <TableCell
-            className='text-bgWhite'
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-              sx={{
-                '&.MuiTableSortLabel-root': {
-                  color: 'white',
-                },
-                '&.MuiTableSortLabel-root:hover': {
-                  color: '#E33939',
-                },
-                '&.Mui-active': {
-                  color: 'white',
-                },
-                '& .MuiTableSortLabel-icon': {
-                  color: '#E33939 !important',
-                },
-              }}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component='span' sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-        <TableCell></TableCell>
-      </TableRow>
-    </TableHead>
-  );
-}
-
-interface EnhancedTableToolbarProps {
-  numSelected: number;
-  onBulkDelete: () => void;
-  onInputChange: (input: string) => void;
-}
-
-const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { numSelected, onBulkDelete, onInputChange } = props;
-  const updateSearchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onInputChange(event.target.value);
-  };
-
-  return (
-    <Toolbar className='sm:pl-2 sm:pr-1'>
-      <Grid className='flex-1 '>
-        <Input
-          placeholder='Search User...'
-          className='font-Inter'
-          onChange={updateSearchHandler}
-          sx={{
-            ':before': { borderBottomColor: 'black' },
-            // underline when selected
-            ':after': { borderBottomColor: 'red' },
-            '.hover': { borderBottomColor: 'red' },
-          }}
-        />
-      </Grid>
-
-      {numSelected > 0 && (
-        <Tooltip title='Delete'>
-          <DeleteIcon className='cursor-pointer text-right text-dulwichRed mr-3' onClick={onBulkDelete} />
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-};
 
 const UserTable = (props: Props) => {
   const userData = props.users;
@@ -287,10 +137,10 @@ const UserTable = (props: Props) => {
     <>
       <Grid sx={{ width: '100%' }}>
         <Paper className='drop-shadow-2xl' sx={{ width: '100%', mb: 2 }}>
-          <EnhancedTableToolbar numSelected={selected.length} onBulkDelete={handleBulkDelete} onInputChange={handleInputChange} />
+          <UserTableToolbar numSelected={selected.length} onBulkDelete={handleBulkDelete} onInputChange={handleInputChange} />
           <TableContainer>
             <Table sx={{ minWidth: 750 }} size={dense ? 'small' : 'medium'}>
-              <EnhancedTableHead
+              <UserTableHeader
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
@@ -298,6 +148,7 @@ const UserTable = (props: Props) => {
                 onRequestSort={handleRequestSort}
                 rowCount={rows.length}
               />
+
               <TableBody>
                 {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
