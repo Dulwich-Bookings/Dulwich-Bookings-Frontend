@@ -3,17 +3,20 @@ import React, { useState, useEffect } from 'react';
 import HomeHeader from '@components/Home/HomeHeader/HomeHeader';
 
 import { useSelector } from 'react-redux';
-import { getCurrentUser } from '@/modules/user/userSlice';
-import { getCurrentSchool } from '@/modules/school/schoolSlice';
-
 import { useApi } from '@/api/ApiHandler';
 import TagService from '@/api/tag/TagService';
 import UserService from '@/api/user/UserService';
-import { TagData } from '@/modules/tag/types';
-import { UserData } from '@/modules/user/types';
 
 import AddRoomForm from '@/components/AddResource/Forms/AddRoomForm/AddRoomForm';
+import { Grid, Stack } from '@mui/material';
+
+import { getCurrentUser } from '@/modules/user/userSlice';
+import { getCurrentSchool } from '@/modules/school/schoolSlice';
+import { TagData } from '@/modules/tag/types';
+import { UserData } from '@/modules/user/types';
 import { retrieveAllData } from '@/utilities/api';
+
+import ResourceSample1 from '@/assets/images/Resource-Sample-1.jpg';
 
 const AddRoom = () => {
   const [getAllTags] = useApi(() => TagService.getAllTags(), false, true, false);
@@ -44,7 +47,20 @@ const AddRoom = () => {
           <HomeHeader currentSchool={currentSchool} currentUser={currentUser} />
           <main>
             <div className='hidden addRoomSmallerLaptop:block'>
-              <AddRoomForm tagData={tags} userData={users} />
+              <Stack direction='row' className='w-screen justify-start'>
+                <Grid className='w-2/3'>
+                  <AddRoomForm
+                    tagData={tags}
+                    userData={users}
+                    editMode={false}
+                    closeEditForm={() => {
+                      return;
+                    }}
+                  />
+                </Grid>
+
+                <img className='hidden w-1/3 h-screen float-right object-cover addRoomLaptop:block' src={ResourceSample1} />
+              </Stack>
             </div>
             <div className='flex w-screen justify-center h-screen items-center addRoomSmallerLaptop:hidden'>
               <div className='font-Inter text-[24px] text-center pb-20 px-5'>This page is not supported for small screens</div>

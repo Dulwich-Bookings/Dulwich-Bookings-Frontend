@@ -24,6 +24,10 @@ const HomeHeader = ({ currentUser, currentSchool }: Props) => {
     history.push('/home');
   };
 
+  const handleProfileIconClick = () => {
+    history.push('/settings');
+  };
+
   const handleViewAll = () => {
     history.push('/home/viewAll');
   };
@@ -59,7 +63,7 @@ const HomeHeader = ({ currentUser, currentSchool }: Props) => {
               className='mr-6'
               Icon={<FormatListBulleted className='w-5' />}
             />
-            <UserProfileCircle email={currentUser?.email} className='mr-8' />
+            <UserProfileCircle email={currentUser?.email} className='mr-8 h-12 w-12' handleOnClick={handleProfileIconClick} />
           </Grid>
         </Grid>
       </Grid>

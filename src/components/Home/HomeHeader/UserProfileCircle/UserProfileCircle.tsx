@@ -4,9 +4,10 @@ import { Box } from '@mui/system';
 type Props = {
   email?: string;
   className?: string;
+  handleOnClick?: () => void;
 };
 
-const UserProfileCircle = ({ email, className }: Props) => {
+const UserProfileCircle = ({ email, className, handleOnClick }: Props) => {
   const profileName = email ? email.substring(0, email.lastIndexOf('@')) : '?';
   const initials =
     profileName.lastIndexOf('.') === -1
@@ -14,7 +15,7 @@ const UserProfileCircle = ({ email, className }: Props) => {
       : (profileName.charAt(0) + profileName.charAt(profileName.lastIndexOf('.') + 1)).toUpperCase();
 
   return (
-    <Box className={`flex bg-bgPurple rounded-full justify-center items-center w-12 h-12 cursor-pointer ${className}`}>
+    <Box className={`flex bg-bgPurple rounded-full justify-center items-center cursor-pointer ${className}`} onClick={handleOnClick}>
       <p className='font-Inter'>{initials}</p>
     </Box>
   );

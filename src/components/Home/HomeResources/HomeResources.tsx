@@ -38,6 +38,10 @@ const HomeResources = (props: Props) => {
           isRvViewClicked={rvClicked}
           className={'py-20'}
           currentUser={props.currentUser}
+          editMode={false}
+          editResourceHandler={() => {
+            return;
+          }}
         />
       </Stack>
     </Grid>

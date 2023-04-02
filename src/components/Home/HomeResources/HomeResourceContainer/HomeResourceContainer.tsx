@@ -11,6 +11,7 @@ import ResourceTag from '@/components/Home/HomeResources/HomeResourceContainer/R
 import ResourceRights from '@/components/Home/HomeResources/HomeResourceContainer/ResourceRights/ResourceRights';
 import { SubscriptionData } from '@/modules/subscription/types';
 import { TagMapData } from '@/modules/tagMap/types';
+import EditButton from './EditButton/EditButton';
 
 type Props = {
   data: ResourceData | SubscriptionData;
@@ -20,13 +21,17 @@ type Props = {
   isRecentlyVisited: boolean;
   onBookmarkChangeHandler: (id: number, type: SearchState) => void;
   onRecentlyVisitedHandler: (id: number, type: SearchState, isRecentlyVisited: boolean) => void;
+  editMode: boolean;
+  onEditHandler: (data: ResourceData | SubscriptionData, tagData: TagData[]) => void;
 };
 
 const vacancy = true;
 
-const HomeRoomItem = (props: Props) => {
+const HomeResourceContainer = (props: Props) => {
   const [isBookmark, setIsBookmark] = useState(props.isBookmark);
   const [openModal, setOpenModal] = useState<boolean>(false);
+
+  const { editMode } = props;
 
   const filterTagMaps = (): TagMapData[] => {
     if (props.data.type === resourceTypes.RESOURCE) {
@@ -43,6 +48,9 @@ const HomeRoomItem = (props: Props) => {
   );
 
   const handleOpenModal = () => {
+    if (editMode) {
+      return;
+    }
     setOpenModal(true);
   };
 
@@ -50,11 +58,18 @@ const HomeRoomItem = (props: Props) => {
     setOpenModal(false);
   };
 
+  const handleEdit = () => {
+    props.onEditHandler(props.data, filteredTags);
+  };
+
   return (
     <>
       <Grid item className='w-full homeLaptop:w-auto'>
+        {editMode && <EditButton handleOnClick={handleEdit} />}
         <Card
-          className='bg-bgGray rounded-xl w-full homeLaptop:w-80 h-48 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)] cursor-pointer'
+          className={`bg-bgGray rounded-xl w-full homeLaptop:w-80 h-48 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)] ${
+            !props.editMode && 'cursor-pointer'
+          }`}
           onClick={handleOpenModal}
         >
           <div
@@ -63,11 +78,14 @@ const HomeRoomItem = (props: Props) => {
               props.onRecentlyVisitedHandler(props.data.id, props.data.type, props.isRecentlyVisited);
             }}
           >
-            <CardContent className='grow'>
+            <CardContent className='grow relative'>
               <Stack spacing={-2}>
                 <div className='w-full z-10'>
                   <Bookmark
                     onClick={async () => {
+                      if (editMode) {
+                        return;
+                      }
                       setIsBookmark(!props.isBookmark);
                       await props.onBookmarkChangeHandler(props.data.id, props.data.type);
                     }}
@@ -115,4 +133,4 @@ const HomeRoomItem = (props: Props) => {
   );
 };
 
-export default HomeRoomItem;
+export default HomeResourceContainer;
