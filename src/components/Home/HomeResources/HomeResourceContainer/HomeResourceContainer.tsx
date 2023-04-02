@@ -38,6 +38,7 @@ type Props = {
 const vacancy = true;
 
 const HomeResourceContainer = (props: Props) => {
+const HomeResourceContainer = (props: Props) => {
   const [isBookmark, setIsBookmark] = useState(props.isBookmark);
   const [openCalendarModal, setOpenCalendarModal] = useState<boolean>(false);
   const [openSubscriptionModal, setOpenSubscriptionModal] = useState<boolean>(false);
@@ -73,6 +74,7 @@ const HomeResourceContainer = (props: Props) => {
     props.onEditHandler(props.data, filteredTags);
   };
 
+
   return (
     <>
       {props.data.type === searchStateMap.SUBSCRIPTIONS && (
@@ -93,6 +95,7 @@ const HomeResourceContainer = (props: Props) => {
       )}
       <Grid item className='w-full homeLaptop:w-auto'>
         {editMode && <EditButton handleOnClick={handleEdit} />}
+        {editMode && <EditButton handleOnClick={handleEdit} />}
         <Card
           className={`bg-bgGray rounded-xl w-full homeLaptop:w-80 h-48 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)] cursor-pointer${
             !props.editMode && 'cursor-pointer'
@@ -107,10 +110,14 @@ const HomeResourceContainer = (props: Props) => {
             }}
           >
             <CardContent className='grow relative'>
+            <CardContent className='grow relative'>
               <Stack spacing={-2}>
                 <div className='w-full z-10'>
                   <Bookmark
                     onClick={async () => {
+                      if (editMode) {
+                        return;
+                      }
                       if (editMode) {
                         return;
                       }
