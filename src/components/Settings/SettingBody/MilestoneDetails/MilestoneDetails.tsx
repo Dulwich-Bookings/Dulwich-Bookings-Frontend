@@ -25,6 +25,7 @@ const MilestoneDetails = ({ milestones: oldMilestones, handleRefresh }: Props) =
   const [actionState, setActionState] = useState<boolean>(true);
   const [createMilestones, setMilestones] = useState<MilestoneFormData[]>([]);
   const [duplicateError, setDuplicateError] = useState<boolean>();
+  const [redundantError, setRedundantError] = useState<boolean>();
 
   const addMilestoneHandler = () => {
     if (hasMilestones) return;
@@ -70,12 +71,41 @@ const MilestoneDetails = ({ milestones: oldMilestones, handleRefresh }: Props) =
     setMilestones([...newMilestones]);
   };
 
+  const redundantDatesHelper = (milestones: MilestoneFormData[]): boolean => {
+    let firstMilestoneWeekNumber = milestones[0].week;
+    let firstMilestoneDate = milestones[0].weekBeginning;
+
+    for (let i = 1; i < milestones.length; i++) {
+      const currentMilestone = milestones[i];
+      const currentMilestoneWeekNumber = currentMilestone.week;
+      const currentMilestoneDate = currentMilestone.weekBeginning;
+      const weekDiff = Math.round((currentMilestoneDate.getTime() - firstMilestoneDate.getTime()) / (1000 * 3600 * 24)) / 7;
+
+      // If the week number is the same despite the date being even number of weeks apart
+      if (
+        (weekDiff % 2 == 0 && currentMilestoneWeekNumber == firstMilestoneWeekNumber) ||
+        (weekDiff % 2 == 1 && currentMilestoneWeekNumber != firstMilestoneWeekNumber)
+      ) {
+        // Return true to indicate that there are redundant dates
+        return true;
+      } else {
+        // Update the first milestone to the current milestone
+        firstMilestoneWeekNumber = currentMilestoneWeekNumber;
+        firstMilestoneDate = currentMilestoneDate;
+      }
+    }
+
+    return false;
+  };
+
   const saveMilestoneHandler = () => {
     const milestoneDates = createMilestones.map(milestone => milestone.weekBeginning.getDate());
-    const duplicate = milestoneDates.filter((date, index) => milestoneDates.indexOf(date) !== index).length !== 0;
-    setDuplicateError(duplicate);
+    const duplicateSameDate = milestoneDates.filter((date, index) => milestoneDates.indexOf(date) !== index).length !== 0;
+    const redundantDate = redundantDatesHelper(createMilestones);
+    setRedundantError(redundantDate);
+    setDuplicateError(duplicateSameDate);
 
-    if (duplicate) {
+    if (duplicateSameDate || redundantDate) {
       return;
     }
 
@@ -147,7 +177,9 @@ const MilestoneDetails = ({ milestones: oldMilestones, handleRefresh }: Props) =
           </>
         )}
       </Stack>
-      <div className={`${duplicateError ? 'block text-dulwichRed' : 'hidden'}`}>Please remove duplicate entries!</div>
+      <div className={`${duplicateError || redundantError ? 'block text-dulwichRed' : 'hidden'}`}>
+        {`${duplicateError ? 'Please remove duplicate entries!' : 'Please remove redundant entries!'}`}
+      </div>
 
       <MilestoneDialog
         actionState={actionState}
