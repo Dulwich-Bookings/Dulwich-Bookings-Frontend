@@ -47,6 +47,22 @@ export default class SubscriptionService {
     }
   }
 
+  public static async getSubscriptionSelf(): Promise<ApiData> {
+    try {
+      const response = await ApiService.request(
+        {
+          url: `${this.getSubscriptionUrl()}/self`,
+          method: 'GET',
+        },
+        true,
+      );
+      response.data.expiry = response.data.expiry ? DateTime.newDateTimeFromUTCString(response.data.expiry) : null;
+      return response;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
   public static async createSubscription(createSubscriptionData: CreateSubscriptionData): Promise<ApiData> {
     try {
       const response = await ApiService.request(

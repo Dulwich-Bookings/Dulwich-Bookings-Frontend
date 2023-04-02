@@ -110,12 +110,14 @@ const Test = () => {
   const [createSubscription] = useApi(() => SubscriptionService.createSubscription(createSubscriptionData), true, true);
   const [getAllSubscriptions] = useApi(() => SubscriptionService.getAllSubscriptions(), true, true);
   const [getSubscriptionById] = useApi(() => SubscriptionService.getSubscriptionById(2), true, true);
+  const [getSubscriptionSelf] = useApi(() => SubscriptionService.getSubscriptionSelf(), true, true);
   const [updateSubscriptionById] = useApi(() => SubscriptionService.updateSubscriptionById(6, updateSubscriptionData), true, true);
   const [deleteSubscriptionById] = useApi(() => SubscriptionService.deleteSubscriptionById(2), true, true);
 
   const [createResource] = useApi(() => ResourceService.createResource(createResourceData), true, true);
   const [getAllResources] = useApi(() => ResourceService.getAllResources(), true, true);
   const [getResourceById] = useApi(() => ResourceService.getResourceById(27), true, true);
+  const [getResourceSelf] = useApi(() => ResourceService.getResourceSelf(), true, true);
   const [updateResourceById] = useApi(() => ResourceService.updateResourceById(27, updateResourceData), true, true);
   const [deleteResourceById] = useApi(() => ResourceService.deleteResourceById(27), true, true);
 
@@ -277,6 +279,9 @@ const Test = () => {
             <Button variant='contained' onClick={() => handleButtonClick(getSubscriptionById)}>
               Get Subscription By Id
             </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getSubscriptionSelf)}>
+              Get Subscription Self
+            </Button>
             <Button variant='contained' onClick={() => handleButtonClick(updateSubscriptionById)}>
               Update Subscription By Id
             </Button>
@@ -295,6 +300,9 @@ const Test = () => {
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(getResourceById)}>
               Get Resource by Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getResourceSelf)}>
+              Get Resource Self
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(updateResourceById)}>
               Update Resource By Id
