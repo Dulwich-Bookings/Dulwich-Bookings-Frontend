@@ -18,7 +18,7 @@ import { SchoolData } from '@/modules/school/types';
 
 import TailWindTheme from '@/tailwind.config';
 
-const { colors } = TailWindTheme.theme;
+const { colors } = TailWindTheme.theme.extend;
 
 type Props = {
   data: ResourceData | SubscriptionData;
