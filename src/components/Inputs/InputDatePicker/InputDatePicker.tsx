@@ -13,8 +13,10 @@ type Props = {
   inputFormat?: string;
   inputValidation?: InputValidation;
   inputValue?: Date;
+  views?: ['day' | 'month' | 'year'];
   inputHandleOnChange: (date: Date | null) => void; // Use with InputValue (Double Binding)
   required?: boolean;
+  restriction?: (date: Date) => boolean;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -24,7 +26,9 @@ const InputDatePicker = (props: Props) => {
       <DesktopDatePicker
         inputFormat={props.inputFormat}
         value={props.inputValue}
+        views={props.views}
         onChange={props.inputHandleOnChange}
+        shouldDisableDate={props.restriction}
         renderInput={params => (
           <InputWithoutBorder
             inputProps={params}

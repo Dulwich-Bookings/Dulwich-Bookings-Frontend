@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
-import { Button, ButtonGroup, Stack } from '@mui/material';
 import UserChip from '@/components/AddResource/Forms/OtherUserInput/UserChip/UserChip';
+import { Button, ButtonGroup, Stack } from '@mui/material';
+
 import { UserData } from '@/modules/user/types';
-import { useSelector } from 'react-redux';
 import { getCurrentUser } from '@/modules/user/userSlice';
 
 type Props = {
   inputClassName?: string; // Optional ClassNames for Input
   userData: UserData[];
+  oldUsers?: UserData[];
   updateUsers: (data: UserData[]) => void;
 };
 
@@ -17,7 +19,7 @@ const OtherUserInput = (props: Props) => {
   const currentUser = useSelector(getCurrentUser);
   const [addOtherUsersValue, setOtherUsersInputValue] = useState('');
   const [filteredOtherUsers, setFilteredOtherUsers] = useState<UserData[]>([]);
-  const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>([]);
+  const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>(props.oldUsers ?? []);
 
   // Helper Functions
   const isUserAlreadySelected = (user: UserData) =>
@@ -35,6 +37,14 @@ const OtherUserInput = (props: Props) => {
     setSelectedOtherUsers(selectedOtherUsers.filter(user => user.id !== userToDelete));
   };
 
+  useEffect(() => {
+    props.updateUsers(selectedOtherUsers);
+  }, [selectedOtherUsers]);
+
+  useEffect(() => {
+    setSelectedOtherUsers(props.oldUsers ?? []);
+  }, [props.oldUsers]);
+
   return (
     <div className={props.inputClassName}>
       <Stack spacing={1} position='absolute' className='w-80 z-10'>
@@ -42,7 +52,7 @@ const OtherUserInput = (props: Props) => {
           inputHandleOnChange={input => otherUsersChangeHandler(input.target.value)}
           inputValue={addOtherUsersValue}
           labelText='Add Others'
-          labelClassName='text-bgDarkGray text-xl font-inter'
+          labelClassName='text-textGray text-xl font-inter'
           inputPlaceholder='name@dulwich.com'
           inputType='text'
           inputClassName='bg-bgGray rounded-xl w-full focus-within:bg-bgWhite'

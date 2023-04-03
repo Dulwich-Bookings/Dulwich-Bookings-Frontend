@@ -20,7 +20,7 @@ const FormHeader = ({ title, disableUpload }: Props) => {
       <Stack direction='row' alignItems='center'>
         <Stack className='w-3/4' spacing={2}>
           <Box onClick={returnResourcePage}>
-            <BackButton buttonName='Add Resource' />
+            <BackButton buttonText='Add Resource' />
           </Box>
           <Typography variant='h4' className='font-Inter'>
             {title}

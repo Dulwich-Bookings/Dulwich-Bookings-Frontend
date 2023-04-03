@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Stack, Grid } from '@mui/material';
+import SubscriptionService from '@/api/subscription/SubscriptionService';
+import { isSuccess, useApi } from '@/api/ApiHandler';
+import { ApiData } from '@/api/ApiService';
 
+import BackButton from '@/components/AddResource/BackButton/BackButton';
 import TagInput from '@/components/AddResource/Forms/TagInput/TagInput';
 import InputCheckBox from '@/components/Inputs/InputCheckBox/InputCheckBox';
 import OtherUserInput from '@/components/AddResource/Forms/OtherUserInput/OtherUserInput';
@@ -10,44 +13,63 @@ import FormHeader from '@components/AddResource/FormHeader/FormHeader';
 import FormSubmitButton from '@/components/AddResource/Forms/FormSubmitButton/FormSubmitButton';
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
 import InputDatePicker from '@/components/Inputs/InputDatePicker/InputDatePicker';
-import ResourceSample1 from '@/assets/images/Resource-Sample-2.png';
-
-import SubscriptionService from '@/api/subscription/SubscriptionService';
-import { useApi } from '@/api/ApiHandler';
+import DialogWrapper from '@/components/Dialog/DialogWrapper/DialogWrapper';
+import { Stack, Grid } from '@mui/material';
 
 import { role } from '@/consts/constants';
 import { InputValidation } from '@/modules/inputValidation/types';
-import { CreateSubscriptionData } from '@/modules/subscription/types';
+import { CreateSubscriptionData, SubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
 import { TagData } from '@/modules/tag/types';
 import { Role, UserData } from '@/modules/user/types';
 import DateTime from '@/modules/DateTime/DateTime';
 
 type Props = {
+  formClassName?: string; //Optional to style the form size
   tagData: TagData[];
   userData: UserData[];
+  oldFormData?: SubscriptionData;
+  oldFormTags?: TagData[];
+  oldFormUsers?: UserData[];
+  editMode: boolean;
+  closeEditForm: () => void;
 };
 
 const AddSubscriptionForm = (props: Props) => {
   const noError: InputValidation = { isError: false, errorHelperText: '' };
+  const { oldFormData: oldData, oldFormTags: oldTags, oldFormUsers: oldUsers } = props;
 
   // react hooks
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [subscriptionName, setSubscriptionName] = useState<string>('');
+  const [subscriptionName, setSubscriptionName] = useState<string>(oldData?.name ?? '');
   const [subscriptionError, setSubscriptionError] = useState<InputValidation>(noError);
-  const [description, setDescription] = useState<string>('');
+  const [description, setDescription] = useState<string>(oldData?.description ?? '');
   const [descriptionError, setDescriptionError] = useState<InputValidation>(noError);
-  const [credentials, setCredentials] = useState<string>('');
+  const [credentials, setCredentials] = useState<string>(oldData?.credentials ?? '');
   const [credentialsError, setCredentialsError] = useState<InputValidation>(noError);
-  const [accessRights, setAccessRights] = useState<Role[]>([]);
-  const [accessOptions, setAccessOptions] = useState({ option1: false, option2: false });
+  const [accessOptions, setAccessOptions] = useState(
+    (oldData?.accessRights && {
+      option1: oldData.accessRights.indexOf(role.STUDENT) > -1,
+      option2: oldData.accessRights.indexOf(role.TEACHER) > -1,
+    }) ?? {
+      option1: false,
+      option2: false,
+    },
+  );
   const [accessError, setAccessError] = useState<InputValidation>(noError);
-  const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
-  const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>([]);
-  const [expiryDate, setExpiryDate] = useState<Date>(new Date());
-  const [linkURL, setLinkURL] = useState<string>('');
+  const [selectedTags, setSelectedTags] = useState<TagData[]>(oldTags ?? []);
+  const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>(oldUsers ?? []);
+  const [expiryDate, setExpiryDate] = useState<Date>(oldData?.expiry?.toDate() ?? new Date());
+  const [linkURL, setLinkURL] = useState<string>(oldData?.link ?? '');
+  const [showDialog, setShowDialog] = useState<boolean>(false);
 
   // useApi hook
   const [createSubscription] = useApi((data: CreateSubscriptionData) => SubscriptionService.createSubscription(data ?? null), true, true);
+  const [updateSubscription] = useApi(
+    (data: SubscriptionPutData) => SubscriptionService.updateSubscriptionById(oldData?.id ?? -1, data ?? null),
+    true,
+    true,
+  );
+  const [deleteSubscription] = useApi((data: number) => SubscriptionService.deleteSubscriptionById(data ?? -1), true, true);
 
   // useHistory hook
   const history = useHistory();
@@ -66,24 +88,24 @@ const AddSubscriptionForm = (props: Props) => {
   };
 
   const updateARHandler = (option1: boolean, option2: boolean): void => {
-    const arr: Role[] = [role.ADMIN];
     let options = { option1: false, option2: false };
-    setAccessOptions({ option1: false, option2: false });
-
     if (option1) {
-      arr.push(role.STUDENT, role.TEACHER);
       options = { option1: true, option2: true };
     }
-
     if (option2) {
-      if (arr.indexOf(role.TEACHER) < 0) {
-        arr.push(role.TEACHER);
-      }
       options = { ...options, option2: true };
     }
-
     setAccessOptions(options);
-    setAccessRights(arr);
+  };
+
+  const optionsToArrayHandler = (option1: boolean, option2: boolean, arr: Role[]): Role[] => {
+    if (option1) {
+      arr.push(role.STUDENT);
+    }
+    if (option2) {
+      arr.push(role.TEACHER);
+    }
+    return arr;
   };
 
   const updateDateHandler = (date: Date | null): void => {
@@ -92,6 +114,14 @@ const AddSubscriptionForm = (props: Props) => {
     }
 
     setExpiryDate(date);
+  };
+
+  const handleShowDialog = () => {
+    setShowDialog(true);
+  };
+
+  const handleHideDialog = () => {
+    setShowDialog(false);
   };
 
   const formValidation = () => {
@@ -105,7 +135,7 @@ const AddSubscriptionForm = (props: Props) => {
     const isValidDescription = description.length !== 0;
     const isValidCredentials = credentials.length !== 0;
     // by default role.ADMIN has access
-    const isValidAccessRights = accessRights.filter(d => d).length > 1;
+    const isValidAccessRights = accessOptions.option1 || accessOptions.option2;
 
     setSubscriptionError(isValidName ? noError : errorObj);
     setDescriptionError(isValidDescription ? noError : errorObj);
@@ -124,11 +154,13 @@ const AddSubscriptionForm = (props: Props) => {
       setIsLoading(true);
       formValidation();
 
+      const accessRights: Role[] = [role.ADMIN];
+
       const subscriptionData: CreateSubscriptionData = {
         subscription: {
           name: subscriptionName,
           description: description,
-          accessRights: accessRights,
+          accessRights: optionsToArrayHandler(accessOptions.option1, accessOptions.option2, accessRights),
           credentials: credentials,
           expiry: DateTime.newDateTimeFromDate(expiryDate),
           // hard coded values will be changed subsequently in the future
@@ -139,10 +171,19 @@ const AddSubscriptionForm = (props: Props) => {
         users: selectedOtherUsers.map(user => user.id),
       };
 
-      const sendReq = await createSubscription(subscriptionData);
+      let sendReq: ApiData<CreateSubscriptionData | SubscriptionPutData> & isSuccess;
+
+      if (!props.editMode) {
+        sendReq = await createSubscription(subscriptionData);
+      } else {
+        sendReq = await updateSubscription(subscriptionData);
+      }
 
       if (sendReq.isSuccess) {
-        history.push('/home');
+        if (!props.editMode) {
+          history.push('/home');
+        }
+        props.closeEditForm();
       }
       setIsLoading(false);
     } catch (err) {
@@ -151,105 +192,154 @@ const AddSubscriptionForm = (props: Props) => {
     }
   };
 
+  const handleDeleteSubscription = async () => {
+    const sendReq = await deleteSubscription(oldData?.id);
+    if (sendReq.isSuccess) {
+      props.closeEditForm();
+    }
+  };
+
+  useEffect(() => {
+    setSubscriptionName(oldData?.name ?? '');
+    setDescription(oldData?.description ?? '');
+    setCredentials(oldData?.credentials ?? '');
+    setSelectedTags(oldTags ?? []);
+    setSelectedOtherUsers(oldUsers ?? []);
+    setExpiryDate(oldData?.expiry?.toDate() ?? new Date());
+    setLinkURL(oldData?.link ?? '');
+    setAccessOptions(
+      (oldData?.accessRights && {
+        option1: oldData.accessRights.indexOf(role.STUDENT) > -1,
+        option2: oldData.accessRights.indexOf(role.TEACHER) > -1,
+      }) ?? {
+        option1: false,
+        option2: false,
+      },
+    );
+  }, [oldData, oldTags, oldUsers]);
+
   return (
     <>
-      <Stack direction='row' className='w-screen justify-start'>
-        <Stack className='addRoomLaptop:w-2/3 w-screen py-10 px-24' spacing={2}>
-          <FormHeader title='Add Subscription' disableUpload={true} />
+      <Stack className={`addRoomLaptop:w-full w-screen py-10 px-24 ${props.formClassName}`} spacing={2}>
+        {!props.editMode && <FormHeader title='Add Subscription' disableUpload={true} />}
+        {props.editMode && <BackButton buttonText='Back' onClickHandler={props.closeEditForm} />}
 
+        <Grid item className='w-1/2'>
+          <InputWithoutBorder
+            inputHandleOnChange={input => setSubscriptionName(input.target.value)}
+            inputValue={subscriptionName}
+            labelText='Name'
+            inputPlaceholder='Add the subscription name'
+            inputValidation={subscriptionError}
+            inputType='text'
+            inputClassName='rounded-xl w-3/4 bg-bgGray focus-within:bg-bgWhite'
+            required={true}
+          />
+        </Grid>
+
+        <InputWithoutBorder
+          inputSize='small'
+          inputHandleOnChange={input => setDescription(input.target.value)}
+          inputValue={description}
+          labelText='Description'
+          labelClassName='text-textGray text-xl font-inter'
+          inputPlaceholder='Add the subscription description'
+          inputType='text'
+          inputValidation={descriptionError}
+          inputClassName='bg-bgGray w-full rounded-xl focus-within:bg-bgWhite'
+          inputRow={3}
+          multiline={true}
+          required={true}
+        />
+
+        <InputWithoutBorder
+          inputSize='small'
+          inputHandleOnChange={input => updateCredentialsHandler(input.target.value)}
+          inputValue={credentials}
+          labelText='Credentials'
+          labelClassName='text-textGray text-xl font-inter'
+          inputPlaceholder='Add the credentials'
+          inputType='text'
+          inputValidation={credentialsError}
+          inputClassName='bg-bgGray w-full rounded-xl focus-within:bg-bgWhite'
+          inputRow={3}
+          multiline={true}
+          required={true}
+        />
+
+        <Grid container>
+          <TagInput inputClassName='w-1/2' tags={props.tagData} oldTags={oldTags} updateTags={updateTagHandler} />
+
+          <OtherUserInput
+            inputClassName='w-1/2 pl-[70px] relative'
+            userData={props.userData}
+            oldUsers={oldUsers}
+            updateUsers={updateUserHandler}
+          />
+        </Grid>
+
+        <Grid container>
           <Grid item className='w-1/2'>
+            <InputDatePicker
+              labelText='Expiry date'
+              inputValue={expiryDate}
+              inputFormat='MM/dd/yyyy'
+              inputClassName='rounded-xl w-1/2 bg-bgGray focus-within:bg-bgWhite caret-transparent'
+              inputHandleOnChange={input => updateDateHandler(input)}
+            />
+          </Grid>
+          <Grid item className='w-1/2 pl-[70px]'>
             <InputWithoutBorder
-              inputHandleOnChange={input => setSubscriptionName(input.target.value)}
-              inputValue={subscriptionName}
-              labelText='Name'
-              inputPlaceholder='Add the subscription name'
-              inputValidation={subscriptionError}
+              inputHandleOnChange={input => setLinkURL(input.target.value)}
+              inputValue={linkURL}
+              labelText='Link'
+              inputPlaceholder='Add the link'
               inputType='text'
-              inputClassName='rounded-xl w-3/4 bg-bgGray focus-within:bg-bgWhite'
-              required={true}
+              inputClassName='rounded-xl w-80 bg-bgGray focus-within:bg-bgWhite'
             />
           </Grid>
+        </Grid>
 
-          <InputWithoutBorder
-            inputSize='small'
-            inputHandleOnChange={input => setDescription(input.target.value)}
-            inputValue={description}
-            labelText='Description'
-            labelClassName='text-[#404040] text-xl font-inter'
-            inputPlaceholder='Add the subscription description'
-            inputType='text'
-            inputValidation={descriptionError}
-            inputClassName='bg-bgGray w-full rounded-xl focus-within:bg-bgWhite'
-            inputRow={3}
-            multiline={true}
-            required={true}
+        <Grid container className='z-0'>
+          <InputCheckBox
+            inputClassName='w-1/2'
+            labelText='Access Rights'
+            inputLabelText={['Student', 'Teacher']}
+            inputValue={accessOptions}
+            inputHandleOnChange={updateARHandler}
+            inputValidation={accessError}
+            required
           />
+        </Grid>
 
-          <InputWithoutBorder
-            inputSize='small'
-            inputHandleOnChange={input => updateCredentialsHandler(input.target.value)}
-            inputValue={credentials}
-            labelText='Credentials'
-            labelClassName='text-[#404040] text-xl font-inter'
-            inputPlaceholder='Add the credentials'
-            inputType='text'
-            inputValidation={credentialsError}
-            inputClassName='bg-bgGray w-full rounded-xl focus-within:bg-bgWhite'
-            inputRow={3}
-            multiline={true}
-            required={true}
+        <Stack direction='row' spacing={5} className='z-0'>
+          <FormSubmitButton
+            buttonClassName='w-64 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter'
+            buttonText={`${(props.editMode && 'Update Subscription') || (!props.editMode && 'Add Subscription')}`}
+            handleOnClick={handleCreateResource}
+            loading={isLoading}
           />
-
-          <Grid container>
-            <TagInput inputClassName='w-1/2' tags={props.tagData} updateTags={updateTagHandler} />
-
-            <OtherUserInput inputClassName='w-1/2 pl-[70px] relative' userData={props.userData} updateUsers={updateUserHandler} />
-          </Grid>
-
-          <Grid container>
-            <Grid item className='w-1/2'>
-              <InputDatePicker
-                labelText='Expiry date'
-                inputValue={expiryDate}
-                inputFormat='MM/dd/yyyy'
-                inputClassName='rounded-xl w-1/2 bg-bgGray focus-within:bg-bgWhite caret-transparent'
-                inputHandleOnChange={input => updateDateHandler(input)}
+          {props.editMode && (
+            <>
+              <FormSubmitButton
+                buttonClassName='w-64 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter'
+                buttonText={`Delete Subscription`}
+                handleOnClick={handleShowDialog}
+                loading={isLoading}
               />
-            </Grid>
-            <Grid item className='w-1/2 pl-[70px]'>
-              <InputWithoutBorder
-                inputHandleOnChange={input => setLinkURL(input.target.value)}
-                inputValue={linkURL}
-                labelText='Link'
-                inputPlaceholder='Add the link'
-                inputType='text'
-                inputClassName='rounded-xl w-80 bg-bgGray focus-within:bg-bgWhite'
+
+              <DialogWrapper
+                isOpen={showDialog}
+                handleClose={handleHideDialog}
+                handleSubmit={handleDeleteSubscription}
+                title='Confirm Delete Subscription?'
+                textBody='Deleting the Subscription will be invertible. Do you wish to continue?'
+                buttonOneText='Close'
+                buttonTwoText='Delete'
               />
-            </Grid>
-          </Grid>
-
-          <Grid container className='z-0'>
-            <InputCheckBox
-              inputClassName='w-1/2'
-              labelText='Access Rights'
-              inputLabelText={['Student', 'Teacher']}
-              inputValue={accessOptions}
-              inputHandleOnChange={updateARHandler}
-              inputValidation={accessError}
-              required
-            />
-          </Grid>
-
-          <Stack direction='row' spacing={5} className='z-0'>
-            <FormSubmitButton
-              buttonClassName='w-64 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter'
-              buttonText='Add Subscription'
-              handleOnClick={handleCreateResource}
-              loading={isLoading}
-            />
-          </Stack>
+            </>
+          )}
         </Stack>
-        <img className='hidden w-1/3 h-screen float-right object-cover addRoomLaptop:block' src={ResourceSample1} />
       </Stack>
     </>
   );

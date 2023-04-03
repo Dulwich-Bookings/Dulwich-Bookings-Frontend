@@ -36,6 +36,10 @@ const HomeViewAllBody = (props: Props) => {
             isRvViewClicked={false}
             currentUser={props.currentUser}
             currentSchool={props.currentSchool}
+            editMode={false}
+            editResourceHandler={() => {
+              return;
+            }}
           />
         </Stack>
       </Stack>
