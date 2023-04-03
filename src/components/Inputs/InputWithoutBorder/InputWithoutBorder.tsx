@@ -33,6 +33,8 @@ const InputWithoutBorder = <T extends Object>(props: Props<T>) => {
   const isError = inputValidation ? inputValidation.isError : false;
   const errorHelperText = isError ? inputValidation?.errorHelperText : '';
 
+  console.log(inputProps);
+
   return (
     <Stack direction='column' spacing={colSpacing}>
       <Typography className={props.labelClassName} variant='h6'>

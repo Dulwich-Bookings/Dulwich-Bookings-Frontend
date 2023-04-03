@@ -18,8 +18,7 @@ import { SchoolData } from '@/modules/school/types';
 
 import TailWindTheme from '@/tailwind.config';
 
-const { colors } = TailWindTheme.theme.extend;
-import EditButton from './EditButton/EditButton';
+const { colors } = TailWindTheme.theme;
 
 type Props = {
   data: ResourceData | SubscriptionData;
@@ -31,18 +30,14 @@ type Props = {
   isRecentlyVisited: boolean;
   onBookmarkChangeHandler: (id: number, type: SearchState) => void;
   onRecentlyVisitedHandler: (id: number, type: SearchState, isRecentlyVisited: boolean) => void;
-  editMode: boolean;
-  onEditHandler: (data: ResourceData | SubscriptionData, tagData: TagData[]) => void;
 };
 
 const vacancy = true;
 
-const HomeResourceContainer = (props: Props) => {
+const HomeRoomItem = (props: Props) => {
   const [isBookmark, setIsBookmark] = useState(props.isBookmark);
   const [openCalendarModal, setOpenCalendarModal] = useState<boolean>(false);
   const [openSubscriptionModal, setOpenSubscriptionModal] = useState<boolean>(false);
-
-  const { editMode } = props;
 
   const filterTagMaps = (): TagMapData[] => {
     if (props.data.type === resourceTypes.RESOURCE) {
@@ -59,18 +54,11 @@ const HomeResourceContainer = (props: Props) => {
   );
 
   const handleOpenModal = () => {
-    if (editMode) {
-      return;
-    }
     props.data.type === resourceTypes.RESOURCE ? setOpenCalendarModal(true) : setOpenSubscriptionModal(true);
   };
 
   const handleCloseModal = () => {
     props.data.type === resourceTypes.RESOURCE ? setOpenCalendarModal(false) : setOpenSubscriptionModal(false);
-  };
-
-  const handleEdit = () => {
-    props.onEditHandler(props.data, filteredTags);
   };
 
   return (
@@ -92,13 +80,7 @@ const HomeResourceContainer = (props: Props) => {
         />
       )}
       <Grid item className='w-full homeLaptop:w-auto'>
-        {editMode && <EditButton handleOnClick={handleEdit} />}
-        <Card
-          className={`bg-bgGray rounded-xl w-full homeLaptop:w-80 h-48 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)] cursor-pointer${
-            !props.editMode && 'cursor-pointer'
-          }`}
-          onClick={handleOpenModal}
-        >
+        <Card className='bg-bgGray rounded-xl w-full homeLaptop:w-80 h-48 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)] cursor-pointer'>
           <div
             className='w-full h-full'
             onClick={() => {
@@ -106,14 +88,11 @@ const HomeResourceContainer = (props: Props) => {
               props.onRecentlyVisitedHandler(props.data.id, props.data.type, props.isRecentlyVisited);
             }}
           >
-            <CardContent className='grow relative'>
+            <CardContent className='grow'>
               <Stack spacing={-2}>
                 <div className='w-full z-10'>
                   <Bookmark
                     onClick={async () => {
-                      if (editMode) {
-                        return;
-                      }
                       setIsBookmark(!props.isBookmark);
                       await props.onBookmarkChangeHandler(props.data.id, props.data.type);
                     }}
@@ -154,4 +133,4 @@ const HomeResourceContainer = (props: Props) => {
   );
 };
 
-export default HomeResourceContainer;
+export default HomeRoomItem;

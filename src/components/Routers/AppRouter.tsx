@@ -22,14 +22,7 @@ import AddResource from '@pages/AddResource/AddResource';
 import AddRoom from '@/pages/AddResource/AddRoom/AddRoom';
 import AddSubscription from '@/pages/AddResource/AddSubscription/AddSubscription';
 import AddTag from '@/pages/AddResource/AddTag/AddTag';
-import { isAdmin, isTeacher } from '@/utilities/authorisation';
-import Settings from '@/pages/Settings/Settings';
-import SettingsResource from '@/pages/Settings/SettingsResource/SettingsResource';
-import EditResource from '@/pages/Settings/SettingsResource/EditResource/EditResource';
-import EditSubscription from '@/pages/Settings/SettingsResource/EditSubscription.tsx/EditSubscription';
-import SettingsTag from '@/pages/Settings/SettingsTag/SettingsTag';
-import SettingsUser from '@/pages/Settings/SettingsUser/SettingsUser';
-import SettingMilestone from '@/pages/Settings/SettingMilestone/SettingMilestone';
+import { isTeacher } from '@/utilities/authorisation';
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -39,7 +32,6 @@ const AppRouter = () => {
   const currentUser = useSelector(getCurrentUser);
   const allSchools = useSelector(getAllSchools);
   const Teacher = isTeacher(currentUser);
-  const Admin = isAdmin(currentUser);
   const isTemp = !currentUser?.isConfirmed && currentUser?.isTemporary;
 
   const fetchSelf = async () => {
@@ -88,18 +80,8 @@ const AppRouter = () => {
       <Route exact path={Routes.authentication.signUp} component={SignUp} />
       <Route exact path={Routes.authentication.confirmEmail} component={ConfirmEmail} />
       {accessToken && <Route exact path={Routes.authentication.isTempUser} component={IsTemporaryUser} />}
-
       {accessToken && !isTemp && <Route exact path={Routes.home.main} component={Home} />}
       {accessToken && !isTemp && <Route exact path={Routes.home.viewAll} component={HomeViewAll} />}
-
-      {accessToken && !isTemp && <Route exact path={Routes.settings.main} component={Settings} />}
-      {accessToken && !isTemp && <Route exact path={Routes.settings.resources.main} component={SettingsResource} />}
-      {accessToken && !isTemp && <Route exact path={Routes.settings.resources.editResource} component={EditResource} />}
-      {accessToken && !isTemp && <Route exact path={Routes.settings.resources.editSubscription} component={EditSubscription} />}
-      {Teacher && accessToken && !isTemp && <Route exact path={Routes.settings.tags} component={SettingsTag} />}
-      {Admin && accessToken && !isTemp && <Route exact path={Routes.settings.milestone} component={SettingMilestone} />}
-      {Admin && accessToken && !isTemp && <Route exact path={Routes.settings.users} component={SettingsUser} />}
-
       {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.main} component={AddResource} />}
       {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.addRoom} component={AddRoom} />}
       {Teacher && accessToken && !isTemp && <Route exact path={Routes.addResource.addSubscription} component={AddSubscription} />}

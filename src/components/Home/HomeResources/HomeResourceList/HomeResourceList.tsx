@@ -14,7 +14,7 @@ import TagService from '@/api/tag/TagService';
 import SubscriptionService from '@/api/subscription/SubscriptionService';
 import TagMapService from '@/api/tagMap/TagMapService';
 
-import { resourceTypes, searchStateMap, SearchState, role } from '@/consts/constants';
+import { resourceTypes, searchStateMap, SearchState } from '@/consts/constants';
 import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
 import { SchoolData } from '@/modules/school/types';
@@ -32,8 +32,6 @@ type Props = {
   className?: string;
   currentUser: UserData;
   currentSchool: SchoolData;
-  editMode: boolean;
-  editResourceHandler: (data: ResourceData | SubscriptionData, tags: TagData[]) => void;
 };
 
 const sortResourcesByName = (resourceAndSubscriptions: (ResourceData | SubscriptionData)[]) =>
@@ -58,9 +56,7 @@ const HomeResourceList = (props: Props) => {
   const [deleteBookmarkById] = useApi((id: number) => BookmarkService.deleteBookmarkById(id), false, true, false);
   const [getMyRecentlyVisited] = useApi(() => RecentlyVisitedService.getSelf(), false, true, false);
   const [getAllResources] = useApi(() => ResourceService.getAllResources(), false, true, false);
-  const [getResourceSelf] = useApi(() => ResourceService.getResourceSelf(), false, true, false);
   const [getAllSubscriptions] = useApi(() => SubscriptionService.getAllSubscriptions(), false, true, false);
-  const [getSubscriptionSelf] = useApi(() => SubscriptionService.getSubscriptionSelf(), false, true, false);
   const [getAllTags] = useApi(() => TagService.getAllTags(), false, true, false);
   const [getAllTagMaps] = useApi(() => TagMapService.getAllTagMap(), false, true, false);
   // const [createRecentlyVisited] = useApi(
@@ -86,16 +82,8 @@ const HomeResourceList = (props: Props) => {
 
     await fetchBookmarksData();
     await fetchRecentlyVisitedData();
-    const allResourceData =
-      !props.editMode || props.currentUser.role === role.ADMIN
-        ? await retrieveAllData<ResourceData[]>(getAllResources)
-        : await retrieveAllData<ResourceData[]>(getResourceSelf);
-
-    const allSubscriptionData =
-      !props.editMode || props.currentUser.role === role.ADMIN
-        ? await retrieveAllData<SubscriptionData[]>(getAllSubscriptions)
-        : await retrieveAllData<SubscriptionData[]>(getSubscriptionSelf);
-
+    const allResourceData = await retrieveAllData<ResourceData[]>(getAllResources);
+    const allSubscriptionData = await retrieveAllData<SubscriptionData[]>(getAllSubscriptions);
     const allTagData = await retrieveAllData<TagData[]>(getAllTags);
     const allTagMapData = await retrieveAllData<TagMapData[]>(getAllTagMaps);
 
@@ -159,10 +147,6 @@ const HomeResourceList = (props: Props) => {
       }
     }
     return false;
-  };
-
-  const editResourceHandler = (data: ResourceData | SubscriptionData, tags: TagData[]) => {
-    props.editResourceHandler(data, tags);
   };
 
   // TODO Add this to the Bookings Modal Component instead
@@ -251,13 +235,11 @@ const HomeResourceList = (props: Props) => {
                 isRecentlyVisited={isRecentlyVisited(resource)}
                 onBookmarkChangeHandler={isBookmark(resource) ? onUnBookmarkHandler : onBookmarkHandler}
                 onRecentlyVisitedHandler={() => ''}
-                editMode={props.editMode}
-                onEditHandler={editResourceHandler}
               />
             ))}
           </Grid>
         ) : (
-          <Typography className='font-Inter text-textGray' variant='h5' textTransform='capitalize'>
+          <Typography className='font-Inter text-bgDarkGray' variant='h5' textTransform='capitalize'>
             No Resources Found.
           </Typography>
         )}

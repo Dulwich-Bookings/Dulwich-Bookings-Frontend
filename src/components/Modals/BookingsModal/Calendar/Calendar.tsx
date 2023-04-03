@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { useDispatch } from 'react-redux';
 import { severity } from '@/consts/constants';
 
@@ -6,7 +7,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
 
-import FullCalendar, { EventClickArg } from '@fullcalendar/react';
+import FullCalendar, { createDuration, EventClickArg } from '@fullcalendar/react';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -20,24 +21,19 @@ import SlotLabelContent from '@/components/Modals/BookingsModal/Calendar/SlotLab
 import BookingForm from '@/components/Modals/BookingsModal/BookingForm/BookingForm';
 import Dialog, { RecurringModificationTypes } from '@/components/Modals/BookingsModal/Calendar/Dialog/Dialog';
 
+import styled from '@emotion/styled';
+import './Calendar.css';
+import TailWindTheme from '@/tailwind.config';
+
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
-import { EventData, BookingType, EventType } from '@/modules/Bookings/Types';
+import { EventData, BookingType, BookingState, EventType } from '@/modules/Bookings/Types';
 import { ResourceMapData } from '@/modules/resourceMap/types';
 import { toggleShowNotification } from '@/modules/ui/uiSlice';
-import {
-  getBookingState,
-  getBgColor,
-  getIsEditable,
-  getTextColor,
-  getEventType,
-  eventDateDuration,
-  getEventData,
-} from '@/utilities/bookings';
+import { isAdmin, isTeacher } from '@/utilities/authorisation';
 
-import styled from '@emotion/styled';
-import './Calendar.css';
+const { colors } = TailWindTheme.theme.extend;
 
 export const StyleWrapper = styled.div`
   .fc .fc-timegrid-slot-minor {
@@ -53,8 +49,25 @@ type Props = {
   resourceMaps: ResourceMapData[];
 };
 
+const dateDuration = (start: Date, end: Date): Duration => {
+  const duration = createDuration(end.getTime() - start.getTime());
+  if (duration === null) {
+    const emptyDuration: Duration = {
+      years: 0,
+      months: 0,
+      days: 0,
+      minutes: 0,
+    };
+    return emptyDuration;
+  }
+
+  return duration;
+};
+
 const Calendar = (props: Props) => {
-  const emptyEvent = {
+  const [openBookingModal, setOpenBookingModal] = useState<boolean>(false);
+
+  const [bookingData, setBookingData] = useState<EventData>({
     id: '',
     userId: props.currentUser.id,
     title: '',
@@ -64,26 +77,30 @@ const Calendar = (props: Props) => {
     description: '',
     editable: true,
     bookingType: BookingType.BOOKING,
-    bookingState: getBookingState(props.currentUser, props.resourceData),
-  };
+    bookingState: isAdmin(props.currentUser)
+      ? BookingState.APPROVED
+      : isTeacher(props.currentUser) && props.resourceData.accessRights.includes('Teacher')
+      ? BookingState.APPROVED
+      : props.resourceData.accessRights.includes('Student')
+      ? BookingState.APPROVED
+      : BookingState.PENDING,
+  });
 
-  const [openBookingModal, setOpenBookingModal] = useState<boolean>(false);
-  const [bookingData, setBookingData] = useState<EventData>(emptyEvent);
   const [bookings, setBookings] = useState<EventData[]>([]);
   const [newBooking, setNewBooking] = useState<boolean>(true);
   const [rrule, setRrule] = useState<RRule>();
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+
   const dispatch = useDispatch();
 
   // for mobile responsiveness
   const theme = useTheme();
   const isMobile = !useMediaQuery(theme.breakpoints.up('sm'));
 
-  // Open New Booking Modal
   const handleDateClick = (e: DateClickArg) => {
     const startTime = moment(e.dateStr).toDate();
     const endTime = moment(e.dateStr).add(15, 'm').toDate();
-    const templateBooking = {
+    setBookingData({
       ...bookingData,
       id: Math.random().toString(),
       formLabel: '',
@@ -95,19 +112,16 @@ const Calendar = (props: Props) => {
       start: startTime,
       end: endTime,
       eventType: EventType.NONE,
-    };
-
-    setBookingData(templateBooking);
+    });
     setNewBooking(true);
     setOpenBookingModal(true);
     setRrule(undefined);
   };
 
-  // Handle Exisiting Event Click
   const handleEventClick = (e: EventClickArg) => {
     const startTime = moment(e.event.start).toDate();
     const endTime = moment(e.event.end).toDate();
-    const currentEvent = {
+    setBookingData({
       ...bookingData,
       id: e.event.id,
       formLabel: e.event.extendedProps.formLabel,
@@ -118,26 +132,47 @@ const Calendar = (props: Props) => {
       start: startTime,
       end: endTime,
       eventType: e.event.extendedProps.eventType,
-    };
-
-    const currentRRule = e.event._def.recurringDef ? e.event._def.recurringDef?.typeData.rruleSet._rrule[0] : undefined;
-    setBookingData(currentEvent);
+    });
     setNewBooking(false);
     setOpenBookingModal(true);
-    setRrule(currentRRule);
+    setRrule(e.event._def.recurringDef ? e.event._def.recurringDef?.typeData.rruleSet._rrule[0] : undefined);
   };
 
-  // On Create New Booking
+  const bookingState = isAdmin(props.currentUser)
+    ? BookingState.APPROVED
+    : isTeacher(props.currentUser) && props.resourceData.accessRights.includes('Teacher')
+    ? BookingState.APPROVED
+    : props.resourceData.accessRights.includes('Student')
+    ? BookingState.APPROVED
+    : BookingState.PENDING;
+
   const onAddBooking = async (data: EventData): Promise<void> => {
     if (data.formLabel.trim().length !== 0) {
       const newBooking: EventData = {
         ...data,
-        backgroundColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
-        borderColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
-        textColor: getTextColor(data.bookingType),
-        editable: getIsEditable(props.resourceMaps, props.resourceData, props.currentUser),
-        duration: eventDateDuration(data.start, data.end),
-        eventType: getEventType(data),
+        backgroundColor:
+          data.bookingType === BookingType.LESSON
+            ? colors.bgLesson
+            : bookingState === BookingState.PENDING
+            ? colors.bgLightRed
+            : colors.dulwichRed,
+        borderColor:
+          data.bookingType === BookingType.LESSON
+            ? colors.bgLesson
+            : bookingState === BookingState.PENDING
+            ? colors.bgLightRed
+            : colors.dulwichRed,
+        textColor: data.bookingType === BookingType.LESSON ? colors.bgBlack : colors.white,
+        editable: isAdmin(props.currentUser)
+          ? true
+          : props.resourceMaps.filter(r => r.resourceId === props.resourceData.id).filter(r => r.userId === props.currentUser.id).length !==
+            0
+          ? true
+          : data.userId === props.currentUser.id
+          ? true
+          : false,
+        duration: dateDuration(data.start, data.end),
+        eventType: data.rrule ? EventType.RECURRING : EventType.SINGLE,
       };
       const newBookingsList: EventData[] = [...bookings, newBooking];
       setBookings(newBookingsList);
@@ -147,25 +182,48 @@ const Calendar = (props: Props) => {
     }
   };
 
-  // On Delete Booking
   const onDeleteBooking = async (id: string): Promise<void> => {
     const newBookingsList = bookings.filter(booking => booking.id != id);
     setBookings(newBookingsList);
     setOpenBookingModal(false);
   };
 
-  // On Save Booking
   const onSaveBooking = async (data: EventData): Promise<void> => {
     if (data.formLabel.trim().length !== 0) {
       if (data.eventType === EventType.SINGLE) {
         const newBooking: EventData = {
           ...data,
-          backgroundColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
-          borderColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
-          textColor: getTextColor(data.bookingType),
-          editable: getIsEditable(props.resourceMaps, props.resourceData, props.currentUser),
-          duration: eventDateDuration(data.start, data.end),
-          eventType: getEventType(data),
+          backgroundColor:
+            data.bookingType === BookingType.LESSON
+              ? colors.bgLesson
+              : data.userId === props.currentUser.id
+              ? bookingState === BookingState.PENDING
+                ? colors.bgLightRed
+                : colors.dulwichRed
+              : bookingState === BookingState.PENDING
+              ? colors.bgBookingBlackPending
+              : colors.bgBookingBlack,
+          borderColor:
+            data.bookingType === BookingType.LESSON
+              ? colors.bgLesson
+              : data.userId === props.currentUser.id
+              ? bookingState === BookingState.PENDING
+                ? colors.bgLightRed
+                : colors.dulwichRed
+              : bookingState === BookingState.PENDING
+              ? colors.bgBookingBlackPending
+              : colors.bgBookingBlack,
+          textColor: data.bookingType === BookingType.LESSON ? colors.bgBlack : colors.white,
+          editable: isAdmin(props.currentUser)
+            ? true
+            : props.resourceMaps.filter(r => r.resourceId === props.resourceData.id).filter(r => r.userId === props.currentUser.id)
+                .length !== 0
+            ? true
+            : data.userId === props.currentUser.id
+            ? true
+            : false,
+          duration: dateDuration(data.start, data.end),
+          eventType: data.rrule ? EventType.RECURRING : EventType.SINGLE,
         };
         const newBookingsList = bookings.map(booking => {
           return booking.id === data.id ? newBooking : booking;
@@ -207,7 +265,6 @@ const Calendar = (props: Props) => {
           bookingData={bookingData}
         />
       )}
-
       <Box className='h-full'>
         <FullCalendar
           plugins={[timeGridPlugin, interactionPlugin, momentTimezonePlugin, dayGridPlugin, rrulePlugin]}
@@ -234,8 +291,38 @@ const Calendar = (props: Props) => {
           eventClick={handleEventClick}
           editable={true}
           events={bookings}
-          eventDrop={e => onSaveBooking(getEventData(e))}
-          eventResize={e => onSaveBooking(getEventData(e))}
+          eventDrop={e => {
+            onSaveBooking({
+              id: e.event.id,
+              userId: e.event.extendedProps.userId,
+              title: e.event.title,
+              formLabel: e.event.extendedProps.formLabel,
+              start: moment(e.event.start).toDate(),
+              end: moment(e.event.end).toDate(),
+              description: e.event.extendedProps.description,
+              rrule: e.event._def.recurringDef?.typeData.rruleSet._rrule[0] ?? undefined,
+              editable: e.event.startEditable,
+              bookingType: e.event.extendedProps.bookingType,
+              bookingState: e.event.extendedProps.bookingState,
+              eventType: e.event.extendedProps.eventType,
+            });
+          }}
+          eventResize={e => {
+            onSaveBooking({
+              id: e.event.id,
+              userId: e.event.extendedProps.userId,
+              title: e.event.title,
+              formLabel: e.event.extendedProps.formLabel,
+              start: moment(e.event.start).toDate(),
+              end: moment(e.event.end).toDate(),
+              description: e.event.extendedProps.description,
+              rrule: e.event._def.recurringDef?.typeData.rruleSet._rrule[0] ?? undefined,
+              editable: e.event.startEditable,
+              bookingType: e.event.extendedProps.bookingType,
+              bookingState: e.event.extendedProps.bookingState,
+              eventType: e.event.extendedProps.eventType,
+            });
+          }}
         />
       </Box>
       <Dialog

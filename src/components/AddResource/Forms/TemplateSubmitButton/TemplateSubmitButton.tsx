@@ -9,14 +9,13 @@ const Input = styled('input')({
 
 type Props = {
   buttonClassName?: string; //Optional for Button Styling
-  buttonTextClassName?: string;
   buttonText: string;
   helperText: string;
   handleOnClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   loading?: boolean;
 };
 
-const TemplateSubmitButton = ({ buttonClassName, buttonTextClassName, buttonText, helperText, handleOnClick, loading }: Props) => {
+const TemplateSubmitButton = ({ buttonClassName, buttonText, helperText, handleOnClick, loading }: Props) => {
   return (
     <label htmlFor={buttonText}>
       <Input accept='.csv' id={buttonText} type='file' onChange={e => handleOnClick(e)} />
@@ -27,7 +26,7 @@ const TemplateSubmitButton = ({ buttonClassName, buttonTextClassName, buttonText
         variant='contained'
         loadingIndicator={<CircularProgress size={16} className='text-bgWhite' />}
       >
-        <p className={`font-Inter text-xl capitalize ${buttonTextClassName}`}>{buttonText}</p>
+        <p className='font-Inter text-xl capitalize'>{buttonText}</p>
       </LoadingButton>
       <FormHelperText className='text-center'>{helperText}</FormHelperText>
     </label>

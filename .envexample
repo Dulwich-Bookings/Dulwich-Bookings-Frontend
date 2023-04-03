@@ -1,3 +1,0 @@
-PORT=8000
-REACT_APP_API_URL="https://dulwich-bookings-api.herokuapp.com/"
-GENERATE_SOUCEMAP=false

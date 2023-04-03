@@ -32,7 +32,7 @@ const InputCheckBox = (props: Props) => {
   return (
     <Stack className={props.inputClassName}>
       <Stack direction='row' spacing={1}>
-        <Typography className='text-textGray text-xl font-inter'>{props.labelText}</Typography>
+        <Typography className='text-[#404040] text-xl font-inter'>{props.labelText}</Typography>
         {props.required && <Typography className='text-dulwichRed text-xxl font-inter'>*</Typography>}
       </Stack>
       <FormControl error={isError}>

@@ -19,17 +19,6 @@ const Routes = {
     addSubscription: '/addResource/subscription',
     addTag: '/addResource/tag',
   },
-  settings: {
-    main: '/settings',
-    resources: {
-      main: '/settings/resources',
-      editResource: '/settings/resources/edit/room/:id',
-      editSubscription: '/settings/resources/edit/subscription/:id',
-    },
-    tags: '/settings/tags',
-    milestone: '/settings/milestones',
-    users: '/settings/users',
-  },
 };
 
 export default Routes;

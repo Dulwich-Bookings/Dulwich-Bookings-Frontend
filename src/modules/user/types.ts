@@ -15,7 +15,6 @@ export interface UserData {
   isTemporary: boolean;
   isConfirmed: boolean;
   schoolId: number;
-  class: number;
 }
 
 export type UserPutData = Partial<UserData>;

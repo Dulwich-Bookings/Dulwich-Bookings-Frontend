@@ -41,10 +41,6 @@ const HomeResources = (props: Props) => {
           className={'py-20'}
           currentUser={props.currentUser}
           currentSchool={props.currentSchool}
-          editMode={false}
-          editResourceHandler={() => {
-            return;
-          }}
         />
       </Stack>
     </Grid>

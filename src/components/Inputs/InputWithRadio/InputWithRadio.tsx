@@ -4,19 +4,18 @@ import { InputValidation } from '@/modules/inputValidation/types';
 
 import TailWindTheme from '@/tailwind.config';
 
-const { colors } = TailWindTheme.theme.extend;
+const { colors } = TailWindTheme.theme;
 
 type Props<inputType> = {
   spacing?: number; // Optional definition for the space between Label and Input
-  labelText?: string;
+  labelText: string;
   labelClassName?: string; // Optional ClassNames for Label
   inputClassName?: string; // Optional ClassNames for Input
   inputValidation?: InputValidation;
   inputValue?: inputType;
-  inputHandleOnChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void; // Use with InputValue (Double Binding)
+  inputHandleOnChange?: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void; // Use with InputValue (Double Binding)
   required?: boolean;
   inputLabels: string[];
-  disabled?: boolean;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -24,10 +23,6 @@ const InputWithRadio = <T extends Object>(props: Props<T>) => {
   const { inputValidation } = props;
   const colSpacing = props.spacing ? props.spacing : 0.5;
   const isError = inputValidation ? inputValidation.isError : false;
-
-  const optionChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.inputHandleOnChange(event);
-  };
 
   return (
     <Stack direction='column' spacing={colSpacing}>
@@ -37,13 +32,7 @@ const InputWithRadio = <T extends Object>(props: Props<T>) => {
       </Typography>
 
       <FormControl error={isError}>
-        <RadioGroup
-          defaultValue={props.inputLabels[0]}
-          row
-          onChange={optionChangeHandler}
-          value={props.inputValue}
-          className={props.inputClassName}
-        >
+        <RadioGroup defaultValue={props.inputLabels[0]} row onChange={props.inputHandleOnChange} value={props.inputValue}>
           <FormControlLabel
             value={props.inputLabels[0]}
             control={
@@ -58,7 +47,7 @@ const InputWithRadio = <T extends Object>(props: Props<T>) => {
               />
             }
             label={props.inputLabels[0]}
-            disabled={props.disabled}
+            color='dulwichRed'
           ></FormControlLabel>
           <FormControlLabel
             value={props.inputLabels[1]}
@@ -74,7 +63,6 @@ const InputWithRadio = <T extends Object>(props: Props<T>) => {
               />
             }
             label={props.inputLabels[1]}
-            disabled={props.disabled}
           ></FormControlLabel>
         </RadioGroup>
       </FormControl>
