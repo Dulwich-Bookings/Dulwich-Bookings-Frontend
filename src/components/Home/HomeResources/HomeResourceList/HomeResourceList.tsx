@@ -15,6 +15,7 @@ import SubscriptionService from '@/api/subscription/SubscriptionService';
 import TagMapService from '@/api/tagMap/TagMapService';
 
 import { resourceTypes, searchStateMap, SearchState, role } from '@/consts/constants';
+import { resourceTypes, searchStateMap, SearchState, role } from '@/consts/constants';
 import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
 import { SchoolData } from '@/modules/school/types';
@@ -59,7 +60,9 @@ const HomeResourceList = (props: Props) => {
   const [getMyRecentlyVisited] = useApi(() => RecentlyVisitedService.getSelf(), false, true, false);
   const [getAllResources] = useApi(() => ResourceService.getAllResources(), false, true, false);
   const [getResourceSelf] = useApi(() => ResourceService.getResourceSelf(), false, true, false);
+  const [getResourceSelf] = useApi(() => ResourceService.getResourceSelf(), false, true, false);
   const [getAllSubscriptions] = useApi(() => SubscriptionService.getAllSubscriptions(), false, true, false);
+  const [getSubscriptionSelf] = useApi(() => SubscriptionService.getSubscriptionSelf(), false, true, false);
   const [getSubscriptionSelf] = useApi(() => SubscriptionService.getSubscriptionSelf(), false, true, false);
   const [getAllTags] = useApi(() => TagService.getAllTags(), false, true, false);
   const [getAllTagMaps] = useApi(() => TagMapService.getAllTagMap(), false, true, false);
@@ -86,6 +89,16 @@ const HomeResourceList = (props: Props) => {
 
     await fetchBookmarksData();
     await fetchRecentlyVisitedData();
+    const allResourceData =
+      !props.editMode || props.currentUser.role === role.ADMIN
+        ? await retrieveAllData<ResourceData[]>(getAllResources)
+        : await retrieveAllData<ResourceData[]>(getResourceSelf);
+
+    const allSubscriptionData =
+      !props.editMode || props.currentUser.role === role.ADMIN
+        ? await retrieveAllData<SubscriptionData[]>(getAllSubscriptions)
+        : await retrieveAllData<SubscriptionData[]>(getSubscriptionSelf);
+
     const allResourceData =
       !props.editMode || props.currentUser.role === role.ADMIN
         ? await retrieveAllData<ResourceData[]>(getAllResources)
@@ -159,6 +172,10 @@ const HomeResourceList = (props: Props) => {
       }
     }
     return false;
+  };
+
+  const editResourceHandler = (data: ResourceData | SubscriptionData, tags: TagData[]) => {
+    props.editResourceHandler(data, tags);
   };
 
   const editResourceHandler = (data: ResourceData | SubscriptionData, tags: TagData[]) => {
@@ -253,10 +270,13 @@ const HomeResourceList = (props: Props) => {
                 onRecentlyVisitedHandler={() => ''}
                 editMode={props.editMode}
                 onEditHandler={editResourceHandler}
+                editMode={props.editMode}
+                onEditHandler={editResourceHandler}
               />
             ))}
           </Grid>
         ) : (
+          <Typography className='font-Inter text-textGray' variant='h5' textTransform='capitalize'>
           <Typography className='font-Inter text-textGray' variant='h5' textTransform='capitalize'>
             No Resources Found.
           </Typography>
