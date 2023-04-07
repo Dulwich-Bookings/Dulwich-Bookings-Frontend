@@ -30,6 +30,9 @@ import { isSuccess } from '@/api/ApiHandler';
 import { timezone, role } from '@/consts/constants';
 import { Button, Stack, Typography } from '@mui/material';
 
+import BookingService from '@/api/booking/BookingService';
+import { BookingPutData, BookingState, BookingType, CreateBookingData } from '@/modules/Bookings/Types';
+
 const createSchoolData: CreateSchoolData = {
   name: 'London',
   alternativeName: '伦敦德威国际学校',
@@ -155,6 +158,12 @@ const Test = () => {
   const [getRecentlyVisitedById] = useApi(() => RecentlyVisitedService.getRecentlyVisitedById(3), true, true);
   const [getSelfRecentlyVisited] = useApi(() => RecentlyVisitedService.getSelf(), true, true);
   const [deleteRecentlyVisitedById] = useApi(() => RecentlyVisitedService.deleteRecentlyVisitedById(3), true, true);
+
+  const [createBooking] = useApi((data: CreateBookingData) => BookingService.createBooking(data ?? null), true, true);
+  const [getAllBookings] = useApi(() => BookingService.getOwnBookings(), true, true);
+  const [getBookingById] = useApi(() => BookingService.getBookingById(2), true, true);
+  const [updateCurrBookingById] = useApi((data: BookingPutData) => BookingService.updateCurrBookingById(5, data ?? null), true, true);
+  const [deleteBookingById] = useApi((index: number) => BookingService.deleteCurrBookingById(index), true, true);
 
   const handleButtonClick = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();
@@ -415,6 +424,56 @@ const Test = () => {
             </Button>
             <Button variant='contained' onClick={() => handleButtonClick(deleteRecentlyVisitedById)}>
               Delete Recently Visited By Id
+            </Button>
+          </Stack>
+
+          <Typography variant='h5'>Bookings</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button
+              variant='contained'
+              onClick={() =>
+                handleButtonClick(() =>
+                  createBooking({
+                    resourceId: 1,
+                    description: 'booking desc',
+                    bookingState: BookingState.PENDING,
+                    bookingType: BookingType.LESSON,
+                    startDateTime: '2020-06-06T08:00:00.000Z',
+                    endDateTime: '2020-06-06T10:00:00.000Z',
+                  }),
+                )
+              }
+            >
+              Create Booking
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getAllBookings)}>
+              Get All Bookings
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getBookingById)}>
+              Get Booking by Id
+            </Button>
+            <Button
+              variant='contained'
+              onClick={() =>
+                handleButtonClick(() =>
+                  updateCurrBookingById({
+                    startDateTime: '2020-07-20T08:00:00.000Z',
+                    newBooking: {
+                      resourceId: 1,
+                      description: 'booking desc',
+                      bookingState: BookingState.PENDING,
+                      bookingType: BookingType.LESSON,
+                      startDateTime: '2020-06-06T10:00:00.000Z',
+                      endDateTime: '2020-06-06T11:00:00.000Z',
+                    },
+                  }),
+                )
+              }
+            >
+              Update Curr Booking by Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(() => deleteBookingById(6))}>
+              Delete Booking by Id
             </Button>
           </Stack>
           {/* <Typography variant='h4'>Calendar Modal</Typography>

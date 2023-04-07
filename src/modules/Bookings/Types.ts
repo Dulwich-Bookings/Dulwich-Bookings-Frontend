@@ -24,6 +24,34 @@ export const EventType = {
   NONE: 'None' as EventType,
 };
 
+export interface BookingData {
+  id: number;
+  userId: number;
+  resourceId: number;
+  description: string;
+  bookingstate: BookingStates;
+  bookingType: BookingTypes;
+  resourceBookingId: number;
+  startDateTime: string;
+  endDateTime: string;
+  RRULE?: string;
+}
+
+export interface CreateBookingData {
+  resourceId: number;
+  description: string;
+  bookingstate: BookingStates;
+  bookingType: BookingTypes;
+  startDateTime: string;
+  endDateTime: string;
+  RRULE?: string;
+}
+
+export interface BookingPutData {
+  startDateTime?: string;
+  newBooking?: Partial<CreateBookingData>;
+}
+
 export interface EventData {
   id: string;
   userId: number;
