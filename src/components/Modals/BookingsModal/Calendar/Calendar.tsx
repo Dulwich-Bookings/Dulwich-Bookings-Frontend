@@ -128,23 +128,35 @@ const Calendar = (props: Props) => {
   };
 
   // On Create New Booking
+  // TODO: Don't allow end time to be before start time. Also don't allow time slots before 7am and after 10pm.
   const onAddBooking = async (data: EventData): Promise<void> => {
-    if (data.formLabel.trim().length !== 0) {
-      const newBooking: EventData = {
-        ...data,
-        backgroundColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
-        borderColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
-        textColor: getTextColor(data.bookingType),
-        editable: getIsEditable(props.resourceMaps, props.resourceData, props.currentUser),
-        duration: eventDateDuration(data.start, data.end),
-        eventType: getEventType(data),
-      };
-      const newBookingsList: EventData[] = [...bookings, newBooking];
-      setBookings(newBookingsList);
-      setOpenBookingModal(false);
-    } else {
+    if (data.formLabel.trim().length == 0) {
       dispatch(toggleShowNotification({ message: 'Title cannot be empty', severity: severity.ERROR }));
+      return;
     }
+
+    if (data.end <= data.start) {
+      dispatch(toggleShowNotification({ message: 'End time has to be after Start time', severity: severity.ERROR }));
+      return;
+    }
+
+    if (data.start.getHours() < 7 || data.start.getHours() > 22 || data.end.getHours() < 7 || data.end.getHours() > 22) {
+      dispatch(toggleShowNotification({ message: 'Start and End times have to be in between 7am to 10pm', severity: severity.ERROR }));
+      return;
+    }
+
+    const newBooking: EventData = {
+      ...data,
+      backgroundColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
+      borderColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
+      textColor: getTextColor(data.bookingType),
+      editable: getIsEditable(props.resourceMaps, props.resourceData, props.currentUser),
+      duration: eventDateDuration(data.start, data.end),
+      eventType: getEventType(data),
+    };
+    const newBookingsList: EventData[] = [...bookings, newBooking];
+    setBookings(newBookingsList);
+    setOpenBookingModal(false);
   };
 
   // On Delete Booking
