@@ -122,4 +122,34 @@ export default class BookingService {
       return Promise.reject(error);
     }
   }
+
+  public static async deleteFollowingBookingById(id: number): Promise<ApiData> {
+    try {
+      const response = await ApiService.request(
+        {
+          url: `${this.getBookingUrl()}/thisandFollowingEvents/${id}`,
+          method: 'DELETE',
+        },
+        true,
+      );
+      return response;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public static async deleteAllBookingById(id: number): Promise<ApiData> {
+    try {
+      const response = await ApiService.request(
+        {
+          url: `${this.getBookingUrl()}/allEvents/${id}`,
+          method: 'DELETE',
+        },
+        true,
+      );
+      return response;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }
