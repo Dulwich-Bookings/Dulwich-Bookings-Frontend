@@ -18,12 +18,12 @@ import { RRule } from 'rrule';
 import DayHeaderContent from '@/components/Modals/BookingsModal/Calendar/DayHeaderContent/DayHeaderContent';
 import SlotLabelContent from '@/components/Modals/BookingsModal/Calendar/SlotLabelContent/SlotLabelContent';
 import BookingForm from '@/components/Modals/BookingsModal/BookingForm/BookingForm';
-import Dialog, { RecurringModificationTypes } from '@/components/Modals/BookingsModal/Calendar/Dialog/Dialog';
+import Dialog, { RecurringModificationType, RecurringModificationTypes } from '@/components/Modals/BookingsModal/Calendar/Dialog/Dialog';
 
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
-import { EventData, BookingType, EventType, BookingData, CreateBookingData } from '@/modules/Bookings/Types';
+import { EventData, BookingType, EventType, BookingData, CreateBookingData, DeleteBookingData } from '@/modules/Bookings/Types';
 import { ResourceMapData } from '@/modules/resourceMap/types';
 import { toggleShowNotification } from '@/modules/ui/uiSlice';
 import {
@@ -73,6 +73,13 @@ const Calendar = (props: Props) => {
 
   const [getBookingData] = useApi(() => BookingService.getBookingById(props.resourceData.id), false, true, false);
   const [createBooking] = useApi((data: CreateBookingData) => BookingService.createBooking(data ?? null), true, true);
+  const [deleteBooking] = useApi((id: number) => BookingService.deleteAllBookingById(id), true, true);
+  const [deleteRecurringBookingOnly] = useApi((data: DeleteBookingData) => BookingService.deleteCurrBookingById(data.id, data), true, true);
+  const [deleteRecurringBookingFuture] = useApi(
+    (data: DeleteBookingData) => BookingService.deleteFollowingBookingById(data.id, data),
+    true,
+    true,
+  );
 
   const fetchData = async () => {
     const bookingData = await retrieveAllData<BookingData[]>(getBookingData);
@@ -90,7 +97,8 @@ const Calendar = (props: Props) => {
   const [bookings, setBookings] = useState<EventData[]>([]);
   const [newBooking, setNewBooking] = useState<boolean>(true);
   const [rrule, setRrule] = useState<RRule>();
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [updateDialog, setUpdateDialog] = useState<boolean>(false);
+  const [deleteDialog, setDeleteDialog] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   // for mobile responsiveness
@@ -174,27 +182,19 @@ const Calendar = (props: Props) => {
 
     await createBooking(createBookingData);
 
-    // const newBooking: EventData = {
-    //   ...data,
-    //   backgroundColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
-    //   borderColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
-    //   textColor: getTextColor(data.bookingType),
-    //   editable: getIsEditable(props.resourceMaps, props.resourceData, props.currentUser),
-    //   duration: eventDateDuration(data.start, data.end),
-    //   eventType: getEventType(data),
-    // };
-    // const newBookingsList: EventData[] = [...bookings, newBooking];
-
-    // setBookings(newBookingsList);
     fetchData();
     setOpenBookingModal(false);
   };
 
   // On Delete Booking
-  const onDeleteBooking = async (id: string): Promise<void> => {
-    const newBookingsList = bookings.filter(booking => booking.id != id);
-    setBookings(newBookingsList);
-    setOpenBookingModal(false);
+  const onDeleteBooking = async (data: EventData): Promise<void> => {
+    if (data.eventType === EventType.SINGLE) {
+      await deleteBooking(data.id as unknown as number);
+      fetchData();
+      setOpenBookingModal(false);
+    } else {
+      setDeleteDialog(true);
+    }
   };
 
   // On Save Booking
@@ -216,15 +216,35 @@ const Calendar = (props: Props) => {
         setBookings(newBookingsList);
         setOpenBookingModal(false);
       } else {
-        setOpenDialog(true);
+        setUpdateDialog(true);
       }
     } else {
       dispatch(toggleShowNotification({ message: 'Title cannot be empty', severity: severity.ERROR }));
     }
   };
 
-  const onSaveRecurringBooking = (modificationType: RecurringModificationTypes) => {
+  const onSaveUpdateRecurringBooking = (modificationType: RecurringModificationTypes) => {
     console.log(modificationType);
+  };
+  const onSaveDeleteRecurringBooking = async (modificationType: RecurringModificationTypes): Promise<void> => {
+    const selectedBooking: EventData = bookingData;
+    const data: DeleteBookingData = {
+      id: selectedBooking.id as unknown as number,
+      body: {
+        startDateTime: selectedBooking.start.toISOString(),
+      },
+    };
+
+    if (modificationType === RecurringModificationType.ONLY) {
+      await deleteRecurringBookingOnly(data);
+    }
+
+    if (modificationType === RecurringModificationType.FUTURE) {
+      await deleteRecurringBookingFuture(data);
+    }
+
+    fetchData();
+    setOpenBookingModal(false);
   };
 
   const onContact = async (): Promise<void> => {
@@ -282,11 +302,23 @@ const Calendar = (props: Props) => {
         />
       </Box>
       <Dialog
-        openDialog={openDialog}
+        title='Update Recurring Booking'
+        openDialog={updateDialog}
         handleDialogClose={() => {
-          setOpenDialog(false);
+          setUpdateDialog(false);
         }}
-        onSaveRecurringBooking={onSaveRecurringBooking}
+        onSaveRecurringBooking={onSaveUpdateRecurringBooking}
+        handleCloseBookingModal={() => {
+          setOpenBookingModal(false);
+        }}
+      />
+      <Dialog
+        title='Delete Recurring Booking'
+        openDialog={deleteDialog}
+        handleDialogClose={() => {
+          setDeleteDialog(false);
+        }}
+        onSaveRecurringBooking={onSaveDeleteRecurringBooking}
         handleCloseBookingModal={() => {
           setOpenBookingModal(false);
         }}

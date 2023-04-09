@@ -52,6 +52,13 @@ export interface BookingPutData {
   newBooking?: Partial<CreateBookingData>;
 }
 
+export interface DeleteBookingData {
+  id: number;
+  body: {
+    startDateTime: string;
+  };
+}
+
 export interface EventData {
   id: string;
   userId: number;

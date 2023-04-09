@@ -1,5 +1,5 @@
 import ApiService, { ApiData } from '@/api/ApiService';
-import { BookingPutData, CreateBookingData } from '@/modules/Bookings/Types';
+import { BookingPutData, CreateBookingData, DeleteBookingData } from '@/modules/Bookings/Types';
 
 export default class BookingService {
   private static getBookingUrl() {
@@ -108,12 +108,15 @@ export default class BookingService {
     }
   }
 
-  public static async deleteCurrBookingById(id: number): Promise<ApiData> {
+  public static async deleteCurrBookingById(id: number, bookingData: DeleteBookingData): Promise<ApiData> {
     try {
       const response = await ApiService.request(
         {
           url: `${this.getBookingUrl()}/thisEvent/${id}`,
           method: 'DELETE',
+          data: {
+            ...bookingData.body,
+          },
         },
         true,
       );
@@ -123,12 +126,15 @@ export default class BookingService {
     }
   }
 
-  public static async deleteFollowingBookingById(id: number): Promise<ApiData> {
+  public static async deleteFollowingBookingById(id: number, bookingData: DeleteBookingData): Promise<ApiData> {
     try {
       const response = await ApiService.request(
         {
           url: `${this.getBookingUrl()}/thisandFollowingEvents/${id}`,
           method: 'DELETE',
+          data: {
+            ...bookingData.body,
+          },
         },
         true,
       );

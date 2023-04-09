@@ -6,29 +6,25 @@ import TailWindTheme from '@/tailwind.config';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, RadioGroup, Radio } from '@mui/material';
 
 type Props = {
+  title: string;
   openDialog: boolean;
   handleDialogClose: () => void;
   onSaveRecurringBooking: (value: RecurringModificationTypes) => void;
   handleCloseBookingModal: () => void;
 };
 
-export type RecurringModificationTypes = 'Only this booking' | 'All bookings' | 'This booking and all future';
+export type RecurringModificationTypes = 'Only this booking' | 'This booking and all future';
 export const RecurringModificationType = {
   ONLY: 'Only this booking' as RecurringModificationTypes,
-  ALL: 'All bookings' as RecurringModificationTypes,
   FUTURE: 'This booking and all future' as RecurringModificationTypes,
 };
 
 const DeleteAlert = (props: Props) => {
-  const [recurringModification, setRecurringModification] = useState<RecurringModificationTypes>(RecurringModificationType.ALL);
+  const [recurringModification, setRecurringModification] = useState<RecurringModificationTypes>(RecurringModificationType.ONLY);
 
   const handleRecurringModificationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRecurringModification(
-      event.target.defaultValue === RecurringModificationType.ALL
-        ? RecurringModificationType.ALL
-        : event.target.defaultValue === RecurringModificationType.ONLY
-        ? RecurringModificationType.ONLY
-        : RecurringModificationType.FUTURE,
+      event.target.defaultValue === RecurringModificationType.ONLY ? RecurringModificationType.ONLY : RecurringModificationType.FUTURE,
     );
   };
 
@@ -40,7 +36,7 @@ const DeleteAlert = (props: Props) => {
       aria-describedby='alert-dialog-description'
     >
       <DialogTitle id='alert-dialog-title' className='font-bold ml-3 mt-1'>
-        {'Change recurring booking'}
+        {props.title}
       </DialogTitle>
       <DialogContent className='px-16'>
         <FormControl>
@@ -52,20 +48,6 @@ const DeleteAlert = (props: Props) => {
             defaultValue='never'
             value={recurringModification}
           >
-            <FormControlLabel
-              value={RecurringModificationType.ALL}
-              control={
-                <Radio
-                  sx={{
-                    color: colors.bgBlack,
-                    '&.Mui-checked': {
-                      color: colors.dulwichRed,
-                    },
-                  }}
-                />
-              }
-              label={RecurringModificationType.ALL}
-            />
             <FormControlLabel
               value={RecurringModificationType.ONLY}
               control={

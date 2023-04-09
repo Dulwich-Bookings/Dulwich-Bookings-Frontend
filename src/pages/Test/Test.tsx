@@ -163,7 +163,7 @@ const Test = () => {
   const [getAllBookings] = useApi(() => BookingService.getOwnBookings(), true, true);
   const [getBookingById] = useApi(() => BookingService.getBookingById(2), true, true);
   const [updateCurrBookingById] = useApi((data: BookingPutData) => BookingService.updateCurrBookingById(5, data ?? null), true, true);
-  const [deleteBookingById] = useApi((index: number) => BookingService.deleteCurrBookingById(index), true, true);
+  const [deleteBookingById] = useApi((index: number) => BookingService.deleteAllBookingById(index), true, true);
 
   const handleButtonClick = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();

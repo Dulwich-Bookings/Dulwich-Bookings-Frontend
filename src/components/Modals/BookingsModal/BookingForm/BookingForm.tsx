@@ -28,7 +28,7 @@ const theme = createTheme({
 type Props = {
   handleCloseModal: () => void;
   onAddBooking: (data: EventData) => void;
-  onDeleteBooking: (id: string) => void;
+  onDeleteBooking: (data: EventData) => void;
   onSaveBooking: (data: EventData) => void;
   onContact: () => void;
   newBooking: boolean;
@@ -157,7 +157,11 @@ const BookingForm = (props: Props) => {
                       });
                     }}
                     handleOnDelete={() => {
-                      props.onDeleteBooking(bookingData.id);
+                      props.onDeleteBooking({
+                        ...bookingData,
+                        title: bookingData.bookingType === BookingType.BOOKING ? 'Booked' : BookingType.LESSON,
+                        rrule: rrule?.toString(),
+                      });
                     }}
                     handleOnContact={props.onContact}
                   />
