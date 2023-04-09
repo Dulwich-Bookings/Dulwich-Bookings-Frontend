@@ -29,7 +29,7 @@ export interface BookingData {
   userId: number;
   resourceId: number;
   description: string;
-  bookingstate: BookingStates;
+  bookingState: BookingStates;
   bookingType: BookingTypes;
   resourceBookingId: number;
   startDateTime: string;

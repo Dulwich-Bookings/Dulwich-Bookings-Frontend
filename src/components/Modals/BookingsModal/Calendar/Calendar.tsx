@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { severity } from '@/consts/constants';
 
@@ -23,7 +23,7 @@ import Dialog, { RecurringModificationTypes } from '@/components/Modals/Bookings
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
-import { EventData, BookingType, EventType } from '@/modules/Bookings/Types';
+import { EventData, BookingType, EventType, BookingData } from '@/modules/Bookings/Types';
 import { ResourceMapData } from '@/modules/resourceMap/types';
 import { toggleShowNotification } from '@/modules/ui/uiSlice';
 import {
@@ -34,10 +34,14 @@ import {
   getEventType,
   eventDateDuration,
   getEventData,
+  mapBookingDataToEventData,
 } from '@/utilities/bookings';
 
 import styled from '@emotion/styled';
 import './Calendar.css';
+import { useApi } from '@/api/ApiHandler';
+import BookingService from '@/api/booking/BookingService';
+import { retrieveAllData } from '@/utilities/api';
 
 export const StyleWrapper = styled.div`
   .fc .fc-timegrid-slot-minor {
@@ -66,6 +70,19 @@ const Calendar = (props: Props) => {
     bookingType: BookingType.BOOKING,
     bookingState: getBookingState(props.currentUser, props.resourceData),
   };
+
+  const [getBookingData] = useApi(() => BookingService.getBookingById(props.resourceData.id), false, true, false);
+
+  const fetchData = async () => {
+    const bookingData = await retrieveAllData<BookingData[]>(getBookingData);
+
+    const eventData = mapBookingDataToEventData(bookingData ?? [], props.currentUser, props.resourceMaps, props.resourceData);
+    setBookings(eventData);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const [openBookingModal, setOpenBookingModal] = useState<boolean>(false);
   const [bookingData, setBookingData] = useState<EventData>(emptyEvent);
@@ -155,6 +172,8 @@ const Calendar = (props: Props) => {
       eventType: getEventType(data),
     };
     const newBookingsList: EventData[] = [...bookings, newBooking];
+
+    console.log(newBookingsList);
     setBookings(newBookingsList);
     setOpenBookingModal(false);
   };

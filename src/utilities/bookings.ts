@@ -1,4 +1,4 @@
-import { BookingState, BookingStates, BookingType, BookingTypes, EventData, EventType } from '@/modules/Bookings/Types';
+import { BookingData, BookingState, BookingStates, BookingType, BookingTypes, EventData, EventType } from '@/modules/Bookings/Types';
 import { ResourceData } from '@/modules/resource/types';
 import { UserData } from '@/modules/user/types';
 import { ResourceMapData } from '@/modules/resourceMap/types';
@@ -111,4 +111,32 @@ export const getEventData = (e: EventDropArg | EventResizeDoneArg) => {
     bookingState: e.event.extendedProps.bookingState,
     eventType: e.event.extendedProps.eventType,
   };
+};
+
+export const mapBookingDataToEventData = (
+  booking: BookingData[],
+  currUser: UserData,
+  resourceMap: ResourceMapData[],
+  resource: ResourceData,
+): EventData[] => {
+  return booking.map(b => {
+    return {
+      id: b.id.toString(),
+      userId: b.userId,
+      title: b.bookingType === BookingType.LESSON ? 'Lesson' : 'Booked',
+      formLabel: b.bookingType === BookingType.LESSON ? 'Lesson' : 'Booked',
+      start: new Date(b.startDateTime),
+      end: new Date(b.endDateTime),
+      duration: eventDateDuration(new Date(b.startDateTime), new Date(b.endDateTime)),
+      description: b.description,
+      backgroundColor: getBgColor(b.bookingType, b.bookingState, resourceMap, resource, currUser),
+      borderColor: getBgColor(b.bookingType, b.bookingState, resourceMap, resource, currUser),
+      textColor: getTextColor(b.bookingType),
+      editable: getIsEditable(resourceMap, resource, currUser),
+      rrule: b.RRULE,
+      bookingType: b.bookingType,
+      bookingState: b.bookingState,
+      eventType: b.RRULE ? EventType.RECURRING : EventType.SINGLE,
+    };
+  });
 };
