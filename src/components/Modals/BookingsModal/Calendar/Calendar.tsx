@@ -23,7 +23,7 @@ import Dialog, { RecurringModificationTypes } from '@/components/Modals/Bookings
 import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 import { ResourceData } from '@/modules/resource/types';
-import { EventData, BookingType, EventType, BookingData } from '@/modules/Bookings/Types';
+import { EventData, BookingType, EventType, BookingData, CreateBookingData } from '@/modules/Bookings/Types';
 import { ResourceMapData } from '@/modules/resourceMap/types';
 import { toggleShowNotification } from '@/modules/ui/uiSlice';
 import {
@@ -72,6 +72,7 @@ const Calendar = (props: Props) => {
   };
 
   const [getBookingData] = useApi(() => BookingService.getBookingById(props.resourceData.id), false, true, false);
+  const [createBooking] = useApi((data: CreateBookingData) => BookingService.createBooking(data ?? null), true, true);
 
   const fetchData = async () => {
     const bookingData = await retrieveAllData<BookingData[]>(getBookingData);
@@ -161,20 +162,31 @@ const Calendar = (props: Props) => {
       dispatch(toggleShowNotification({ message: 'Start and End times have to be in between 7am to 10pm', severity: severity.ERROR }));
       return;
     }
-
-    const newBooking: EventData = {
-      ...data,
-      backgroundColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
-      borderColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
-      textColor: getTextColor(data.bookingType),
-      editable: getIsEditable(props.resourceMaps, props.resourceData, props.currentUser),
-      duration: eventDateDuration(data.start, data.end),
-      eventType: getEventType(data),
+    const createBookingData: CreateBookingData = {
+      resourceId: props.resourceData.id,
+      description: data.description,
+      bookingState: data.bookingState,
+      bookingType: data.bookingType,
+      startDateTime: data.start.toISOString(),
+      endDateTime: data.end.toISOString(),
+      RRULE: data.rrule?.toString() ?? undefined,
     };
-    const newBookingsList: EventData[] = [...bookings, newBooking];
 
-    console.log(newBookingsList);
-    setBookings(newBookingsList);
+    await createBooking(createBookingData);
+
+    // const newBooking: EventData = {
+    //   ...data,
+    //   backgroundColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
+    //   borderColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
+    //   textColor: getTextColor(data.bookingType),
+    //   editable: getIsEditable(props.resourceMaps, props.resourceData, props.currentUser),
+    //   duration: eventDateDuration(data.start, data.end),
+    //   eventType: getEventType(data),
+    // };
+    // const newBookingsList: EventData[] = [...bookings, newBooking];
+
+    // setBookings(newBookingsList);
+    fetchData();
     setOpenBookingModal(false);
   };
 
