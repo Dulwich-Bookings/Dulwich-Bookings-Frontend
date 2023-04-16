@@ -31,7 +31,7 @@ const AddResource = () => {
         <Grid container className='justify-start'>
           <Stack>
             <Grid item className='w-16' onClick={returnHomePage}>
-              <BackButton buttonName='Home' />
+              <BackButton buttonText='Home' />
             </Grid>
             <Typography className='font-Inter text-[36px] mb-14 lg:mb-0'>Add Resource</Typography>
           </Stack>

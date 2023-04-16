@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { AppBar, Grid } from '@mui/material';
-import { Add, FormatListBulleted } from '@mui/icons-material';
+import { AppBar, Grid, IconButton } from '@mui/material';
+import { Add, FormatListBulleted, Logout } from '@mui/icons-material';
 
 import SchoolLogo from '@components/Home/HomeHeader/SchoolLogo/SchoolLogo';
 import UserProfileCircle from '@components/Home/HomeHeader/UserProfileCircle/UserProfileCircle';
@@ -11,6 +11,7 @@ import { UserData } from '@/modules/user/types';
 import { SchoolData } from '@/modules/school/types';
 import { useHistory } from 'react-router-dom';
 import { isTeacher } from '@/utilities/authorisation';
+import AuthService from '@/api/auth/AuthService';
 
 type Props = {
   currentUser: UserData;
@@ -20,8 +21,13 @@ type Props = {
 const HomeHeader = ({ currentUser, currentSchool }: Props) => {
   const history = useHistory();
   const Teacher = isTeacher(currentUser);
+
   const handleSchoolLogoClick = () => {
     history.push('/home');
+  };
+
+  const handleProfileIconClick = () => {
+    history.push('/settings');
   };
 
   const handleViewAll = () => {
@@ -30,6 +36,11 @@ const HomeHeader = ({ currentUser, currentSchool }: Props) => {
 
   const handleAddResource = () => {
     history.push('/addResource');
+  };
+
+  const handleLogOut = () => {
+    AuthService.logout();
+    history.push('/login');
   };
 
   return (
@@ -59,7 +70,10 @@ const HomeHeader = ({ currentUser, currentSchool }: Props) => {
               className='mr-6'
               Icon={<FormatListBulleted className='w-5' />}
             />
-            <UserProfileCircle email={currentUser?.email} className='mr-8' />
+            <UserProfileCircle email={currentUser?.email} className='mr-4 h-12 w-12' handleOnClick={handleProfileIconClick} />
+            <IconButton className='mt-2 mr-6' onClick={handleLogOut}>
+              <Logout className=' text-textGray' />
+            </IconButton>
           </Grid>
         </Grid>
       </Grid>

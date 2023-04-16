@@ -6,12 +6,14 @@ import SearchFilterView from '@/components/Home/HomeResources/SearchFilterView/S
 import HomeResourceList from '@/components/Home/HomeResources/HomeResourceList/HomeResourceList';
 
 import { UserData } from '@/modules/user/types';
+import { SchoolData } from '@/modules/school/types';
 import { SearchState } from '@/consts/constants';
 
 type Props = {
   searchedInput: string;
   searchState: SearchState;
   currentUser: UserData;
+  currentSchool: SchoolData;
 };
 
 const HomeResources = (props: Props) => {
@@ -38,6 +40,11 @@ const HomeResources = (props: Props) => {
           isRvViewClicked={rvClicked}
           className={'py-20'}
           currentUser={props.currentUser}
+          currentSchool={props.currentSchool}
+          editMode={false}
+          editResourceHandler={() => {
+            return;
+          }}
         />
       </Stack>
     </Grid>

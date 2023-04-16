@@ -5,10 +5,13 @@ import HomeSearchBar from '@components/Home/HomeSearchBar/HomeSearchBar';
 import { Stack, Grid } from '@mui/material';
 
 import { UserData } from '@/modules/user/types';
+import { SchoolData } from '@/modules/school/types';
+
 import { SearchState, searchStateMap } from '@/consts/constants';
 
 type Props = {
   currentUser: UserData;
+  currentSchool: SchoolData;
 };
 
 const HomeViewAllBody = (props: Props) => {
@@ -32,6 +35,11 @@ const HomeViewAllBody = (props: Props) => {
             isBookmarksViewClicked={false}
             isRvViewClicked={false}
             currentUser={props.currentUser}
+            currentSchool={props.currentSchool}
+            editMode={false}
+            editResourceHandler={() => {
+              return;
+            }}
           />
         </Stack>
       </Stack>

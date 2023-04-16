@@ -34,7 +34,7 @@ const Home = () => {
                 <HomeBanner schoolId={1} />
                 <HomeSearchBar onInputChange={onInputChangeHandler} onStateChange={onSearchStateChangeHandler} />
               </Stack>
-              <HomeResources searchedInput={inputValue} searchState={searchState} currentUser={currentUser} />
+              <HomeResources searchedInput={inputValue} searchState={searchState} currentUser={currentUser} currentSchool={currentSchool} />
             </Stack>
           </main>
         </>
