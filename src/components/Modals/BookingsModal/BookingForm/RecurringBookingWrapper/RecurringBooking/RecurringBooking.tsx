@@ -14,6 +14,7 @@ type Props = {
   rrule?: RRule;
   handleChangeRRule: (rrule: RRule) => void;
   date: Date;
+  newBooking: boolean;
 };
 
 export type RecurrenceTypes = 'On' | 'After';
@@ -52,6 +53,7 @@ export default function RecurringBooking(props: Props) {
               setEndDate(newValue as Date);
             }}
             renderInput={params => <TextField size='small' color='info' {...params} />}
+            disabled={props.newBooking ? false : true}
           />
         </LocalizationProvider>
       )}
@@ -71,6 +73,7 @@ export default function RecurringBooking(props: Props) {
             onChange={event => {
               setFrequency(parseInt(event.target.value));
             }}
+            disabled={props.newBooking ? false : true}
           />
           <Typography className='font-Inter align-center'>occurrences</Typography>
         </Stack>
@@ -99,6 +102,7 @@ export default function RecurringBooking(props: Props) {
                   color: colors.dulwichRed,
                 },
               }}
+              disabled={props.newBooking ? false : true}
             />
           }
           label={endDatePicker}
@@ -113,6 +117,7 @@ export default function RecurringBooking(props: Props) {
                   color: colors.dulwichRed,
                 },
               }}
+              disabled={props.newBooking ? false : true}
             />
           }
           label={ocurrences}

@@ -35,6 +35,7 @@ type Props<inputType> = {
   acceptInput?: boolean;
   inputProp?: object;
   customInput?: JSX.Element;
+  newBooking?: boolean;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -56,6 +57,7 @@ const InputWithIcon = <T extends Object>(props: Props<T>) => {
             variant={props.inputVariant ? props.inputVariant : 'outlined'}
             onFocus={props.onFocus}
             onBlur={props.onBlur}
+            disabled={props.newBooking ? false : true}
           />
         </>
       </Stack>

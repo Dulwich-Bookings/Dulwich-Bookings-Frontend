@@ -29,7 +29,7 @@ type Props = {
   handleCloseModal: () => void;
   onAddBooking: (data: EventData) => void;
   onDeleteBooking: (data: EventData) => void;
-  onSaveBooking: (data: EventData) => void;
+  onCloseBooking: (data: EventData) => void;
   onContact: () => void;
   newBooking: boolean;
   rrule?: RRule;
@@ -95,10 +95,10 @@ const BookingForm = (props: Props) => {
               </div>
               <Stack direction='column' className='h-full w-11/12 ' spacing={{ xs: 1, md: 1 }} alignItems='justified'>
                 <Input
-                  disabled={!bookingData.editable}
+                  disabled={true}
                   color='error'
                   placeholder='Add title'
-                  value={bookingData.formLabel}
+                  value={bookingData.bookingType}
                   className='w-full h-1/6 text-xxl font-Inter mb-1'
                   onChange={handleTitleChange}
                 ></Input>
@@ -109,9 +109,11 @@ const BookingForm = (props: Props) => {
                     onChangeTime={onChangeTime}
                     editable={bookingData.editable}
                     school={props.school}
+                    newBooking={props.newBooking}
                   />
                   <div className='w-full'>
                     <InputWithIcon
+                      newBooking={props.newBooking}
                       inputType='string'
                       inputPlaceholder={bookingData.editable ? 'Add description' : ''}
                       inputValue={bookingData.description}
@@ -128,7 +130,11 @@ const BookingForm = (props: Props) => {
                     />
                   </div>
                   {isAdmin(props.currentUser) && (
-                    <BookingTypeWrapper bookingType={bookingData.bookingType} onChangeBookingType={onChangeBookingType} />
+                    <BookingTypeWrapper
+                      bookingType={bookingData.bookingType}
+                      onChangeBookingType={onChangeBookingType}
+                      newBooking={props.newBooking}
+                    />
                   )}
 
                   <RecurringBookingWrapper
@@ -136,6 +142,7 @@ const BookingForm = (props: Props) => {
                     rrule={rrule}
                     date={bookingData.start}
                     weekProfile={props.weekProfile}
+                    newBooking={props.newBooking}
                   />
 
                   <BookingFormFooter
@@ -150,7 +157,7 @@ const BookingForm = (props: Props) => {
                       });
                     }}
                     handleOnSave={() => {
-                      props.onSaveBooking({
+                      props.onCloseBooking({
                         ...bookingData,
                         title: bookingData.bookingType === BookingType.BOOKING ? 'Booked' : BookingType.LESSON,
                         rrule: rrule?.toString(),

@@ -26,16 +26,7 @@ import { ResourceData } from '@/modules/resource/types';
 import { EventData, BookingType, EventType, BookingData, CreateBookingData, DeleteBookingData } from '@/modules/Bookings/Types';
 import { ResourceMapData } from '@/modules/resourceMap/types';
 import { toggleShowNotification } from '@/modules/ui/uiSlice';
-import {
-  getBookingState,
-  getBgColor,
-  getIsEditable,
-  getTextColor,
-  getEventType,
-  eventDateDuration,
-  getEventData,
-  mapBookingDataToEventData,
-} from '@/utilities/bookings';
+import { getBookingState, mapBookingDataToEventData } from '@/utilities/bookings';
 
 import styled from '@emotion/styled';
 import './Calendar.css';
@@ -97,7 +88,6 @@ const Calendar = (props: Props) => {
   const [bookings, setBookings] = useState<EventData[]>([]);
   const [newBooking, setNewBooking] = useState<boolean>(true);
   const [rrule, setRrule] = useState<RRule>();
-  const [updateDialog, setUpdateDialog] = useState<boolean>(false);
   const [deleteDialog, setDeleteDialog] = useState<boolean>(false);
   const dispatch = useDispatch();
 
@@ -156,10 +146,10 @@ const Calendar = (props: Props) => {
   // On Create New Booking
   // TODO: Don't allow end time to be before start time. Also don't allow time slots before 7am and after 10pm.
   const onAddBooking = async (data: EventData): Promise<void> => {
-    if (data.formLabel.trim().length == 0) {
-      dispatch(toggleShowNotification({ message: 'Title cannot be empty', severity: severity.ERROR }));
-      return;
-    }
+    // if (data.formLabel.trim().length == 0) {
+    //   dispatch(toggleShowNotification({ message: 'Title cannot be empty', severity: severity.ERROR }));
+    //   return;
+    // }
 
     if (data.end <= data.start) {
       dispatch(toggleShowNotification({ message: 'End time has to be after Start time', severity: severity.ERROR }));
@@ -198,34 +188,44 @@ const Calendar = (props: Props) => {
   };
 
   // On Save Booking
-  const onSaveBooking = async (data: EventData): Promise<void> => {
-    if (data.formLabel.trim().length !== 0) {
-      if (data.eventType === EventType.SINGLE) {
-        const newBooking: EventData = {
-          ...data,
-          backgroundColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
-          borderColor: getBgColor(data.bookingType, data.bookingState, props.resourceMaps, props.resourceData, props.currentUser),
-          textColor: getTextColor(data.bookingType),
-          editable: getIsEditable(props.resourceMaps, props.resourceData, props.currentUser),
-          duration: eventDateDuration(data.start, data.end),
-          eventType: getEventType(data),
-        };
-        const newBookingsList = bookings.map(booking => {
-          return booking.id === data.id ? newBooking : booking;
-        });
-        setBookings(newBookingsList);
-        setOpenBookingModal(false);
-      } else {
-        setUpdateDialog(true);
-      }
-    } else {
-      dispatch(toggleShowNotification({ message: 'Title cannot be empty', severity: severity.ERROR }));
-    }
+  // const onSaveBooking = async (data: EventData): Promise<void> => {
+  //   const selectedBooking: EventData = bookingData;
+
+  //   if (data.formLabel.trim().length !== 0) {
+  //     if (data.eventType === EventType.SINGLE) {
+  //       const bookingPutData: BookingPutData = {
+  //         startDateTime: data.start.toISOString(),
+  //         newBooking: {
+  //           resourceId: props.resourceData.id,
+  //           description: data.description,
+  //           bookingState: data.bookingState,
+  //           bookingType: data.bookingType,
+  //           startDateTime: data.start.toISOString(),
+  //           endDateTime: data.end.toISOString(),
+  //           RRULE: data.rrule?.toString() ?? undefined,
+  //         },
+  //       };
+
+  //       const updateBookingData: UpdateBookingData = {
+  //         id: selectedBooking.id as unknown as number,
+  //         body: bookingPutData,
+  //       };
+
+  //       await updateBooking(updateBookingData);
+  //       fetchData();
+  //       setOpenBookingModal(false);
+  //     } else {
+  //       setUpdateDialog(true);
+  //     }
+  //   } else {
+  //     dispatch(toggleShowNotification({ message: 'Title cannot be empty', severity: severity.ERROR }));
+  //   }
+  // };
+
+  const onCloseModal = (): void => {
+    setOpenBookingModal(false);
   };
 
-  const onSaveUpdateRecurringBooking = (modificationType: RecurringModificationTypes) => {
-    console.log(modificationType);
-  };
   const onSaveDeleteRecurringBooking = async (modificationType: RecurringModificationTypes): Promise<void> => {
     const selectedBooking: EventData = bookingData;
     const data: DeleteBookingData = {
@@ -260,7 +260,7 @@ const Calendar = (props: Props) => {
           }}
           onAddBooking={onAddBooking}
           onDeleteBooking={onDeleteBooking}
-          onSaveBooking={onSaveBooking}
+          onCloseBooking={onCloseModal}
           onContact={onContact}
           newBooking={newBooking}
           rrule={rrule}
@@ -297,21 +297,8 @@ const Calendar = (props: Props) => {
           eventClick={handleEventClick}
           editable={true}
           events={bookings}
-          eventDrop={e => onSaveBooking(getEventData(e))}
-          eventResize={e => onSaveBooking(getEventData(e))}
         />
       </Box>
-      <Dialog
-        title='Update Recurring Booking'
-        openDialog={updateDialog}
-        handleDialogClose={() => {
-          setUpdateDialog(false);
-        }}
-        onSaveRecurringBooking={onSaveUpdateRecurringBooking}
-        handleCloseBookingModal={() => {
-          setOpenBookingModal(false);
-        }}
-      />
       <Dialog
         title='Delete Recurring Booking'
         openDialog={deleteDialog}

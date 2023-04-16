@@ -14,6 +14,7 @@ type Props = {
   editable: boolean;
   onChangeTime: (start: Date, isStart: boolean) => void;
   school: SchoolData;
+  newBooking?: boolean;
 };
 
 const TimePickerWrapper = (props: Props) => {
@@ -74,11 +75,12 @@ const TimePickerWrapper = (props: Props) => {
                 value={moment(startTime).tz(props.school.timezone).format('HH:mm')}
                 type='string'
                 onClick={() => {
-                  props.editable ? setOpenStateStart(true) : setOpenStateStart(false);
+                  props.newBooking ? setOpenStateStart(true) : setOpenStateStart(false);
                 }}
                 id='standard-basic'
                 disableUnderline
                 readOnly
+                disabled={props.newBooking ? false : true}
               />
               <Typography className='font-Inter text-[14px] pt-[3px]'>{'-'}</Typography>
               <Input
@@ -87,11 +89,12 @@ const TimePickerWrapper = (props: Props) => {
                 value={moment(endTime).tz(props.school.timezone).format('HH:mm')}
                 type='string'
                 onClick={() => {
-                  props.editable ? setOpenStateEnd(true) : setOpenStateEnd(false);
+                  props.newBooking ? setOpenStateEnd(true) : setOpenStateEnd(false);
                 }}
                 id='standard-basic'
                 disableUnderline
                 readOnly
+                disabled={props.newBooking ? false : true}
               />
             </Stack>
           </Stack>

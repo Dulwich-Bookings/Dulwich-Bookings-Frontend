@@ -9,6 +9,7 @@ const { colors } = TailWindTheme.theme.extend;
 type Props = {
   bookingType: BookingTypes;
   onChangeBookingType: (value: string) => void;
+  newBooking: boolean;
 };
 
 export default function BookingTypeWrapper(props: Props) {
@@ -35,6 +36,7 @@ export default function BookingTypeWrapper(props: Props) {
           className='pr-4'
           control={
             <Radio
+              disabled={props.newBooking ? false : true}
               sx={{
                 color: colors.bgBlack,
                 '&.Mui-checked': {
@@ -49,6 +51,7 @@ export default function BookingTypeWrapper(props: Props) {
           value={BookingType.LESSON}
           control={
             <Radio
+              disabled={props.newBooking ? false : true}
               sx={{
                 color: colors.bgBlack,
                 '&.Mui-checked': {

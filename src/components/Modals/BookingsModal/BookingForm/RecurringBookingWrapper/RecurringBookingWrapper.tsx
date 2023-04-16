@@ -14,6 +14,7 @@ type Props = {
   rrule?: RRule;
   date: Date;
   weekProfile: RecurringTypes;
+  newBooking: boolean;
 };
 
 export default function RecurringBookingWrapper(props: Props) {
@@ -56,6 +57,7 @@ export default function RecurringBookingWrapper(props: Props) {
                   className='pr-5'
                   control={
                     <Radio
+                      disabled={props.newBooking ? false : true}
                       sx={{
                         color: colors.bgBlack,
                         '&.Mui-checked': {
@@ -71,6 +73,7 @@ export default function RecurringBookingWrapper(props: Props) {
                 value={RecurringType.BIWEEKLY}
                 control={
                   <Radio
+                    disabled={props.newBooking ? false : true}
                     sx={{
                       color: colors.bgBlack,
                       '&.Mui-checked': {
@@ -86,21 +89,29 @@ export default function RecurringBookingWrapper(props: Props) {
         </Grid>
         {recurring !== RecurringType.NONE && (
           <Grid item className='h-full'>
-            <Typography
-              className='text-dulwichRed hover:underline pl-2 mb-1'
-              onClick={() => {
-                setRecurring(RecurringType.NONE);
-              }}
-            >
-              Undo
-            </Typography>
+            {false && (
+              <Typography
+                className='text-dulwichRed hover:underline pl-2 mb-1'
+                onClick={() => {
+                  setRecurring(RecurringType.NONE);
+                }}
+              >
+                Undo
+              </Typography>
+            )}
           </Grid>
         )}
       </Grid>
       {recurring === RecurringType.NONE ? (
         <></>
       ) : (
-        <RecurringBooking handleChangeRRule={props.handleChangeRRule} rrule={props.rrule} recurring={recurring} date={props.date} />
+        <RecurringBooking
+          handleChangeRRule={props.handleChangeRRule}
+          rrule={props.rrule}
+          recurring={recurring}
+          date={props.date}
+          newBooking={props.newBooking}
+        />
       )}
     </>
   );

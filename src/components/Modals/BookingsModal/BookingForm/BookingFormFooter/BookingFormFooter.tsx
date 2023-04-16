@@ -17,7 +17,7 @@ const BookingFormFooter = (props: Props) => {
       {!props.newBooking && props.editable && (
         <Stack direction='row' className='w-full' spacing={2}>
           <>
-            <BookingButton buttonText='Save' handleOnClick={props.handleOnSave} />
+            <BookingButton buttonText='Close' handleOnClick={props.handleOnSave} className='bg-bgDarkGray' />
             <BookingButton buttonText='Delete' handleOnClick={props.handleOnDelete} />
           </>
         </Stack>
