@@ -102,6 +102,7 @@ const BookingForm = (props: Props) => {
                   className='w-full h-1/6 text-xxl font-Inter mb-1'
                   onChange={handleTitleChange}
                 ></Input>
+                {!props.newBooking && <div className='text-bgDarkGray'>{props.currentUser.email}</div>}
                 <Stack direction='column' spacing={{ xs: 0, md: 0 }} alignItems='justified'>
                   <TimePickerWrapper
                     startTime={bookingData.start}
