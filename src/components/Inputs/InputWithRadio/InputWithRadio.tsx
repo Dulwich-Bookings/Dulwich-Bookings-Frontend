@@ -1,15 +1,18 @@
 import React from 'react';
 import { Typography, Stack, RadioGroup, FormControlLabel, Radio, FormControl } from '@mui/material';
 import { InputValidation } from '@/modules/inputValidation/types';
-import { Role } from '@/modules/user/types';
 
-type Props = {
+import TailWindTheme from '@/tailwind.config';
+
+const { colors } = TailWindTheme.theme.extend;
+
+type Props<inputType> = {
   spacing?: number; // Optional definition for the space between Label and Input
   labelText?: string;
   labelClassName?: string; // Optional ClassNames for Label
   inputClassName?: string; // Optional ClassNames for Input
   inputValidation?: InputValidation;
-  inputValue?: string | Role;
+  inputValue?: inputType;
   inputHandleOnChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void; // Use with InputValue (Double Binding)
   required?: boolean;
   inputLabels: string[];
@@ -17,7 +20,7 @@ type Props = {
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-const InputWithRadio = (props: Props) => {
+const InputWithRadio = <T extends Object>(props: Props<T>) => {
   const { inputValidation } = props;
   const colSpacing = props.spacing ? props.spacing : 0.5;
   const isError = inputValidation ? inputValidation.isError : false;
@@ -47,9 +50,9 @@ const InputWithRadio = (props: Props) => {
               <Radio
                 disableRipple={true}
                 sx={{
-                  color: '#202020',
+                  color: colors.bgDarkGray,
                   '&.Mui-checked': {
-                    color: '#E33939',
+                    color: colors.dulwichRed,
                   },
                 }}
               />
@@ -63,9 +66,9 @@ const InputWithRadio = (props: Props) => {
               <Radio
                 disableRipple={true}
                 sx={{
-                  color: '#202020',
+                  color: colors.bgDarkGray,
                   '&.Mui-checked': {
-                    color: '#E33939',
+                    color: colors.dulwichRed,
                   },
                 }}
               />

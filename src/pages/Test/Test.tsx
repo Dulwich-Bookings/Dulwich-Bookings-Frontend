@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+// import { useSelector } from 'react-redux';
+
 import { useApi } from '@/api/ApiHandler';
 import AuthService from '@/api/auth/AuthService';
 import UserService from '@/api/user/UserService';
 import TagService from '@/api/tag/TagService';
+
 import SubscriptionService from '@/api/subscription/SubscriptionService';
 import ResourceService from '@/api/resource/ResourceService';
 import SchoolService from '@/api/school/SchoolService';
@@ -12,6 +15,7 @@ import BookmarkService from '@/api/bookmarks/BookmarkService';
 import RecentlyVisitedService from '@/api/recentlyVisited/RecentlyVisitedService';
 import ResourceMapService from '@/api/resourceMap/ResourceMapService';
 
+// import BookingsModal from '@/components/BookingsModal/BookingsModal';
 import { CreateSubscriptionData, SubscriptionPutData } from '@/modules/subscription/types';
 import { CreateSchoolData, SchoolPutData } from '@/modules/school/types';
 import { CreateResourceData, ResourcePutData } from '@/modules/resource/types';
@@ -19,16 +23,15 @@ import { CreateTagMapData } from '@/modules/tagMap/types';
 import { CreateBookmarkData } from '@/modules/Bookmarks/Types';
 import { CreateRecentlyVisitedData } from '@/modules/recentlyVisited/Types';
 import { CreateResourceMapData } from '@/modules/resourceMap/types';
+// import { getCurrentUser } from '@/modules/user/userSlice';
 
 import { ApiData } from '@/api/ApiService';
 import { isSuccess } from '@/api/ApiHandler';
 import { timezone, role } from '@/consts/constants';
-import { styled } from '@mui/material/styles';
 import { Button, Stack, Typography } from '@mui/material';
 
-const Input = styled('input')({
-  display: 'none',
-});
+import BookingService from '@/api/booking/BookingService';
+import { BookingPutData, BookingState, BookingType, CreateBookingData } from '@/modules/Bookings/Types';
 
 const createSchoolData: CreateSchoolData = {
   name: 'London',
@@ -89,13 +92,18 @@ let isFirstLoaded = true;
 const Test = () => {
   const [loginStudent] = useApi(() => AuthService.login('student23@stu.dulwich.org', 'asdasd', 1), true, true);
   const [loginTeacher] = useApi(() => AuthService.login('teacher@dulwich.org', 'asdasd', 1), true, true);
-  const [loginAdmin] = useApi(() => AuthService.login('admin@dulwich.org', 'asdasd', 1), true, true);
+  const [loginAdmin] = useApi(() => AuthService.login('admin@dulwich.org', 'asdasd?', 1), true, true);
   const [bulkSignUp] = useApi(() => AuthService.bulkRegister(bulkSignUpForm), true, true);
   const [bulkSignUpForm, setBulkSignUpForm] = useState<FormData>(new FormData());
 
   const [getAllUsers] = useApi(() => UserService.getAllUsers(), true, true);
   const [getAllTags] = useApi(() => TagService.getAllTags(), true, true);
 
+  // const [openCalendarModal, setOpenCalendarModal] = useState<boolean>(false);
+
+  // const handleCloseModal = () => {
+  //   setOpenCalendarModal(false);
+  // };
   const [createSchool] = useApi(() => SchoolService.createSchool(createSchoolData), true, true);
   const [getAllSchools] = useApi(() => SchoolService.getAllSchools(), true, true);
   const [getSchoolById] = useApi(() => SchoolService.getSchoolById(1), true, true);
@@ -151,6 +159,12 @@ const Test = () => {
   const [getSelfRecentlyVisited] = useApi(() => RecentlyVisitedService.getSelf(), true, true);
   const [deleteRecentlyVisitedById] = useApi(() => RecentlyVisitedService.deleteRecentlyVisitedById(3), true, true);
 
+  const [createBooking] = useApi((data: CreateBookingData) => BookingService.createBooking(data ?? null), true, true);
+  const [getAllBookings] = useApi(() => BookingService.getOwnBookings(), true, true);
+  const [getBookingById] = useApi(() => BookingService.getBookingById(2), true, true);
+  const [updateCurrBookingById] = useApi((data: BookingPutData) => BookingService.updateCurrBookingById(5, data ?? null), true, true);
+  const [deleteBookingById] = useApi((index: number) => BookingService.deleteAllBookingById(index), true, true);
+
   const handleButtonClick = async (func: () => Promise<ApiData & isSuccess>) => {
     const res = await func();
     if (res.isSuccess) {
@@ -176,34 +190,58 @@ const Test = () => {
     bulkSignUp();
   }, [bulkSignUpForm]);
 
+  // const currentUser = useSelector(getCurrentUser);
+
   return (
     <>
+      {/* {currentUser && <BookingsModal
+        openState={openCalendarModal}
+        handleCloseModal={handleCloseModal}
+        title='technology'
+        description='tech1'
+        currentUser={currentUser}
+      />} */}
       <div className='pt-6 pl-6'>
         <Typography className='pb-6' variant='h3'>
           Add your own test components below!
         </Typography>
         <Typography variant='h4'>APIs</Typography>
-        <Stack spacing={2} direction='column'>
-          <Typography variant='h5'>Auth</Typography>
-          <Stack spacing={2} direction='row'>
-            <Button variant='contained' onClick={() => handleButtonClick(loginStudent)}>
-              Sign In Student
-            </Button>
-            <Button variant='contained' onClick={() => handleButtonClick(loginTeacher)}>
-              Sign In Teacher
-            </Button>
-            <Button variant='contained' onClick={() => handleButtonClick(loginAdmin)}>
-              Sign In Admin
-            </Button>
-            <label htmlFor='bulk-sign-up'>
-              <Input accept='.csv' id='bulk-sign-up' type='file' onChange={e => handleBulkSignUp(e)} />
-              <Button variant='contained' component='span'>
-                Bulk Sign Up
+
+        <Stack spacing={4}>
+          <Stack spacing={2} direction='column'>
+            <Typography variant='h5'>Auth</Typography>
+            <Stack spacing={2} direction='row'>
+              <Button variant='contained' onClick={() => handleButtonClick(loginStudent)}>
+                Sign In Student
               </Button>
-            </label>
-            <Button variant='contained' onClick={() => AuthService.logout()}>
-              Logout
-            </Button>
+              <Button variant='contained' onClick={() => handleButtonClick(loginTeacher)}>
+                Sign In Teacher
+              </Button>
+              <Button variant='contained' onClick={() => handleButtonClick(loginAdmin)}>
+                Sign In Admin
+              </Button>
+              <label htmlFor='bulk-sign-up'>
+                <input className='hidden' accept='.csv' id='bulk-sign-up' type='file' onChange={e => handleBulkSignUp(e)} />
+                <Button variant='contained' component='span'>
+                  Bulk Sign Up
+                </Button>
+              </label>
+              <Button variant='contained' onClick={() => AuthService.logout()}>
+                Logout
+              </Button>
+            </Stack>
+            <Typography variant='h5'>Tag</Typography>
+            <Stack spacing={2} direction='row'>
+              <Button variant='contained' onClick={() => handleButtonClick(getAllTags)}>
+                Get All Tags
+              </Button>
+            </Stack>
+            <Typography variant='h5'>User</Typography>
+            <Stack spacing={2} direction='row'>
+              <Button variant='contained' onClick={() => handleButtonClick(getAllUsers)}>
+                Get All Users
+              </Button>
+            </Stack>
           </Stack>
 
           <Typography variant='h5'>Tag</Typography>
@@ -388,9 +426,66 @@ const Test = () => {
               Delete Recently Visited By Id
             </Button>
           </Stack>
+
+          <Typography variant='h5'>Bookings</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button
+              variant='contained'
+              onClick={() =>
+                handleButtonClick(() =>
+                  createBooking({
+                    resourceId: 1,
+                    description: 'booking desc',
+                    bookingState: BookingState.PENDING,
+                    bookingType: BookingType.LESSON,
+                    startDateTime: '2020-06-06T08:00:00.000Z',
+                    endDateTime: '2020-06-06T10:00:00.000Z',
+                  }),
+                )
+              }
+            >
+              Create Booking
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getAllBookings)}>
+              Get All Bookings
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(getBookingById)}>
+              Get Booking by Id
+            </Button>
+            <Button
+              variant='contained'
+              onClick={() =>
+                handleButtonClick(() =>
+                  updateCurrBookingById({
+                    startDateTime: '2020-07-20T08:00:00.000Z',
+                    newBooking: {
+                      resourceId: 1,
+                      description: 'booking desc',
+                      bookingState: BookingState.PENDING,
+                      bookingType: BookingType.LESSON,
+                      startDateTime: '2020-06-06T10:00:00.000Z',
+                      endDateTime: '2020-06-06T11:00:00.000Z',
+                    },
+                  }),
+                )
+              }
+            >
+              Update Curr Booking by Id
+            </Button>
+            <Button variant='contained' onClick={() => handleButtonClick(() => deleteBookingById(6))}>
+              Delete Booking by Id
+            </Button>
+          </Stack>
+          {/* <Typography variant='h4'>Calendar Modal</Typography>
+          <Stack spacing={2} direction='row'>
+            <Button variant='contained' onClick={() => setOpenCalendarModal(true)}>
+              Open Modal
+            </Button>
+          </Stack> */}
         </Stack>
-        <br />
       </div>
+      <br />
+      <br />
     </>
   );
 };

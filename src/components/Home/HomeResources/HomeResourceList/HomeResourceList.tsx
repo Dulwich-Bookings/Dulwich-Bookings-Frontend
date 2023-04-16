@@ -17,6 +17,7 @@ import TagMapService from '@/api/tagMap/TagMapService';
 import { resourceTypes, searchStateMap, SearchState, role } from '@/consts/constants';
 import { ResourceData } from '@/modules/resource/types';
 import { TagData } from '@/modules/tag/types';
+import { SchoolData } from '@/modules/school/types';
 import { Role, UserData } from '@/modules/user/types';
 import { SubscriptionData } from '@/modules/subscription/types';
 import { TagMapData } from '@/modules/tagMap/types';
@@ -30,6 +31,7 @@ type Props = {
   isRvViewClicked: boolean;
   className?: string;
   currentUser: UserData;
+  currentSchool: SchoolData;
   editMode: boolean;
   editResourceHandler: (data: ResourceData | SubscriptionData, tags: TagData[]) => void;
 };
@@ -241,6 +243,8 @@ const HomeResourceList = (props: Props) => {
               <ResourceContainer
                 key={resource.type === resourceTypes.RESOURCE ? `Room:${resource.id}` : `Subscription:${resource.id}`}
                 data={resource}
+                currentUser={props.currentUser}
+                currentSchool={props.currentSchool}
                 tagData={tags}
                 tagMapData={tagMaps}
                 isBookmark={isBookmark(resource)}

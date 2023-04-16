@@ -18,7 +18,7 @@ const HomeViewAll = () => {
         <main>
           <Stack spacing={3}>
             <HomeHeader currentSchool={currentSchool} currentUser={currentUser} />
-            <HomeViewAllBody currentUser={currentUser} />
+            <HomeViewAllBody currentSchool={currentSchool} currentUser={currentUser} />
           </Stack>
         </main>
       )}

@@ -9,12 +9,14 @@ import { resourceTypes, searchStateMap } from '@/consts/constants';
 import { UserData } from '@/modules/user/types';
 import { ResourceData } from '@/modules/resource/types';
 import { SubscriptionData } from '@/modules/subscription/types';
+import { SchoolData } from '@/modules/school/types';
 
 type Props = {
   user: UserData;
+  school: SchoolData;
 };
 
-const ResourceDetails = ({ user: userSelf }: Props) => {
+const ResourceDetails = ({ user: userSelf, school: schoolSelf }: Props) => {
   const history = useHistory();
 
   const openEditResourceHandler = (data: ResourceData | SubscriptionData) => {
@@ -39,6 +41,7 @@ const ResourceDetails = ({ user: userSelf }: Props) => {
             className='justify-center'
             editMode={true}
             editResourceHandler={openEditResourceHandler}
+            currentSchool={schoolSelf}
           />
         </Grid>
       </Stack>
