@@ -89,7 +89,7 @@ export default function RecurringBookingWrapper(props: Props) {
         </Grid>
         {recurring !== RecurringType.NONE && (
           <Grid item className='h-full'>
-            {false && (
+            {props.newBooking && (
               <Typography
                 className='text-dulwichRed hover:underline pl-2 mb-1'
                 onClick={() => {
