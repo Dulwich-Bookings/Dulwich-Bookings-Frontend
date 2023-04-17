@@ -10,7 +10,7 @@ import TagInput from '@/components/AddResource/Forms/TagInput/TagInput';
 import InputCheckBox from '@/components/Inputs/InputCheckBox/InputCheckBox';
 import OtherUserInput from '@/components/AddResource/Forms/OtherUserInput/OtherUserInput';
 import FormHeader from '@components/AddResource/FormHeader/FormHeader';
-import TemplateSubmitButton from '@/components/AddResource/Forms/TemplateSubmitButton/TemplateSubmitButton';
+// import TemplateSubmitButton from '@/components/AddResource/Forms/TemplateSubmitButton/TemplateSubmitButton';
 import FormSubmitButton from '@/components/AddResource/Forms/FormSubmitButton/FormSubmitButton';
 import InputWithoutBorder from '@/components/Inputs/InputWithoutBorder/InputWithoutBorder';
 import InputWithRadio from '@/components/Inputs/InputWithRadio/InputWithRadio';
@@ -71,7 +71,7 @@ const AddRoomForm = (props: Props) => {
   const [bookingError, setBookingError] = useState<InputValidation>(noError);
   const [selectedTags, setSelectedTags] = useState<TagData[]>(oldTags ?? []);
   const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>(oldUsers ?? []);
-  const [templateFormName, setTemplateFormName] = useState<string>('');
+  // const [templateFormName, setTemplateFormName] = useState<string>('');
   const [showDialog, setShowDialog] = useState<boolean>(false);
 
   // useApi hook

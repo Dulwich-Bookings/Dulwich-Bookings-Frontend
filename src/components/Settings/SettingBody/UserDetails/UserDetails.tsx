@@ -1,7 +1,7 @@
 import React from 'react';
 
 import SettingHeader from '@/components/Settings/SettingBody/SettingHeader/SettingHeader';
-import { Button, Grid, Stack } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 import { UserData } from '@/modules/user/types';
 
 import UserTable from './UserTable/UserTable';
@@ -27,10 +27,6 @@ const UserDetails = ({ user: userSelf, usersData, handleRefresh }: Props) => {
     formData.append('file', file);
     await bulkSignUp(formData);
     window.location.reload();
-  };
-
-  const downloadTemplateHandler = () => {
-    return;
   };
 
   return (
