@@ -17,9 +17,7 @@ const AddCalendarButton = ({ id }: Props) => {
     const url = `http://www.testURL/${id}`;
     try {
       copyToClipboard(url);
-      dispatch(
-        toggleShowNotification({ message: 'Successfully Copied Calendar Subscription Link to Clipboard', severity: severity.SUCCESS }),
-      );
+      dispatch(toggleShowNotification({ message: 'This Feature Has Yet to be Implemented', severity: severity.INFO }));
     } catch (err: unknown) {
       const error = err as Error;
       dispatch(toggleShowNotification({ message: error.message, severity: severity.ERROR }));

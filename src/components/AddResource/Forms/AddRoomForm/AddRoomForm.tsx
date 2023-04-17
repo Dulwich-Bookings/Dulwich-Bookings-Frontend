@@ -135,14 +135,14 @@ const AddRoomForm = (props: Props) => {
     return arr;
   };
 
-  const handleUploadTemplate = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files ? event.target.files[0] : null;
-    if (!file) {
-      return;
-    }
-    const message: string = 'Successfully uploaded ' + file.name;
-    setTemplateFormName(message);
-  };
+  // const handleUploadTemplate = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files ? event.target.files[0] : null;
+  //   if (!file) {
+  //     return;
+  //   }
+  //   const message: string = 'Successfully uploaded ' + file.name;
+  //   setTemplateFormName(message);
+  // };
 
   const handleShowDialog = () => {
     setShowDialog(true);
@@ -330,14 +330,14 @@ const AddRoomForm = (props: Props) => {
             handleOnClick={handleCreateResource}
             loading={isLoading}
           />
-          {!props.editMode && (
+          {/* {!props.editMode && (
             <TemplateSubmitButton
               buttonClassName='w-72 h-16 bg-dulwichRed rounded-xl text-bgWhite font-inter'
               buttonText='Upload Template'
               helperText={templateFormName}
               handleOnClick={handleUploadTemplate}
             />
-          )}
+          )} */}
           {props.editMode && (
             <>
               <FormSubmitButton
