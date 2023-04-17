@@ -33,6 +33,8 @@ import './Calendar.css';
 import { useApi } from '@/api/ApiHandler';
 import BookingService from '@/api/booking/BookingService';
 import { retrieveAllData } from '@/utilities/api';
+import { CreateRecentlyVisitedData } from '@/modules/recentlyVisited/Types';
+import RecentlyVisitedService from '@/api/recentlyVisited/RecentlyVisitedService';
 
 export const StyleWrapper = styled.div`
   .fc .fc-timegrid-slot-minor {
@@ -61,7 +63,12 @@ const Calendar = (props: Props) => {
     bookingType: BookingType.BOOKING,
     bookingState: getBookingState(props.currentUser, props.resourceData),
   };
-
+  const [setRecentlyVisited] = useApi(
+    (data: CreateRecentlyVisitedData) => RecentlyVisitedService.createRecentlyVisited(data),
+    false,
+    false,
+    false,
+  );
   const [getBookingData] = useApi(() => BookingService.getBookingById(props.resourceData.id), false, true, false);
   const [createBooking] = useApi((data: CreateBookingData) => BookingService.createBooking(data ?? null), true, true);
   const [deleteBooking] = useApi((id: number) => BookingService.deleteAllBookingById(id), true, true);
@@ -81,6 +88,7 @@ const Calendar = (props: Props) => {
 
   useEffect(() => {
     fetchData();
+    setRecentlyVisited({ resourceId: props.resourceData.id });
   }, []);
 
   const [openBookingModal, setOpenBookingModal] = useState<boolean>(false);
@@ -143,7 +151,6 @@ const Calendar = (props: Props) => {
   };
 
   // On Create New Booking
-  // TODO: Don't allow end time to be before start time. Also don't allow time slots before 7am and after 10pm.
   const onAddBooking = async (data: EventData): Promise<void> => {
     if (data.description.length === 0) {
       dispatch(toggleShowNotification({ message: 'Description cannot be empty', severity: severity.ERROR }));

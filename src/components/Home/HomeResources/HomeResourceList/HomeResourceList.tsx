@@ -165,23 +165,6 @@ const HomeResourceList = (props: Props) => {
     props.editResourceHandler(data, tags);
   };
 
-  // TODO Add this to the Bookings Modal Component instead
-  // const onRecentlyVisitedHandler = async (id: number, type: SearchState, isRecentlyVisited: boolean): Promise<void> => {
-  //   if (isRecentlyVisited) return;
-
-  //   const newRecentlyVisited: RecentlyVisitedData =
-  //     type === resourceTypes.RESOURCE
-  //       ? ({ resourceId: id, subscriptionId: null, userId: props.currentUser?.id, id: Math.random() } as unknown as RecentlyVisitedData)
-  //       : ({ resourceId: null, subscriptionId: id, userId: props.currentUser?.id, id: Math.random() } as unknown as RecentlyVisitedData);
-  //   const newRecentlyVisitedList: RecentlyVisitedData[] = [...recentlyVisited, newRecentlyVisited];
-  //   setRecentlyVisited(newRecentlyVisitedList);
-
-  //   const createRecentlyVisitedData = type === resourceTypes.RESOURCE ? { resourceId: id } : { subscriptionId: id };
-  //     await createRecentlyVisited(createRecentlyVisitedData);
-  //     await fetchRecentlyVisitedData();
-  //   }
-  // };
-
   // Fetch Data from API
   useEffect(() => {
     fetchAllData();

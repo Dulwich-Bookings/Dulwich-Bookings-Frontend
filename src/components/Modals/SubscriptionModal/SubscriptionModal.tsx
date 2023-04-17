@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Card, CardContent, Stack } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { SubscriptionData } from '@/modules/subscription/types';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { textAreaToHTML } from '@/utilities/textAreaConversion';
+import { CreateRecentlyVisitedData } from '@/modules/recentlyVisited/Types';
+import RecentlyVisitedService from '@/api/recentlyVisited/RecentlyVisitedService';
+import { useApi } from '@/api/ApiHandler';
 
 type Props = {
   handleClose: () => void;
@@ -12,6 +15,17 @@ type Props = {
 };
 
 const SubscriptionModal = ({ data, handleClose }: Props) => {
+  const [setRecentlyVisited] = useApi(
+    (data: CreateRecentlyVisitedData) => RecentlyVisitedService.createRecentlyVisited(data),
+    false,
+    false,
+    false,
+  );
+
+  useEffect(() => {
+    setRecentlyVisited({ subscriptionId: data.id });
+  }, []);
+
   return (
     <Card className='bg-bgGray rounded-xl w-[355px] homeLaptop:w-[600px] h-96 hover:shadow-[0_4px_30px_0px_rgba(0,0,0,0.25)]'>
       <CardContent className='grow'>
