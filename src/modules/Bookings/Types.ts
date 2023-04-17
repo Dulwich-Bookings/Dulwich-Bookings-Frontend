@@ -76,7 +76,7 @@ export interface EventData {
   backgroundColor?: string;
   borderColor?: string;
   textColor?: string;
-  editable: boolean;
+  isEditable: boolean;
   rrule?: string;
   bookingType: BookingTypes;
   bookingState: BookingStates;

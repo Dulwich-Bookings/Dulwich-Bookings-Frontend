@@ -33,6 +33,9 @@ import './Calendar.css';
 import { useApi } from '@/api/ApiHandler';
 import BookingService from '@/api/booking/BookingService';
 import { retrieveAllData } from '@/utilities/api';
+import { CreateRecentlyVisitedData } from '@/modules/recentlyVisited/Types';
+import RecentlyVisitedService from '@/api/recentlyVisited/RecentlyVisitedService';
+import Loading from '@/components/Loading/Loading';
 
 export const StyleWrapper = styled.div`
   .fc .fc-timegrid-slot-minor {
@@ -57,11 +60,17 @@ const Calendar = (props: Props) => {
     start: new Date(),
     end: new Date(),
     description: '',
-    editable: true,
+    isEditable: true,
     bookingType: BookingType.BOOKING,
     bookingState: getBookingState(props.currentUser, props.resourceData),
   };
-
+  const [setRecentlyVisited] = useApi(
+    (data: CreateRecentlyVisitedData) => RecentlyVisitedService.createRecentlyVisited(data),
+    false,
+    false,
+    false,
+  );
+  const [isLoading, setIsLoading] = useState(true);
   const [getBookingData] = useApi(() => BookingService.getBookingById(props.resourceData.id), false, true, false);
   const [createBooking] = useApi((data: CreateBookingData) => BookingService.createBooking(data ?? null), true, true);
   const [deleteBooking] = useApi((id: number) => BookingService.deleteAllBookingById(id), true, true);
@@ -73,14 +82,17 @@ const Calendar = (props: Props) => {
   );
 
   const fetchData = async () => {
+    setIsLoading(true);
     const bookingData = await retrieveAllData<BookingData[]>(getBookingData);
 
     const eventData = mapBookingDataToEventData(bookingData ?? [], props.currentUser, props.resourceMaps, props.resourceData);
     setBookings(eventData);
+    setIsLoading(false);
   };
 
   useEffect(() => {
     fetchData();
+    setRecentlyVisited({ resourceId: props.resourceData.id });
   }, []);
 
   const [openBookingModal, setOpenBookingModal] = useState<boolean>(false);
@@ -105,7 +117,7 @@ const Calendar = (props: Props) => {
       formLabel: '',
       userId: props.currentUser.id,
       description: '',
-      editable: true,
+      isEditable: true,
       rrule: undefined,
       bookingType: BookingType.BOOKING,
       start: startTime,
@@ -129,7 +141,6 @@ const Calendar = (props: Props) => {
       formLabel: e.event.extendedProps.formLabel,
       userId: e.event.extendedProps.userId,
       description: e.event.extendedProps.description,
-      editable: e.event.startEditable,
       bookingType: e.event.extendedProps.bookingType,
       start: startTime,
       end: endTime,
@@ -144,12 +155,17 @@ const Calendar = (props: Props) => {
   };
 
   // On Create New Booking
-  // TODO: Don't allow end time to be before start time. Also don't allow time slots before 7am and after 10pm.
   const onAddBooking = async (data: EventData): Promise<void> => {
-    // if (data.formLabel.trim().length == 0) {
-    //   dispatch(toggleShowNotification({ message: 'Title cannot be empty', severity: severity.ERROR }));
-    //   return;
-    // }
+    // if start time is less than the current time, return and show error
+    if (data.start < new Date()) {
+      dispatch(toggleShowNotification({ message: 'Start time cannot be in the past', severity: severity.ERROR }));
+      return;
+    }
+
+    if (data.description.length === 0) {
+      dispatch(toggleShowNotification({ message: 'Description cannot be empty', severity: severity.ERROR }));
+      return;
+    }
 
     if (data.end <= data.start) {
       dispatch(toggleShowNotification({ message: 'End time has to be after Start time', severity: severity.ERROR }));
@@ -272,32 +288,39 @@ const Calendar = (props: Props) => {
       )}
 
       <Box className='h-full'>
-        <FullCalendar
-          plugins={[timeGridPlugin, interactionPlugin, momentTimezonePlugin, dayGridPlugin, rrulePlugin]}
-          timeZone={props.currentSchool.timezone}
-          headerToolbar={{
-            start: '',
-            center: '',
-            end: 'today prev title next',
-          }}
-          dayHeaderContent={obj => <DayHeaderContent obj={obj} />}
-          slotLabelContent={obj => <SlotLabelContent obj={obj} />}
-          height={'95%'}
-          allDaySlot={false}
-          nowIndicator={true}
-          slotMinTime='07:00:00'
-          slotMaxTime='22:00:00'
-          scrollTime='07:00:00'
-          slotDuration='00:15:00'
-          slotLabelInterval={{ hours: 1 }}
-          eventMinHeight={20}
-          eventOverlap={false}
-          initialView={isMobile ? 'timeGridDay' : 'timeGridWeek'}
-          dateClick={handleDateClick}
-          eventClick={handleEventClick}
-          editable={true}
-          events={bookings}
-        />
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <FullCalendar
+            plugins={[timeGridPlugin, interactionPlugin, momentTimezonePlugin, dayGridPlugin, rrulePlugin]}
+            timeZone={props.currentSchool.timezone}
+            headerToolbar={{
+              start: '',
+              center: '',
+              end: 'today prev title next',
+            }}
+            dayHeaderContent={obj => <DayHeaderContent obj={obj} />}
+            slotLabelContent={obj => <SlotLabelContent obj={obj} />}
+            height={'95%'}
+            allDaySlot={false}
+            nowIndicator={true}
+            slotMinTime='07:00:00'
+            slotMaxTime='22:00:00'
+            scrollTime='07:00:00'
+            slotDuration='00:15:00'
+            slotLabelInterval={{ hours: 1 }}
+            eventMinHeight={20}
+            eventOverlap={false}
+            initialView={isMobile ? 'timeGridDay' : 'timeGridWeek'}
+            dateClick={handleDateClick}
+            eventClick={handleEventClick}
+            editable={false}
+            eventDurationEditable={false}
+            eventResizableFromStart={false}
+            eventStartEditable={false}
+            events={bookings}
+          />
+        )}
       </Box>
       <Dialog
         title='Delete Recurring Booking'

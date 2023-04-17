@@ -2,6 +2,9 @@ import React from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import BackButton from '@/components/AddResource/BackButton/BackButton';
 import { useHistory } from 'react-router-dom';
+import { toggleShowNotification } from '@/modules/ui/uiSlice';
+import { useDispatch } from 'react-redux';
+import { severity } from '@/consts/constants';
 
 type Props = {
   title: string;
@@ -9,6 +12,7 @@ type Props = {
 };
 
 const FormHeader = ({ title, disableUpload }: Props) => {
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const returnResourcePage = () => {
@@ -28,7 +32,14 @@ const FormHeader = ({ title, disableUpload }: Props) => {
         </Stack>
         <div className='w-1/4'>
           {!disableUpload && (
-            <Button className='w-52 h-10 bg-[#808080] rounded-md text-bgWhite font-inter float-right'>Download Template</Button>
+            <Button
+              onClick={() => {
+                dispatch(toggleShowNotification({ message: 'This Feature Has Yet to be Implemented', severity: severity.INFO }));
+              }}
+              className='w-52 h-10 bg-[#808080] rounded-md text-bgWhite font-inter float-right'
+            >
+              Download Template
+            </Button>
           )}
         </div>
       </Stack>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, createTheme, Stack, ThemeProvider, Box, Input } from '@mui/material';
 import { FormatAlignLeft, Close } from '@mui/icons-material';
 import BookingFormFooter from '@/components/Modals/BookingsModal/BookingForm/BookingFormFooter/BookingFormFooter';
@@ -45,6 +45,14 @@ const BookingForm = (props: Props) => {
   const [rows, setRows] = useState<number>(1);
   const [bookingData, setBookingData] = useState<EventData>(props.bookingData);
 
+  useEffect(() => {
+    if (props.newBooking) {
+      return;
+    }
+    setMultiline(true);
+    setRows(4);
+  }, [props.newBooking]);
+
   const handleTitleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setBookingData({ ...bookingData, formLabel: event.target.value });
   };
@@ -63,7 +71,7 @@ const BookingForm = (props: Props) => {
   };
 
   const onChangeBookingType = (value: string) => {
-    bookingData.editable
+    bookingData.isEditable
       ? value === BookingType.BOOKING
         ? setBookingData({ ...bookingData, bookingType: BookingType.BOOKING })
         : setBookingData({ ...bookingData, bookingType: BookingType.LESSON })
@@ -108,7 +116,7 @@ const BookingForm = (props: Props) => {
                     startTime={bookingData.start}
                     endTime={bookingData.end}
                     onChangeTime={onChangeTime}
-                    editable={bookingData.editable}
+                    isEditable={bookingData.isEditable}
                     school={props.school}
                     newBooking={props.newBooking}
                   />
@@ -116,7 +124,7 @@ const BookingForm = (props: Props) => {
                     <InputWithIcon
                       newBooking={props.newBooking}
                       inputType='string'
-                      inputPlaceholder={bookingData.editable ? 'Add description' : ''}
+                      inputPlaceholder={bookingData.isEditable ? 'Add description' : ''}
                       inputValue={bookingData.description}
                       inputClassname='w-full color-bgWhite font-Inter font-light px-0'
                       inputVariant='outlined'
@@ -125,7 +133,7 @@ const BookingForm = (props: Props) => {
                       icon={<FormatAlignLeft className='ml-2 text-lg' />}
                       spacing={0.5}
                       inputHandleOnChange={handleDescriptionChange}
-                      acceptInput={bookingData.editable}
+                      acceptInput={bookingData.isEditable}
                       onFocus={handleOnFocus}
                       onBlur={() => setMultiline(false)}
                     />
@@ -147,7 +155,7 @@ const BookingForm = (props: Props) => {
                   />
 
                   <BookingFormFooter
-                    editable={bookingData.editable}
+                    isEditable={bookingData.isEditable}
                     newBooking={props.newBooking}
                     handleOnBook={() => {
                       props.onAddBooking({
