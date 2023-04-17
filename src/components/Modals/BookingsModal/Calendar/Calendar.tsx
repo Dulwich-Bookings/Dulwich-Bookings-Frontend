@@ -35,6 +35,7 @@ import BookingService from '@/api/booking/BookingService';
 import { retrieveAllData } from '@/utilities/api';
 import { CreateRecentlyVisitedData } from '@/modules/recentlyVisited/Types';
 import RecentlyVisitedService from '@/api/recentlyVisited/RecentlyVisitedService';
+import Loading from '@/components/Loading/Loading';
 
 export const StyleWrapper = styled.div`
   .fc .fc-timegrid-slot-minor {
@@ -69,6 +70,7 @@ const Calendar = (props: Props) => {
     false,
     false,
   );
+  const [isLoading, setIsLoading] = useState(true);
   const [getBookingData] = useApi(() => BookingService.getBookingById(props.resourceData.id), false, true, false);
   const [createBooking] = useApi((data: CreateBookingData) => BookingService.createBooking(data ?? null), true, true);
   const [deleteBooking] = useApi((id: number) => BookingService.deleteAllBookingById(id), true, true);
@@ -80,10 +82,12 @@ const Calendar = (props: Props) => {
   );
 
   const fetchData = async () => {
+    setIsLoading(true);
     const bookingData = await retrieveAllData<BookingData[]>(getBookingData);
 
     const eventData = mapBookingDataToEventData(bookingData ?? [], props.currentUser, props.resourceMaps, props.resourceData);
     setBookings(eventData);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -278,35 +282,39 @@ const Calendar = (props: Props) => {
       )}
 
       <Box className='h-full'>
-        <FullCalendar
-          plugins={[timeGridPlugin, interactionPlugin, momentTimezonePlugin, dayGridPlugin, rrulePlugin]}
-          timeZone={props.currentSchool.timezone}
-          headerToolbar={{
-            start: '',
-            center: '',
-            end: 'today prev title next',
-          }}
-          dayHeaderContent={obj => <DayHeaderContent obj={obj} />}
-          slotLabelContent={obj => <SlotLabelContent obj={obj} />}
-          height={'95%'}
-          allDaySlot={false}
-          nowIndicator={true}
-          slotMinTime='07:00:00'
-          slotMaxTime='22:00:00'
-          scrollTime='07:00:00'
-          slotDuration='00:15:00'
-          slotLabelInterval={{ hours: 1 }}
-          eventMinHeight={20}
-          eventOverlap={false}
-          initialView={isMobile ? 'timeGridDay' : 'timeGridWeek'}
-          dateClick={handleDateClick}
-          eventClick={handleEventClick}
-          editable={false}
-          eventDurationEditable={false}
-          eventResizableFromStart={false}
-          eventStartEditable={false}
-          events={bookings}
-        />
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <FullCalendar
+            plugins={[timeGridPlugin, interactionPlugin, momentTimezonePlugin, dayGridPlugin, rrulePlugin]}
+            timeZone={props.currentSchool.timezone}
+            headerToolbar={{
+              start: '',
+              center: '',
+              end: 'today prev title next',
+            }}
+            dayHeaderContent={obj => <DayHeaderContent obj={obj} />}
+            slotLabelContent={obj => <SlotLabelContent obj={obj} />}
+            height={'95%'}
+            allDaySlot={false}
+            nowIndicator={true}
+            slotMinTime='07:00:00'
+            slotMaxTime='22:00:00'
+            scrollTime='07:00:00'
+            slotDuration='00:15:00'
+            slotLabelInterval={{ hours: 1 }}
+            eventMinHeight={20}
+            eventOverlap={false}
+            initialView={isMobile ? 'timeGridDay' : 'timeGridWeek'}
+            dateClick={handleDateClick}
+            eventClick={handleEventClick}
+            editable={false}
+            eventDurationEditable={false}
+            eventResizableFromStart={false}
+            eventStartEditable={false}
+            events={bookings}
+          />
+        )}
       </Box>
       <Dialog
         title='Delete Recurring Booking'

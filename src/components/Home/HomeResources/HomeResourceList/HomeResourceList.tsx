@@ -63,12 +63,6 @@ const HomeResourceList = (props: Props) => {
   const [getSubscriptionSelf] = useApi(() => SubscriptionService.getSubscriptionSelf(), false, true, false);
   const [getAllTags] = useApi(() => TagService.getAllTags(), false, true, false);
   const [getAllTagMaps] = useApi(() => TagMapService.getAllTagMap(), false, true, false);
-  // const [createRecentlyVisited] = useApi(
-  //   (data: CreateRecentlyVisitedData) => RecentlyVisitedService.createRecentlyVisited(data ?? null),
-  //   false,
-  //   true,
-  //   false,
-  // );
 
   // API Functions
   const fetchBookmarksData = async () => {
