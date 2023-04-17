@@ -156,6 +156,12 @@ const Calendar = (props: Props) => {
 
   // On Create New Booking
   const onAddBooking = async (data: EventData): Promise<void> => {
+    // if start time is less than the current time, return and show error
+    if (data.start < new Date()) {
+      dispatch(toggleShowNotification({ message: 'Start time cannot be in the past', severity: severity.ERROR }));
+      return;
+    }
+
     if (data.description.length === 0) {
       dispatch(toggleShowNotification({ message: 'Description cannot be empty', severity: severity.ERROR }));
       return;
