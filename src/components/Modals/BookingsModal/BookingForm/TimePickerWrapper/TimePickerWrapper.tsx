@@ -11,7 +11,7 @@ import { SchoolData } from '@/modules/school/types';
 type Props = {
   startTime: Date;
   endTime: Date;
-  editable: boolean;
+  isEditable: boolean;
   onChangeTime: (start: Date, isStart: boolean) => void;
   school: SchoolData;
   newBooking?: boolean;

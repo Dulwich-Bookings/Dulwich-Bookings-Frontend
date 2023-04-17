@@ -3,7 +3,7 @@ import React from 'react';
 import BookingButton from '@/components/Modals/BookingsModal/BookingForm/BookingFormFooter/BookingButton/BookingButton';
 
 type Props = {
-  editable: boolean;
+  isEditable: boolean;
   newBooking: boolean;
   handleOnBook: () => void;
   handleOnSave: () => void;
@@ -14,7 +14,7 @@ type Props = {
 const BookingFormFooter = (props: Props) => {
   return (
     <>
-      {!props.newBooking && props.editable && (
+      {!props.newBooking && props.isEditable && (
         <Stack direction='row' className='w-full' spacing={2}>
           <>
             <BookingButton buttonText='Close' handleOnClick={props.handleOnSave} className='bg-bgDarkGray' />
@@ -22,7 +22,7 @@ const BookingFormFooter = (props: Props) => {
           </>
         </Stack>
       )}
-      {!props.newBooking && !props.editable && (
+      {!props.newBooking && !props.isEditable && (
         <div className='w-full'>
           <BookingButton buttonText='Contact' handleOnClick={props.handleOnContact} />
         </div>

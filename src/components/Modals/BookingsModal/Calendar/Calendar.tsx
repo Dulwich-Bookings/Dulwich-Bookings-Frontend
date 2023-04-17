@@ -57,7 +57,7 @@ const Calendar = (props: Props) => {
     start: new Date(),
     end: new Date(),
     description: '',
-    editable: true,
+    isEditable: true,
     bookingType: BookingType.BOOKING,
     bookingState: getBookingState(props.currentUser, props.resourceData),
   };
@@ -105,7 +105,7 @@ const Calendar = (props: Props) => {
       formLabel: '',
       userId: props.currentUser.id,
       description: '',
-      editable: true,
+      isEditable: true,
       rrule: undefined,
       bookingType: BookingType.BOOKING,
       start: startTime,
@@ -129,7 +129,6 @@ const Calendar = (props: Props) => {
       formLabel: e.event.extendedProps.formLabel,
       userId: e.event.extendedProps.userId,
       description: e.event.extendedProps.description,
-      editable: e.event.startEditable,
       bookingType: e.event.extendedProps.bookingType,
       start: startTime,
       end: endTime,
@@ -295,7 +294,10 @@ const Calendar = (props: Props) => {
           initialView={isMobile ? 'timeGridDay' : 'timeGridWeek'}
           dateClick={handleDateClick}
           eventClick={handleEventClick}
-          editable={true}
+          editable={false}
+          eventDurationEditable={false}
+          eventResizableFromStart={false}
+          eventStartEditable={false}
           events={bookings}
         />
       </Box>

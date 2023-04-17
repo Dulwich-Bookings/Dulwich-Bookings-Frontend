@@ -106,7 +106,7 @@ export const getEventData = (e: EventDropArg | EventResizeDoneArg) => {
     end: moment(e.event.end).toDate(),
     description: e.event.extendedProps.description,
     rrule: e.event._def.recurringDef?.typeData.rruleSet._rrule[0] ?? undefined,
-    editable: e.event.startEditable,
+    isEditable: e.event.startEditable,
     bookingType: e.event.extendedProps.bookingType,
     bookingState: e.event.extendedProps.bookingState,
     eventType: e.event.extendedProps.eventType,
@@ -132,11 +132,11 @@ export const mapBookingDataToEventData = (
       backgroundColor: getBgColor(b.bookingType, b.bookingState, resourceMap, resource, currUser),
       borderColor: getBgColor(b.bookingType, b.bookingState, resourceMap, resource, currUser),
       textColor: getTextColor(b.bookingType),
-      editable: getIsEditable(resourceMap, resource, currUser),
       rrule: b.RRULE,
       bookingType: b.bookingType,
       bookingState: b.bookingState,
       eventType: b.RRULE ? EventType.RECURRING : EventType.SINGLE,
+      isEditable: getIsEditable(resourceMap, resource, currUser),
     };
   });
 };
