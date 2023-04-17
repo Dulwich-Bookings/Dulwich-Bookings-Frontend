@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, createTheme, Stack, ThemeProvider, Box, Input } from '@mui/material';
 import { FormatAlignLeft, Close } from '@mui/icons-material';
 import BookingFormFooter from '@/components/Modals/BookingsModal/BookingForm/BookingFormFooter/BookingFormFooter';
@@ -44,6 +44,14 @@ const BookingForm = (props: Props) => {
   const [multiline, setMultiline] = useState<boolean>(false);
   const [rows, setRows] = useState<number>(1);
   const [bookingData, setBookingData] = useState<EventData>(props.bookingData);
+
+  useEffect(() => {
+    if (props.newBooking) {
+      return;
+    }
+    setMultiline(true);
+    setRows(4);
+  }, [props.newBooking]);
 
   const handleTitleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setBookingData({ ...bookingData, formLabel: event.target.value });
