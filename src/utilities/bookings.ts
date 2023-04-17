@@ -25,30 +25,23 @@ export const getBookingState = (user: UserData, resource: ResourceData) => {
   return BookingState.PENDING;
 };
 
-export const getBgColor = (
-  bookingType: BookingTypes,
-  bookingState: BookingStates,
-  resourceMaps: ResourceMapData[],
-  currentResource: ResourceData,
-  currentUser: UserData,
-) => {
-  const allResourceOwners = resourceMaps.filter(r => r.resourceId === currentResource.id);
-  const isResourceOwner = allResourceOwners.find(r => r.userId === currentUser.id);
+export const getBgColor = (bookingType: BookingTypes, bookingState: BookingStates, currentUser: UserData, bookingData: BookingData) => {
+  const isBookingOwner = bookingData.userId === currentUser.id;
 
   if (bookingType === BookingType.LESSON) {
     return colors.bgLesson;
   }
 
   // Pending Color
-  if (bookingState === BookingState.PENDING && isResourceOwner) {
+  if (bookingState === BookingState.PENDING && isBookingOwner) {
     return colors.bgLightRed;
   }
-  if (bookingState === BookingState.PENDING && !isResourceOwner) {
+  if (bookingState === BookingState.PENDING && !isBookingOwner) {
     return colors.bgBookingBlackPending;
   }
 
   // Normal Booking Color
-  if (isResourceOwner) {
+  if (isBookingOwner) {
     return colors.dulwichRed;
   } else {
     return colors.bgBlack;
@@ -123,14 +116,14 @@ export const mapBookingDataToEventData = (
     return {
       id: b.id.toString(),
       userId: b.userId,
-      title: b.bookingType === BookingType.LESSON ? 'Lesson' : 'Booked',
+      title: b.bookingState === BookingState.APPROVED ? (b.bookingType === BookingType.LESSON ? 'Lesson' : 'Booked') : 'Pending',
       formLabel: b.bookingType === BookingType.LESSON ? 'Lesson' : 'Booked',
       start: new Date(b.startDateTime),
       end: new Date(b.endDateTime),
       duration: eventDateDuration(new Date(b.startDateTime), new Date(b.endDateTime)),
       description: b.description,
-      backgroundColor: getBgColor(b.bookingType, b.bookingState, resourceMap, resource, currUser),
-      borderColor: getBgColor(b.bookingType, b.bookingState, resourceMap, resource, currUser),
+      backgroundColor: getBgColor(b.bookingType, b.bookingState, currUser, b),
+      borderColor: getBgColor(b.bookingType, b.bookingState, currUser, b),
       textColor: getTextColor(b.bookingType),
       rrule: b.RRULE,
       bookingType: b.bookingType,
