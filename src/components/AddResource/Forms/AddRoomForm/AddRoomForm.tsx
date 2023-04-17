@@ -59,16 +59,17 @@ const AddRoomForm = (props: Props) => {
     },
   );
   const [accessError, setAccessError] = useState<InputValidation>(noError);
-  const [bookingOptions, setBookingOptions] = useState(
-    (oldData?.bookingRights && {
-      option1: oldData.bookingRights.indexOf(role.STUDENT) > -1,
-      option2: oldData.bookingRights.indexOf(role.TEACHER) > -1,
-    }) ?? {
-      option1: false,
-      option2: false,
-    },
-  );
-  const [bookingError, setBookingError] = useState<InputValidation>(noError);
+  // TODO: Implement after you fix the backend edit booking function
+  // const [bookingOptions, setBookingOptions] = useState(
+  //   (oldData?.bookingRights && {
+  //     option1: oldData.bookingRights.indexOf(role.STUDENT) > -1,
+  //     option2: oldData.bookingRights.indexOf(role.TEACHER) > -1,
+  //   }) ?? {
+  //     option1: false,
+  //     option2: false,
+  //   },
+  // );
+  // const [bookingError, setBookingError] = useState<InputValidation>(noError);
   const [selectedTags, setSelectedTags] = useState<TagData[]>(oldTags ?? []);
   const [selectedOtherUsers, setSelectedOtherUsers] = useState<UserData[]>(oldUsers ?? []);
   // const [templateFormName, setTemplateFormName] = useState<string>('');
@@ -114,16 +115,16 @@ const AddRoomForm = (props: Props) => {
     setAccessOptions(options);
   };
 
-  const updateBRHandler = (option1: boolean, option2: boolean): void => {
-    let options = { option1: false, option2: false };
-    if (option1) {
-      options = { option1: true, option2: true };
-    }
-    if (option2) {
-      options = { ...options, option2: true };
-    }
-    setBookingOptions(options);
-  };
+  // const updateBRHandler = (option1: boolean, option2: boolean): void => {
+  //   let options = { option1: false, option2: false };
+  //   if (option1) {
+  //     options = { option1: true, option2: true };
+  //   }
+  //   if (option2) {
+  //     options = { ...options, option2: true };
+  //   }
+  //   setBookingOptions(options);
+  // };
 
   const optionsToArrayHandler = (option1: boolean, option2: boolean, arr: Role[]): Role[] => {
     if (option1) {
@@ -162,15 +163,19 @@ const AddRoomForm = (props: Props) => {
     const isValidRoomName = roomName.length !== 0;
     // by default role.ADMIN has access
     const isValidAccessRights = accessOptions.option1 || accessOptions.option2;
-    const isValidBookingRights = bookingOptions.option1 || bookingOptions.option2;
+    // const isValidBookingRights = bookingOptions.option1 || bookingOptions.option2;
     const isValidDescription = description.length !== 0;
 
     setRoomError(isValidRoomName ? noError : errorObj);
     setAccessError(isValidAccessRights ? noError : errorObj);
-    setBookingError(isValidBookingRights ? noError : errorObj);
+    // setBookingError(isValidBookingRights ? noError : errorObj);
     setDescriptionError(isValidDescription ? noError : errorObj);
 
-    if (!isValidRoomName || !isValidAccessRights || !isValidBookingRights || !isValidDescription) {
+    // if (!isValidRoomName || !isValidAccessRights || !isValidBookingRights || !isValidDescription) {
+    //   throw new Error('Form Invalid');
+    // }
+
+    if (!isValidRoomName || !isValidAccessRights || !isValidDescription) {
       throw new Error('Form Invalid');
     }
   };
@@ -189,7 +194,8 @@ const AddRoomForm = (props: Props) => {
           name: roomName,
           description: description,
           accessRights: optionsToArrayHandler(accessOptions.option1, accessOptions.option2, accessRights),
-          bookingRights: optionsToArrayHandler(bookingOptions.option1, bookingOptions.option2, bookingRights),
+          // bookingRights: optionsToArrayHandler(bookingOptions.option1, bookingOptions.option2, bookingRights),
+          bookingRights: optionsToArrayHandler(true, true, bookingRights),
           weekProfile: weekProfile === 'Weekly' ? 'Weekly' : 'BiWeekly',
           // hard coded values will be changed subsequently in the future
           inAdvance: 0,
@@ -242,15 +248,15 @@ const AddRoomForm = (props: Props) => {
         option2: false,
       },
     );
-    setBookingOptions(
-      (oldData?.bookingRights && {
-        option1: oldData.bookingRights.indexOf(role.STUDENT) > -1,
-        option2: oldData.bookingRights.indexOf(role.TEACHER) > -1,
-      }) ?? {
-        option1: false,
-        option2: false,
-      },
-    );
+    // setBookingOptions(
+    //   (oldData?.bookingRights && {
+    //     option1: oldData.bookingRights.indexOf(role.STUDENT) > -1,
+    //     option2: oldData.bookingRights.indexOf(role.TEACHER) > -1,
+    //   }) ?? {
+    //     option1: false,
+    //     option2: false,
+    //   },
+    // );
   }, [oldData, oldTags, oldUsers]);
 
   return (
@@ -312,7 +318,7 @@ const AddRoomForm = (props: Props) => {
             inputValidation={accessError}
             required
           />
-          <InputCheckBox
+          {/* <InputCheckBox
             inputClassName='w-1/2 px-[70px]'
             labelText='Booking Rights'
             inputLabelText={['Student', 'Teacher']}
@@ -320,7 +326,7 @@ const AddRoomForm = (props: Props) => {
             inputHandleOnChange={updateBRHandler}
             inputValidation={bookingError}
             required
-          />
+          /> */}
         </Grid>
 
         <Stack direction='row' spacing={5} className='z-0'>

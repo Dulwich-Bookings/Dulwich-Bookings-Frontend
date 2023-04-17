@@ -9,7 +9,7 @@ import BookingTypeWrapper from '@/components/Modals/BookingsModal/BookingForm/Bo
 
 import { isAdmin } from '@/utilities/authorisation';
 import { UserData } from '@/modules/user/types';
-import { EventData, RecurringTypes, BookingType } from '@/modules/Bookings/Types';
+import { EventData, RecurringTypes, BookingType, BookingState } from '@/modules/Bookings/Types';
 import { SchoolData } from '@/modules/school/types';
 import { RRule } from 'rrule';
 
@@ -106,7 +106,13 @@ const BookingForm = (props: Props) => {
                   disabled={true}
                   color='error'
                   placeholder='Add title'
-                  value={bookingData.bookingType}
+                  value={
+                    bookingData.bookingState === BookingState.APPROVED
+                      ? bookingData.bookingType === BookingType.LESSON
+                        ? 'Lesson'
+                        : 'Booked'
+                      : 'Pending Booking'
+                  }
                   className='w-full h-1/6 text-xxl font-Inter mb-1'
                   onChange={handleTitleChange}
                 ></Input>
